@@ -12,10 +12,10 @@ from whenever import Instant
 from cream_api.db import ModelBase
 
 if TYPE_CHECKING:
-    from cream_api.users.models.user import User
+    from cream_api.users.models.app_user import AppUser
 
 
-class Session(ModelBase):
+class AppUserSession(ModelBase):
     """Session model representing user sessions."""
 
     __tablename__ = "sessions"
@@ -23,7 +23,7 @@ class Session(ModelBase):
     # Core Fields
     id: Mapped[UUID] = mapped_column(PGUUID, primary_key=True, default=uuid4)
     user_id: Mapped[UUID] = mapped_column(
-        PGUUID, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        PGUUID, ForeignKey("app_users.id", ondelete="CASCADE"), nullable=False
     )
     created_at: Mapped[Instant] = mapped_column(DateTime, default=Instant.now, nullable=False)
     expires_at: Mapped[Instant] = mapped_column(DateTime, nullable=False)
@@ -40,7 +40,7 @@ class Session(ModelBase):
     location: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     platform: Mapped[str | None] = mapped_column(Text, nullable=True)
     browser: Mapped[str | None] = mapped_column(Text, nullable=True)
-    metadata: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    session_metadata: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
     # Relationships
-    user: Mapped["User"] = relationship("User", back_populates="sessions")
+    user: Mapped["AppUser"] = relationship("AppUser", back_populates="sessions")

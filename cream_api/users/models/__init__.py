@@ -1,6 +1,6 @@
 """User-related models package exports."""
 
-from cream_api.users.models.session import Session
-from cream_api.users.models.user import User
+from cream_api.users.models.app_user import AppUser
+from cream_api.users.models.app_user_session import AppUserSession
 
-__all__ = ["Session", "User"]
+__all__ = ["AppUser", "AppUserSession"]

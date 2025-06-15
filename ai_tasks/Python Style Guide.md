@@ -64,8 +64,8 @@
 - Include docstrings for all functions and classes
 - Document API endpoints with clear descriptions
 - Use type hints as a form of documentation
-- Keep comments focused on explaining "why" rather than "what"
-- A comment that only has "what" should not exist.
+- Comments should ONLY explain "why" something is done, never "what" is done
+- If a comment only describes what the code does, it should be removed
 
 ## Security
 

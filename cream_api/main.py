@@ -1,13 +1,17 @@
+import asyncio
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# Required for background tasks and custom event loop operations
+async_event_loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+
 # Routers
 # app.include_router()
 
-
-# Middleware
+# CORS configuration for local development
 ORIGINS = ["http://localhost:3000", "localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
@@ -22,4 +26,5 @@ app.add_middleware(
     "/",
 )
 async def root() -> dict[str, str]:
+    """Health check endpoint to verify API is running."""
     return {"app": "root"}

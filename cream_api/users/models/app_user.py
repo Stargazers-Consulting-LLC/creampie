@@ -12,13 +12,13 @@ from whenever import Instant
 from cream_api.db import ModelBase
 
 if TYPE_CHECKING:
-    from cream_api.users.models.session import Session
+    from cream_api.users.models import AppUserSession
 
 
-class User(ModelBase):
+class AppUser(ModelBase):
     """User model representing application users."""
 
-    __tablename__ = "users"
+    __tablename__ = "app_users"
 
     # Core Fields
     id: Mapped[UUID] = mapped_column(PGUUID, primary_key=True, default=uuid4)
@@ -45,11 +45,9 @@ class User(ModelBase):
     two_factor_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     two_factor_secret: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    # Metadata
-    metadata: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
     tags: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list, nullable=False)
 
     # Relationships
-    sessions: Mapped[list["Session"]] = relationship(
-        "Session", back_populates="user", cascade="all, delete-orphan"
+    sessions: Mapped[list["AppUserSession"]] = relationship(
+        "AppUserSession", back_populates="user", cascade="all, delete-orphan"
     )

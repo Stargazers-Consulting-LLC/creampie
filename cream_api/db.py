@@ -1,13 +1,12 @@
-import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-if __debug__:
-    SQLALCHEMY_DATABASE_URL = "postgresql://creamapp:creamapp@localhost/cream"
-else:
-    SQLALCHEMY_DATABASE_URL = os.getenv("POSTGRESQL_URL", "")
+from cream_api.settings import Settings, get_app_config
+
+# Get database configuration from settings
+settings: Settings = get_app_config()
+SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg://{settings.db_user}:{settings.db_password}@{settings.db_host}/{settings.db_name}"
 
 if not SQLALCHEMY_DATABASE_URL:
     raise RuntimeError("Missing connection arguments: SQLALCHEMY_DATABASE_URL")
