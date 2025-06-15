@@ -1,11 +1,11 @@
 // @ts-expect-error - React is needed for JSX
-import React from 'react';
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import { Button } from './components/ui/button';
+import React from "react";
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import { Button } from "./components/ui/button";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,12 +20,19 @@ function App() {
                 <img src={viteLogo} className="h-12 w-12" alt="Vite logo" />
               </a>
               <a href="https://react.dev" target="_blank" rel="noreferrer">
-                <img src={reactLogo} className="h-12 w-12 animate-spin" alt="React logo" />
+                <img
+                  src={reactLogo}
+                  className="h-12 w-12 animate-spin"
+                  alt="React logo"
+                />
               </a>
             </div>
+
             <div className="divide-y divide-gray-200">
               <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Vite + React</h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-8">
+                  Vite + React
+                </h1>
                 <div className="space-y-4">
                   <button
                     onClick={() => setCount((count) => count + 1)}
@@ -34,8 +41,11 @@ function App() {
                     count is {count}
                   </button>
                   <p className="text-gray-600">
-                    Edit <code className="bg-gray-100 px-2 py-1 rounded">src/App.tsx</code> and save
-                    to test HMR
+                    Edit{" "}
+                    <code className="bg-gray-100 px-2 py-1 rounded">
+                      src/App.tsx
+                    </code>{" "}
+                    and save to test HMR
                   </p>
                 </div>
               </div>
