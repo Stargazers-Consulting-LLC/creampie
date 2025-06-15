@@ -115,16 +115,7 @@
 
 @layer base {
   * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+    @apply border-border ring-1 ring-opacity-50 ring-[var(--color-ring)];
   }
   body {
     @apply bg-background text-foreground;
