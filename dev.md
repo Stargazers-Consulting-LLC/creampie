@@ -2,17 +2,16 @@
 
 ## Frontend
 
-React
-Vite
+- React
+- Vite
 
 ## API
 
 ## Backend
 
 - FastAPI
-- sqlite3
-- ORM?
-- - SQLAlchemy?
+- SQLAlchemy?
+- PostgreSQL
 
 ## CLI Stuff
 

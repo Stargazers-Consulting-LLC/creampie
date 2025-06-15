@@ -46,7 +46,7 @@ repos:
           - pandas-stubs
           - scipy-stubs
           - fastapi
-          - sqlalchemy-stubs
+          - "sqlalchemy[mypy]"
           - pydantic_settings
 
   - repo: git@github.com:pre-commit/mirrors-eslint.git
