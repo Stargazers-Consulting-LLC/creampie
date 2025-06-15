@@ -33,6 +33,8 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
 htmlcov/
 
 # TypeScript/Node
