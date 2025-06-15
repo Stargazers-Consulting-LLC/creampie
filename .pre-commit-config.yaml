@@ -49,6 +49,26 @@ repos:
           - sqlalchemy-stubs
           - pydantic_settings
 
+  - repo: git@github.com:pre-commit/mirrors-eslint.git
+    rev: v9.29.0
+    hooks:
+      - id: eslint
+        files: '\.(js|jsx|ts|tsx)$'
+        types: [file]
+        language: node
+        entry: bash -c 'cd cream_ui && yarn eslint --fix'
+        args: ["--config", ".eslintrc.json"]
+        fail_fast: true
+        stages: [pre-commit]
+        additional_dependencies:
+          - "eslint@^9.29.0"
+          - "eslint-plugin-react@^7.33.2"
+          - "eslint-plugin-react-hooks@^4.6.0"
+          - "eslint-plugin-react-refresh@^0.4.9"
+          - "@eslint/js@^9.29.0"
+          - "typescript-eslint@^8.34.0"
+          - "globals@^16.2.0"
+
   - repo: local
     hooks:
       - id: typescript
@@ -69,22 +89,3 @@ repos:
         fail_fast: false
         stages: [pre-commit] 
 
-  - repo: git@github.com:pre-commit/mirrors-eslint.git
-    rev: v9.29.0
-    hooks:
-      - id: eslint
-        files: '\.(js|jsx|ts|tsx)$'
-        types: [file]
-        language: node
-        entry: bash -c 'cd cream_ui && yarn eslint --fix'
-        args: ["--config", ".eslintrc.json"]
-        fail_fast: false
-        stages: [pre-commit]
-        additional_dependencies:
-          - "eslint@^9.29.0"
-          - "eslint-plugin-react@^7.33.2"
-          - "eslint-plugin-react-hooks@^4.6.0"
-          - "eslint-plugin-react-refresh@^0.4.9"
-          - "@eslint/js@^9.29.0"
-          - "typescript-eslint@^8.34.0"
-          - "globals@^16.2.0"
