@@ -1,6 +1,5 @@
 """User model definition."""
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
@@ -8,6 +7,7 @@ from sqlalchemy import Boolean, DateTime, Text
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from whenever import Instant
 
 from cream_api.db import ModelBase
 
@@ -27,9 +27,9 @@ class User(ModelBase):
     username: Mapped[str] = mapped_column(Text, nullable=False)
     first_name: Mapped[str] = mapped_column(Text, nullable=False)
     last_name: Mapped[str] = mapped_column(Text, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+    created_at: Mapped[Instant] = mapped_column(DateTime, default=Instant.now, nullable=False)
+    updated_at: Mapped[Instant] = mapped_column(
+        DateTime, default=Instant.now, onupdate=Instant.now, nullable=False
     )
 
     # Account Settings
@@ -39,9 +39,9 @@ class User(ModelBase):
     preferences: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
     # Security
-    last_login: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_login: Mapped[Instant | None] = mapped_column(DateTime, nullable=True)
     password_reset_token: Mapped[str | None] = mapped_column(Text, nullable=True)
-    password_reset_expires: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    password_reset_expires: Mapped[Instant | None] = mapped_column(DateTime, nullable=True)
     two_factor_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     two_factor_secret: Mapped[str | None] = mapped_column(Text, nullable=True)
 

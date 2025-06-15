@@ -43,6 +43,7 @@ repos:
           - types-python-dateutil
           - types-six
           - pytest
+          - whenever
           - pandas-stubs
           - scipy-stubs
           - fastapi
