@@ -9,6 +9,7 @@ React, Vite and Typescript
 - FastAPI
 - sqlite3
 - ORM?
+- - SQLAlchemy?
 
 # CLI Stuff
 
