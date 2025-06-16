@@ -15,7 +15,7 @@ class StockDataRequest(BaseModel):
     end_date: str | None = None
 
 
-async def _retrieve_historical_data(symbol: str, end_date: str | None) -> None:
+async def _retrieve_historical_data_task(symbol: str, end_date: str | None) -> None:
     """Background task to retrieve historical stock data.
 
     Args:
@@ -48,7 +48,7 @@ async def get_historical_data(
     """
     try:
         background_tasks.add_task(
-            _retrieve_historical_data,
+            _retrieve_historical_data_task,
             symbol=request.symbol,
             end_date=request.end_date,
         )

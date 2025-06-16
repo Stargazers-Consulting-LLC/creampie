@@ -91,6 +91,7 @@ module = [
     "pytest_asyncio.*",
     "pytest.*",
     "hypothesis.*",
-    "aioresponses.*"
+    "aioresponses.*",
+    "stargazer_utils.*"
 ]
 ignore_missing_imports = true
