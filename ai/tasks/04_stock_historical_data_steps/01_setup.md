@@ -11,7 +11,7 @@ Before diving into the implementation, let's set up our development environment 
 - The project already has the required dependencies in pyproject.toml:
   - pandas
   - numpy
-  - requests
+  - aiohttp
   - sqlalchemy
   - alembic
 
@@ -70,7 +70,7 @@ class StockData(Base):
   - Close
   - Adj Close
   - Volume
-- Plan for async data retrieval and storage
+- Plan for async data retrieval and storage using aiohttp
 
 ### 5. Next Steps
 

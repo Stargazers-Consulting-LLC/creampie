@@ -56,6 +56,7 @@
 
 - Use explicit error handling with try/except blocks
 - Raise specific exceptions with meaningful messages
+- Reraise an exception to preserve traceback (`raise from` syntax) when appropriate.
 - Validate input data using Pydantic models
 - Use type assertions when necessary for type safety
 
