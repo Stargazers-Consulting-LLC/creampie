@@ -15,7 +15,7 @@ This document outlines the implementation of the historical stock data retrieval
    - Implements retry mechanisms and rate limiting
    - Manages data validation before storage
 
-2. **Data Processor** (`DataProcessor`)
+2. **Data Processor** (`StockDataManager`)
 
    - Validates incoming data
    - Transforms raw data into structured format

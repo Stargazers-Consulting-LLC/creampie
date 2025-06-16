@@ -1,10 +1,12 @@
 """Test configuration and fixtures."""
 
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
 
 import pytest
+import pytest_asyncio
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -58,6 +60,35 @@ def test_db(test_settings: Settings) -> Generator[Session, None, None]:
 
     # Clean up by dropping all tables
     ModelBase.metadata.drop_all(bind=engine)
+
+
+@pytest_asyncio.fixture
+async def async_test_db(test_settings: Settings) -> AsyncGenerator[AsyncSession, None]:
+    """Create an async test database session."""
+    # Create SQLite in-memory database URL for async
+    test_db_url = "sqlite+aiosqlite:///:memory:"
+
+    # Create async engine
+    engine = create_async_engine(
+        test_db_url,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+
+    # Create async session factory
+    async_session = async_sessionmaker(engine, expire_on_commit=False)
+
+    # Create all tables
+    async with engine.begin() as conn:
+        await conn.run_sync(ModelBase.metadata.create_all)
+
+    # Create and yield session
+    async with async_session() as session:
+        yield session
+
+    # Clean up by dropping all tables
+    async with engine.begin() as conn:
+        await conn.run_sync(ModelBase.metadata.drop_all)
 
 
 @pytest.fixture

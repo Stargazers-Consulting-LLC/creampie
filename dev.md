@@ -54,6 +54,11 @@
 - Run yarn
 - -`yarn dev`
 
+## Migrations:
+
+- Downgrade to an empty state:
+- - `alembic downgrade base`
+
 ## Next Steps
 
 - Write DB generating script

@@ -28,15 +28,21 @@ class PriceData(TypedDict):
     volume: int
 
 
-class ParsedData(TypedDict, total=False):
+class ParsedData(TypedDict):
     """Type definition for parsed data."""
 
     prices: list[PriceData]
 
 
 @pytest.fixture
+def parser() -> StockDataParser:
+    """Create parser instance."""
+    return StockDataParser()
+
+
+@pytest.fixture
 def sample_html() -> str:
-    """Get sample HTML for testing."""
+    """Create sample HTML content."""
     return """
     <table data-test="historical-prices">
         <tr>
@@ -50,21 +56,15 @@ def sample_html() -> str:
         </tr>
         <tr>
             <td>Jan 01, 2024</td>
-            <td>100.00</td>
-            <td>101.00</td>
-            <td>99.00</td>
-            <td>100.50</td>
-            <td>100.50</td>
-            <td>1,000,000</td>
+            <td>150.00</td>
+            <td>155.00</td>
+            <td>148.00</td>
+            <td>152.00</td>
+            <td>152.00</td>
+            <td>1000000</td>
         </tr>
     </table>
     """
-
-
-@pytest.fixture
-def parser() -> StockDataParser:
-    """Create a parser instance."""
-    return StockDataParser()
 
 
 def test_parse_html(parser: StockDataParser, sample_html: str) -> None:
@@ -93,29 +93,28 @@ def test_parse_invalid_html(parser: StockDataParser) -> None:
 
 def test_process_data(parser: StockDataParser) -> None:
     """Test data processing functionality."""
-    raw_data = {
+    data = {
         "prices": [
             {
-                "date": 1704067200,  # 2024-01-01
-                "open": 100.00,
-                "high": 101.00,
-                "low": 99.00,
-                "close": 100.50,
-                "adjclose": 100.50,
-                "volume": 1000000,
+                "date": "Jan 01, 2024",
+                "open": TEST_OPEN_PRICE,
+                "high": TEST_HIGH_PRICE,
+                "low": TEST_LOW_PRICE,
+                "close": TEST_CLOSE_PRICE,
+                "adj_close": TEST_ADJ_CLOSE_PRICE,
+                "volume": TEST_VOLUME,
             }
         ]
     }
-
-    df = parser.process_data(raw_data)
+    df = parser.process_data(data)
     assert not df.empty
-    assert list(df.columns) == ["Open", "High", "Low", "Close", "Adj Close", "Volume"]
-    assert df.iloc[0]["Open"] == TEST_OPEN_PRICE
-    assert df.iloc[0]["High"] == TEST_HIGH_PRICE
-    assert df.iloc[0]["Low"] == TEST_LOW_PRICE
-    assert df.iloc[0]["Close"] == TEST_CLOSE_PRICE
-    assert df.iloc[0]["Adj Close"] == TEST_ADJ_CLOSE_PRICE
-    assert df.iloc[0]["Volume"] == TEST_VOLUME
+    assert len(df) == 1
+    assert df["open"].iloc[0] == TEST_OPEN_PRICE
+    assert df["high"].iloc[0] == TEST_HIGH_PRICE
+    assert df["low"].iloc[0] == TEST_LOW_PRICE
+    assert df["close"].iloc[0] == TEST_CLOSE_PRICE
+    assert df["adj_close"].iloc[0] == TEST_ADJ_CLOSE_PRICE
+    assert df["volume"].iloc[0] == TEST_VOLUME
 
 
 def test_process_invalid_data(parser: StockDataParser) -> None:

@@ -3,20 +3,21 @@
 import asyncio
 from datetime import datetime
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 import aiohttp
-from sqlalchemy import select
+from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cream_api.common.http import HTTP_OK, HTTP_TOO_MANY_REQUESTS
 from cream_api.settings import get_app_settings
+from cream_api.stock_data.data_manager import StockDataManager
 from cream_api.stock_data.exceptions import APIError, ValidationError
-from cream_api.stock_data.models import StockData
 from cream_api.stock_data.parser import StockDataParser
-from cream_api.stock_data.processor import DataProcessor
 
 settings = get_app_settings()
+
+# TODO Refactor this to do what I wanted it to do in the first place
+# instead of this weird cache bullshit.
 
 
 class StockDataRetriever:
@@ -34,7 +35,7 @@ class StockDataRetriever:
         self.cache_dir.mkdir(exist_ok=True)
         self.headers = {"User-Agent": settings.PARSER_USER_AGENT}
         self.parser = StockDataParser()
-        self.processor = DataProcessor(session)
+        self.manager = StockDataManager(session)
         self.max_retries = settings.PARSER_MAX_RETRIES
         self.retry_delay = settings.PARSER_RETRY_DELAY
 
@@ -70,9 +71,9 @@ class StockDataRetriever:
         for attempt in range(self.max_retries):
             try:
                 async with session.get(url, headers=self.headers, params=params) as response:
-                    if response.status == HTTP_OK:
-                        return cast(str, await response.text())
-                    elif response.status == HTTP_TOO_MANY_REQUESTS:  # Too Many Requests
+                    if response.status == status.HTTP_200_OK:
+                        return await response.text()
+                    elif response.status == status.HTTP_429_TOO_MANY_REQUESTS:  # Too Many Requests
                         if attempt < self.max_retries - 1:
                             await asyncio.sleep(self.retry_delay * (attempt + 1))
                             continue
@@ -180,7 +181,7 @@ class StockDataRetriever:
         symbol: str,
         start_date: str,
         end_date: str | None = None,
-    ) -> list[StockData]:
+    ) -> dict[str, Any]:
         """
         Get historical stock data for a symbol.
 
@@ -190,7 +191,7 @@ class StockDataRetriever:
             end_date: End date in 'YYYY-MM-DD' format (defaults to today)
 
         Returns:
-            List of StockData objects
+            Dictionary containing the parsed stock data
 
         Raises:
             APIError: If the request fails or returns invalid data
@@ -199,18 +200,5 @@ class StockDataRetriever:
         if end_date is None:
             end_date = datetime.now().strftime("%Y-%m-%d")
 
-        # Fetch data from Yahoo Finance
-        data = await self._fetch_data(symbol, start_date, end_date)
-
-        # Process and store the data
-        await self.processor.process_data(data, symbol)
-
-        # Return the stored data
-        result = await self.session.execute(
-            select(StockData)
-            .where(StockData.symbol == symbol)
-            .where(StockData.date >= datetime.strptime(start_date, "%Y-%m-%d"))
-            .where(StockData.date <= datetime.strptime(end_date, "%Y-%m-%d"))
-            .order_by(StockData.date)
-        )
-        return list(result.scalars().all())
+        # Fetch and return the data
+        return await self._fetch_data(symbol, start_date, end_date)

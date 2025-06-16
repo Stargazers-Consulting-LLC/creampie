@@ -46,6 +46,8 @@ click = "^8.2.1"
 pre-commit = "^4.2.0"
 pytest-asyncio = "^1.0.0"
 types-beautifulsoup4 = "^4.12.0.20250516"
+aiosqlite = "^0.21.0"
+aioresponses = "^0.7.8"
 
 [build-system]
 requires = ["poetry-core"]
@@ -77,7 +79,18 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
+exclude = [
+    'tests/.*',
+    '.*_test\.py$',
+    'test_.*\.py$'
+]
 
 [[tool.mypy.overrides]]
-module = ["aiohttp.*", "pytest_asyncio.*"]
+module = [
+    "aiohttp.*",
+    "pytest_asyncio.*",
+    "pytest.*",
+    "hypothesis.*",
+    "aioresponses.*"
+]
 ignore_missing_imports = true

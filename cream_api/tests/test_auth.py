@@ -21,9 +21,7 @@ def test_signup_success(client: TestClient, test_db: Session, test_settings: Set
         },
     )
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.json() == {
-        "message": "User created successfully. Please contact support to verify your account."
-    }
+    assert response.json() == {"message": "User created successfully."}
 
     # Verify user was created in database
     user = test_db.query(AppUser).filter(AppUser.email == "test@example.com").first()

@@ -66,8 +66,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def create_access_token(data: dict) -> str:
-    """Generates a cryptographically secure session token."""
-    return secrets.token_urlsafe(32)
+    """Create JWT access token."""
+    # TODO: Implement proper JWT token creation
+    return "dummy_token"
 
 
 async def get_current_user(

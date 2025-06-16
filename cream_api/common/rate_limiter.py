@@ -6,6 +6,7 @@ asynchronous usage patterns.
 """
 
 import asyncio
+from collections import defaultdict, deque
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
@@ -55,7 +56,7 @@ class RateLimiter:
 
         self.max_requests: int = max_requests
         self.time_window: float = float(time_window)
-        self.requests: dict[str, list[datetime]] = {}
+        self.requests: defaultdict[str, deque[datetime]] = defaultdict(deque)
         self._session: ClientSession | None = session
 
     @property
@@ -91,15 +92,11 @@ class RateLimiter:
         """
         now = datetime.now()
 
-        # Clean up old requests
-        if domain in self.requests:
-            self.requests[domain] = [
-                req_time
-                for req_time in self.requests[domain]
-                if now - req_time < timedelta(seconds=self.time_window)
-            ]
-        else:
-            self.requests[domain] = []
+        # Remove expired requests from the front of the deque
+        while self.requests[domain] and now - self.requests[domain][0] >= timedelta(
+            seconds=self.time_window
+        ):
+            self.requests[domain].popleft()
 
         # If rate limit is exceeded, wait until the oldest request expires
         if len(self.requests[domain]) >= self.max_requests:
@@ -109,11 +106,10 @@ class RateLimiter:
                 await asyncio.sleep(wait_time)
             # Clean up again after waiting
             now = datetime.now()
-            self.requests[domain] = [
-                req_time
-                for req_time in self.requests[domain]
-                if now - req_time < timedelta(seconds=self.time_window)
-            ]
+            while self.requests[domain] and now - self.requests[domain][0] >= timedelta(
+                seconds=self.time_window
+            ):
+                self.requests[domain].popleft()
 
         # Add current request
         self.requests[domain].append(now)

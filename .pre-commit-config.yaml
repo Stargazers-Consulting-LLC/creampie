@@ -30,22 +30,26 @@ repos:
     hooks:
       - id: mypy
         args: [--config-file=pyproject.toml]
+        files: ^cream_api/
+        types: [python]
         additional_dependencies:
+          - pytest
+          - fastapi
+          - alembic
           - types-requests
           - types-setuptools
           - types-PyYAML
           - types-python-dateutil
           - types-six
           - types-beautifulsoup4
-          - pytest
           - pandas-stubs
           - scipy-stubs
-          - fastapi
           - "sqlalchemy[mypy]"
-          - alembic
-          - pydantic_settings
           - pydantic
-          - email-validator
+          - pydantic_settings
+          - aioresponses
+          - pytest-asyncio
+          - hypothesis
 
   - repo: git@github.com:pre-commit/mirrors-eslint.git
     rev: v9.29.0

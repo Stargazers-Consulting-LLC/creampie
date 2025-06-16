@@ -23,7 +23,6 @@ class AppUser(ModelBase):
     id: Mapped[UUID] = mapped_column(PGUUID, primary_key=True, default=uuid4)
     email: Mapped[str] = mapped_column(Text, nullable=False)
     password: Mapped[str] = mapped_column(Text, nullable=False)
-    username: Mapped[str] = mapped_column(Text, nullable=False)
     first_name: Mapped[str] = mapped_column(Text, nullable=False)
     last_name: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=False)
