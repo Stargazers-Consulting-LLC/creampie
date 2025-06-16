@@ -1,25 +1,28 @@
+"""Main FastAPI application module."""
+
 import asyncio
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from cream_api.users.routes import auth
+
+app = FastAPI(title="Cream API")
 
 # Required for background tasks and custom event loop operations
 async_event_loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
 
-# Routers
-# app.include_router()
-
-# CORS configuration for local development
-ORIGINS = ["http://localhost:3000", "localhost:3000"]
+# Enables frontend to make API requests during development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ORIGINS,
+    allow_origins=["http://localhost:5173"],  # Vite default port
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth.router)
 
 
 @app.get(

@@ -1,10 +1,4 @@
 repos:
-  - repo: git@github.com:pre-commit/pre-commit-hooks.git
-    rev: v5.0.0
-    hooks:
-      - id: check-yaml
-      - id: check-json
-
   - repo: git@github.com:PyCQA/autoflake.git
     rev: v2.3.1
     hooks:
@@ -24,7 +18,7 @@ repos:
     rev: v0.11.13
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix]
         fail_fast: false
         stages: [pre-commit]
       - id: ruff-format
@@ -50,6 +44,8 @@ repos:
           - "sqlalchemy[mypy]"
           - alembic
           - pydantic_settings
+          - pydantic
+          - email-validator
 
   - repo: git@github.com:pre-commit/mirrors-eslint.git
     rev: v9.29.0

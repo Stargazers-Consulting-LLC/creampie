@@ -8,15 +8,15 @@ from sqlalchemy import engine_from_config, pool
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from cream_api.db import ModelBase
-from cream_api.settings import get_app_config
+from cream_api.db import DbModelBase
+from cream_api.settings import get_app_settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 # Get database configuration from settings
-settings = get_app_config()
+settings = get_app_settings()
 # Use admin credentials for migrations
 config.set_main_option(
     "sqlalchemy.url",
@@ -30,7 +30,7 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = ModelBase.metadata
+target_metadata = DbModelBase.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

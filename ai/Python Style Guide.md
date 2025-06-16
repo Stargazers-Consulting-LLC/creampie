@@ -66,6 +66,7 @@
 - Use type hints as a form of documentation
 - Comments should ONLY explain "why" something is done, never "what" is done
 - If a comment only describes what the code does, it should be removed
+- Commented out code should be removed
 
 ## Security
 

@@ -9,13 +9,13 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from whenever import Instant
 
-from cream_api.db import ModelBase
+from cream_api.db import DbModelBase
 
 if TYPE_CHECKING:
     from cream_api.users.models import AppUserSession
 
 
-class AppUser(ModelBase):
+class AppUser(DbModelBase):
     """User model representing application users."""
 
     __tablename__ = "app_users"
@@ -35,7 +35,6 @@ class AppUser(ModelBase):
     # Account Settings
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    role: Mapped[str] = mapped_column(Text, nullable=False)
     preferences: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
     # Security

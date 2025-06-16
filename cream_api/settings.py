@@ -1,25 +1,30 @@
-from functools import lru_cache
+"""Application settings configuration."""
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Application settings loaded from environment variables."""
+    """Configuration for database and frontend integration."""
 
-    # Database settings
     db_user: str = "creamapp"
-    db_password: str = "creamapp"
-    db_host: str = "localhost"
-    db_name: str = "cream"
+    db_host: str = ""
+    db_name: str = ""
+    db_url: str = ""
+    db_password: str = ""
+    db_admin_user: str = ""
+    db_admin_password: str = ""
 
-    # Admin database settings for migrations
-    db_admin_user: str = "postgres"
-    db_admin_password: str = "postgres"
+    frontend_url: str = ""
 
     model_config = SettingsConfigDict(env_file=".env")
 
+    class Config:
+        env_file = ".env"
 
-@lru_cache
-def get_app_config() -> Settings:
-    """Returns cached application settings to avoid repeated environment variable lookups."""
-    return Settings()
+
+app_settings = Settings()
+
+
+def get_app_settings() -> Settings:
+    """Get application configuration settings."""
+    return app_settings

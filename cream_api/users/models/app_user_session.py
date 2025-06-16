@@ -9,13 +9,13 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from whenever import Instant
 
-from cream_api.db import ModelBase
+from cream_api.db import DbModelBase
 
 if TYPE_CHECKING:
     from cream_api.users.models.app_user import AppUser
 
 
-class AppUserSession(ModelBase):
+class AppUserSession(DbModelBase):
     """Session model representing user sessions."""
 
     __tablename__ = "sessions"
