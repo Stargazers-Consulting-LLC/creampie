@@ -1,5 +1,7 @@
 """Application settings configuration."""
 
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,6 +18,17 @@ class Settings(BaseSettings):
 
     # Frontend configuration
     frontend_url: str = ""
+
+    # Cache configuration
+    CACHE_DIR: Path = Path("cache")
+    CACHE_EXPIRATION_DAYS: int = 7
+    CACHE_MAX_SIZE: int = 1000
+
+    # Parser configuration
+    PARSER_USER_AGENT: str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    PARSER_TIMEOUT: int = 30
+    PARSER_MAX_RETRIES: int = 3
+    PARSER_RETRY_DELAY: int = 5
 
     def get_connection_string(self) -> str:
         """Get database connection string."""

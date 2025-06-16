@@ -1,4 +1,67 @@
-# Cream API Style Guide
+# Python Style Guide
+
+## General Guidelines
+
+1. Follow PEP 8 style guide
+2. Use type hints for all function parameters and return values
+3. Use docstrings for all modules, classes, and functions
+4. Use meaningful variable and function names
+5. Keep functions small and focused
+6. Use list comprehensions for simple transformations
+7. Use generator expressions for large datasets
+8. Use context managers for resource management
+9. Use dataclasses for data containers
+10. Use enums for constants
+11. Use os.path for file paths
+12. Use the standard `datetime` library for date/time operations
+13. Do not use magic numbers that are not 1, 2, -1 or 0.
+
+## Code Organization
+
+1. Group related functionality into modules
+2. Use `__init__.py` files to expose public API
+3. Never have a circular import
+4. Use absolute imports
+
+## Testing
+
+1. Write unit tests for all functions
+2. Use pytest for testing
+3. Use fixtures for test setup
+4. Use parametrize for multiple test cases
+5. Use mock for external dependencies
+
+## Error Handling
+
+1. Use custom exceptions for domain-specific errors
+2. Use context managers for cleanup
+3. Use try/except blocks for expected errors
+4. Use raise from for exception chaining
+5. Use logging for error tracking
+
+## Performance
+
+1. Use generators for large datasets
+2. Use sets for membership testing
+3. Use dict.get() for safe access
+4. Use list comprehension for simple transformations
+5. Use collections.deque for queues
+
+## Security
+
+1. Use secrets module for random values
+2. Use hashlib for hashing
+3. Use ssl for secure connections
+4. Use hmac for message authentication
+5. Use cryptography for encryption
+
+## Documentation
+
+1. Use docstrings for all modules, classes, and functions
+2. Use type hints for all function parameters and return values
+3. Use comments for complex logic
+4. Use README.md for project documentation
+5. Use CHANGELOG.md for version history
 
 ## General Python Style
 
@@ -7,10 +70,6 @@
 - Keep line length reasonable (aim for under 100 characters)
 - Use meaningful variable and function names that are descriptive
 - Use `typing.TYPE_CHECKING` when appropriate to avoid circular imports while type checking.
-
-## Specific Substitutions
-
-- Prefer the 3rd party `whenever` library over the built-in `datetime`
 
 ## Project Structure
 
