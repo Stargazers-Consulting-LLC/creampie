@@ -6,7 +6,6 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cream_api.stock_data.exceptions import ValidationError
 from cream_api.stock_data.models import StockData
 
 
@@ -30,36 +29,22 @@ class StockDataManager:
             data: Stock data to validate
 
         Raises:
-            ValidationError: If data is invalid
+            ValueError: If data is invalid
         """
         if not isinstance(data, dict):
-            raise ValidationError(
-                "", [{"error": "Invalid data format", "details": "Data must be a dictionary"}]
-            )
+            raise ValueError("Data must be a dictionary")
 
         if "prices" not in data:
-            raise ValidationError(
-                "", [{"error": "Missing prices", "details": "Data must contain prices"}]
-            )
+            raise ValueError("Data must contain prices")
 
         if not data["prices"]:
-            raise ValidationError(
-                "", [{"error": "Empty prices", "details": "Prices list cannot be empty"}]
-            )
+            raise ValueError("Prices list cannot be empty")
 
         required_fields = {"date", "open", "high", "low", "close", "adj_close", "volume"}
         for price in data["prices"]:
             missing_fields = required_fields - set(price.keys())
             if missing_fields:
-                raise ValidationError(
-                    "",
-                    [
-                        {
-                            "error": "Missing fields",
-                            "details": f"Missing required fields: {missing_fields}",
-                        }
-                    ],
-                )
+                raise ValueError(f"Missing required fields: {missing_fields}")
 
     async def transform_data(self, data: dict[str, Any]) -> list[StockData]:
         """Transform raw data into StockData objects.

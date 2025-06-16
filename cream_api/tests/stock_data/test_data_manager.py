@@ -8,7 +8,6 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.stock_data.data_manager import StockDataManager
-from cream_api.stock_data.exceptions import ValidationError
 from cream_api.stock_data.models import StockData
 from cream_api.tests.stock_data.test_constants import (
     TEST_ADJ_CLOSE_PRICE,
@@ -69,16 +68,16 @@ async def test_validate_data_missing_fields(data_manager: StockDataManager) -> N
             }
         ]
     }
-    with pytest.raises(ValidationError) as exc_info:
+    with pytest.raises(ValueError) as exc_info:
         await data_manager.validate_data(sample_data)
-    assert "Missing required field" in str(exc_info.value)
+    assert "Missing required fields" in str(exc_info.value)
 
 
 @pytest.mark.asyncio
 async def test_validate_data_empty_prices(data_manager: StockDataManager) -> None:
     """Test validation with empty prices list."""
     sample_data: dict[str, list[dict[str, str | float | int]]] = {"prices": []}
-    with pytest.raises(ValidationError) as exc_info:
+    with pytest.raises(ValueError) as exc_info:
         await data_manager.validate_data(sample_data)
     assert "Prices list cannot be empty" in str(exc_info.value)
 

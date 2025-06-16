@@ -11,13 +11,3 @@ class APIError(StockDataError):
     def __init__(self, symbol: str, message: str):
         self.symbol = symbol
         super().__init__(f"API error for {symbol}: {message}")
-
-
-class ValidationError(StockDataError):
-    """Exception raised for data validation errors."""
-
-    def __init__(self, symbol: str, errors: list):
-        self.symbol = symbol
-        self.errors = errors
-        error_messages = [f"{e['error']}: {e['details']}" for e in errors]
-        super().__init__(f"Validation error for {symbol}:\n" + "\n".join(error_messages))

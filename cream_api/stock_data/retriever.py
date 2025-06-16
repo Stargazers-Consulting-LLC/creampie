@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.settings import get_app_settings
 from cream_api.stock_data.data_manager import StockDataManager
-from cream_api.stock_data.exceptions import APIError, ValidationError
+from cream_api.stock_data.exceptions import APIError
 from cream_api.stock_data.parser import StockDataParser
 
 settings = get_app_settings()
@@ -141,7 +141,7 @@ class StockDataRetriever:
 
         Raises:
             APIError: If the request fails or returns invalid data
-            ValidationError: If the date range is invalid
+            ValueError: If the date range is invalid
         """
         # Convert dates to timestamps
         start_timestamp = int(datetime.strptime(start_date, "%Y-%m-%d").timestamp())
@@ -149,15 +149,7 @@ class StockDataRetriever:
 
         # Validate date range
         if start_timestamp > end_timestamp:
-            raise ValidationError(
-                symbol,
-                [
-                    {
-                        "error": "Invalid date range",
-                        "details": f"Start date {start_date} is after end date {end_date}",
-                    }
-                ],
-            )
+            raise ValueError(f"Start date {start_date} is after end date {end_date}")
 
         # Fetch first page
         all_data = await self._fetch_page(symbol, start_date, end_date)
@@ -195,7 +187,7 @@ class StockDataRetriever:
 
         Raises:
             APIError: If the request fails or returns invalid data
-            ValidationError: If the date range is invalid
+            ValueError: If the date range is invalid
         """
         if end_date is None:
             end_date = datetime.now().strftime("%Y-%m-%d")
