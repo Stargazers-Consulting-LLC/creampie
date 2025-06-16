@@ -4,18 +4,17 @@ from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Text
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from whenever import Instant
 
-from cream_api.db import DbModelBase
+from cream_api.db import ModelBase
 
 if TYPE_CHECKING:
     from cream_api.users.models.app_user import AppUser
 
 
-class AppUserSession(DbModelBase):
+class AppUserSession(ModelBase):
     """Session model representing user sessions."""
 
     __tablename__ = "sessions"
@@ -37,10 +36,8 @@ class AppUserSession(DbModelBase):
     revoked_at: Mapped[Instant | None] = mapped_column(DateTime, nullable=True)
 
     # Metadata
-    location: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     platform: Mapped[str | None] = mapped_column(Text, nullable=True)
     browser: Mapped[str | None] = mapped_column(Text, nullable=True)
-    session_metadata: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
     # Relationships
     user: Mapped["AppUser"] = relationship("AppUser", back_populates="sessions")

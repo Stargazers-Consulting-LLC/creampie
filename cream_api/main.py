@@ -1,16 +1,11 @@
 """Main FastAPI application module."""
 
-import asyncio
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from cream_api.users.routes import auth
 
 app = FastAPI(title="Cream API")
-
-# Required for background tasks and custom event loop operations
-async_event_loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
 
 app.add_middleware(
     CORSMiddleware,

@@ -10,13 +10,20 @@ class Settings(BaseSettings):
     db_user: str = "creamapp"
     db_host: str = ""
     db_name: str = ""
-    db_url: str = ""
     db_password: str = ""
     db_admin_user: str = ""
     db_admin_password: str = ""
 
     # Frontend configuration
     frontend_url: str = ""
+
+    def get_connection_string(self) -> str:
+        """Get database connection string."""
+        if not self.db_host or not self.db_name:
+            return "sqlite:///:memory:"
+        return (
+            f"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}"
+        )
 
     model_config = SettingsConfigDict(env_file=".env")
 

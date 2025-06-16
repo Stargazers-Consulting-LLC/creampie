@@ -10,7 +10,6 @@ from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
-from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = "5bcf6394c136"
@@ -35,13 +34,11 @@ def upgrade() -> None:
         sa.Column("is_verified", sa.Boolean(), nullable=False),
         sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column("role", sa.Text(), nullable=False),
-        sa.Column("preferences", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("last_login", sa.DateTime(), nullable=True),
         sa.Column("password_reset_token", sa.Text(), nullable=True),
         sa.Column("password_reset_expires", sa.DateTime(), nullable=True),
         sa.Column("two_factor_enabled", sa.Boolean(), nullable=False),
         sa.Column("two_factor_secret", sa.Text(), nullable=True),
-        sa.Column("tags", postgresql.ARRAY(sa.Text()), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -56,10 +53,8 @@ def upgrade() -> None:
         sa.Column("device_id", sa.Text(), nullable=True),
         sa.Column("is_valid", sa.Boolean(), nullable=False),
         sa.Column("revoked_at", sa.DateTime(), nullable=True),
-        sa.Column("location", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
         sa.Column("platform", sa.Text(), nullable=True),
         sa.Column("browser", sa.Text(), nullable=True),
-        sa.Column("session_metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.ForeignKeyConstraint(["user_id"], ["app_users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )

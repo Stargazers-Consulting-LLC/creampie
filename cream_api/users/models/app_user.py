@@ -4,18 +4,17 @@ from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, DateTime, Text
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from whenever import Instant
 
-from cream_api.db import DbModelBase
+from cream_api.db import ModelBase
 
 if TYPE_CHECKING:
     from cream_api.users.models import AppUserSession
 
 
-class AppUser(DbModelBase):
+class AppUser(ModelBase):
     """User model representing application users."""
 
     __tablename__ = "app_users"
@@ -35,7 +34,6 @@ class AppUser(DbModelBase):
     # Account Settings
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    preferences: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
     # Security
     last_login: Mapped[Instant | None] = mapped_column(DateTime, nullable=True)
@@ -43,8 +41,6 @@ class AppUser(DbModelBase):
     password_reset_expires: Mapped[Instant | None] = mapped_column(DateTime, nullable=True)
     two_factor_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     two_factor_secret: Mapped[str | None] = mapped_column(Text, nullable=True)
-
-    tags: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list, nullable=False)
 
     # Relationships
     sessions: Mapped[list["AppUserSession"]] = relationship(
