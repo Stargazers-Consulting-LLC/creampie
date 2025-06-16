@@ -3,7 +3,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from cream_api.settings import get_app_settings
 from cream_api.users.routes import auth
+
+settings = get_app_settings()
+
+# Create required directories
+settings.HTML_RAW_RESPONSES_DIR.mkdir(exist_ok=True, parents=True)
 
 app = FastAPI(title="Cream API")
 

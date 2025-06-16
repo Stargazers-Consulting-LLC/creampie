@@ -14,8 +14,4 @@ class StockDataError(CreamError):
 
 
 class StockRetrievalError(StockDataError):
-    """Exception raised for API-related errors."""
-
-    def __init__(self, symbol: str, message: str):
-        self.symbol = symbol
-        super().__init__(f"API error for {symbol}: {message}")
+    """Exception raised for errors relating to retrieving stock data."""
