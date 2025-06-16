@@ -1,6 +1,4 @@
-"""
-Database connection and session management.
-"""
+"""Database connection and session management."""
 
 from collections.abc import Generator
 

@@ -12,7 +12,6 @@ app = FastAPI(title="Cream API")
 # Required for background tasks and custom event loop operations
 async_event_loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
 
-# Enables frontend to make API requests during development
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Vite default port
@@ -25,9 +24,7 @@ app.add_middleware(
 app.include_router(auth.router)
 
 
-@app.get(
-    "/",
-)
+@app.get("/")
 async def root() -> dict[str, str]:
     """Health check endpoint to verify API is running."""
     return {"app": "root"}

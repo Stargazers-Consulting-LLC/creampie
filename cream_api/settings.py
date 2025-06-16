@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Configuration for database and frontend integration."""
 
+    # Database configuration
     db_user: str = "creamapp"
     db_host: str = ""
     db_name: str = ""
@@ -14,12 +15,10 @@ class Settings(BaseSettings):
     db_admin_user: str = ""
     db_admin_password: str = ""
 
+    # Frontend configuration
     frontend_url: str = ""
 
     model_config = SettingsConfigDict(env_file=".env")
-
-    class Config:
-        env_file = ".env"
 
 
 app_settings = Settings()
