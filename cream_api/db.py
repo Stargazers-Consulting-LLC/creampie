@@ -5,7 +5,7 @@ from collections.abc import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-from .settings import get_app_settings
+from cream_api.settings import get_app_settings
 
 settings = get_app_settings()
 
