@@ -6,8 +6,8 @@ from typing import Any
 import pandas as pd
 from bs4 import BeautifulSoup
 
+from cream_api.common.exceptions import StockRetrievalError
 from cream_api.settings import get_app_settings
-from cream_api.stock_data.exceptions import APIError
 from cream_api.tests.stock_data.test_constants import REQUIRED_COLUMNS_COUNT
 
 settings = get_app_settings()
@@ -40,18 +40,18 @@ class StockDataParser:
             Dictionary containing parsed stock data
 
         Raises:
-            APIError: If HTML content is invalid or missing required data
+            StockRetrievalError: If HTML content is invalid or missing required data
         """
         try:
             soup = BeautifulSoup(html_content, "html.parser")
             table = self._find_data_table(soup)
             if not table:
-                raise APIError("AAPL", "No data table found in HTML content")
+                raise StockRetrievalError("AAPL", "No data table found in HTML content")
 
             data = self._extract_table_data(table)
             return {"prices": data}
         except Exception as e:
-            raise APIError("AAPL", f"Failed to parse HTML: {e!s}") from e
+            raise StockRetrievalError("AAPL", f"Failed to parse HTML: {e!s}") from e
 
     def process_data(self, data: dict[str, list[dict[str, Any]]]) -> pd.DataFrame:
         """
@@ -64,7 +64,7 @@ class StockDataParser:
             DataFrame with processed stock data
 
         Raises:
-            APIError: If data processing fails
+            StockRetrievalError: If data processing fails
         """
         try:
             df = pd.DataFrame(data["prices"])
@@ -72,7 +72,7 @@ class StockDataParser:
             df = self._validate_data(df)
             return df
         except Exception as e:
-            raise APIError("AAPL", f"Failed to process data: {e!s}") from e
+            raise StockRetrievalError("AAPL", f"Failed to process data: {e!s}") from e
 
     def _find_data_table(self, soup: BeautifulSoup) -> Any | None:
         """
@@ -154,14 +154,14 @@ class StockDataParser:
             Validated DataFrame
 
         Raises:
-            APIError: If validation fails
+            StockRetrievalError: If validation fails
         """
         # Validate date range
         if df["date"].min() < datetime(1900, 1, 1):
-            raise APIError("AAPL", "Data contains dates before 1900")
+            raise StockRetrievalError("AAPL", "Data contains dates before 1900")
 
         if df["date"].max() > datetime.now():
-            raise APIError("AAPL", "Data contains future dates")
+            raise StockRetrievalError("AAPL", "Data contains future dates")
 
         # Validate price relationships
         invalid_high = (
@@ -172,11 +172,11 @@ class StockDataParser:
         )
 
         if invalid_high.any() or invalid_low.any():
-            raise APIError("AAPL", "Invalid price relationships detected")
+            raise StockRetrievalError("AAPL", "Invalid price relationships detected")
 
         # Validate volume
         if (df["volume"] < 0).any():
-            raise APIError("AAPL", "Negative volume values detected")
+            raise StockRetrievalError("AAPL", "Negative volume values detected")
 
         return df
 

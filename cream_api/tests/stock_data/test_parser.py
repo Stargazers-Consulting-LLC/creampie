@@ -4,7 +4,7 @@ from typing import TypedDict
 
 import pytest
 
-from cream_api.stock_data.exceptions import APIError
+from cream_api.common.exceptions import StockRetrievalError
 from cream_api.stock_data.parser import StockDataParser
 from cream_api.tests.stock_data.test_constants import (
     TEST_ADJ_CLOSE_PRICE,
@@ -87,7 +87,7 @@ def test_parse_html(parser: StockDataParser, sample_html: str) -> None:
 
 def test_parse_invalid_html(parser: StockDataParser) -> None:
     """Test parsing invalid HTML."""
-    with pytest.raises(APIError):
+    with pytest.raises(StockRetrievalError):
         parser.parse_html("<invalid>html</invalid>")
 
 
@@ -119,5 +119,5 @@ def test_process_data(parser: StockDataParser) -> None:
 
 def test_process_invalid_data(parser: StockDataParser) -> None:
     """Test processing invalid data."""
-    with pytest.raises(APIError):
+    with pytest.raises(StockRetrievalError):
         parser.process_data({"prices": [{"invalid": "data"}]})

@@ -9,9 +9,9 @@ import aiohttp
 from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from cream_api.common.exceptions import StockRetrievalError
 from cream_api.settings import get_app_settings
 from cream_api.stock_data.data_manager import StockDataManager
-from cream_api.stock_data.exceptions import APIError
 from cream_api.stock_data.parser import StockDataParser
 
 settings = get_app_settings()
@@ -66,7 +66,7 @@ class StockDataRetriever:
             Response text
 
         Raises:
-            APIError: If all retries fail
+            StockRetrievalError: If all retries fail
         """
         for attempt in range(self.max_retries):
             try:
@@ -77,14 +77,14 @@ class StockDataRetriever:
                         if attempt < self.max_retries - 1:
                             await asyncio.sleep(self.retry_delay * (attempt + 1))
                             continue
-                    raise APIError("", f"Request failed with status {response.status}")
+                    raise StockRetrievalError("", f"Request failed with status {response.status}")
             except aiohttp.ClientError as e:
                 if attempt < self.max_retries - 1:
                     await asyncio.sleep(self.retry_delay * (attempt + 1))
                     continue
-                raise APIError("", f"Network error: {e!s}") from e
+                raise StockRetrievalError("", f"Network error: {e!s}") from e
 
-        raise APIError("", f"Failed after {self.max_retries} retries")
+        raise StockRetrievalError("", f"Failed after {self.max_retries} retries")
 
     async def _fetch_page(
         self, symbol: str, start_date: str, end_date: str, offset: int = 0
@@ -140,7 +140,7 @@ class StockDataRetriever:
             Combined stock data from all pages
 
         Raises:
-            APIError: If the request fails or returns invalid data
+            StockRetrievalError: If the request fails or returns invalid data
             ValueError: If the date range is invalid
         """
         # Convert dates to timestamps
@@ -163,7 +163,7 @@ class StockDataRetriever:
                     break
                 all_data["prices"].extend(page_data["prices"])
                 offset += 100
-            except APIError:
+            except StockRetrievalError:
                 break
 
         return all_data
@@ -186,7 +186,7 @@ class StockDataRetriever:
             Dictionary containing the parsed stock data
 
         Raises:
-            APIError: If the request fails or returns invalid data
+            StockRetrievalError: If the request fails or returns invalid data
             ValueError: If the date range is invalid
         """
         if end_date is None:
