@@ -13,6 +13,6 @@ async def session(async_test_db: AsyncSession) -> AsyncSession:
 
 
 @pytest_asyncio.fixture
-async def retriever(session: AsyncSession) -> StockDataRetriever:
+async def retriever() -> StockDataRetriever:
     """Create a stock data retriever instance."""
-    return StockDataRetriever(session)
+    return StockDataRetriever()

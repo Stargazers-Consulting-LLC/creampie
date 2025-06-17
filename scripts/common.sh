@@ -47,3 +47,29 @@ get_script_dir() {
 get_project_root() {
     dirname "$(get_script_dir)"
 }
+
+# Function to confirm an action
+# Usage: confirm_action "Warning message" [-f]
+# Returns 0 if confirmed, 1 if not
+confirm_action() {
+    local message="$1"
+    local force=false
+
+    # Check for force flag
+    if [[ "$2" == "-f" ]]; then
+        force=true
+    fi
+
+    if [ "$force" = true ]; then
+        return 0
+    fi
+
+    print_status "⚠️  $message"
+    read -p "Are you sure you want to continue? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        print_error "❌ Operation cancelled by user"
+        return 1
+    fi
+    return 0
+}

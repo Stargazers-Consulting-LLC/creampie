@@ -5,11 +5,12 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-# Add the parent directory to the Python path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 from cream_api.db import ModelBase
 from cream_api.settings import get_app_settings
+
+# Add the project root to the Python path
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, project_root)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

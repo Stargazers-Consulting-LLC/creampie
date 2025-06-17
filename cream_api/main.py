@@ -35,7 +35,10 @@ app.include_router(auth.router)
 @app.on_event("startup")
 async def startup_event() -> None:
     """Start background tasks when the application starts."""
-    await start_background_tasks()
+    if settings.enable_background_tasks:
+        await start_background_tasks()
+    else:
+        logger.info("Background tasks are disabled in settings")
 
 
 logger.info("App started.")

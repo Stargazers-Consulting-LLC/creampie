@@ -19,7 +19,7 @@ async def start_background_tasks() -> None:
     """Start all background tasks.
 
     This function should be called during application startup to initialize
-    all background tasks. New tasks should be added to the tasks list.
+    all background tasks.
     """
     tasks: Sequence[asyncio.Task] = [
         asyncio.create_task(run_periodic_updates(), name="stock_updates"),

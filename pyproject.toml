@@ -79,11 +79,6 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
-exclude = [
-    'tests/.*',
-    '.*_test\.py$',
-    'test_.*\.py$'
-]
 
 [[tool.mypy.overrides]]
 module = [

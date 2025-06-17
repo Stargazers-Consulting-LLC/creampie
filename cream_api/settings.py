@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # Frontend configuration
     frontend_url: str = ""
 
+    # Background task configuration
+    enable_background_tasks: bool = True
+
     # Cache configuration
     TMP_HTML_FILES_DIR: Path = Path(__file__).parent / "files"
     HTML_RAW_RESPONSES_DIR: Path = TMP_HTML_FILES_DIR / "raw_responses"
