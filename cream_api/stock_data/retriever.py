@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 from datetime import datetime
 
 import aiohttp
@@ -41,7 +42,7 @@ class StockDataRetriever:
         logger.debug("Initialized StockDataRetriever with user agent: %s", settings.PARSER_USER_AGENT)
 
     def save_html(self, symbol: str, html_content: str) -> None:
-        """Save HTML content to a file with timestamp.
+        """Save HTML content to a file.
 
         Args:
             symbol: Stock symbol to use in filename
@@ -51,13 +52,13 @@ class StockDataRetriever:
             OSError: If the file cannot be written
         """
         date = datetime.now().strftime("%Y-%m-%d")
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{symbol}_{date}_{timestamp}.html"
-        filepath = settings.HTML_RAW_RESPONSES_DIR / filename
+        filename = f"{symbol}_{date}.html"
+        filepath = os.path.join(settings.HTML_RAW_RESPONSES_DIR, filename)
 
         logger.debug("Saving HTML content for %s to %s", symbol, filename)
         try:
-            filepath.write_text(html_content, encoding="utf-8")
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(html_content)
         except OSError as e:
             logger.error("Failed to save HTML content: %s", str(e))
             raise
