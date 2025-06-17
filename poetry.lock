@@ -1203,13 +1203,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.135.10"
+version = "6.135.11"
 description = "A library for property-based testing"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "hypothesis-6.135.10-py3-none-any.whl", hash = "sha256:275012ee9a7a1a64fd38745c2b7a07e838fc9f738d49c97a881d235b53fe28c1"},
-    {file = "hypothesis-6.135.10.tar.gz", hash = "sha256:ce224e310012e40b8e3aa6edba226c032c57bbcbdccad41212ab6d2d74b602cf"},
+    {file = "hypothesis-6.135.11-py3-none-any.whl", hash = "sha256:3e45c8d4d601c5cdb82d335aa1d0e9d3e9ff147ac7d07f3ef6cbfbd161d90117"},
+    {file = "hypothesis-6.135.11.tar.gz", hash = "sha256:de2881633c06bd96f8fd4f83b4e62a0c060d488dfe2ea61fe1ede0081e2f16af"},
 ]
 
 [package.dependencies]
@@ -2920,20 +2920,20 @@ websocket-client = ">=1.8.0,<1.9.0"
 
 [[package]]
 name = "seleniumbase"
-version = "4.39.4"
+version = "4.39.5"
 description = "A complete web automation framework for end-to-end testing."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "seleniumbase-4.39.4-py3-none-any.whl", hash = "sha256:15562b2550ce6f6fdcc524ff9bd87a1d7381a558767245f10ff63982f508c281"},
-    {file = "seleniumbase-4.39.4.tar.gz", hash = "sha256:8880869b88fa5a48c649a776488bafa1ca97d786fb8a25f63e6d5b5b5fc47f44"},
+    {file = "seleniumbase-4.39.5-py3-none-any.whl", hash = "sha256:bda571f4864bba126442571bb0a3ae8a9bee9253461253ac84affd9a48efdb4d"},
+    {file = "seleniumbase-4.39.5.tar.gz", hash = "sha256:a6d4930eb894c84d881f0fa596fb357b0fa2bb5a9e89ac3875d9e89eb27054c7"},
 ]
 
 [package.dependencies]
 attrs = ">=25.3.0"
 beautifulsoup4 = "4.13.4"
 behave = "1.2.6"
-certifi = ">=2025.4.26"
+certifi = ">=2025.6.15"
 chardet = "5.2.0"
 charset-normalizer = ">=3.4.2,<4"
 colorama = ">=0.4.6"
@@ -2992,7 +2992,7 @@ wsproto = "1.2.0"
 
 [package.extras]
 allure = ["allure-behave (>=2.13.5)", "allure-pytest (>=2.13.5)", "allure-python-commons (>=2.13.5)"]
-coverage = ["coverage (>=7.6.1)", "coverage (>=7.9.0)", "pytest-cov (>=5.0.0)", "pytest-cov (>=6.2.1)"]
+coverage = ["coverage (>=7.6.1)", "coverage (>=7.9.1)", "pytest-cov (>=5.0.0)", "pytest-cov (>=6.2.1)"]
 flake8 = ["flake8 (==5.0.4)", "flake8 (==7.2.0)", "mccabe (==0.7.0)", "pycodestyle (==2.13.0)", "pycodestyle (==2.9.1)", "pyflakes (==2.5.0)", "pyflakes (==3.3.2)"]
 ipdb = ["ipdb (==0.13.13)", "ipython (==7.34.0)"]
 mss = ["mss (==10.0.0)", "mss (==9.0.2)"]
@@ -3925,4 +3925,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "2e19b57394b7a7633ca8dca73c408437988f95a8b60e13e82634d38430d9940c"
+content-hash = "75f538ea6f120e63c51c28ed569f2a43471aaa546f9ab27b0ea4280bca96a0b1"

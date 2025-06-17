@@ -1,36 +1,82 @@
-"""Constants for stock data tests."""
+"""Constants for stock data tests.
+
+This module contains test-specific constants used across stock data tests,
+including test directories, sample data, and other test configuration.
+"""
 
 import os
 from datetime import datetime
 
-# Number of required columns in the stock data table
-REQUIRED_COLUMNS_COUNT = 7
+# Test data constants
+TEST_SYMBOL = "AAPL"
+TEST_DATE = datetime.strptime("2025-06-13", "%Y-%m-%d")  # Match fixture data
+TEST_RECORDS_COUNT = 1  # Number of records in test data
 
-# Test data values
-TEST_DATE = datetime(2025, 6, 13)  # Updated to match actual data
+# Price data
 TEST_OPEN_PRICE = 199.73
 TEST_HIGH_PRICE = 200.37
 TEST_LOW_PRICE = 195.70
 TEST_CLOSE_PRICE = 196.45
 TEST_ADJ_CLOSE_PRICE = 196.45
-TEST_VOLUME = 51447300  # Updated to match actual data
+TEST_VOLUME = 51_447_300
 
-# Test data will be extracted from the actual HTML file
-# These values will be updated based on the first row of data
-TEST_RECORDS_COUNT = 1
-TEST_UPDATED_OPEN_PRICE = 199.73
+# Test data dictionary
+TEST_STOCK_DATA = {
+    "prices": [
+        {
+            "date": TEST_DATE.strftime("%Y-%m-%d"),
+            "open": str(TEST_OPEN_PRICE),
+            "high": str(TEST_HIGH_PRICE),
+            "low": str(TEST_LOW_PRICE),
+            "close": str(TEST_CLOSE_PRICE),
+            "adj_close": str(TEST_ADJ_CLOSE_PRICE),
+            "volume": str(TEST_VOLUME),
+        }
+    ]
+}
 
-# Rate limiter test configuration
+# HTML content
+TEST_HTML_CONTENT = f"""<table>
+<tr>
+    <th>Date</th>
+    <th>Open</th>
+    <th>High</th>
+    <th>Low</th>
+    <th>Close</th>
+    <th>Adj Close</th>
+    <th>Volume</th>
+</tr>
+<tr>
+    <td>{TEST_DATE.strftime("%b %d, %Y")}</td>
+    <td>{TEST_OPEN_PRICE:,.2f}</td>
+    <td>{TEST_HIGH_PRICE:,.2f}</td>
+    <td>{TEST_LOW_PRICE:,.2f}</td>
+    <td>{TEST_CLOSE_PRICE:,.2f}</td>
+    <td>{TEST_ADJ_CLOSE_PRICE:,.2f}</td>
+    <td>{TEST_VOLUME:,}</td>
+</tr>
+</table>"""
+
+# Directory and file configuration
+TEST_RAW_RESPONSES_DIR = "test_raw_responses"
+TEST_PARSED_RESPONSES_DIR = "test_parsed_responses"
+TEST_HTML_FILENAME = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
+
+# Fixture configuration
+TEST_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
+TEST_AAPL_FIXTURE = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
+TEST_AAPL_FIXTURE_PATH = os.path.join(TEST_FIXTURES_DIR, TEST_AAPL_FIXTURE)
+
+# Server configuration
+TEST_HOST = "localhost"
+TEST_PORT = 8000
+TEST_BASE_URL = f"http://{TEST_HOST}:{TEST_PORT}"
+TEST_SERVER_BASE_URL = TEST_BASE_URL  # Alias for backward compatibility
+
+# Rate limiter configuration
 RATE_LIMITER_REQUESTS = 2  # Number of requests allowed per window
 RATE_LIMITER_WINDOW = 1.0  # Time window in seconds
 TIMING_TOLERANCE = 0.1  # Allow 100ms timing variation
 
-# Test server configuration
-TEST_SERVER_BASE_URL = "http://localhost:8000"  # FastAPI default port
-
-TEST_STOCK_SYMBOL = "TST"
-
-# Test fixture files
-TEST_AAPL_FIXTURE = "AAPL_2025-06-16_20250616_185555.html"
-TEST_FIXTURES_DIR = os.path.join("cream_api", "tests", "stock_data", "fixtures")
-TEST_AAPL_FIXTURE_PATH = os.path.join(TEST_FIXTURES_DIR, TEST_AAPL_FIXTURE)
+# Data validation constants
+REQUIRED_COLUMNS_COUNT = 7

@@ -43,7 +43,7 @@ class StockDataParser:
     """Parser for extracting stock data from HTML content."""
 
     # Selectors for the historical prices table
-    HISTORICAL_PRICES_CSS_SELECTOR = ".gridLayout > div:nth-child(2)"
+    HISTORICAL_PRICES_CSS_SELECTOR = ".table"
 
     # Settings
     SETTINGS = settings
@@ -145,8 +145,12 @@ class StockDataParser:
             StockRetrievalError: If table structure is invalid
         """
         try:
-            # Extract and clean headers
-            headers = [th.get_text(strip=True) for th in table.find_all("th")]
+            # Extract and clean headers from thead
+            thead = table.find("thead")
+            if not thead:
+                raise StockRetrievalError("No thead found in table")
+
+            headers = [th.get_text(strip=True) for th in thead.find_all("th")]
             if not headers:
                 raise StockRetrievalError("No headers found in table")
 
@@ -168,9 +172,13 @@ class StockDataParser:
                     f"Invalid table headers. Expected {self._required_columns}, got {cleaned_headers}",
                 )
 
-            # Extract rows
+            # Extract rows from tbody
+            tbody = table.find("tbody")
+            if not tbody:
+                raise StockRetrievalError("No tbody found in table")
+
             rows = []
-            for tr in table.find_all("tr")[1:]:  # Skip header row
+            for tr in tbody.find_all("tr"):
                 row_data = {}
                 for td, header in zip(tr.find_all("td"), cleaned_headers, strict=False):
                     # Get just the immediate text content, stripped of whitespace
@@ -182,6 +190,9 @@ class StockDataParser:
                     # Store with lowercase column names for consistency
                     row_data[df_column] = value
                 rows.append(row_data)
+
+            # Sort rows by date in descending order (newest first)
+            rows.sort(key=lambda x: pd.to_datetime(x["date"]), reverse=True)
 
             return rows
         except Exception as e:

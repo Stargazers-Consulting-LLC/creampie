@@ -1,5 +1,7 @@
 """Tests for the stock data parser."""
 
+import os
+
 import pandas as pd
 import pytest
 from bs4 import BeautifulSoup
@@ -28,6 +30,8 @@ def parser() -> StockDataParser:
 @pytest.fixture
 def sample_html() -> str:
     """Load sample HTML content from file."""
+    print(f"\nTrying to read file: {TEST_AAPL_FIXTURE_PATH}")
+    print(f"File exists: {os.path.exists(TEST_AAPL_FIXTURE_PATH)}")
     with open(TEST_AAPL_FIXTURE_PATH) as f:
         return f.read()
 
@@ -110,8 +114,12 @@ def test_parse_html_file_not_found(parser: StockDataParser) -> None:
 
 def test_process_data_valid(parser: StockDataParser, sample_html: str) -> None:
     """Test processing valid data."""
+    print("\nStarting test_process_data_valid")
+    print(f"sample_html length: {len(sample_html)}")
     parsed_data = parser.parse_html(sample_html)
+    print(f"parsed_data: {parsed_data}")
     df = parser.process_data(parsed_data)
+    print(f"df shape: {df.shape}")
     assert not df.empty
     assert len(df.columns) == REQUIRED_COLUMNS_COUNT
     assert all(col in df.columns for col in ["date", "open", "high", "low", "close", "adj_close", "volume"])

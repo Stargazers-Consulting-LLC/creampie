@@ -16,7 +16,7 @@ from cream_api.tests.stock_data.test_constants import (
     TEST_LOW_PRICE,
     TEST_OPEN_PRICE,
     TEST_RECORDS_COUNT,
-    TEST_STOCK_SYMBOL,
+    TEST_SYMBOL,
     TEST_VOLUME,
 )
 
@@ -149,7 +149,7 @@ async def test_store_data_success(data_loader: StockDataLoader, session: AsyncSe
         ]
     }
     stock_data_list = await data_loader.transform_data(sample_data)
-    await data_loader.store_data(TEST_STOCK_SYMBOL, stock_data_list)
+    await data_loader.store_data(TEST_SYMBOL, stock_data_list)
     result = await session.execute(text("SELECT * FROM stock_data"))
     stored_data = result.fetchall()
     assert len(stored_data) == TEST_RECORDS_COUNT
@@ -172,8 +172,8 @@ async def test_store_data_duplicate(data_loader: StockDataLoader, session: Async
         ]
     }
     stock_data_list = await data_loader.transform_data(sample_data)
-    await data_loader.store_data(TEST_STOCK_SYMBOL, stock_data_list)
-    await data_loader.store_data(TEST_STOCK_SYMBOL, stock_data_list)
+    await data_loader.store_data(TEST_SYMBOL, stock_data_list)
+    await data_loader.store_data(TEST_SYMBOL, stock_data_list)
     result = await session.execute(text("SELECT * FROM stock_data"))
     stored_data = result.fetchall()
     assert len(stored_data) == TEST_RECORDS_COUNT
@@ -195,7 +195,7 @@ async def test_process_data_end_to_end(data_loader: StockDataLoader, session: As
             }
         ]
     }
-    await data_loader.process_data(TEST_STOCK_SYMBOL, sample_data)
+    await data_loader.process_data(TEST_SYMBOL, sample_data)
     result = await session.execute(text("SELECT * FROM stock_data"))
     stored_data = result.fetchall()
     assert len(stored_data) == TEST_RECORDS_COUNT
