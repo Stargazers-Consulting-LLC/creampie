@@ -43,7 +43,7 @@ class StockData(ModelBase):
     )
 
 
-class StockTracking(ModelBase):
+class TrackedStock(ModelBase):
     """Model for tracking when stock data was last pulled into the system.
 
     Attributes:
@@ -55,7 +55,7 @@ class StockTracking(ModelBase):
         is_active: Whether the stock is currently being tracked for updates
     """
 
-    __tablename__ = "stock_tracking"
+    __tablename__ = "tracked_stock"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     symbol: Mapped[str] = mapped_column(String, nullable=False, index=True)

@@ -1,8 +1,9 @@
 """Database connection and session management."""
 
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
 
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from cream_api.settings import get_app_settings
@@ -12,6 +13,10 @@ settings = get_app_settings()
 # Create SQLAlchemy engine
 engine = create_engine(settings.get_connection_string())
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Create async engine and session factory
+async_engine = create_async_engine(settings.get_connection_string())
+AsyncSessionLocal = async_sessionmaker(async_engine, expire_on_commit=False)
 
 
 class ModelBase(DeclarativeBase):
@@ -25,3 +30,12 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
+
+
+async def get_async_db() -> AsyncGenerator[AsyncSession, None]:
+    """Dependency for getting async database session."""
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()

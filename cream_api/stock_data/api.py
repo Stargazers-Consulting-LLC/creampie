@@ -1,62 +1,74 @@
 """FastAPI endpoints for stock data retrieval."""
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException
-from pydantic import BaseModel
+from datetime import datetime
+from typing import Annotated
 
-from cream_api.stock_data.retriever import StockDataRetriever
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from pydantic import BaseModel
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from cream_api.background_tasks.stock_updates import _retrieve_historical_data_task
+from cream_api.db import get_async_db
+from cream_api.stock_data.models import TrackedStock
 
 router = APIRouter(prefix="/stock-data", tags=["stock-data"])
 
 
-class StockDataRequest(BaseModel):
-    """Request model for stock data retrieval."""
+class TrackStockRequest(BaseModel):
+    """Request model for tracking a new stock."""
 
     symbol: str
-    end_date: str | None = None
 
 
-async def _retrieve_historical_data_task(symbol: str, end_date: str | None) -> None:
-    """Background task to retrieve historical stock data.
-
-    Args:
-        symbol: Stock symbol to retrieve data for
-        end_date: Optional end date in YYYY-MM-DD format
-    """
-    retriever = StockDataRetriever()
-    await retriever.get_historical_data(
-        symbol=symbol,
-        end_date=end_date,
-    )
-
-
-@router.post("/historical")
-async def get_historical_data(
-    request: StockDataRequest,
+@router.post("/track")
+async def track_stock(
+    request: TrackStockRequest,
     background_tasks: BackgroundTasks,
+    db: Annotated[AsyncSession, Depends(get_async_db)],
 ) -> dict:
-    """Schedule historical stock data retrieval for a given symbol.
+    """Start tracking a new stock symbol.
 
     Args:
-        request: StockDataRequest containing symbol and optional end_date
+        request: TrackStockRequest containing the symbol to track
         background_tasks: FastAPI background tasks manager
+        db: Database session
 
     Returns:
-        dict: Response indicating the task has been scheduled
+        dict: Response indicating the stock is now being tracked
 
     Raises:
-        HTTPException: If there's an error scheduling the task
+        HTTPException: If there's an error starting tracking
     """
     try:
+        # Check if stock is already being tracked
+        stmt = select(TrackedStock).where(TrackedStock.symbol == request.symbol)
+        result = await db.execute(stmt)
+        existing_tracking = result.scalar_one_or_none()
+
+        if not existing_tracking:
+            # Create new tracking entry
+            new_tracking = TrackedStock(
+                symbol=request.symbol,
+                last_pull_date=datetime.now(),
+                last_pull_status="pending",
+                is_active=True,
+            )
+            db.add(new_tracking)
+            await db.commit()
+
+        # Schedule the background task
         background_tasks.add_task(
             _retrieve_historical_data_task,
             symbol=request.symbol,
-            end_date=request.end_date,
+            end_date=None,
         )
+
         return {
-            "status": "scheduled",
-            "message": f"Historical data retrieval for {request.symbol} has been scheduled",
+            "status": "tracking",
+            "message": f"Stock {request.symbol} is now being tracked",
             "symbol": request.symbol,
-            "end_date": request.end_date,
         }
     except Exception as e:
+        await db.rollback()
         raise HTTPException(status_code=500, detail=str(e)) from e

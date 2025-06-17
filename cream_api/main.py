@@ -6,11 +6,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from stargazer_utils.logging import get_logger_for
 
+from cream_api.background_tasks import start_background_tasks
 from cream_api.settings import get_app_settings
 from cream_api.users.routes import auth
 
 logger: logging.Logger = get_logger_for(__name__)
-
 
 settings = get_app_settings()
 
@@ -30,6 +30,13 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router)
+
+
+@app.on_event("startup")
+async def startup_event() -> None:
+    """Start background tasks when the application starts."""
+    await start_background_tasks()
+
 
 logger.info("App started.")
 
