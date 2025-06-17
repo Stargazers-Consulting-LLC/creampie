@@ -60,7 +60,7 @@ class TrackedStock(ModelBase):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     symbol: Mapped[str] = mapped_column(String, nullable=False, index=True)
     last_pull_date: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=lambda: datetime.now(UTC))
-    last_pull_status: Mapped[str] = mapped_column(String, nullable=False, default="success")
+    last_pull_status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
     error_message: Mapped[str] = mapped_column(String, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
