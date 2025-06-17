@@ -150,9 +150,7 @@ async def test_request_without_session() -> None:
 
 
 @pytest.mark.asyncio
-async def test_request_error_handling(
-    rate_limiter: RateLimiter, mock_responses: aioresponses
-) -> None:
+async def test_request_error_handling(rate_limiter: RateLimiter, mock_responses: aioresponses) -> None:
     """Test error handling during requests."""
     url = "http://test.com/error"
     domain = "test.com"
@@ -166,9 +164,7 @@ async def test_request_error_handling(
 
 
 @pytest.mark.asyncio
-async def test_rate_limited_requests(
-    rate_limiter: RateLimiter, mock_responses: aioresponses
-) -> None:
+async def test_rate_limited_requests(rate_limiter: RateLimiter, mock_responses: aioresponses) -> None:
     """Test multiple requests with rate limiting."""
     url = f"{TEST_SERVER_BASE_URL}/test"
     domain = "test.com"

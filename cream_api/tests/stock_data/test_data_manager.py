@@ -180,9 +180,7 @@ async def test_store_data_duplicate(data_manager: StockDataManager, session: Asy
 
 
 @pytest.mark.asyncio
-async def test_process_data_end_to_end(
-    data_manager: StockDataManager, session: AsyncSession
-) -> None:
+async def test_process_data_end_to_end(data_manager: StockDataManager, session: AsyncSession) -> None:
     """Test end-to-end data processing."""
     sample_data: dict[str, list[dict[str, str | float | int]]] = {
         "prices": [

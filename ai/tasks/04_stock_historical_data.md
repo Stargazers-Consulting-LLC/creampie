@@ -9,31 +9,31 @@ This document outlines the implementation of the historical stock data retrieval
 ### Core Components
 
 1. **Data Retriever** (`StockDataRetriever`)
+   - Asynchronous data fetching from Yahoo Finance using aiohttp
+   - Handles API requests and responses with retry logic
+   - Implements rate limiting and exponential backoff
+   - Saves raw HTML responses for debugging
+   - Configurable user agent and request headers
 
-   - Asynchronous data fetching from Yahoo Finance
-   - Handles API requests and responses
-   - Implements retry mechanisms and rate limiting
-   - Manages data validation before storage
-
-2. **Data Processor** (`StockDataManager`)
-
-   - Validates incoming data
-   - Transforms raw data into structured format
-   - Handles data cleaning and normalization
-   - Manages database storage operations
-
-3. **HTML Parser** (`StockDataParser`)
-
+2. **Data Parser** (`StockDataParser`)
    - Parses HTML content using BeautifulSoup4
-   - Extracts stock data from tables
-   - Handles different date formats
-   - Implements robust error handling
+   - Extracts stock data from historical prices table
+   - Handles date parsing and data type conversion
+   - Implements data validation and cleaning
+   - Processes missing values and outliers
 
-4. **HTML Cache** (`HTMLCache`)
-   - Manages local cache of HTML responses
-   - Implements cache expiration
-   - Handles cache cleanup and maintenance
-   - Provides cache statistics
+3. **Data Manager** (`StockDataManager`)
+   - Validates incoming data structure
+   - Transforms raw data into database models
+   - Manages database storage operations
+   - Handles data retrieval with date filtering
+   - Implements transaction management
+
+4. **Database Model** (`StockData`)
+   - SQLAlchemy model for stock data storage
+   - Implements unique constraints for symbol and date
+   - Provides type hints and documentation
+   - Supports efficient querying with indexes
 
 ### Database Schema
 
@@ -55,33 +55,33 @@ CREATE TABLE stock_data (
 ## Features
 
 ### Data Retrieval
-
-- Asynchronous data fetching using aiohttp
-- Support for custom date ranges
-- Automatic retry with exponential backoff
+- Asynchronous HTTP requests with aiohttp
+- Configurable retry mechanism with exponential backoff
 - Rate limiting to prevent API abuse
+- Raw HTML response storage for debugging
+- Custom user agent and request headers
 
 ### Data Processing
-
+- HTML parsing with BeautifulSoup4
 - Comprehensive data validation
-- Price relationship verification
+- Price relationship verification (high/low/open/close)
 - Volume consistency checks
-- Outlier detection
-- Missing value handling
+- Missing value handling with mean imputation
+- Date range validation
+- Duplicate removal
 
 ### Error Handling
-
 - Custom exception hierarchy
 - Detailed error messages
 - Graceful failure handling
 - Transaction management
+- Logging with stargazer_utils
 
-### Caching
-
-- Local HTML response caching
-- Configurable cache expiration
-- Automatic cache cleanup
-- Cache statistics tracking
+### API Integration
+- FastAPI router for stock data endpoints
+- Background task processing
+- Request validation with Pydantic
+- Error handling with HTTP exceptions
 
 ## Usage
 
@@ -89,68 +89,60 @@ CREATE TABLE stock_data (
 
 ```python
 from cream_api.stock_data.retriever import StockDataRetriever
-from cream_api.db import get_session
+from cream_api.stock_data.parser import StockDataParser
+from cream_api.stock_data.data_manager import StockDataManager
 
-async def get_stock_data(symbol: str, start_date: str, end_date: str):
-    async with get_session() as session:
-        retriever = StockDataRetriever(session)
-        await retriever.get_historical_data(symbol, start_date, end_date)
+# Initialize components
+retriever = StockDataRetriever()
+parser = StockDataParser()
+manager = StockDataManager(session)
+
+# Fetch and process data
+html_content = await retriever.get_historical_data("AAPL", "2024-01-01")
+parsed_data = parser.parse_html(html_content)
+processed_data = parser.process_data(parsed_data)
+await manager.process_data("AAPL", parsed_data)
 ```
 
-### Error Handling
+### API Usage
 
 ```python
-from cream_api.stock_data.exceptions import APIError, ValidationError
+from fastapi import FastAPI
+from cream_api.stock_data.api import router as stock_data_router
 
-try:
-    await retriever.get_historical_data("AAPL", "2024-01-01")
-except APIError as e:
-    print(f"API error: {e}")
-except ValidationError as e:
-    print(f"Validation error: {e}")
+app = FastAPI()
+app.include_router(stock_data_router)
+
+# POST /stock-data/historical
+# {
+#     "symbol": "AAPL",
+#     "end_date": "2024-01-01"
+# }
 ```
 
 ## Testing
 
 ### Unit Tests
+- Parser tests for HTML extraction
+- Retriever tests for HTTP requests
+- Manager tests for data processing
+- Model tests for database operations
 
-```bash
-pytest cream_api/tests/stock_data/
-```
-
-### Integration Tests
-
-```bash
-pytest cream_api/tests/integration/
-```
-
-### Coverage Report
-
-```bash
-pytest --cov=cream_api.stock_data tests/stock_data/
-```
+### Test Coverage
+- HTML parsing validation
+- Data type conversion
+- Error handling scenarios
+- Database operations
+- API endpoint behavior
 
 ## Configuration
 
 ### Environment Variables
-
 ```env
-DB_HOST=localhost
-DB_NAME=cream
-DB_USER=creamapp
-DB_PASSWORD=your_password
-DB_ADMIN_USER=postgres
-DB_ADMIN_PASSWORD=admin_password
-```
-
-### Cache Settings
-
-```python
-CACHE_SETTINGS = {
-    'expiration_days': 7,
-    'max_cache_size': 1000,
-    'cache_dir': 'cache/html'
-}
+PARSER_USER_AGENT=your_user_agent
+YAHOO_FINANCE_GET_MAX_RETRIES=3
+YAHOO_FINANCE_RETRY_DELAY=1
+HTML_RAW_RESPONSES_DIR=/path/to/responses
 ```
 
 ## Dependencies
@@ -159,52 +151,45 @@ CACHE_SETTINGS = {
 [tool.poetry.dependencies]
 python = "^3.11"
 beautifulsoup4 = "^4.13.4"
-requests = "^2.31.0"
-pandas = "^2.2.0"
-python-dateutil = "^2.8.2"
-sqlalchemy = "^2.0.25"
-alembic = "^1.13.1"
-pytest = "^8.0.0"
-pytest-asyncio = "^0.23.5"
 aiohttp = "^3.9.3"
+pandas = "^2.2.0"
+sqlalchemy = "^2.0.25"
+fastapi = "^0.109.0"
+pydantic = "^2.6.0"
+stargazer_utils = "^1.0.0"
 ```
 
 ## Monitoring
 
 ### Logging
-
 - Request/response logging
 - Error tracking
 - Performance metrics
-- Cache statistics
+- Debug information
 
-### Alerts
-
+### Error Tracking
 - API error notifications
 - Data validation failures
-- Cache cleanup events
-- Performance degradation
+- Network issues
+- Database errors
 
 ## Maintenance
 
 ### Regular Tasks
-
-1. Cache cleanup
-2. Database optimization
-3. Log rotation
-4. Performance monitoring
+1. Monitor API rate limits
+2. Check data consistency
+3. Review error logs
+4. Update user agent strings
 
 ### Troubleshooting
-
 1. Check API availability
 2. Verify data consistency
 3. Monitor error rates
-4. Review cache statistics
+4. Review HTML responses
 
 ## Security
 
 ### Best Practices
-
 1. Secure database credentials
 2. Rate limiting implementation
 3. Input validation
@@ -216,3 +201,5 @@ aiohttp = "^3.9.3"
 2. Real-time data support
 3. Advanced analytics
 4. API endpoint expansion
+5. Caching layer implementation
+6. Batch processing support

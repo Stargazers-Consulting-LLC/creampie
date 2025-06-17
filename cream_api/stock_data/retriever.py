@@ -38,9 +38,7 @@ class StockDataRetriever:
             "Upgrade-Insecure-Requests": "1",
             "Cache-Control": "max-age=0",
         }
-        logger.debug(
-            "Initialized StockDataRetriever with user agent: %s", settings.PARSER_USER_AGENT
-        )
+        logger.debug("Initialized StockDataRetriever with user agent: %s", settings.PARSER_USER_AGENT)
 
     def save_html(self, symbol: str, html_content: str) -> None:
         """Save HTML content to a file with timestamp.
@@ -83,9 +81,7 @@ class StockDataRetriever:
 
         if response.status == status.HTTP_404_NOT_FOUND:
             logger.error("Symbol not found (404)")
-            raise StockRetrievalError(
-                "Symbol not found", f"Failed to find symbol after {attempt} attempts"
-            )
+            raise StockRetrievalError("Symbol not found", f"Failed to find symbol after {attempt} attempts")
 
         if response.status == status.HTTP_429_TOO_MANY_REQUESTS:
             logger.warning("Rate limited (429), attempt %d of %d", attempt, MAX_RETRIES)
@@ -117,13 +113,9 @@ class StockDataRetriever:
                 if attempt < MAX_RETRIES - 1:
                     await asyncio.sleep(RETRY_DELAY * (attempt + 1))
                     continue
-                raise StockRetrievalError(
-                    "Network error occurred", f"Failed to connect to Yahoo Finance: {e!s}"
-                ) from e
+                raise StockRetrievalError("Network error occurred", f"Failed to connect to Yahoo Finance: {e!s}") from e
 
-        raise StockRetrievalError(
-            "Maximum retries exceeded", f"Failed to retrieve data after {MAX_RETRIES} attempts"
-        )
+        raise StockRetrievalError("Maximum retries exceeded", f"Failed to retrieve data after {MAX_RETRIES} attempts")
 
     async def _fetch_page(self, symbol: str, end_timestamp: int) -> str:
         """Fetch historical stock data page from Yahoo Finance.

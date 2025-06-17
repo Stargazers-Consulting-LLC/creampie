@@ -33,9 +33,7 @@ def test_signup_success(client: TestClient, test_db: Session, test_settings: Set
     assert user.is_active
 
 
-def test_signup_duplicate_email(
-    client: TestClient, test_db: Session, test_settings: Settings
-) -> None:
+def test_signup_duplicate_email(client: TestClient, test_db: Session, test_settings: Settings) -> None:
     """Test signup with existing email."""
     # Create existing user
     user = AppUser(

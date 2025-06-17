@@ -1,17 +1,23 @@
 """Constants for stock data tests."""
 
-# Test data values
-TEST_OPEN_PRICE = 150.00
-TEST_HIGH_PRICE = 155.00
-TEST_LOW_PRICE = 148.00
-TEST_CLOSE_PRICE = 152.00
-TEST_ADJ_CLOSE_PRICE = 152.00
-TEST_VOLUME = 1000000
-TEST_RECORDS_COUNT = 1
-TEST_UPDATED_OPEN_PRICE = 151.00
+from datetime import datetime
 
-# Table column count
+# Number of required columns in the stock data table
 REQUIRED_COLUMNS_COUNT = 7
+
+# Test data values
+TEST_DATE = datetime(2025, 6, 13)  # Updated to match actual data
+TEST_OPEN_PRICE = 199.73
+TEST_HIGH_PRICE = 200.37
+TEST_LOW_PRICE = 195.70
+TEST_CLOSE_PRICE = 196.45
+TEST_ADJ_CLOSE_PRICE = 196.45
+TEST_VOLUME = 51447300  # Updated to match actual data
+
+# Test data will be extracted from the actual HTML file
+# These values will be updated based on the first row of data
+TEST_RECORDS_COUNT = 1
+TEST_UPDATED_OPEN_PRICE = 199.73
 
 # Rate limiter test configuration
 RATE_LIMITER_REQUESTS = 2  # Number of requests allowed per window

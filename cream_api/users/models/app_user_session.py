@@ -21,9 +21,7 @@ class AppUserSession(ModelBase):
 
     # Core Fields
     id: Mapped[UUID] = mapped_column(PGUUID, primary_key=True, default=uuid4)
-    user_id: Mapped[UUID] = mapped_column(
-        PGUUID, ForeignKey("app_users.id", ondelete="CASCADE"), nullable=False
-    )
+    user_id: Mapped[UUID] = mapped_column(PGUUID, ForeignKey("app_users.id", ondelete="CASCADE"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=False)
     expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     last_activity: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=False)

@@ -93,9 +93,7 @@ def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> di
     """Creates new user account with manual verification requirement."""
     # Check if user already exists
     if db.query(AppUser).filter(AppUser.email == user_data.email).first():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered"
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
     # Create new user
     hashed_password = get_password_hash(user_data.password)

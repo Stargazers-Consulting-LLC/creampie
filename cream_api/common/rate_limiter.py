@@ -93,9 +93,7 @@ class RateLimiter:
         now = datetime.now()
 
         # Remove expired requests from the front of the deque
-        while self.requests[domain] and now - self.requests[domain][0] >= timedelta(
-            seconds=self.time_window
-        ):
+        while self.requests[domain] and now - self.requests[domain][0] >= timedelta(seconds=self.time_window):
             self.requests[domain].popleft()
 
         # If rate limit is exceeded, wait until the oldest request expires
@@ -106,9 +104,7 @@ class RateLimiter:
                 await asyncio.sleep(wait_time)
             # Clean up again after waiting
             now = datetime.now()
-            while self.requests[domain] and now - self.requests[domain][0] >= timedelta(
-                seconds=self.time_window
-            ):
+            while self.requests[domain] and now - self.requests[domain][0] >= timedelta(seconds=self.time_window):
                 self.requests[domain].popleft()
 
         # Add current request
@@ -134,9 +130,7 @@ class RateLimiter:
         return await self.session.request(method, url, **kwargs)
 
     @asynccontextmanager
-    async def get(
-        self, url: str, domain: str, **kwargs: Any
-    ) -> AsyncGenerator[ClientResponse, None]:
+    async def get(self, url: str, domain: str, **kwargs: Any) -> AsyncGenerator[ClientResponse, None]:
         """Rate-limited GET request context manager.
 
         Args:
@@ -160,9 +154,7 @@ class RateLimiter:
             response.close()
 
     @asynccontextmanager
-    async def post(
-        self, url: str, domain: str, **kwargs: Any
-    ) -> AsyncGenerator[ClientResponse, None]:
+    async def post(self, url: str, domain: str, **kwargs: Any) -> AsyncGenerator[ClientResponse, None]:
         """Rate-limited POST request context manager.
 
         Args:
