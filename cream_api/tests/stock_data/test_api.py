@@ -116,26 +116,22 @@ async def test_track_stock_existing(async_test_db: AsyncSession, async_client: T
     async_test_db.add(existing_stock)
     await async_test_db.commit()
 
-    # Mock the Yahoo Finance request
-    with patch("cream_api.stock_data.retriever.StockDataRetriever._fetch_page") as mock_fetch:
-        mock_fetch.return_value = "<html>Mock Yahoo Finance Response</html>"
+    # Make the request
+    response = async_client.post("/stock-data/track", json={"symbol": "AAPL"})
 
-        # Make the request
-        response = async_client.post("/stock-data/track", json={"symbol": "AAPL"})
+    # Verify response
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert data["status"] == "tracking"
+    assert data["message"] == "Stock AAPL is now being tracked"
+    assert data["symbol"] == "AAPL"
 
-        # Verify response
-        assert response.status_code == status.HTTP_200_OK
-        data = response.json()
-        assert data["status"] == "tracking"
-        assert data["message"] == "Stock AAPL is now being tracked"
-        assert data["symbol"] == "AAPL"
-
-        # Verify database state
-        result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == "AAPL"))
-        tracked_stock = result.scalar_one()
-        assert tracked_stock.symbol == "AAPL"
-        assert tracked_stock.last_pull_status == "success"  # Should not change
-        assert tracked_stock.is_active is True
+    # Verify database state
+    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == "AAPL"))
+    tracked_stock = result.scalar_one()
+    assert tracked_stock.symbol == "AAPL"
+    assert tracked_stock.last_pull_status == "success"  # Should not change
+    assert tracked_stock.is_active is True
 
 
 @pytest.mark.asyncio
