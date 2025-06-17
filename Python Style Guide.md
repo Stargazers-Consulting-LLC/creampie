@@ -7,6 +7,8 @@ This style guide should be used as a reference for maintaining consistency acros
 1. Follow PEP 8 style guide
 2. Use type hints for all function parameters and return values
     - Use `|` for union types in Python 3.10+
+    - Use built-in types (`dict`, `list`, `set`, etc.) instead of `typing.Dict`, `typing.List`, etc.
+    - Only import from `typing` for types that don't have built-in equivalents (e.g., `Any`, `TypeVar`, `Protocol`)
 3. Use docstrings for all modules, classes, and functions
 4. Use meaningful variable and function names
 5. Keep functions small and focused
@@ -179,30 +181,3 @@ This style guide should be used as a reference for maintaining consistency acros
 - Implement proper logging
 - Refactor functions with "and" in their name into separate functions
   - Example: `process_and_validate_data()` should be split into `process_data()` and `validate_data()`
-
-## Example Code Structure
-
-```python
-from typing import Any, Dict
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-
-# Type definitions
-class ResponseModel(BaseModel):
-    field: str | None  # Preferred over Optional[str]
-
-# Route handlers
-@app.get("/endpoint")
-async def handler() -> Dict[str, Any]:
-    return {"status": "success"}
-
-# Configuration
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env")
-
-# Database models
-class User(ModelBase):
-    __tablename__ = "users"
-    id: int = Column(Integer, primary_key=True)
-```
