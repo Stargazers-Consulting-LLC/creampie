@@ -284,6 +284,46 @@ __all__ = [
 6. Include both positive and negative test cases
 7. Mock external dependencies in tests
 
+#### FastAPI Testing Best Practices
+1. **Test Application Setup**
+   ```python
+   @pytest.fixture
+   def app(async_test_db: AsyncSession):
+       """Create a test FastAPI application."""
+       app = FastAPI()
+
+       # Override the database dependency
+       async def override_get_async_db():
+           yield async_test_db
+
+       app.dependency_overrides[get_async_db] = override_get_async_db
+       app.include_router(router)
+       return app
+   ```
+
+2. **Async Database Testing**
+   - Use `pytest_asyncio` for async tests
+   - Create separate fixtures for sync and async databases
+   - Use in-memory SQLite for testing
+   - Ensure proper cleanup after tests
+
+3. **Background Task Testing**
+   - Mock `BackgroundTasks.add_task` instead of the task function
+   - Test both success and error cases
+   - Verify task scheduling without executing the task
+
+4. **Error Handling Tests**
+   - Test both expected and unexpected errors
+   - Verify correct HTTP status codes
+   - Check error messages and response structure
+   - Test database rollback behavior
+
+5. **Test Isolation**
+   - Each test should have its own database session
+   - Clean up resources after each test
+   - Don't rely on test execution order
+   - Use fixtures for shared setup
+
 #### Documentation
 1. Use docstrings for all modules, classes, and functions
 2. Use type hints for all function parameters and return values

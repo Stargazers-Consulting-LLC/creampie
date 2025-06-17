@@ -4,12 +4,13 @@ from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.db import get_async_db
 from cream_api.stock_data.models import TrackedStock
+from cream_api.stock_data.tasks import retrieve_historical_data_task
 
 router = APIRouter(prefix="/stock-data", tags=["stock-data"])
 
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/stock-data", tags=["stock-data"])
 class TrackStockRequest(BaseModel):
     """Request model for tracking a new stock."""
 
-    symbol: str
+    symbol: str = Field(..., min_length=1, description="Stock symbol to track")
 
 
 @router.post("/track")
@@ -56,6 +57,13 @@ async def track_stock(
             db.add(new_tracking)
             await db.commit()
 
+        # Schedule background task to retrieve historical data
+        try:
+            background_tasks.add_task(retrieve_historical_data_task, symbol=request.symbol, end_date=None)
+        except Exception as e:
+            # Log the error but don't fail the request
+            print(f"Error scheduling background task: {e}")
+
         return {
             "status": "tracking",
             "message": f"Stock {request.symbol} is now being tracked",
@@ -63,4 +71,6 @@ async def track_stock(
         }
     except Exception as e:
         await db.rollback()
+        if isinstance(e, HTTPException):
+            raise
         raise HTTPException(status_code=500, detail=str(e)) from e

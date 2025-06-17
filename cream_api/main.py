@@ -1,6 +1,13 @@
-"""Main FastAPI application module."""
+"""Main FastAPI application module.
+
+This module sets up the FastAPI application with all necessary middleware,
+routers, and event handlers. It also configures the application's lifespan
+for proper startup and shutdown handling.
+"""
 
 import logging
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,7 +25,35 @@ settings = get_app_settings()
 logger.info("Creating directories...")
 settings.HTML_RAW_RESPONSES_DIR.mkdir(exist_ok=True, parents=True)
 
-app = FastAPI(title="Cream API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """Handle application startup and shutdown events.
+
+    This context manager is responsible for:
+    1. Starting background tasks on application startup
+    2. Logging application lifecycle events
+    3. Cleaning up resources on shutdown
+
+    Args:
+        app: The FastAPI application instance
+
+    Yields:
+        None: The context manager yields nothing
+    """
+    # Startup
+    logger.info("Starting up application...")
+    if settings.enable_background_tasks:
+        await start_background_tasks()
+    else:
+        logger.info("Background tasks are disabled in settings")
+    logger.info("App started.")
+    yield
+    # Shutdown
+    logger.info("App shutting down.")
+
+
+app = FastAPI(title="Cream API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,19 +67,10 @@ app.add_middleware(
 app.include_router(auth.router)
 
 
-@app.on_event("startup")
-async def startup_event() -> None:
-    """Start background tasks when the application starts."""
-    if settings.enable_background_tasks:
-        await start_background_tasks()
-    else:
-        logger.info("Background tasks are disabled in settings")
-
-
-logger.info("App started.")
-
-
 @app.get("/")
 async def root() -> dict[str, str]:
     """Health check endpoint to verify API is running."""
     return {"app": "root"}
+
+
+logger.info("App started.")

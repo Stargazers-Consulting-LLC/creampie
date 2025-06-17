@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from cream_api.db import ModelBase, get_db
+from cream_api.db import ModelBase, get_async_db, get_db
 from cream_api.main import app
 from cream_api.settings import Settings
 
@@ -82,6 +82,16 @@ async def async_test_db(test_settings: Settings) -> AsyncGenerator[AsyncSession,
     async with engine.begin() as conn:
         await conn.run_sync(ModelBase.metadata.create_all)
 
+    # Override the get_async_db dependency
+    async def override_get_async_db() -> AsyncGenerator[AsyncSession, None]:
+        async with async_session() as session:
+            try:
+                yield session
+            finally:
+                await session.close()
+
+    app.dependency_overrides[get_async_db] = override_get_async_db
+
     # Create and yield session
     async with async_session() as session:
         yield session
@@ -94,4 +104,10 @@ async def async_test_db(test_settings: Settings) -> AsyncGenerator[AsyncSession,
 @pytest.fixture
 def client(test_db: Session) -> TestClient:
     """Create a test client with the test database."""
+    return TestClient(app)
+
+
+@pytest.fixture
+def async_client(async_test_db: AsyncSession) -> TestClient:
+    """Create a test client with the async test database."""
     return TestClient(app)
