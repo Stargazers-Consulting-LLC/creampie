@@ -1,15 +1,38 @@
 # Python Style Guide
 
+This style guide should be used as a reference for maintaining consistency across the codebase and for generating new code that matches the existing patterns and practices.
+
 ## General Guidelines
 
 1. Follow PEP 8 style guide
 2. Use type hints for all function parameters and return values
+    - Use `|` for union types in Python 3.10+
 3. Use docstrings for all modules, classes, and functions
 4. Use meaningful variable and function names
 5. Keep functions small and focused
 6. Use list comprehensions for simple transformations
 7. Use generator expressions for large datasets
 8. Use context managers for resource management
+   - For context managers with more than two arguments, create and assign them first, then use in a separate `with` statement
+   - Example:
+     ```python
+     # Good
+     session = aiohttp.ClientSession(
+         timeout=timeout,
+         headers=headers,
+         skip_auto_headers=['Accept-Encoding']
+     )
+     async with session:
+         # use session
+
+     # Avoid
+     async with aiohttp.ClientSession(
+         timeout=timeout,
+         headers=headers,
+         skip_auto_headers=['Accept-Encoding']
+     ) as session:
+         # use session
+     ```
 9. Use dataclasses for data containers
 10. Use enums for constants
 11. Use os.path for file paths
@@ -67,6 +90,7 @@
 
 - Follow PEP 8 guidelines for general Python code style
 - Use type hints consistently throughout the codebase
+  - Use `|` for union types in Python 3.10+
 - Keep line length reasonable (aim for under 100 characters)
 - Use meaningful variable and function names that are descriptive
 - Use `typing.TYPE_CHECKING` when appropriate to avoid circular imports while type checking.
@@ -153,6 +177,8 @@
 - Keep the code DRY (Don't Repeat Yourself)
 - Use constants for configuration values
 - Implement proper logging
+- Refactor functions with "and" in their name into separate functions
+  - Example: `process_and_validate_data()` should be split into `process_data()` and `validate_data()`
 
 ## Example Code Structure
 
@@ -164,7 +190,7 @@ from pydantic import BaseModel
 
 # Type definitions
 class ResponseModel(BaseModel):
-    field: str
+    field: str | None  # Preferred over Optional[str]
 
 # Route handlers
 @app.get("/endpoint")
@@ -180,5 +206,3 @@ class User(ModelBase):
     __tablename__ = "users"
     id: int = Column(Integer, primary_key=True)
 ```
-
-This style guide should be used as a reference for maintaining consistency across the codebase and for generating new code that matches the existing patterns and practices.
