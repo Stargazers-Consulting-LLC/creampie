@@ -1,8 +1,8 @@
-"""User migration
+"""auto migration
 
-Revision ID: 5bcf6394c136
-Revises:
-Create Date: 2025-06-15 15:42:52.487138
+Revision ID: c012323995b4
+Revises: b961dcb63ef1
+Create Date: 2025-06-17 13:50:39.552378
 
 """
 
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "5bcf6394c136"
-down_revision: str | None = None
+revision: str = "c012323995b4"
+down_revision: str | None = "b961dcb63ef1"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
@@ -26,14 +26,12 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("email", sa.Text(), nullable=False),
         sa.Column("password", sa.Text(), nullable=False),
-        sa.Column("username", sa.Text(), nullable=False),
         sa.Column("first_name", sa.Text(), nullable=False),
         sa.Column("last_name", sa.Text(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("is_verified", sa.Boolean(), nullable=False),
         sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.Column("role", sa.Text(), nullable=False),
         sa.Column("last_login", sa.DateTime(), nullable=True),
         sa.Column("password_reset_token", sa.Text(), nullable=True),
         sa.Column("password_reset_expires", sa.DateTime(), nullable=True),

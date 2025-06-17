@@ -67,6 +67,7 @@ async def run_periodic_updates() -> None:
                 logger.info("Successfully updated all tracked stocks")
         except Exception as e:
             logger.error("Error updating tracked stocks: %s", str(e))
+            return
 
         # Wait 5 minutes before retrying if there was an error
         await asyncio.sleep(5 * 60)

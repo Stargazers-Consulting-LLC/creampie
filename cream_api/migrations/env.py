@@ -7,6 +7,16 @@ from sqlalchemy import engine_from_config, pool
 
 from cream_api.db import ModelBase
 from cream_api.settings import get_app_settings
+from cream_api.stock_data.models import StockData, TrackedStock
+from cream_api.users.models.app_user import AppUser
+from cream_api.users.models.app_user_session import AppUserSession
+
+__all__ = [
+    "AppUser",
+    "AppUserSession",
+    "StockData",
+    "TrackedStock",
+]
 
 # Add the project root to the Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
