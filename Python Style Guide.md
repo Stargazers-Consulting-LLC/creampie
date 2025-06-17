@@ -39,6 +39,8 @@ This style guide should be used as a reference for maintaining consistency acros
 10. Use enums for constants
 11. Use os.path for file paths
 12. Use the standard `datetime` library for date/time operations
+    - Use `datetime.now(datetime.UTC)` instead of `datetime.utcnow()` for UTC timestamps
+    - This provides better timezone awareness and is the preferred method in modern Python
 13. Do not use magic numbers that are not 1, 2, -1 or 0.
 
 ## Code Organization

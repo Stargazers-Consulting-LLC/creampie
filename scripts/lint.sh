@@ -1,5 +1,11 @@
-#!/usr/bin/env bash
-set -e  # Exit on any error
+#!/bin/bash
+
+# Exit on error
+set -e
+
+# Source common functions
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$SCRIPT_DIR/common.sh"
 
 # Function to print colored status messages
 print_status() {
