@@ -3,8 +3,8 @@
  * Provides responsive navigation with dropdown menus and mobile support.
  */
 // @ts-expect-error - React is needed for JSX
-import * as React from "react";
-import { Link } from "react-router-dom";
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,8 +13,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
 
 export function Navigation() {
   return (
@@ -25,9 +25,7 @@ export function Navigation() {
             {/* Logo */}
             <NavigationMenuItem>
               <Link to="/" className="flex items-center space-x-2">
-                <span className="text-2xl font-bold text-indigo-600">
-                  Cream
-                </span>
+                <span className="text-2xl font-bold text-indigo-600">Cream</span>
               </Link>
             </NavigationMenuItem>
 
@@ -63,9 +61,7 @@ export function Navigation() {
                         to="/docs/quickstart"
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       >
-                        <div className="text-sm font-medium leading-none">
-                          Quick Start
-                        </div>
+                        <div className="text-sm font-medium leading-none">Quick Start</div>
                         <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                           Get started with our basic tools and features.
                         </p>
@@ -78,9 +74,7 @@ export function Navigation() {
                         to="/docs/advanced"
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       >
-                        <div className="text-sm font-medium leading-none">
-                          Advanced Topics
-                        </div>
+                        <div className="text-sm font-medium leading-none">Advanced Topics</div>
                         <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                           Deep dive into advanced features and concepts.
                         </p>
@@ -103,10 +97,7 @@ export function Navigation() {
         <div className="ml-auto flex items-center space-x-4">
           <Link
             to="/auth/login"
-            className={cn(
-              navigationMenuTriggerStyle(),
-              "bg-transparent hover:bg-accent",
-            )}
+            className={cn(navigationMenuTriggerStyle(), 'bg-transparent hover:bg-accent')}
           >
             Login
           </Link>
@@ -114,7 +105,7 @@ export function Navigation() {
             to="/auth/signup"
             className={cn(
               navigationMenuTriggerStyle(),
-              "bg-indigo-600 text-white hover:bg-indigo-700",
+              'bg-indigo-600 text-white hover:bg-indigo-700'
             )}
           >
             Sign Up

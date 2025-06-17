@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import * as React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   if (!token) {
     // Redirect to login page but save the attempted url

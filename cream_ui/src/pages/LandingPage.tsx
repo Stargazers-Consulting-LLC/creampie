@@ -3,8 +3,8 @@
  * Implements a responsive design with hero section, features grid, and disclaimer.
  */
 // @ts-expect-error - React is needed for JSX
-import * as React from "react";
-import { Link } from "react-router-dom";
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 export function LandingPage() {
   return (
@@ -17,14 +17,11 @@ export function LandingPage() {
               <div className="sm:text-center lg:text-left">
                 <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="block">CREAM</span>
-                  <span className="block text-indigo-600">
-                    Cash Rules Everything Around Me
-                  </span>
+                  <span className="block text-indigo-600">Cash Rules Everything Around Me</span>
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Your all-in-one solution for managing finances and building
-                  wealth. We make quantitative finance tools accessible and easy
-                  to understand.
+                  Your all-in-one solution for managing finances and building wealth. We make
+                  quantitative finance tools accessible and easy to understand.
                 </p>
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                   <div className="rounded-md shadow">
@@ -61,8 +58,7 @@ export function LandingPage() {
               Investing Made Simple
             </p>
             <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              Open source, transparent, and built for everyone. Audit the code
-              or run it yourself.
+              Open source, transparent, and built for everyone. Audit the code or run it yourself.
             </p>
           </div>
 
@@ -71,12 +67,7 @@ export function LandingPage() {
               {/* Feature 1: Quantitative Tools */}
               <div className="relative">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -90,8 +81,7 @@ export function LandingPage() {
                     Quantitative Finance Tools
                   </h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Access powerful financial analysis tools powered by numpy,
-                    pandas, and scipy.
+                    Access powerful financial analysis tools powered by numpy, pandas, and scipy.
                   </p>
                 </div>
               </div>
@@ -99,12 +89,7 @@ export function LandingPage() {
               {/* Feature 2: Security */}
               <div className="relative">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -114,12 +99,9 @@ export function LandingPage() {
                   </svg>
                 </div>
                 <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Secure & Private
-                  </h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">Secure & Private</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Built with security in mind using cryptography and secure
-                    session management.
+                    Built with security in mind using cryptography and secure session management.
                   </p>
                 </div>
               </div>
@@ -127,12 +109,7 @@ export function LandingPage() {
               {/* Feature 3: Open Source */}
               <div className="relative">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -142,12 +119,9 @@ export function LandingPage() {
                   </svg>
                 </div>
                 <div className="ml-16">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Open Source
-                  </h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">Open Source</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Fully open source with comprehensive documentation and
-                    external readings.
+                    Fully open source with comprehensive documentation and external readings.
                   </p>
                 </div>
               </div>
@@ -155,12 +129,7 @@ export function LandingPage() {
               {/* Feature 4: Transparency */}
               <div className="relative">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -174,8 +143,7 @@ export function LandingPage() {
                     Transparent & Verifiable
                   </h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Audit the code yourself or run it independently. No hidden
-                    algorithms.
+                    Audit the code yourself or run it independently. No hidden algorithms.
                   </p>
                 </div>
               </div>

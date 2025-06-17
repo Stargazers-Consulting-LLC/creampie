@@ -3,21 +3,21 @@
  * Provides the base structure for the application including navigation and route protection.
  */
 // @ts-expect-error - React is needed for JSX
-import * as React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import * as React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Page imports
-import { LandingPage } from "./pages/LandingPage";
-import { SignUpPage } from "./pages/auth/SignUpPage";
-import { LoginPage } from "./pages/auth/LoginPage";
-import { VerifyEmailPage } from "./pages/auth/VerifyEmailPage";
+import { LandingPage } from './pages/LandingPage';
+import { SignUpPage } from './pages/auth/SignUpPage';
+import { LoginPage } from './pages/auth/LoginPage';
+import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 
 // Component imports
-import { ProtectedRoute } from "./components/auth/ProtectedRoute";
-import { Navigation } from "./components/Navigation";
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { Navigation } from './components/Navigation';
 
 // Styles
-import "./App.css";
+import './App.css';
 
 function App() {
   return (
