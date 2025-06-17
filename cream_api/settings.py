@@ -20,8 +20,9 @@ class Settings(BaseSettings):
     frontend_url: str = ""
 
     # Cache configuration
-    CACHE_DIR: Path = Path("files")
-    HTML_RAW_RESPONSES_DIR: Path = CACHE_DIR / "raw_responses"
+    TMP_HTML_FILES_DIR: Path = Path(__file__).parent / "files"
+    HTML_RAW_RESPONSES_DIR: Path = TMP_HTML_FILES_DIR / "raw_responses"
+    HTML_PARSED_RESPONSES_DIR: Path = TMP_HTML_FILES_DIR / "parsed_responses"
 
     # Parser configuration
     # Modern Chrome user agent to avoid being blocked by websites
