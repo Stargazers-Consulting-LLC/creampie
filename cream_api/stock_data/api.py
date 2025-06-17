@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cream_api.background_tasks.stock_updates import _retrieve_historical_data_task
 from cream_api.db import get_async_db
 from cream_api.stock_data.models import TrackedStock
 
@@ -56,13 +55,6 @@ async def track_stock(
             )
             db.add(new_tracking)
             await db.commit()
-
-        # Schedule the background task
-        background_tasks.add_task(
-            _retrieve_historical_data_task,
-            symbol=request.symbol,
-            end_date=None,
-        )
 
         return {
             "status": "tracking",

@@ -1,4 +1,4 @@
-"""Background tasks for stock data updates."""
+"""Background tasks for stock data operations."""
 
 import asyncio
 import logging
@@ -15,7 +15,7 @@ from cream_api.stock_data.retriever import StockDataRetriever
 logger: logging.Logger = get_logger_for(__name__)
 
 
-async def _retrieve_historical_data_task(symbol: str, end_date: str | None) -> None:
+async def retrieve_historical_data_task(symbol: str, end_date: str | None) -> None:
     """Background task to retrieve historical stock data.
 
     Args:
@@ -44,7 +44,7 @@ async def update_all_tracked_stocks(db: AsyncSession) -> None:
         # Update each tracked stock
         for stock in tracked_stocks:
             try:
-                await _retrieve_historical_data_task(symbol=stock.symbol, end_date=None)
+                await retrieve_historical_data_task(symbol=stock.symbol, end_date=None)
                 stock.last_pull_status = "success"
                 stock.last_pull_date = datetime.now()
             except Exception as e:

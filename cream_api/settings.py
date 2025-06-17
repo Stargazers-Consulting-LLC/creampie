@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     def get_connection_string(self) -> str:
         """Get database connection string."""
         if not self.db_host or not self.db_name:
-            return "sqlite:///:memory:"
+            return "sqlite+aiosqlite:///:memory:"
         return f"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}"
 
     model_config = SettingsConfigDict(env_file=".env")

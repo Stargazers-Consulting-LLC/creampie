@@ -2,15 +2,17 @@
 
 import asyncio
 import logging
-from collections.abc import Sequence
+from collections.abc import Callable, Coroutine, Sequence
+from typing import Any
 
+from fastapi import BackgroundTasks
 from stargazer_utils.logging import get_logger_for
 
-from cream_api.background_tasks.stock_updates import run_periodic_updates
+from cream_api.stock_data.tasks import run_periodic_updates
 
 logger: logging.Logger = get_logger_for(__name__)
 
-__all__ = ["run_periodic_updates"]
+__all__ = ["schedule_background_task", "start_background_tasks"]
 
 
 async def start_background_tasks() -> None:
@@ -33,3 +35,22 @@ async def start_background_tasks() -> None:
         logger.error("Background task failed: %s", str(e))
         # Re-raise to ensure the application knows about the failure
         raise
+
+
+# Type alias for background task functions
+BackgroundTaskFunc = Callable[..., Coroutine[Any, Any, None]]
+
+
+def schedule_background_task(
+    background_tasks: BackgroundTasks,
+    task_func: BackgroundTaskFunc,
+    **kwargs: Any,
+) -> None:
+    """Schedule a background task.
+
+    Args:
+        background_tasks: FastAPI background tasks manager
+        task_func: Async function to run in background
+        **kwargs: Arguments to pass to the task function
+    """
+    background_tasks.add_task(task_func, **kwargs)
