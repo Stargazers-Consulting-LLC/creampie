@@ -8,6 +8,7 @@ from cream_api.common.exceptions import StockRetrievalError
 from cream_api.stock_data.parser import StockDataParser
 from cream_api.tests.stock_data.test_constants import (
     REQUIRED_COLUMNS_COUNT,
+    TEST_AAPL_FIXTURE_PATH,
     TEST_ADJ_CLOSE_PRICE,
     TEST_CLOSE_PRICE,
     TEST_DATE,
@@ -27,7 +28,7 @@ def parser() -> StockDataParser:
 @pytest.fixture
 def sample_html() -> str:
     """Load sample HTML content from file."""
-    with open("files/raw_responses/AAPL_2025-06-16_20250616_185555.html") as f:
+    with open(TEST_AAPL_FIXTURE_PATH) as f:
         return f.read()
 
 
@@ -96,7 +97,7 @@ def test_parse_html_missing_table(parser: StockDataParser) -> None:
 
 def test_parse_html_file_valid(parser: StockDataParser) -> None:
     """Test parsing valid HTML file."""
-    result = parser.parse_html_file("files/raw_responses/AAPL_2025-06-16_20250616_185555.html")
+    result = parser.parse_html_file(TEST_AAPL_FIXTURE_PATH)
     assert "prices" in result
     assert len(result["prices"]) > 0
 
