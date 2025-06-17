@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prettier": "prettier --write '**/*.{css,less,scss,ts,tsx,graphql,gql,json,js,jsx,md}'"
+    "prettier": "prettier --config .prettierrc --write '**/*.{css,less,scss,ts,tsx,graphql,gql,json,js,jsx,md}'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

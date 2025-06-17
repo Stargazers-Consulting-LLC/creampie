@@ -82,7 +82,7 @@ repos:
         pass_filenames: false
       - id: prettier
         name: prettier
-        entry: bash -c 'cd cream_ui && yarn prettier'
+        entry: bash -c 'cd cream_ui && yarn prettier --config .prettierrc'
         language: system
         types: [file]
         files: '\.(css|less|scss|ts|tsx|graphql|gql|json|js|jsx|md)$'

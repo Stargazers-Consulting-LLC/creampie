@@ -15,6 +15,5 @@
   "insertPragma": false,
   "requirePragma": false,
   "useTabs": false,
-  "jsxSingleQuote": false,
-  "jsxBracketSameLine": false
+  "jsxSingleQuote": false
 } 
