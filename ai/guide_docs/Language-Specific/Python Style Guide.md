@@ -77,6 +77,38 @@ with open('file.txt', 'r') as f:
     # use file
 ```
 
+### Configuration Management
+- Load configuration once at module level to avoid redundant calls
+- Use module-level variables for configuration that doesn't change during runtime
+- Avoid calling configuration functions multiple times in the same module
+
+```python
+# Good - load once at module level
+config = get_stock_data_config()
+
+def some_function():
+    retriever = StockDataRetriever(config=config)  # Use module-level config
+
+# Avoid - loading config multiple times
+def some_function():
+    config = get_stock_data_config()  # Redundant call
+    retriever = StockDataRetriever(config=config)
+```
+
+### Constants and Magic Numbers
+- Define constants at module level for configuration values
+- Use descriptive names for time intervals and other magic numbers
+- Group related constants together
+
+```python
+# Good - named constants
+RETRIEVAL_INTERVAL_SECONDS = 5 * 60
+PROCESSING_INTERVAL_SECONDS = 10 * 60
+
+# Avoid - magic numbers in code
+await asyncio.sleep(5 * 60)  # What does 300 seconds mean?
+```
+
 ## 2. Project Structure and Organization
 
 ### Directory Structure
