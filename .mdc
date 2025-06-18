@@ -1,0 +1,29 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Cursor Rules for CreamPie Project
+# Always include the /ai directory in context as it contains:
+# - Project architecture and context documentation
+# - Development guides and patterns
+# - Technical summaries and decisions
+# - Domain-specific and language-specific guidelines
+ai/
+
+# Include key project configuration files
+pyproject.toml
+poetry.lock
+pytest.ini
+.gitignore
+README.md
+
+# Include main application directories
+cream_api/
+cream_ui/
+
+# Include development scripts and tools
+scripts/
+dev.md
+FEATURE_TEMPLATE.md
+cream.md
