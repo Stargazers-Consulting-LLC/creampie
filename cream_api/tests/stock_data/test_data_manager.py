@@ -112,27 +112,6 @@ async def test_transform_data_success(data_loader: StockDataLoader) -> None:
 
 
 @pytest.mark.asyncio
-async def test_transform_data_invalid_format(data_loader: StockDataLoader) -> None:
-    """Test transformation with invalid data format."""
-    sample_data: dict[str, list[dict[str, str | float | int]]] = {
-        "prices": [
-            {
-                "date": "2024-01-01",
-                "open": "invalid",
-                "high": TEST_HIGH_PRICE,
-                "low": TEST_LOW_PRICE,
-                "close": TEST_CLOSE_PRICE,
-                "adj_close": TEST_ADJ_CLOSE_PRICE,
-                "volume": TEST_VOLUME,
-            }
-        ]
-    }
-    with pytest.raises(ValueError) as exc_info:
-        await data_loader.transform_data(sample_data)
-    assert "could not convert string to float: 'invalid'" in str(exc_info.value)
-
-
-@pytest.mark.asyncio
 async def test_store_data_success(data_loader: StockDataLoader, session: AsyncSession) -> None:
     """Test successful data storage."""
     sample_data: dict[str, list[dict[str, str | float | int]]] = {

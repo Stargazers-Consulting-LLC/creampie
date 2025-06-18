@@ -1,5 +1,6 @@
 """FastAPI endpoints for stock data retrieval."""
 
+import logging
 from datetime import datetime
 from typing import Annotated
 
@@ -10,7 +11,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.db import get_async_db
 from cream_api.stock_data.models import TrackedStock
-from cream_api.stock_data.tasks import retrieve_historical_data_task
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/stock-data", tags=["stock-data"])
 
@@ -56,13 +58,6 @@ async def track_stock(
             )
             db.add(new_tracking)
             await db.commit()
-
-        # Schedule background task to retrieve historical data
-        try:
-            background_tasks.add_task(retrieve_historical_data_task, symbol=request.symbol, end_date=None)
-        except Exception as e:
-            # Log the error but don't fail the request
-            print(f"Error scheduling background task: {e}")
 
         return {
             "status": "tracking",

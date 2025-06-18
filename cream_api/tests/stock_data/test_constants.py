@@ -9,16 +9,16 @@ from datetime import datetime
 
 # Test data constants
 TEST_SYMBOL = "TEST"
-TEST_DATE = datetime.strptime("2025-06-13", "%Y-%m-%d")  # Match fixture data
+TEST_DATE = datetime.strptime("2025-06-16", "%Y-%m-%d")  # Match fixture data first row
 TEST_RECORDS_COUNT = 1  # Number of records in test data
 
-# Price data
-TEST_OPEN_PRICE = 199.73
-TEST_HIGH_PRICE = 200.37
-TEST_LOW_PRICE = 195.70
-TEST_CLOSE_PRICE = 196.45
-TEST_ADJ_CLOSE_PRICE = 196.45
-TEST_VOLUME = 51_447_300
+# Price data - matching the first row in fixture (Jun 16, 2025)
+TEST_OPEN_PRICE = 197.30
+TEST_HIGH_PRICE = 198.69
+TEST_LOW_PRICE = 196.56
+TEST_CLOSE_PRICE = 198.42
+TEST_ADJ_CLOSE_PRICE = 198.42
+TEST_VOLUME = 43_020_700
 
 # Test data dictionary
 TEST_STOCK_DATA = {

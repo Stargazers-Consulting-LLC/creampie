@@ -1,14 +1,17 @@
 """Stock data loading functionality."""
 
+import logging
 import shutil
-from datetime import datetime
 from typing import Any
 
+import pandas as pd
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 from cream_api.stock_data.models import StockData
 from cream_api.stock_data.parser import StockDataParser
+
+logger = logging.getLogger(__name__)
 
 
 class StockDataLoader:
@@ -49,9 +52,12 @@ class StockDataLoader:
             raise ValueError("Prices list cannot be empty")
 
         required_fields = {"date", "open", "high", "low", "close", "adj_close", "volume"}
-        for price in data["prices"]:
+
+        # Check all records, not just the first one
+        for i, price in enumerate(data["prices"]):
             missing_fields = required_fields - set(price.keys())
             if missing_fields:
+                logger.error(f"Record {i} missing fields: {missing_fields}")
                 raise ValueError(f"Missing required fields: {missing_fields}")
 
     async def transform_data(self, data: dict[str, Any]) -> list[StockData]:
@@ -67,14 +73,20 @@ class StockDataLoader:
         stock_data_list = []
 
         for price in data["prices"]:
+            # Remove commas from volume before converting to numeric
+            volume_str = str(price["volume"]).replace(",", "")
+            volume_numeric = pd.to_numeric(volume_str, errors="coerce")
+            if pd.isna(volume_numeric) or volume_numeric <= 0:
+                continue
+
             stock_data = StockData(
-                date=datetime.strptime(price["date"], "%Y-%m-%d"),
-                open=float(price["open"]),
-                high=float(price["high"]),
-                low=float(price["low"]),
-                close=float(price["close"]),
-                adj_close=float(price["adj_close"]),
-                volume=int(price["volume"]),
+                date=pd.to_datetime(price["date"]),
+                open=pd.to_numeric(price["open"], errors="coerce"),
+                high=pd.to_numeric(price["high"], errors="coerce"),
+                low=pd.to_numeric(price["low"], errors="coerce"),
+                close=pd.to_numeric(price["close"], errors="coerce"),
+                adj_close=pd.to_numeric(price["adj_close"], errors="coerce"),
+                volume=int(volume_numeric),
             )
             stock_data_list.append(stock_data)
 
@@ -136,5 +148,5 @@ class StockDataLoader:
                 shutil.move(str(file_path), str(self.config.parsed_responses_dir / file_path.name))
 
             except Exception as e:
-                print(f"Error processing file {file_path}: {e!s}")
+                logger.error(f"Error processing file {file_path}: {e!s}")
                 continue

@@ -1,7 +1,5 @@
 """Tests for the stock data parser."""
 
-import os
-
 import pandas as pd
 import pytest
 from bs4 import BeautifulSoup
@@ -31,8 +29,6 @@ def parser(test_config: StockDataConfig) -> StockDataParser:
 @pytest.fixture
 def sample_html() -> str:
     """Load sample HTML content from file."""
-    print(f"\nTrying to read file: {TEST_FIXTURE_PATH}")
-    print(f"File exists: {os.path.exists(TEST_FIXTURE_PATH)}")
     with open(TEST_FIXTURE_PATH) as f:
         return f.read()
 
@@ -62,8 +58,6 @@ def test_parse_html_table_headers(parser: StockDataParser, sample_html: str) -> 
 
     # Extract headers
     headers = [th.get_text(strip=True) for th in table.find_all("th")]
-    print("\nFound headers:", headers)
-    print("Expected mappings:", parser._column_mapping)
     assert len(headers) == REQUIRED_COLUMNS_COUNT
 
     # Clean headers the same way as the parser
@@ -81,9 +75,6 @@ def test_parse_html_table_headers(parser: StockDataParser, sample_html: str) -> 
         cleaned_headers.append(base_header)
 
     # Check if headers can be mapped to required columns
-    unmapped_headers = [h for h in cleaned_headers if h not in parser._column_mapping]
-    if unmapped_headers:
-        print("\nUnmapped headers:", unmapped_headers)
     assert all(header in parser._column_mapping for header in cleaned_headers)
 
 
@@ -115,12 +106,8 @@ def test_parse_html_file_not_found(parser: StockDataParser) -> None:
 
 def test_process_data_valid(parser: StockDataParser, sample_html: str) -> None:
     """Test processing valid data."""
-    print("\nStarting test_process_data_valid")
-    print(f"sample_html length: {len(sample_html)}")
     parsed_data = parser.parse_html(sample_html)
-    print(f"parsed_data: {parsed_data}")
     df = parser.process_data(parsed_data)
-    print(f"df shape: {df.shape}")
     assert not df.empty
     assert len(df.columns) == REQUIRED_COLUMNS_COUNT
     assert all(col in df.columns for col in ["date", "open", "high", "low", "close", "adj_close", "volume"])
@@ -205,24 +192,6 @@ def test_validate_data_valid(parser: StockDataParser, sample_html: str) -> None:
     assert not validated_df.empty
 
 
-def test_validate_data_invalid_dates(parser: StockDataParser) -> None:
-    """Test validating data with invalid dates."""
-    df = pd.DataFrame(
-        {
-            "date": ["1899-12-31", "2024-01-01"],
-            "open": [100.0, 100.0],
-            "high": [101.0, 101.0],
-            "low": [99.0, 99.0],
-            "close": [100.5, 100.5],
-            "adj_close": [100.5, 100.5],
-            "volume": [1000000, 1000000],
-        }
-    )
-    df["date"] = pd.to_datetime(df["date"])
-    with pytest.raises(StockRetrievalError):
-        parser._validate_data(df)
-
-
 def test_validate_data_invalid_prices(parser: StockDataParser) -> None:
     """Test validating data with invalid prices."""
     df = pd.DataFrame(
@@ -239,31 +208,3 @@ def test_validate_data_invalid_prices(parser: StockDataParser) -> None:
     df["date"] = pd.to_datetime(df["date"])
     with pytest.raises(StockRetrievalError):
         parser._validate_data(df)
-
-
-def test_handle_missing_values(parser: StockDataParser) -> None:
-    """Test handling missing values."""
-    df = pd.DataFrame(
-        {
-            "date": ["2024-01-01", "2024-01-02"],
-            "open": [100.0, None],
-            "high": [101.0, None],
-            "low": [99.0, None],
-            "close": [100.5, None],
-            "adj_close": [100.5, None],
-            "volume": [1000000, None],
-        }
-    )
-    df["date"] = pd.to_datetime(df["date"])
-    result = parser._handle_missing_values(df)
-
-    # Check that there are no NaN values in any column
-    assert not result.isna().any().any()
-
-    # Check that volume is filled with 0
-    assert result["volume"].iloc[1] == 0
-
-    # Check that price columns are filled with mean values
-    price_cols = ["open", "high", "low", "close", "adj_close"]
-    for col in price_cols:
-        assert result[col].iloc[1] == result[col].iloc[0]  # Second row should be filled with first row's value

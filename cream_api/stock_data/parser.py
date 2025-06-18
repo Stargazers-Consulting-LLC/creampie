@@ -1,6 +1,5 @@
 """Stock data parser for extracting information from HTML content."""
 
-import logging
 from typing import Any
 
 import pandas as pd
@@ -32,7 +31,19 @@ COLUMN_MAPPING: dict[str, str] = {
     "Volume": "volume",
 }
 
-logger = logging.getLogger(__name__)
+# Constants for data filtering
+DIVIDEND_ROW_FIELD_COUNT = 2
+REQUIRED_FIELDS = {"date", "open", "high", "low", "close", "adj_close", "volume"}
+
+# Column groups for processing
+NUMERIC_COLUMNS = ["open", "high", "low", "close", "adj_close", "volume"]
+
+# Dividend detection patterns
+DIVIDEND_INDICATORS = {"dividend", "div", "distribution"}
+STOCK_SPLIT_INDICATORS = {"split", "splits", "stock split"}
+
+# Data validation constants
+NUMERIC_TOLERANCE = 1e-10
 
 
 class StockDataParser:
@@ -127,7 +138,8 @@ class StockDataParser:
         Returns:
             BeautifulSoup table object or None if not found
         """
-        return soup.select_one(self.HISTORICAL_PRICES_CSS_SELECTOR)
+        table = soup.select_one(self.HISTORICAL_PRICES_CSS_SELECTOR)
+        return table
 
     def _extract_table_data(self, table: Any) -> list[dict[str, Any]]:
         """
@@ -143,58 +155,156 @@ class StockDataParser:
             StockRetrievalError: If table structure is invalid
         """
         try:
-            # Extract and clean headers from thead
-            thead = table.find("thead")
-            if not thead:
-                raise StockRetrievalError("No thead found in table")
-
-            headers = [th.get_text(strip=True) for th in thead.find_all("th")]
-            if not headers:
-                raise StockRetrievalError("No headers found in table")
-
-            cleaned_headers = []
-            for header_text in headers:
-                # Remove special characters and normalize spaces
-                clean_header = header_text.replace("*", "").replace(".", "")
-                # Split on any whitespace and take first part
-                base_header = clean_header.split()[0]
-                # Handle special cases
-                if base_header == "CloseClose":
-                    base_header = "Close"
-                elif base_header == "Adj":
-                    base_header = "Adj Close"
-                cleaned_headers.append(base_header)
-
-            if not self._validate_headers(cleaned_headers):
-                raise StockRetrievalError(
-                    f"Invalid table headers. Expected {self._required_columns}, got {cleaned_headers}",
-                )
-
-            # Extract rows from tbody
-            tbody = table.find("tbody")
-            if not tbody:
-                raise StockRetrievalError("No tbody found in table")
-
-            rows = []
-            for tr in tbody.find_all("tr"):
-                row_data = {}
-                for td, header in zip(tr.find_all("td"), cleaned_headers, strict=False):
-                    # Get just the immediate text content, stripped of whitespace
-                    value = td.get_text(strip=True)
-                    # Map headers to DataFrame column names using the mapping dictionary
-                    df_column = self._column_mapping.get(header)
-                    if df_column is None:
-                        raise StockRetrievalError(f"Unknown header: {header}")
-                    # Store with lowercase column names for consistency
-                    row_data[df_column] = value
-                rows.append(row_data)
-
-            # Sort rows by date in descending order (newest first)
-            rows.sort(key=lambda x: pd.to_datetime(x["date"]), reverse=True)
-
+            headers = self._extract_headers(table)
+            cleaned_headers = self._clean_headers(headers)
+            rows = self._extract_rows(table, cleaned_headers)
+            rows.sort(key=lambda row: pd.to_datetime(row["date"]), reverse=True)
             return rows
         except Exception as e:
             raise StockRetrievalError(f"Failed to extract table data: {e!s}") from e
+
+    def _extract_headers(self, table: Any) -> list[str]:
+        """Extract raw headers from the table.
+
+        Args:
+            table: BeautifulSoup table object
+
+        Returns:
+            List of raw header names
+
+        Raises:
+            StockRetrievalError: If headers cannot be extracted
+        """
+        thead = table.find("thead")
+        if not thead:
+            raise StockRetrievalError("No thead found in table")
+
+        headers = [th.get_text(strip=True) for th in thead.find_all("th")]
+        if not headers:
+            raise StockRetrievalError("No headers found in table")
+
+        return headers
+
+    def _clean_headers(self, headers: list[str]) -> list[str]:
+        """Clean and normalize header names.
+
+        Args:
+            headers: List of raw header names
+
+        Returns:
+            List of cleaned header names
+        """
+        cleaned_headers = []
+        for header_text in headers:
+            clean_header = header_text.replace("*", "").replace(".", "")
+            base_header = clean_header.split()[0]
+            if base_header == "CloseClose":
+                base_header = "Close"
+            elif base_header == "Adj":
+                base_header = "Adj Close"
+            cleaned_headers.append(base_header)
+
+        return cleaned_headers
+
+    def _extract_rows(self, table: Any, cleaned_headers: list[str]) -> list[dict[str, Any]]:
+        """Extract and filter rows from the table.
+
+        Args:
+            table: BeautifulSoup table object
+            cleaned_headers: List of cleaned header names
+
+        Returns:
+            List of filtered row data dictionaries
+        """
+        tbody = table.find("tbody")
+        if not tbody:
+            raise StockRetrievalError("No tbody found in table")
+
+        rows = list(
+            filter(
+                self._is_valid_row, map(lambda tr: self._extract_row_data(tr, cleaned_headers), tbody.find_all("tr"))
+            )
+        )
+
+        return rows
+
+    def _extract_row_data(self, tr: Any, cleaned_headers: list[str]) -> dict[str, Any]:
+        """Extract data from a single table row.
+
+        Args:
+            tr: BeautifulSoup tr object
+            cleaned_headers: List of cleaned header names
+
+        Returns:
+            Dictionary containing row data
+        """
+        row_data = {}
+        for td, header in zip(tr.find_all("td"), cleaned_headers, strict=False):
+            value = td.get_text(strip=True)
+            df_column = self._column_mapping.get(header)
+            if df_column is None:
+                raise StockRetrievalError(f"Unknown header: {header}")
+            row_data[df_column] = value
+        return row_data
+
+    def _is_valid_row(self, row_data: dict[str, Any]) -> bool:
+        """Check if a row contains valid data.
+
+        Args:
+            row_data: Dictionary containing row data
+
+        Returns:
+            True if row is valid, False otherwise
+        """
+        if self._is_dividend_or_split_row(row_data):
+            return False
+
+        if not REQUIRED_FIELDS.issubset(set(row_data.keys())):
+            return False
+
+        if not self._has_valid_volume(row_data):
+            return False
+
+        return True
+
+    def _is_dividend_or_split_row(self, row_data: dict[str, Any]) -> bool:
+        """Check if a row represents dividend or stock split data.
+
+        Args:
+            row_data: Dictionary containing row data
+
+        Returns:
+            True if row is dividend/split data, False otherwise
+        """
+        if len(row_data) == DIVIDEND_ROW_FIELD_COUNT and "date" in row_data and "open" in row_data:
+            open_value = row_data["open"].lower()
+
+            if any(indicator in open_value for indicator in DIVIDEND_INDICATORS):
+                return True
+
+            if any(indicator in open_value for indicator in STOCK_SPLIT_INDICATORS):
+                return True
+
+        if len(row_data) < len(REQUIRED_FIELDS):
+            return True
+
+        return False
+
+    def _has_valid_volume(self, row_data: dict[str, Any]) -> bool:
+        """Check if a row has valid volume data.
+
+        Args:
+            row_data: Dictionary containing row data
+
+        Returns:
+            True if volume is valid, False otherwise
+        """
+        try:
+            volume_str = row_data["volume"].replace(",", "")
+            volume_val = float(volume_str)
+            return volume_val > 0
+        except (ValueError, AttributeError, KeyError):
+            return False
 
     def _validate_headers(self, headers: list[str]) -> bool:
         """
@@ -206,18 +316,15 @@ class StockDataParser:
         Returns:
             True if headers match required columns, False otherwise
         """
-        # Check if all headers can be mapped to required columns
         mapped_headers = set()
         for header in headers:
             if header in self._column_mapping:
                 mapped_headers.add(self._column_mapping[header])
             else:
-                # Try to find a mapping by removing any description
                 base_header = header.split(None, 1)[0].strip()
                 if base_header in self._column_mapping:
                     mapped_headers.add(self._column_mapping[base_header])
 
-        # Check if we have all required columns
         required_columns = {"date", "open", "high", "low", "close", "adj_close", "volume"}
         return len(headers) == REQUIRED_COLUMNS_COUNT and mapped_headers == required_columns
 
@@ -235,38 +342,26 @@ class StockDataParser:
             StockRetrievalError: If data cleaning fails
         """
         try:
-            # Ensure column names are lowercase
             df.columns = df.columns.str.lower()
 
-            # Convert date column to datetime
             df["date"] = pd.to_datetime(df["date"])
 
-            # Filter out dividend rows before processing
-            # Dividend rows typically have text in numeric columns
-            numeric_cols = ["open", "high", "low", "close", "adj_close", "volume"]
-            for col in numeric_cols:
-                if col not in df.columns:
-                    raise StockRetrievalError(f"Missing required column: {col}")
-                # Keep only rows where the value is purely numeric (after removing commas)
-                df = df[df[col].str.replace(",", "").str.match(r"^\d*\.?\d+$")]
+            missing_cols = [col for col in NUMERIC_COLUMNS if col not in df.columns]
+            if missing_cols:
+                raise StockRetrievalError(f"Missing required columns: {missing_cols}")
 
-            # Convert numeric columns
-            for col in numeric_cols:
-                df[col] = df[col].str.replace(",", "")
-                df[col] = pd.to_numeric(df[col], errors="raise")
+            # Convert numeric columns with error handling
+            for col in NUMERIC_COLUMNS:
+                # Remove commas from numeric strings before conversion
+                df[col] = df[col].astype(str).str.replace(",", "")
+                df[col] = pd.to_numeric(df[col], errors="coerce")
 
-            # Remove duplicates
+            # Filter out rows with invalid numeric data (NaN values)
+            df = df.dropna(subset=NUMERIC_COLUMNS)
+
             df = df.drop_duplicates(subset=["date"])
-
-            # Sort by date
             df = df.sort_values("date")
-
-            # Handle missing values
-            df = self._handle_missing_values(df)
-
-            # Print first few rows for debugging
-            print("\nFirst few rows after cleaning:")
-            print(df[["date", "open", "high", "low", "close"]].head().to_string())
+            df[NUMERIC_COLUMNS] = df[NUMERIC_COLUMNS].fillna(df[NUMERIC_COLUMNS].mean())
 
             return df
         except Exception as e:
@@ -285,64 +380,15 @@ class StockDataParser:
         Raises:
             StockRetrievalError: If data validation fails
         """
-        try:
-            # Check for required columns
-            required_cols = ["date", "open", "high", "low", "close", "adj_close", "volume"]
-            if not all(col in df.columns for col in required_cols):
-                raise StockRetrievalError("Missing required columns")
+        invalid_rows = df[
+            (df["high"] < df["low"] - NUMERIC_TOLERANCE)
+            | (df["high"] < df["open"] - NUMERIC_TOLERANCE)
+            | (df["high"] < df["close"] - NUMERIC_TOLERANCE)
+            | (df["low"] > df["open"] + NUMERIC_TOLERANCE)
+            | (df["low"] > df["close"] + NUMERIC_TOLERANCE)
+        ]
 
-            # Check for valid date range
-            min_date = pd.Timestamp("1900-01-01")
-            max_date = pd.Timestamp.now()
-            if not df["date"].between(min_date, max_date).all():
-                raise StockRetrievalError("Invalid date range")
-
-            # Check for valid price ranges
-            price_cols = ["open", "high", "low", "close", "adj_close"]
-            for col in price_cols:
-                if not df[col].between(0, float("inf")).all():
-                    raise StockRetrievalError(f"Invalid {col} price range")
-
-            # Check for valid volume
-            if not df["volume"].between(0, float("inf")).all():
-                raise StockRetrievalError("Invalid volume range")
-
-            # Check price relationships with tolerance for floating point errors
-            tolerance = 1e-10
-            invalid_rows = df[
-                (df["high"] < df["low"] - tolerance)
-                | (df["high"] < df["open"] - tolerance)
-                | (df["high"] < df["close"] - tolerance)
-                | (df["low"] > df["open"] + tolerance)
-                | (df["low"] > df["close"] + tolerance)
-            ]
-
-            if not invalid_rows.empty:
-                # Log the problematic rows for debugging
-                print("\nInvalid price relationships found:")
-                print(invalid_rows[["date", "open", "high", "low", "close"]].to_string())
-                raise StockRetrievalError("Invalid price relationships detected")
-
-            return df
-        except Exception as e:
-            raise StockRetrievalError(f"Failed to validate data: {e!s}") from e
-
-    def _handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Handle missing values in the data.
-
-        Args:
-            df: DataFrame to process
-
-        Returns:
-            DataFrame with missing values handled
-        """
-        # Fill missing volume with 0
-        df["volume"] = df["volume"].fillna(0)
-
-        # Fill missing prices with mean values
-        price_cols = ["open", "high", "low", "close", "adj_close"]
-        for col in price_cols:
-            df[col] = df[col].fillna(df[col].mean())
+        if not invalid_rows.empty:
+            raise StockRetrievalError("Invalid price relationships detected")
 
         return df
