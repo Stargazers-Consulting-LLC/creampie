@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from stargazer_utils.logging import get_logger_for
 
 from cream_api.db import AsyncSessionLocal
+from cream_api.stock_data.config import get_stock_data_config
 from cream_api.stock_data.models import TrackedStock
 from cream_api.stock_data.retriever import StockDataRetriever
 
@@ -22,7 +23,8 @@ async def retrieve_historical_data_task(symbol: str, end_date: str | None) -> No
         symbol: Stock symbol to retrieve data for
         end_date: Optional end date in YYYY-MM-DD format
     """
-    retriever = StockDataRetriever()
+    config = get_stock_data_config()
+    retriever = StockDataRetriever(config=config)
     await retriever.get_historical_data(
         symbol=symbol,
         end_date=end_date,

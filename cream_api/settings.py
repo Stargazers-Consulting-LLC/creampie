@@ -1,7 +1,5 @@
 """Application settings configuration."""
 
-from pathlib import Path
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,22 +19,6 @@ class Settings(BaseSettings):
 
     # Background task configuration
     enable_background_tasks: bool = True
-
-    # Cache configuration
-    TMP_HTML_FILES_DIR: Path = Path(__file__).parent / "files"
-    HTML_RAW_RESPONSES_DIR: Path = TMP_HTML_FILES_DIR / "raw_responses"
-    HTML_PARSED_RESPONSES_DIR: Path = TMP_HTML_FILES_DIR / "parsed_responses"
-
-    # Parser configuration
-    # Modern Chrome user agent to avoid being blocked by websites
-    PARSER_USER_AGENT: str = (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/122.0.0.0 Safari/537.36"
-    )
-    PARSER_TIMEOUT: int = 30
-    YAHOO_FINANCE_GET_MAX_RETRIES: int = 3
-    YAHOO_FINANCE_RETRY_DELAY: int = 5
 
     def get_connection_string(self) -> str:
         """Get database connection string."""

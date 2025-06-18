@@ -6,7 +6,7 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cream_api.settings import app_settings
+from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 from cream_api.stock_data.models import StockData
 from cream_api.stock_data.parser import StockDataParser
 
@@ -16,13 +16,19 @@ class StockDataLoader:
     Loader for stock data operations including validation, transformation, and database storage.
     """
 
-    def __init__(self, session: AsyncSession):
+    def __init__(
+        self,
+        session: AsyncSession,
+        config: StockDataConfig | None = None,
+    ):
         """Initialize the loader with a database session.
 
         Args:
             session: AsyncSession for database operations
+            config: StockDataConfig instance (defaults to default config)
         """
         self.session = session
+        self.config = config or get_stock_data_config()
 
     async def validate_data(self, data: dict[str, Any]) -> None:
         """Validate stock data structure.
@@ -112,10 +118,10 @@ class StockDataLoader:
         2. Stores the data in the database
         3. Moves the file to the parsed responses directory
         """
-        parser = StockDataParser()
+        parser = StockDataParser(config=self.config)
 
         # Process each file in the raw directory
-        for file_path in app_settings.HTML_RAW_RESPONSES_DIR.glob("*.html"):
+        for file_path in self.config.raw_responses_dir.glob("*.html"):
             try:
                 # Extract symbol from filename (assuming format: SYMBOL_YYYY-MM-DD.html)
                 symbol = file_path.stem.split("_")[0]
@@ -127,7 +133,7 @@ class StockDataLoader:
                 await self.process_data(symbol, data)
 
                 # Move file to parsed directory
-                shutil.move(str(file_path), str(app_settings.HTML_PARSED_RESPONSES_DIR / file_path.name))
+                shutil.move(str(file_path), str(self.config.parsed_responses_dir / file_path.name))
 
             except Exception as e:
                 print(f"Error processing file {file_path}: {e!s}")

@@ -2,7 +2,6 @@
 
 import asyncio
 import logging
-import os
 from datetime import datetime
 
 import aiohttp
@@ -10,14 +9,11 @@ from fastapi import status
 from stargazer_utils.logging import get_logger_for
 
 from cream_api.common.exceptions import StockRetrievalError
-from cream_api.settings import get_app_settings
+from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 
-settings = get_app_settings()
 logger: logging.Logger = get_logger_for(__name__)
 
 BASE_URL = "https://finance.yahoo.com"
-MAX_RETRIES = settings.YAHOO_FINANCE_GET_MAX_RETRIES
-RETRY_DELAY = settings.YAHOO_FINANCE_RETRY_DELAY
 MAX_HEADER_SIZE = 2**32  # 4GB should be more than enough for any header
 
 
@@ -28,10 +24,15 @@ class StockDataRetriever:
     including retry logic for rate limiting and error handling.
     """
 
-    def __init__(self) -> None:
-        """Initialize the retriever with required headers."""
+    def __init__(self, config: StockDataConfig | None = None) -> None:
+        """Initialize the retriever with required headers.
+
+        Args:
+            config: StockDataConfig instance (defaults to default config)
+        """
+        self.config = config or get_stock_data_config()
         self.headers = {
-            "User-Agent": settings.PARSER_USER_AGENT,
+            "User-Agent": self.config.user_agent,
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
             "Accept-Encoding": "gzip, deflate, br",
@@ -39,7 +40,7 @@ class StockDataRetriever:
             "Upgrade-Insecure-Requests": "1",
             "Cache-Control": "max-age=0",
         }
-        logger.debug("Initialized StockDataRetriever with user agent: %s", settings.PARSER_USER_AGENT)
+        logger.debug("Initialized StockDataRetriever with user agent: %s", self.config.user_agent)
 
     def save_html(self, symbol: str, html_content: str) -> None:
         """Save HTML content to a file.
@@ -53,7 +54,7 @@ class StockDataRetriever:
         """
         date = datetime.now().strftime("%Y-%m-%d")
         filename = f"{symbol}_{date}.html"
-        filepath = os.path.join(settings.HTML_RAW_RESPONSES_DIR, filename)
+        filepath = self.config.raw_responses_dir / filename
 
         logger.debug("Saving HTML content for %s to %s", symbol, filename)
         try:
@@ -85,7 +86,7 @@ class StockDataRetriever:
             raise StockRetrievalError("Symbol not found", f"Failed to find symbol after {attempt} attempts")
 
         if response.status == status.HTTP_429_TOO_MANY_REQUESTS:
-            logger.warning("Rate limited (429), attempt %d of %d", attempt, MAX_RETRIES)
+            logger.warning("Rate limited (429), attempt %d of %d", attempt, self.config.max_retries)
             return None
 
         logger.error("Unexpected status code %d on attempt %d", response.status, attempt)
@@ -104,19 +105,21 @@ class StockDataRetriever:
         Raises:
             StockRetrievalError: If all retries fail or network error occurs
         """
-        for attempt in range(MAX_RETRIES):
+        for attempt in range(self.config.max_retries):
             try:
-                logger.debug("Request attempt %d/%d to %s", attempt + 1, MAX_RETRIES, url)
+                logger.debug("Request attempt %d/%d to %s", attempt + 1, self.config.max_retries, url)
                 async with session.get(url, headers=self.headers) as response:
                     if response_text := await self._handle_response(response, attempt):
                         return response_text
             except aiohttp.ClientError as e:
-                if attempt < MAX_RETRIES - 1:
-                    await asyncio.sleep(RETRY_DELAY * (attempt + 1))
+                if attempt < self.config.max_retries - 1:
+                    await asyncio.sleep(self.config.retry_delay * (attempt + 1))
                     continue
                 raise StockRetrievalError("Network error occurred", f"Failed to connect to Yahoo Finance: {e!s}") from e
 
-        raise StockRetrievalError("Maximum retries exceeded", f"Failed to retrieve data after {MAX_RETRIES} attempts")
+        raise StockRetrievalError(
+            "Maximum retries exceeded", f"Failed to retrieve data after {self.config.max_retries} attempts"
+        )
 
     async def _fetch_page(self, symbol: str, end_timestamp: int) -> str:
         """Fetch historical stock data page from Yahoo Finance.
@@ -134,7 +137,7 @@ class StockDataRetriever:
         url = f"{BASE_URL}/quote/{symbol}/history/?period1=0&period2={end_timestamp}"
         logger.info("Fetching historical data for %s up to %d", symbol, end_timestamp)
 
-        timeout = aiohttp.ClientTimeout(total=30)
+        timeout = aiohttp.ClientTimeout(total=self.config.timeout)
         session = aiohttp.ClientSession(
             timeout=timeout,
             headers=self.headers,

@@ -3,6 +3,7 @@
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from cream_api.stock_data.config import StockDataConfig
 from cream_api.stock_data.retriever import StockDataRetriever
 
 
@@ -13,6 +14,6 @@ async def session(async_test_db: AsyncSession) -> AsyncSession:
 
 
 @pytest_asyncio.fixture
-async def retriever() -> StockDataRetriever:
-    """Create a stock data retriever instance."""
-    return StockDataRetriever()
+async def retriever(test_config: StockDataConfig) -> StockDataRetriever:
+    """Create a stock data retriever instance with test configuration."""
+    return StockDataRetriever(config=test_config)

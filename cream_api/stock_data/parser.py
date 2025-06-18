@@ -7,10 +7,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from cream_api.common.exceptions import StockRetrievalError
-from cream_api.settings import get_app_settings
+from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 from cream_api.tests.stock_data.test_constants import REQUIRED_COLUMNS_COUNT
-
-settings = get_app_settings()
 
 # Required columns for data validation
 REQUIRED_COLUMNS: list[str] = [
@@ -36,8 +34,6 @@ COLUMN_MAPPING: dict[str, str] = {
 
 logger = logging.getLogger(__name__)
 
-settings = get_app_settings()
-
 
 class StockDataParser:
     """Parser for extracting stock data from HTML content."""
@@ -45,11 +41,13 @@ class StockDataParser:
     # Selectors for the historical prices table
     HISTORICAL_PRICES_CSS_SELECTOR = ".table"
 
-    # Settings
-    SETTINGS = settings
+    def __init__(self, config: StockDataConfig | None = None) -> None:
+        """Initialize parser.
 
-    def __init__(self) -> None:
-        """Initialize parser."""
+        Args:
+            config: StockDataConfig instance (defaults to default config)
+        """
+        self.config = config or get_stock_data_config()
         self._required_columns: set[str] = set(REQUIRED_COLUMNS)
         self._column_mapping: dict[str, str] = COLUMN_MAPPING
 

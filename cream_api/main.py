@@ -15,6 +15,7 @@ from stargazer_utils.logging import get_logger_for
 
 from cream_api.background_tasks import start_background_tasks
 from cream_api.settings import get_app_settings
+from cream_api.stock_data.config import get_stock_data_config
 from cream_api.users.routes import auth
 
 logger: logging.Logger = get_logger_for(__name__)
@@ -23,7 +24,9 @@ settings = get_app_settings()
 
 # Create required directories
 logger.info("Creating directories...")
-settings.HTML_RAW_RESPONSES_DIR.mkdir(exist_ok=True, parents=True)
+stock_data_config = get_stock_data_config()
+stock_data_config.raw_responses_dir.mkdir(exist_ok=True, parents=True)
+stock_data_config.parsed_responses_dir.mkdir(exist_ok=True, parents=True)
 
 
 @asynccontextmanager

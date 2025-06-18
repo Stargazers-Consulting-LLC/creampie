@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 
 # Test data constants
-TEST_SYMBOL = "AAPL"
+TEST_SYMBOL = "TEST"
 TEST_DATE = datetime.strptime("2025-06-13", "%Y-%m-%d")  # Match fixture data
 TEST_RECORDS_COUNT = 1  # Number of records in test data
 
@@ -64,8 +64,8 @@ TEST_HTML_FILENAME = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
 
 # Fixture configuration
 TEST_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
-TEST_AAPL_FIXTURE = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
-TEST_AAPL_FIXTURE_PATH = os.path.join(TEST_FIXTURES_DIR, TEST_AAPL_FIXTURE)
+TEST_FIXTURE = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
+TEST_FIXTURE_PATH = os.path.join(TEST_FIXTURES_DIR, TEST_FIXTURE)
 
 # Server configuration
 TEST_HOST = "localhost"

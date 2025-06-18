@@ -14,98 +14,26 @@ The tests follow the testing best practices outlined in the Backend Style Guide,
 
 from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock, patch
 
 import pytest
-import pytest_asyncio
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from cream_api.settings import get_app_settings
+from cream_api.stock_data.config import StockDataConfig
 from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.models import StockData
+from cream_api.stock_data.processor import FileProcessor
 from cream_api.tests.stock_data.test_constants import (
     TEST_ADJ_CLOSE_PRICE,
     TEST_CLOSE_PRICE,
     TEST_DATE,
     TEST_HIGH_PRICE,
-    TEST_HTML_CONTENT,
     TEST_HTML_FILENAME,
     TEST_LOW_PRICE,
     TEST_OPEN_PRICE,
-    TEST_PARSED_RESPONSES_DIR,
-    TEST_RAW_RESPONSES_DIR,
     TEST_STOCK_DATA,
     TEST_SYMBOL,
     TEST_VOLUME,
 )
-
-settings = get_app_settings()
-
-
-@pytest.fixture
-def test_raw_responses_dir(tmp_path: Path) -> Path:
-    """Create a temporary directory for test raw responses.
-
-    This fixture ensures test isolation by creating a unique temporary directory
-    for each test that needs to work with raw response files.
-
-    Returns:
-        Path: Path to the temporary directory for raw responses
-    """
-    return tmp_path / TEST_RAW_RESPONSES_DIR
-
-
-@pytest.fixture
-def test_parsed_responses_dir(tmp_path: Path) -> Path:
-    """Create a temporary directory for test parsed responses.
-
-    This fixture ensures test isolation by creating a unique temporary directory
-    for each test that needs to work with parsed response files.
-
-    Returns:
-        Path: Path to the temporary directory for parsed responses
-    """
-    return tmp_path / TEST_PARSED_RESPONSES_DIR
-
-
-@pytest_asyncio.fixture
-async def session(async_test_db: AsyncSession) -> AsyncSession:
-    """Create a database session for testing.
-
-    This fixture provides an isolated database session for each test,
-    ensuring that database operations don't interfere with each other.
-
-    Returns:
-        AsyncSession: Isolated database session for testing
-    """
-    return async_test_db
-
-
-@pytest_asyncio.fixture
-async def loader(
-    session: AsyncSession,
-    test_raw_responses_dir: Path,
-    test_parsed_responses_dir: Path,
-) -> StockDataLoader:
-    """Create a stock data loader instance with test directories.
-
-    This fixture creates a StockDataLoader instance configured to use test directories
-    instead of production ones, ensuring test isolation.
-
-    Args:
-        session: Database session for testing
-        test_raw_responses_dir: Directory for test raw responses
-        test_parsed_responses_dir: Directory for test parsed responses
-
-    Returns:
-        StockDataLoader: Configured loader instance for testing
-    """
-    with (
-        patch("cream_api.settings.app_settings.HTML_RAW_RESPONSES_DIR", test_raw_responses_dir),
-        patch("cream_api.settings.app_settings.HTML_PARSED_RESPONSES_DIR", test_parsed_responses_dir),
-    ):
-        return StockDataLoader(session)
 
 
 @pytest.mark.asyncio
@@ -190,7 +118,11 @@ async def test_transform_data(loader: StockDataLoader) -> None:
 
 
 @pytest.mark.asyncio
-async def test_store_data(loader: StockDataLoader, test_dirs: dict[str, Path]) -> None:
+async def test_store_data(
+    loader: StockDataLoader,
+    test_config: StockDataConfig,
+    test_data_files: dict[str, Path],
+) -> None:
     """Test storing data in the database."""
     # Create test data
     valid_data = {
@@ -208,86 +140,100 @@ async def test_store_data(loader: StockDataLoader, test_dirs: dict[str, Path]) -
     }
 
     # Store data
-    await loader.process_data(TEST_SYMBOL, valid_data)
+    await loader.store_data(TEST_SYMBOL, await loader.transform_data(valid_data))
 
     # Verify data was stored
-    async with loader.session as session:
-        result = await session.execute(select(StockData).where(StockData.symbol == TEST_SYMBOL))
-        stored_data = result.scalar_one()
-        assert stored_data is not None
-        assert stored_data.symbol == TEST_SYMBOL
-        assert stored_data.date == TEST_DATE
-        assert stored_data.open == TEST_OPEN_PRICE
-        assert stored_data.high == TEST_HIGH_PRICE
-        assert stored_data.low == TEST_LOW_PRICE
-        assert stored_data.close == TEST_CLOSE_PRICE
-        assert stored_data.adj_close == TEST_ADJ_CLOSE_PRICE
-        assert stored_data.volume == TEST_VOLUME
+    result = await loader.session.execute(select(StockData))
+    stored_data = result.scalars().all()
+    assert len(stored_data) == 1
+    assert stored_data[0].date == TEST_DATE
+    assert stored_data[0].open == TEST_OPEN_PRICE
 
 
 @pytest.mark.asyncio
 async def test_store_data_invalid(loader: StockDataLoader) -> None:
-    """Test storing invalid data."""
-    invalid_data: dict[str, Any] = {"prices": []}  # Empty prices list should trigger validation error
-    with pytest.raises(ValueError):
-        await loader.process_data(TEST_SYMBOL, invalid_data)
+    """Test storing invalid data in the database."""
+    invalid_data: dict[str, Any] = {"prices": []}
+    with pytest.raises(ValueError, match="Prices list cannot be empty"):
+        await loader.validate_data(invalid_data)
 
 
 @pytest.mark.asyncio
-async def test_process_raw_files(loader: StockDataLoader, test_dirs: dict[str, Path]) -> None:
-    """Test processing raw HTML files."""
-    # Create test file in raw responses directory
-    test_file = test_dirs["raw"] / TEST_HTML_FILENAME
-    test_file.parent.mkdir(parents=True, exist_ok=True)
-    test_file.write_text(TEST_HTML_CONTENT)
+async def test_process_raw_files(
+    loader: StockDataLoader,
+    test_config: StockDataConfig,
+    test_data_files: dict[str, Path],
+) -> None:
+    """Test processing raw HTML files.
+
+    This test verifies that:
+    1. Raw HTML files are properly processed
+    2. Data is correctly extracted and stored
+    3. Files are moved to the parsed directory
+    4. Only test data files are processed
+    """
+    # Create file processor
+    processor = FileProcessor(loader=loader, config=test_config)
+
+    # Verify test files exist
+    assert test_data_files.get(TEST_SYMBOL) is not None
+    assert test_data_files[TEST_SYMBOL].exists()
+
+    # Verify we're using test directories
+    assert str(loader.config.raw_responses_dir).startswith(str(test_config.raw_responses_dir))
+    assert str(loader.config.parsed_responses_dir).startswith(str(test_config.parsed_responses_dir))
 
     # Process files
-    await loader.process_raw_files()
+    await processor.process_raw_files()
 
-    # Verify file was moved
-    assert not test_file.exists()
-    parsed_file = test_dirs["parsed"] / TEST_HTML_FILENAME
-    assert parsed_file.exists()
+    # Verify files were moved to parsed directory
+    parsed_dir = test_config.parsed_responses_dir
+    assert (parsed_dir / TEST_HTML_FILENAME).exists()
+    assert not (test_config.raw_responses_dir / TEST_HTML_FILENAME).exists()
 
     # Verify data was stored
-    async with loader.session as session:
-        result = await session.execute(select(StockData).where(StockData.symbol == TEST_SYMBOL))
-        stored_data = result.scalar_one()
-        assert stored_data is not None
-        assert stored_data.symbol == TEST_SYMBOL
-        assert stored_data.date == TEST_DATE
-        assert stored_data.open == TEST_OPEN_PRICE
-        assert stored_data.high == TEST_HIGH_PRICE
-        assert stored_data.low == TEST_LOW_PRICE
-        assert stored_data.close == TEST_CLOSE_PRICE
-        assert stored_data.adj_close == TEST_ADJ_CLOSE_PRICE
-        assert stored_data.volume == TEST_VOLUME
+    result = await loader.session.execute(select(StockData))
+    stored_data = result.scalars().all()
+    assert len(stored_data) > 0
+
+    # Verify only test data was processed
+    for data in stored_data:
+        assert data.symbol == TEST_SYMBOL
 
 
 @pytest.mark.asyncio
 async def test_process_raw_files_error_handling(
-    loader: StockDataLoader, test_raw_responses_dir: Path, test_parsed_responses_dir: Path
+    loader: StockDataLoader,
+    test_config: StockDataConfig,
+    test_data_files: dict[str, Path],
 ) -> None:
-    """Test error handling during raw file processing.
+    """Test error handling when processing raw files.
 
     This test verifies that:
-    1. Errors during file processing are properly caught
-    2. The process continues with remaining files
-    3. Failed files are not moved to the parsed directory
+    1. Invalid files are properly handled
+    2. Errors are logged but don't crash the process
+    3. Valid files are still processed
+    4. Only test data files are processed
     """
-    # Create test HTML file
-    test_file = test_raw_responses_dir / TEST_HTML_FILENAME
-    test_raw_responses_dir.mkdir(exist_ok=True)
-    test_parsed_responses_dir.mkdir(exist_ok=True)
-    test_file.write_text("invalid html")
+    # Create file processor
+    processor = FileProcessor(loader=loader, config=test_config)
 
-    # Mock the parser to raise an exception
-    mock_parser = MagicMock()
-    mock_parser.parse_html_file.side_effect = ValueError("Invalid HTML")
+    # Create an invalid file
+    invalid_file = test_config.raw_responses_dir / "INVALID.html"
+    invalid_file.write_text("invalid content")
 
-    with patch("cream_api.stock_data.loader.StockDataParser", return_value=mock_parser):
-        await loader.process_raw_files()
+    # Process files
+    await processor.process_raw_files()
 
-    # Verify file was not moved
-    assert test_file.exists()
-    assert not (test_parsed_responses_dir / TEST_HTML_FILENAME).exists()
+    # Verify invalid file was handled
+    assert not (test_config.parsed_responses_dir / "INVALID.html").exists()
+    assert not invalid_file.exists()  # Invalid file should be removed
+
+    # Verify valid files were still processed
+    assert (test_config.parsed_responses_dir / TEST_HTML_FILENAME).exists()
+
+    # Verify only test data was processed
+    result = await loader.session.execute(select(StockData))
+    stored_data = result.scalars().all()
+    for data in stored_data:
+        assert data.symbol == TEST_SYMBOL

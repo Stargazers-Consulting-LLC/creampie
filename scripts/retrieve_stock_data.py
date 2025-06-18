@@ -6,6 +6,7 @@ import asyncio
 import click
 from stargazer_utils.logging import get_logger_for
 
+from cream_api.stock_data.config import get_stock_data_config
 from cream_api.stock_data.retriever import StockDataRetriever
 
 logger = get_logger_for(__name__)
@@ -13,16 +14,15 @@ logger = get_logger_for(__name__)
 
 @click.command()
 @click.argument("symbol", type=str)
-@click.option(
-    "--end-date", type=str, help="End date in YYYY-MM-DD format (defaults to today)", default=None
-)
+@click.option("--end-date", type=str, help="End date in YYYY-MM-DD format (defaults to today)", default=None)
 def retrieve_stock_data(symbol: str, end_date: str | None) -> None:
     """Retrieve historical stock data for a given symbol from Yahoo Finance.
 
     SYMBOL: The stock symbol to fetch data for (e.g., AAPL, MSFT)
     """
     try:
-        retriever = StockDataRetriever()
+        config = get_stock_data_config()
+        retriever = StockDataRetriever(config=config)
         asyncio.run(retriever.get_historical_data(symbol, end_date))
         click.echo(f"Successfully retrieved data for {symbol}")
     except Exception as e:

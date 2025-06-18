@@ -7,13 +7,14 @@ import pytest
 from bs4 import BeautifulSoup
 
 from cream_api.common.exceptions import StockRetrievalError
+from cream_api.stock_data.config import StockDataConfig
 from cream_api.stock_data.parser import StockDataParser
 from cream_api.tests.stock_data.test_constants import (
     REQUIRED_COLUMNS_COUNT,
-    TEST_AAPL_FIXTURE_PATH,
     TEST_ADJ_CLOSE_PRICE,
     TEST_CLOSE_PRICE,
     TEST_DATE,
+    TEST_FIXTURE_PATH,
     TEST_HIGH_PRICE,
     TEST_LOW_PRICE,
     TEST_OPEN_PRICE,
@@ -22,17 +23,17 @@ from cream_api.tests.stock_data.test_constants import (
 
 
 @pytest.fixture
-def parser() -> StockDataParser:
+def parser(test_config: StockDataConfig) -> StockDataParser:
     """Create a parser instance for testing."""
-    return StockDataParser()
+    return StockDataParser(config=test_config)
 
 
 @pytest.fixture
 def sample_html() -> str:
     """Load sample HTML content from file."""
-    print(f"\nTrying to read file: {TEST_AAPL_FIXTURE_PATH}")
-    print(f"File exists: {os.path.exists(TEST_AAPL_FIXTURE_PATH)}")
-    with open(TEST_AAPL_FIXTURE_PATH) as f:
+    print(f"\nTrying to read file: {TEST_FIXTURE_PATH}")
+    print(f"File exists: {os.path.exists(TEST_FIXTURE_PATH)}")
+    with open(TEST_FIXTURE_PATH) as f:
         return f.read()
 
 
@@ -101,7 +102,7 @@ def test_parse_html_missing_table(parser: StockDataParser) -> None:
 
 def test_parse_html_file_valid(parser: StockDataParser) -> None:
     """Test parsing valid HTML file."""
-    result = parser.parse_html_file(TEST_AAPL_FIXTURE_PATH)
+    result = parser.parse_html_file(TEST_FIXTURE_PATH)
     assert "prices" in result
     assert len(result["prices"]) > 0
 
