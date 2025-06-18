@@ -1,6 +1,7 @@
 """Stock data loading functionality."""
 
 import logging
+import os
 import shutil
 from typing import Any
 
@@ -15,9 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class StockDataLoader:
-    """
-    Loader for stock data operations including validation, transformation, and database storage.
-    """
+    """Loader for stock data operations including validation, transformation, and database storage."""
 
     def __init__(
         self,
@@ -53,7 +52,6 @@ class StockDataLoader:
 
         required_fields = {"date", "open", "high", "low", "close", "adj_close", "volume"}
 
-        # Check all records, not just the first one
         for i, price in enumerate(data["prices"]):
             missing_fields = required_fields - set(price.keys())
             if missing_fields:
@@ -73,7 +71,6 @@ class StockDataLoader:
         stock_data_list = []
 
         for price in data["prices"]:
-            # Remove commas from volume before converting to numeric
             volume_str = str(price["volume"]).replace(",", "")
             volume_numeric = pd.to_numeric(volume_str, errors="coerce")
             if pd.isna(volume_numeric) or volume_numeric <= 0:
@@ -123,30 +120,19 @@ class StockDataLoader:
         await self.store_data(symbol, stock_data_list)
 
     async def process_raw_files(self) -> None:
-        """Process all HTML files in the raw responses directory.
-
-        For each file:
-        1. Parses the HTML content using StockDataParser
-        2. Stores the data in the database
-        3. Moves the file to the parsed responses directory
-        """
+        """Process all HTML files in the raw responses directory."""
         parser = StockDataParser(config=self.config)
 
-        # Process each file in the raw directory
-        for file_path in self.config.raw_responses_dir.glob("*.html"):
-            try:
-                # Extract symbol from filename (assuming format: SYMBOL_YYYY-MM-DD.html)
-                symbol = file_path.stem.split("_")[0]
+        for filename in os.listdir(self.config.raw_responses_dir):
+            if filename.endswith(".html"):
+                file_path = os.path.join(self.config.raw_responses_dir, filename)
+                try:
+                    symbol = filename.split("_")[0]
+                    data = parser.parse_html_file(file_path)
+                    await self.process_data(symbol, data)
+                    dest_path = os.path.join(self.config.parsed_responses_dir, filename)
+                    shutil.move(file_path, dest_path)
 
-                # Parse the HTML file
-                data = parser.parse_html_file(str(file_path))
-
-                # Process and store the data
-                await self.process_data(symbol, data)
-
-                # Move file to parsed directory
-                shutil.move(str(file_path), str(self.config.parsed_responses_dir / file_path.name))
-
-            except Exception as e:
-                logger.error(f"Error processing file {file_path}: {e!s}")
-                continue
+                except Exception as e:
+                    logger.error(f"Error processing file {file_path}: {e!s}")
+                    continue

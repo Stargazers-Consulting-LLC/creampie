@@ -12,7 +12,7 @@ The tests follow the testing best practices outlined in the Backend Style Guide,
 - Clear test organization and documentation
 """
 
-from pathlib import Path
+import os
 from typing import Any
 
 import pytest
@@ -120,7 +120,7 @@ async def test_transform_data(loader: StockDataLoader) -> None:
 async def test_store_data(
     loader: StockDataLoader,
     test_config: StockDataConfig,
-    test_data_files: dict[str, Path],
+    test_data_files: dict[str, str],
 ) -> None:
     """Test storing data in the database."""
     # Create test data
@@ -161,7 +161,7 @@ async def test_store_data_invalid(loader: StockDataLoader) -> None:
 async def test_process_raw_files(
     loader: StockDataLoader,
     test_config: StockDataConfig,
-    test_data_files: dict[str, Path],
+    test_data_files: dict[str, str],
 ) -> None:
     """Test processing raw HTML files.
 
@@ -173,19 +173,19 @@ async def test_process_raw_files(
     """
     # Verify test files exist
     assert test_data_files.get(TEST_SYMBOL) is not None
-    assert test_data_files[TEST_SYMBOL].exists()
+    assert os.path.exists(test_data_files[TEST_SYMBOL])
 
     # Verify we're using test directories
-    assert str(loader.config.raw_responses_dir).startswith(str(test_config.raw_responses_dir))
-    assert str(loader.config.parsed_responses_dir).startswith(str(test_config.parsed_responses_dir))
+    assert loader.config.raw_responses_dir.startswith(test_config.raw_responses_dir)
+    assert loader.config.parsed_responses_dir.startswith(test_config.parsed_responses_dir)
 
     # Process files using the loader's method
     await loader.process_raw_files()
 
     # Verify files were moved to parsed directory
     parsed_dir = test_config.parsed_responses_dir
-    assert (parsed_dir / TEST_HTML_FILENAME).exists()
-    assert not (test_config.raw_responses_dir / TEST_HTML_FILENAME).exists()
+    assert os.path.exists(os.path.join(parsed_dir, TEST_HTML_FILENAME))
+    assert not os.path.exists(os.path.join(test_config.raw_responses_dir, TEST_HTML_FILENAME))
 
     # Verify data was stored
     result = await loader.session.execute(select(StockData))
@@ -201,7 +201,7 @@ async def test_process_raw_files(
 async def test_process_raw_files_error_handling(
     loader: StockDataLoader,
     test_config: StockDataConfig,
-    test_data_files: dict[str, Path],
+    test_data_files: dict[str, str],
 ) -> None:
     """Test error handling when processing raw files.
 
@@ -212,17 +212,18 @@ async def test_process_raw_files_error_handling(
     4. Only test data files are processed
     """
     # Create an invalid file
-    invalid_file = test_config.raw_responses_dir / "INVALID.html"
-    invalid_file.write_text("invalid content")
+    invalid_file_path = os.path.join(test_config.raw_responses_dir, "INVALID.html")
+    with open(invalid_file_path, "w") as f:
+        f.write("invalid content")
 
     # Process files using the loader's method
     await loader.process_raw_files()
 
     # Verify invalid file was handled (should still exist since loader doesn't remove invalid files)
-    assert invalid_file.exists()
+    assert os.path.exists(invalid_file_path)
 
     # Verify valid files were still processed
-    assert (test_config.parsed_responses_dir / TEST_HTML_FILENAME).exists()
+    assert os.path.exists(os.path.join(test_config.parsed_responses_dir, TEST_HTML_FILENAME))
 
     # Verify only test data was processed
     result = await loader.session.execute(select(StockData))

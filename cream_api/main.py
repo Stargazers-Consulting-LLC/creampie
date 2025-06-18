@@ -6,6 +6,7 @@ for proper startup and shutdown handling.
 """
 
 import logging
+import os
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
@@ -25,8 +26,8 @@ settings = get_app_settings()
 # Create required directories
 logger.info("Creating directories...")
 stock_data_config = get_stock_data_config()
-stock_data_config.raw_responses_dir.mkdir(exist_ok=True, parents=True)
-stock_data_config.parsed_responses_dir.mkdir(exist_ok=True, parents=True)
+os.makedirs(stock_data_config.raw_responses_dir, exist_ok=True)
+os.makedirs(stock_data_config.parsed_responses_dir, exist_ok=True)
 
 
 @asynccontextmanager

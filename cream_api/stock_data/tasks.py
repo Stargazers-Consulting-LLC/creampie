@@ -38,12 +38,10 @@ async def update_all_tracked_stocks(db: AsyncSession) -> None:
         db: Database session
     """
     try:
-        # Get all active tracked stocks
         stmt = select(TrackedStock).where(TrackedStock.is_active)
         result = await db.execute(stmt)
         tracked_stocks = result.scalars().all()
 
-        # Update each tracked stock
         for stock in tracked_stocks:
             try:
                 await retrieve_historical_data_task(symbol=stock.symbol, end_date=None)
@@ -70,6 +68,5 @@ async def run_periodic_updates() -> None:
         except Exception as e:
             logger.error("Error updating tracked stocks: %s", str(e))
             return
-
-        # Wait 5 minutes before retrying if there was an error
-        await asyncio.sleep(5 * 60)
+        else:
+            await asyncio.sleep(5 * 60)

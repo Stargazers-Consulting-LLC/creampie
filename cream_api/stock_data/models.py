@@ -11,19 +11,7 @@ from cream_api.db import ModelBase
 
 
 class StockData(ModelBase):
-    """Model for storing historical stock data.
-
-    Attributes:
-        id: Primary key
-        symbol: Stock symbol (e.g., 'AAPL')
-        date: Date of the stock data
-        open: Opening price
-        high: Highest price during the day
-        low: Lowest price during the day
-        close: Closing price
-        adj_close: Adjusted closing price
-        volume: Trading volume
-    """
+    """Model for storing historical stock data."""
 
     __tablename__ = "stock_data"
 
@@ -37,23 +25,11 @@ class StockData(ModelBase):
     adj_close: Mapped[float] = mapped_column(Float, nullable=False)
     volume: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    __table_args__ = (
-        # Ensure we don't have duplicate data for the same symbol and date
-        UniqueConstraint("symbol", "date", name="uix_symbol_date"),
-    )
+    __table_args__ = (UniqueConstraint("symbol", "date", name="uix_symbol_date"),)
 
 
 class TrackedStock(ModelBase):
-    """Model for tracking when stock data was last pulled into the system.
-
-    Attributes:
-        id: Primary key (UUID)
-        symbol: Stock symbol (e.g., 'AAPL')
-        last_pull_date: Date when the stock data was last pulled
-        last_pull_status: Status of the last pull attempt (success/failure)
-        error_message: Optional error message if the last pull failed
-        is_active: Whether the stock is currently being tracked for updates
-    """
+    """Model for tracking when stock data was last pulled into the system."""
 
     __tablename__ = "tracked_stock"
 
@@ -64,7 +40,4 @@ class TrackedStock(ModelBase):
     error_message: Mapped[str] = mapped_column(String, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
-    __table_args__ = (
-        # Ensure we don't have duplicate tracking entries for the same symbol
-        UniqueConstraint("symbol", name="uix_symbol"),
-    )
+    __table_args__ = (UniqueConstraint("symbol", name="uix_symbol"),)

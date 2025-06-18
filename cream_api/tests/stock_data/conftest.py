@@ -1,7 +1,7 @@
 """Shared test fixtures for stock data tests."""
 
+import os
 import shutil
-from pathlib import Path
 
 import pytest
 import pytest_asyncio
@@ -20,7 +20,7 @@ from cream_api.tests.stock_data.test_constants import (
 
 
 @pytest.fixture
-def test_dirs(tmp_path: Path) -> dict[str, Path]:
+def test_dirs(tmp_path: str) -> dict[str, str]:
     """Create temporary test directories.
 
     This fixture creates temporary directories for raw and parsed responses
@@ -32,15 +32,15 @@ def test_dirs(tmp_path: Path) -> dict[str, Path]:
     Returns:
         Dictionary containing paths to raw and parsed response directories
     """
-    raw_dir = tmp_path / TEST_RAW_RESPONSES_DIR
-    parsed_dir = tmp_path / TEST_PARSED_RESPONSES_DIR
-    raw_dir.mkdir()
-    parsed_dir.mkdir()
+    raw_dir = os.path.join(tmp_path, TEST_RAW_RESPONSES_DIR)
+    parsed_dir = os.path.join(tmp_path, TEST_PARSED_RESPONSES_DIR)
+    os.makedirs(raw_dir, exist_ok=True)
+    os.makedirs(parsed_dir, exist_ok=True)
     return {"raw": raw_dir, "parsed": parsed_dir}
 
 
 @pytest.fixture
-def test_config(test_dirs: dict[str, Path]) -> StockDataConfig:
+def test_config(test_dirs: dict[str, str]) -> StockDataConfig:
     """Create test configuration.
 
     Args:
@@ -56,7 +56,7 @@ def test_config(test_dirs: dict[str, Path]) -> StockDataConfig:
 
 
 @pytest.fixture
-def test_data_files(test_dirs: dict[str, Path]) -> dict[str, Path]:
+def test_data_files(test_dirs: dict[str, str]) -> dict[str, str]:
     """Set up test data files in temporary directories.
 
     This fixture copies test data files from the fixtures directory to the
@@ -75,9 +75,9 @@ def test_data_files(test_dirs: dict[str, Path]) -> dict[str, Path]:
 
     test_files = {}
     for symbol, filename in fixture_files.items():
-        source = Path(TEST_FIXTURES_DIR) / filename
-        if source.exists():
-            dest = test_dirs["raw"] / filename
+        source = os.path.join(TEST_FIXTURES_DIR, filename)
+        if os.path.exists(source):
+            dest = os.path.join(test_dirs["raw"], filename)
             shutil.copy2(source, dest)
             test_files[symbol] = dest
 
@@ -88,7 +88,7 @@ def test_data_files(test_dirs: dict[str, Path]) -> dict[str, Path]:
 async def loader(
     async_test_db: AsyncSession,
     test_config: StockDataConfig,
-    test_data_files: dict[str, Path],
+    test_data_files: dict[str, str],
 ) -> StockDataLoader:
     """Create a stock data loader instance with test configuration.
 
@@ -107,8 +107,8 @@ async def loader(
     loader = StockDataLoader(session=async_test_db, config=test_config)
 
     # Verify we're using test directories
-    assert str(loader.config.raw_responses_dir).startswith(str(test_config.raw_responses_dir))
-    assert str(loader.config.parsed_responses_dir).startswith(str(test_config.parsed_responses_dir))
+    assert loader.config.raw_responses_dir.startswith(test_config.raw_responses_dir)
+    assert loader.config.parsed_responses_dir.startswith(test_config.parsed_responses_dir)
 
     return loader
 

@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 from datetime import datetime
 
 import aiohttp
@@ -14,15 +15,11 @@ from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 logger: logging.Logger = get_logger_for(__name__)
 
 BASE_URL = "https://finance.yahoo.com"
-MAX_HEADER_SIZE = 2**32  # 4GB should be more than enough for any header
+MAX_HEADER_SIZE = 2**32
 
 
 class StockDataRetriever:
-    """Retriever for historical stock data from Yahoo Finance.
-
-    This class handles fetching and saving historical stock data from Yahoo Finance,
-    including retry logic for rate limiting and error handling.
-    """
+    """Retriever for historical stock data from Yahoo Finance."""
 
     def __init__(self, config: StockDataConfig | None = None) -> None:
         """Initialize the retriever with required headers.
@@ -54,7 +51,7 @@ class StockDataRetriever:
         """
         date = datetime.now().strftime("%Y-%m-%d")
         filename = f"{symbol}_{date}.html"
-        filepath = self.config.raw_responses_dir / filename
+        filepath = os.path.join(self.config.raw_responses_dir, filename)
 
         logger.debug("Saving HTML content for %s to %s", symbol, filename)
         try:

@@ -15,6 +15,16 @@ This style guide outlines the coding standards and best practices for Python dev
 - Keep functions small and focused
 - Do not use magic numbers that are not 1, 2, -1 or 0
 
+### Import Organization
+- Group imports in the following order:
+  1. Standard library imports
+  2. Third-party imports
+  3. Local application imports
+- Separate imports with a blank line between groups
+- Remove unused imports to keep the codebase clean
+- Use direct access to settings when appropriate instead of creating local variables
+- Place `__all__` at the top of a module after imports
+
 ### Data Structures and Operations
 - Use dataclasses for data containers
 - Use enums for constants
@@ -24,9 +34,19 @@ This style guide outlines the coding standards and best practices for Python dev
 - Use dict.get() for safe access
 - Use collections.deque for queues
 
+### File and Path Handling
+- Use os.path for file paths
+  - os.path is preferred over pathlib because it works as strings instead of needing to be coerced
+- Use the standard `datetime` library for date/time operations
+  - Use `datetime.now(datetime.UTC)` instead of `datetime.utcnow()`, which is deprecated
+  - This provides better timezone awareness and is the preferred method in modern Python
+
 ### Resource Management
+- Split context manager creation into separate statements when the constructor has many parameters or is difficult to read
+- Simple context managers with few or no parameters can remain inline
+
 ```python
-# Good
+# Good - complex constructor with many parameters
 session = aiohttp.ClientSession(
     timeout=timeout,
     headers=headers,
@@ -35,20 +55,22 @@ session = aiohttp.ClientSession(
 async with session:
     # use session
 
-# Avoid
+# Avoid - complex constructor inline makes it hard to read
 async with aiohttp.ClientSession(
     timeout=timeout,
     headers=headers,
     skip_auto_headers=['Accept-Encoding']
 ) as session:
     # use session
-```
 
-### File and Path Handling
-- Use os.path for file paths
-- Use the standard `datetime` library for date/time operations
-  - Use `datetime.now(datetime.UTC)` instead of `datetime.utcnow()`, which is deprecated
-  - This provides better timezone awareness and is the preferred method in modern Python
+# Good - simple constructor can remain inline
+async with ClientSession() as session:
+    # use session
+
+# Good - factory functions can remain inline
+async with AsyncSessionLocal() as session:
+    # use session
+```
 
 ## 2. Project Structure and Organization
 
@@ -71,15 +93,6 @@ cream_api/
 - Separate configuration, database, and application logic into different modules
 - Never have circular imports
 - Use absolute imports for clarity
-
-### Import Organization
-- Group imports in the following order:
-  1. Standard library imports
-  2. Third-party imports
-  3. Local application imports
-- Separate imports with a blank line between groups
-- Remove unused imports to keep the codebase clean
-- Use direct access to settings when appropriate instead of creating local variables
 
 ## 3. Error Handling and Security
 

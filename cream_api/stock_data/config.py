@@ -1,25 +1,25 @@
 """Configuration for stock data module."""
 
-from pathlib import Path
+import os
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+from cream_api.common import get_project_root
 
 
 class StockDataConfig(BaseModel):
     """Configuration for stock data operations."""
 
-    # File path configuration
-    raw_responses_dir: Path = Field(
-        default=Path(__file__).parent.parent / "files" / "raw_responses",
+    raw_responses_dir: str = Field(
+        default=os.path.join(get_project_root(), "cream_api", "files", "raw_responses"),
         description="Directory for storing raw HTML responses",
     )
-    parsed_responses_dir: Path = Field(
-        default=Path(__file__).parent.parent / "files" / "parsed_responses",
+    parsed_responses_dir: str = Field(
+        default=os.path.join(get_project_root(), "cream_api", "files", "parsed_responses"),
         description="Directory for storing parsed HTML responses",
     )
 
-    # Parser configuration
     user_agent: str = Field(
         default=(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -34,12 +34,10 @@ class StockDataConfig(BaseModel):
 
     def __init__(self, **data: Any) -> None:
         super().__init__(**data)
-        # Ensure directories exist
-        self.raw_responses_dir.mkdir(parents=True, exist_ok=True)
-        self.parsed_responses_dir.mkdir(parents=True, exist_ok=True)
+        os.makedirs(self.raw_responses_dir, exist_ok=True)
+        os.makedirs(self.parsed_responses_dir, exist_ok=True)
 
 
-# Default configuration instance
 default_config = StockDataConfig()
 
 

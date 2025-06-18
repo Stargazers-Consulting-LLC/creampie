@@ -43,13 +43,11 @@ async def track_stock(
         HTTPException: If there's an error starting tracking
     """
     try:
-        # Check if stock is already being tracked
         stmt = select(TrackedStock).where(TrackedStock.symbol == request.symbol)
         result = await db.execute(stmt)
         existing_tracking = result.scalar_one_or_none()
 
         if not existing_tracking:
-            # Create new tracking entry
             new_tracking = TrackedStock(
                 symbol=request.symbol,
                 last_pull_date=datetime.now(),

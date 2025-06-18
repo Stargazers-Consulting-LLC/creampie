@@ -350,13 +350,10 @@ class StockDataParser:
             if missing_cols:
                 raise StockRetrievalError(f"Missing required columns: {missing_cols}")
 
-            # Convert numeric columns with error handling
             for col in NUMERIC_COLUMNS:
-                # Remove commas from numeric strings before conversion
                 df[col] = df[col].astype(str).str.replace(",", "")
                 df[col] = pd.to_numeric(df[col], errors="coerce")
 
-            # Filter out rows with invalid numeric data (NaN values)
             df = df.dropna(subset=NUMERIC_COLUMNS)
 
             df = df.drop_duplicates(subset=["date"])
