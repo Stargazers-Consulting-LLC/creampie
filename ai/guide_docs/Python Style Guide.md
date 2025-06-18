@@ -44,6 +44,7 @@ This style guide outlines the coding standards and best practices for Python dev
 ### Resource Management
 - Split context manager creation into separate statements when the constructor has many parameters or is difficult to read
 - Simple context managers with few or no parameters can remain inline
+- Factory functions (like `AsyncSessionLocal()`) are simple enough to use inline
 
 ```python
 # Good - complex constructor with many parameters
@@ -70,6 +71,10 @@ async with ClientSession() as session:
 # Good - factory functions can remain inline
 async with AsyncSessionLocal() as session:
     # use session
+
+# Good - simple context managers with few parameters
+with open('file.txt', 'r') as f:
+    # use file
 ```
 
 ## 2. Project Structure and Organization

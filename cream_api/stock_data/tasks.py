@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 from datetime import datetime
 
 from sqlalchemy import select
@@ -10,57 +11,78 @@ from stargazer_utils.logging import get_logger_for
 
 from cream_api.db import AsyncSessionLocal
 from cream_api.stock_data.config import get_stock_data_config
+from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.models import TrackedStock
+from cream_api.stock_data.processor import FileProcessor
 from cream_api.stock_data.retriever import StockDataRetriever
 
 logger: logging.Logger = get_logger_for(__name__)
 
+RETRIEVAL_INTERVAL_SECONDS = 5 * 60
+PROCESSING_INTERVAL_SECONDS = 10 * 60
 
-async def retrieve_historical_data_task(symbol: str, end_date: str | None) -> None:
-    """Background task to retrieve historical stock data.
+config = get_stock_data_config()
+
+
+async def retrieve_historical_data_task(symbol: str, end_date: str | None = None) -> None:
+    """Retrieve historical stock data for a given symbol.
 
     Args:
         symbol: Stock symbol to retrieve data for
         end_date: Optional end date in YYYY-MM-DD format
     """
-    config = get_stock_data_config()
     retriever = StockDataRetriever(config=config)
-    await retriever.get_historical_data(
-        symbol=symbol,
-        end_date=end_date,
-    )
+    await retriever.get_historical_data(symbol=symbol, end_date=end_date)
+
+
+async def process_raw_files_task() -> None:
+    """Process raw HTML files and load data into database."""
+
+    if not os.path.exists(config.raw_responses_dir):
+        logger.info("Raw responses directory does not exist, skipping file processing")
+        return
+
+    try:
+        async with AsyncSessionLocal() as session:
+            loader = StockDataLoader(session=session, config=config)
+            processor = FileProcessor(loader=loader, config=config)
+            await processor.process_raw_files()
+            logger.info("Successfully completed file processing task")
+    except Exception as e:
+        logger.error("Error during file processing task: %s", str(e))
+        raise
 
 
 async def update_all_tracked_stocks(db: AsyncSession) -> None:
-    """Update all tracked stocks.
+    """Update all tracked stocks with latest data.
 
     Args:
-        db: Database session
+        db: Database session for tracking stock updates
     """
     try:
         stmt = select(TrackedStock).where(TrackedStock.is_active)
         result = await db.execute(stmt)
         tracked_stocks = result.scalars().all()
+        logger.info("Found %d tracked stocks", len(tracked_stocks))
 
         for stock in tracked_stocks:
+            stock.last_pull_date = datetime.now()
             try:
-                await retrieve_historical_data_task(symbol=stock.symbol, end_date=None)
+                await retrieve_historical_data_task(symbol=stock.symbol)
                 stock.last_pull_status = "success"
-                stock.last_pull_date = datetime.now()
             except Exception as e:
                 stock.last_pull_status = "failure"
                 stock.error_message = str(e)
-                stock.last_pull_date = datetime.now()
-
-        await db.commit()
-    except Exception as e:
+            await db.commit()
+    except Exception:
         await db.rollback()
-        raise e
+        raise
 
 
 async def run_periodic_updates() -> None:
     """Run periodic updates of tracked stocks."""
     while True:
+        logger.info("run_periodic_updates() heartbeat.")
         try:
             async with AsyncSessionLocal() as session:
                 await update_all_tracked_stocks(session)
@@ -69,4 +91,26 @@ async def run_periodic_updates() -> None:
             logger.error("Error updating tracked stocks: %s", str(e))
             return
         else:
-            await asyncio.sleep(5 * 60)
+            await asyncio.sleep(RETRIEVAL_INTERVAL_SECONDS)
+
+
+async def run_periodic_file_processing() -> None:
+    """Run periodic processing of raw HTML files every 10 minutes.
+
+    Note: If non-HTML files are found in the raw_responses directory,
+    this is treated as a critical application logic failure and logged
+    as such, but the periodic task continues running.
+    """
+    while True:
+        logger.info("run_periodic_file_processing() heartbeat.")
+        try:
+            await process_raw_files_task()
+            logger.info("Successfully completed file processing cycle")
+        except RuntimeError as e:
+            logger.critical("Critical application logic failure in file processing: %s", str(e))
+            logger.critical("Task stopping!")
+            return
+        except Exception as e:
+            logger.error("Error during periodic file processing: %s", str(e))
+
+        await asyncio.sleep(PROCESSING_INTERVAL_SECONDS)

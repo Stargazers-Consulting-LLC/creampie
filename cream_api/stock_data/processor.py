@@ -30,23 +30,42 @@ class FileProcessor:
         self.parser = StockDataParser(config=self.config)
 
     async def process_raw_files(self) -> None:
-        """Process all HTML files in the raw responses directory."""
-        for filename in os.listdir(self.config.raw_responses_dir):
-            if filename.endswith(".html"):
-                file_path = os.path.join(self.config.raw_responses_dir, filename)
-                try:
-                    await self._process_single_file(file_path)
-                except Exception as e:
-                    logger.error(f"Error processing file {file_path}: {e!s}")
-                    if "Missing required fields" in str(e) or "Failed to parse HTML" in str(e):
-                        await self.remove_invalid_file(file_path)
-                    else:
-                        try:
-                            dest_path = os.path.join(self.config.parsed_responses_dir, filename)
-                            shutil.move(file_path, dest_path)
-                        except Exception as move_error:
-                            logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
-                    continue
+        """Process all HTML files in the raw responses directory.
+
+        Raises:
+            RuntimeError: If non-HTML files are found in raw_responses directory
+        """
+        all_files = os.listdir(self.config.raw_responses_dir)
+        html_files = [f for f in all_files if f.endswith(".html")]
+        non_html_files = [f for f in all_files if not f.endswith(".html")]
+
+        # Critical failure: non-HTML files in raw_responses directory
+        if non_html_files:
+            error_msg = f"CRITICAL: Non-HTML files found in raw_responses directory: {non_html_files}"
+            logger.critical(error_msg)
+            raise RuntimeError(error_msg)
+
+        if not html_files:
+            logger.info("No HTML files found in raw responses directory")
+            return
+
+        logger.info(f"Found {len(html_files)} HTML files to process")
+
+        for filename in html_files:
+            file_path = os.path.join(self.config.raw_responses_dir, filename)
+            try:
+                await self._process_single_file(file_path)
+            except Exception as e:
+                logger.error(f"Error processing file {file_path}: {e!s}")
+                if "Missing required fields" in str(e) or "Failed to parse HTML" in str(e):
+                    await self.remove_invalid_file(file_path)
+                else:
+                    try:
+                        dest_path = os.path.join(self.config.parsed_responses_dir, filename)
+                        shutil.move(file_path, dest_path)
+                    except Exception as move_error:
+                        logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
+                continue
 
     async def _process_single_file(self, file_path: str) -> None:
         """Process a single HTML file.

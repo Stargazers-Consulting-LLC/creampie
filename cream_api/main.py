@@ -16,8 +16,9 @@ from stargazer_utils.logging import get_logger_for
 
 from cream_api.background_tasks import start_background_tasks
 from cream_api.settings import get_app_settings
+from cream_api.stock_data.api import router as stock_data_router
 from cream_api.stock_data.config import get_stock_data_config
-from cream_api.users.routes import auth
+from cream_api.users.routes.auth import router as auth_router
 
 logger: logging.Logger = get_logger_for(__name__)
 
@@ -68,7 +69,8 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(auth.router)
+app.include_router(auth_router)
+app.include_router(stock_data_router)
 
 
 @app.get("/")
