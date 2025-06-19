@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "title": "React Style Guide",
+    "description": "Best practices and standards for writing React code in the CreamPie project.",
+    "version": "1.0.0",
+    "last_updated": "2025-01-27",
+    "source": "humans/guides/react_style_guide.md",
+    "cross_references": [
+      "cream_ui/src/components/",
+      "cream_ui/src/hooks/",
+      "cream_ui/src/pages/",
+      "cream_ui/src/App.tsx",
+      "cream_ui/src/main.tsx"
+    ]
+  },
+  "sections": {
+    "general_principles": {
+      "title": "General Principles",
+      "rules": [
+        "Use function components and React Hooks for all new code.",
+        "Check the existing component library in cream_ui/src/components before creating new components.",
+        "Prefer composition over inheritance.",
+        "Keep components small, focused, and reusable.",
+        "Write declarative code: describe what you want, not how to do it.",
+        "Co-locate related files (component, styles, tests) together.",
+        "Use TypeScript for type safety and better developer experience.",
+        "Write self-documenting code; use comments only for non-obvious logic."
+      ]
+    },
+    "project_structure": {
+      "title": "Project Structure",
+      "rules": [
+        "Organize by feature/domain, not by type (e.g., components/, pages/, hooks/, lib/).",
+        "Place each component in its own folder if it has related files (styles, tests, subcomponents)."
+      ],
+      "example_structure": "cream_ui/src/components/Button/Button.tsx, Button.test.tsx, button.module.css, ..."
+    },
+    "file_and_folder_naming": {
+      "title": "File and Folder Naming Conventions",
+      "rules": [
+        "Use PascalCase for component and page files/folders (e.g., Button.tsx, SignUpPage.tsx).",
+        "Use camelCase for hooks and utility files (e.g., useMobile.ts, fetchData.ts).",
+        "Use kebab-case or camelCase for CSS/SCSS files (e.g., button.module.css).",
+        "Use index.tsx for default exports in a folder, but prefer explicit filenames for clarity.",
+        "Avoid spaces, special characters, or uppercase in non-component filenames."
+      ]
+    },
+    "component_patterns": {
+      "title": "Component Patterns",
+      "rules": [
+        "Use function components with ES6+ syntax.",
+        "Use TypeScript for all components and props.",
+        "Define prop types with TypeScript interfaces or types.",
+        "Use React.FC only if you need children; otherwise, prefer explicit typing.",
+        "Prefer arrow functions for component definitions.",
+        "Keep components pure and side-effect free; use hooks for side effects.",
+        "Use custom hooks to encapsulate reusable logic.",
+        "Destructure props at the top of the component.",
+        "Use default values for optional props."
+      ],
+      "example": {
+        "Button": "export const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false }) => ( <button onClick={onClick} disabled={disabled}>{label}</button> );"
+      }
+    },
+    "styling": {
+      "title": "Styling",
+      "rules": [
+        "Use CSS Modules, Tailwind CSS, or styled-components for component styles.",
+        "Co-locate styles with their components.",
+        "Use utility-first CSS (e.g., Tailwind) for rapid prototyping and consistent design.",
+        "Avoid global styles except for resets and base typography.",
+        "Use BEM or similar conventions if using plain CSS.",
+        "Prefer className over inline styles for maintainability."
+      ],
+      "example": {
+        "tailwind": "<button className=\"px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700\">Click me</button>"
+      }
+    },
+    "state_management": {
+      "title": "State Management",
+      "rules": [
+        "Use React's built-in state and context for local and shared state.",
+        "Use useState for local state.",
+        "Use useContext for global/shared state.",
+        "Use useReducer for complex state logic.",
+        "For larger apps, consider Redux Toolkit or Zustand for global state.",
+        "Keep state as close to where it is used as possible.",
+        "Avoid prop drilling by using context or hooks."
+      ]
+    },
+    "testing": {
+      "title": "Testing",
+      "rules": [
+        "Use Jest and React Testing Library for all component and hook tests.",
+        "Co-locate tests with the components they test.",
+        "Use descriptive test names and group related tests with describe.",
+        "Prefer testing user interactions and behavior over implementation details.",
+        "Mock external dependencies and APIs."
+      ],
+      "example": {
+        "button_test": "test('calls onClick when clicked', () => { const handleClick = jest.fn(); render(<Button label=\"Click me\" onClick={handleClick} />); fireEvent.click(screen.getByText('Click me')); expect(handleClick).toHaveBeenCalledTimes(1); });"
+      }
+    },
+    "performance": {
+      "title": "Performance",
+      "rules": [
+        "Use React.memo to memoize pure components.",
+        "Use useCallback and useMemo to avoid unnecessary re-renders.",
+        "Avoid anonymous functions and objects in JSX when possible.",
+        "Split large components into smaller, focused ones.",
+        "Use code-splitting and lazy loading for large pages or components.",
+        "Avoid unnecessary state and props."
+      ]
+    },
+    "accessibility": {
+      "title": "Accessibility",
+      "rules": [
+        "Use semantic HTML elements (e.g., <button>, <nav>, <main>, <form>).",
+        "Always provide aria-* attributes and labels for interactive elements.",
+        "Ensure all interactive elements are keyboard accessible.",
+        "Use eslint-plugin-jsx-a11y to catch accessibility issues.",
+        "Test with screen readers and keyboard navigation.",
+        "Provide alt text for all images."
+      ]
+    },
+    "code_review_checklist": {
+      "title": "Code Review Checklist",
+      "items": [
+        "Component and file naming follows conventions",
+        "TypeScript types are used for all props and state",
+        "Components are pure and side-effect free",
+        "State is managed appropriately (local, context, or global)",
+        "Styles are co-located and follow project conventions",
+        "Tests are present and cover key behaviors",
+        "Accessibility best practices are followed",
+        "No unused code, variables, or imports",
+        "No direct DOM manipulation (use refs or effects if needed)",
+        "No hardcoded values (use constants or config)",
+        "Code is self-documenting and maintainable"
+      ]
+    },
+    "example_patterns": {
+      "title": "Example Patterns",
+      "simple_function_component": "export function Greeting({ name }: { name: string }) { return <h1>Hello, {name}!</h1>; }",
+      "custom_hook": "export function useWindowWidth() { const [width, setWidth] = useState(window.innerWidth); useEffect(() => { const handleResize = () => setWidth(window.innerWidth); window.addEventListener('resize', handleResize); return () => window.removeEventListener('resize', handleResize); }, []); return width; }",
+      "tailwind_component": "export function Alert({ message }: { message: string }) { return (<div className=\"bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4\">{message}</div>); }"
+    }
+  }
+}

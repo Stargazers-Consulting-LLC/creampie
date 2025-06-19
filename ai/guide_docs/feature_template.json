@@ -1,0 +1,327 @@
+{
+  "metadata": {
+    "title": "Feature Documentation Template",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "guide_docs/feature_template.md",
+    "cross_references": [
+      "../project_context/architecture_overview.json",
+      "../project_context/common_patterns.json",
+      "../project_context/development_workflow.json",
+      "../guide_docs/core_principles.json"
+    ]
+  },
+  "sections": {
+    "feature_documentation_template": {
+      "title": "Feature Documentation Template",
+      "description": "> This template provides a standardized structure for documenting features. Use this template to ens...",
+      "content": "> This template provides a standardized structure for documenting features. Use this template to ensure consistent, comprehensive feature documentation that follows AI optimization patterns."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, ...",
+      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, existing patterns, technical summaries\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../project_context/architecture_overview.json.replace(\".json\", \".json\")` - System architecture\n- `../project_context/common_patterns.json.replace(\".json\", \".json\")` - Project patterns\n- `../project_context/development_workflow.json.replace(\".json\", \".json\")` - Development process\n- `../technical_summaries/` - Module details\n- `../guide_docs/core_principles.json.replace(\".json\", \".json\")` - Decision frameworks\n\n**Validation Rules:**\n- All placeholders must be replaced with specific content\n- File paths must reference actual codebase structure\n- Requirements must be measurable and testable\n- Implementation plan must reference existing patterns\n- Success criteria must be quantifiable"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "**Feature Name:** [Name of the feature]\n**Status:** [Draft/In Progress/Completed/Deprecated]\n**Prior...",
+      "content": "**Feature Name:** [Name of the feature]\n**Status:** [Draft/In Progress/Completed/Deprecated]\n**Priority:** [High/Medium/Low]\n**Target Release:** [Version number or sprint]\n\n**AI Context:** This section establishes the feature identity and scope. Use consistent naming conventions from existing features."
+    },
+    "description": {
+      "title": "Description",
+      "description": "[Provide a clear and concise description of the feature or enhancement]\n\n**AI Guidance**: Be specifi...",
+      "content": "[Provide a clear and concise description of the feature or enhancement]\n\n**AI Guidance**: Be specific about what the feature does, who uses it, and what problem it solves. Reference existing features for similar patterns.\n\nThis description should inform the implementation plan and user stories."
+    },
+    "business_value": {
+      "title": "Business Value",
+      "description": "- [List the business benefits and value this feature brings]\n- [Include any relevant metrics or KPIs...",
+      "content": "- [List the business benefits and value this feature brings]\n- [Include any relevant metrics or KPIs]\n\n**AI Guidance**: Connect to existing business goals. Reference similar features' impact if applicable.\n\nEach benefit should be measurable or observable."
+    },
+    "user_stories": {
+      "title": "User Stories",
+      "description": "- As a [type of user], I want to [goal] so that [benefit]\n- As a [type of user], I want to [goal] so...",
+      "content": "- As a [type of user], I want to [goal] so that [benefit]\n- As a [type of user], I want to [goal] so that [benefit]\n\n**AI Guidance**: Use existing user types from the system. Make stories specific and testable.\n\nThese stories will inform the user experience flow and acceptance criteria.\n\nEach story should be testable and have clear acceptance criteria."
+    },
+    "architecture_analysis": {
+      "title": "Architecture Analysis",
+      "description": "Based on the current project structure:\n- **Backend**: [List specific modules like `cream_api/stock_...",
+      "content": "Based on the current project structure:\n- **Backend**: [List specific modules like `cream_api/stock_data/`, `cream_api/users/`, etc.]\n- **Models**: [List specific model files like `cream_api/stock_data/models.py`]\n- **API**: [List specific router files and endpoint patterns]\n- **Frontend**: [List specific component directories and patterns]\n\n**AI Guidance**: Reference actual files and modules from the codebase. Use `../project_context/architecture_overview.json.replace(\".json\", \".json\")` for context.\n\nThis analysis will determine which files need to be created or modified.\n\nAll listed files and modules must exist in the codebase."
+    },
+    "technical_requirements": {
+      "title": "Technical Requirements",
+      "description": "",
+      "content": ""
+    },
+    "functional_requirements": {
+      "title": "Functional Requirements",
+      "description": "- [List specific functional requirements with acceptance criteria]\n- [Each requirement should be tes...",
+      "content": "- [List specific functional requirements with acceptance criteria]\n- [Each requirement should be testable and specific]\n\n**AI Guidance**: Make requirements specific enough that they can be implemented and tested. Reference existing patterns.\n\nThese requirements will become test cases and implementation tasks.\n\nEach requirement must have clear acceptance criteria."
+    },
+    "non_functional_requirements": {
+      "title": "Non-Functional Requirements",
+      "description": "- **Performance**: [Specific metrics like \"API response time < 200ms\"]\n- **Security**: [Specific sec...",
+      "content": "- **Performance**: [Specific metrics like \"API response time < 200ms\"]\n- **Security**: [Specific security requirements like \"Rate limiting: 10 requests/minute\"]\n- **Scalability**: [Specific scalability requirements like \"Support 1000 concurrent users\"]\n- **Compatibility**: [Specific compatibility requirements like \"Works with existing auth system\"]\n\n**AI Guidance**: Use measurable, specific requirements. Reference existing performance patterns.\n\nThese requirements will inform technical considerations and testing strategy.\n\nAll requirements must be measurable or verifiable."
+    },
+    "implementation_plan": {
+      "title": "Implementation Plan",
+      "description": "",
+      "content": ""
+    },
+    "1_database_schema_changes": {
+      "title": "1. Database Schema Changes",
+      "description": "",
+      "content": ""
+    },
+    "update_specific_model_files_like_cream_apistock_datamodelspy": {
+      "title": "Update [specific model files like `cream_api/stock_data/models.py`]",
+      "description": "[Describe any new models needed or changes to existing models]\n\n- **[Model Name]**: [Description of ...",
+      "content": "[Describe any new models needed or changes to existing models]\n\n- **[Model Name]**: [Description of model purpose and fields]\n  - Fields: [List fields with types and constraints like `id: int, symbol: str, created_at: datetime`]\n  - **Purpose**: [Explain what this model tracks/manages]\n  - **Relationships**: [Describe relationships to existing models]\n\n**AI Guidance**: Reference existing models for field patterns. Use consistent naming conventions.\n\nThis will become the actual SQLAlchemy model definition.\n\nField types must match existing patterns, relationships must be valid.\n\n[Any important considerations about existing vs new models]"
+    },
+    "2_backend_implementation": {
+      "title": "2. Backend Implementation",
+      "description": "",
+      "content": ""
+    },
+    "a_models": {
+      "title": "A. Models",
+      "description": "- [List specific model changes with field names and types]\n- [Reference existing models like `Tracke...",
+      "content": "- [List specific model changes with field names and types]\n- [Reference existing models like `TrackedStock`, `AppUser`, etc.]\n\nReference existing model patterns for consistency."
+    },
+    "b_schemas": {
+      "title": "B. Schemas",
+      "description": "- **[SchemaName]**: [Pydantic model with specific fields like `symbol: str = Field(..., min_length=1...",
+      "content": "- **[SchemaName]**: [Pydantic model with specific fields like `symbol: str = Field(..., min_length=1, max_length=10)`]\n- [Include validation requirements with specific rules]\n\nThis will become the actual Pydantic schema definition."
+    },
+    "c_business_logic": {
+      "title": "C. Business Logic",
+      "description": "- [List specific functions/classes with signatures like `def process_stock_request(symbol: str) -> T...",
+      "content": "- [List specific functions/classes with signatures like `def process_stock_request(symbol: str) -> TrackedStock:`]\n- [Reference existing patterns from similar modules]\n\nThese will become the actual function implementations."
+    },
+    "d_error_handling": {
+      "title": "D. Error Handling",
+      "description": "- [List specific error types like `StockNotFoundError`, `InvalidSymbolError`]\n- [Reference existing ...",
+      "content": "- [List specific error types like `StockNotFoundError`, `InvalidSymbolError`]\n- [Reference existing error patterns from `cream_api/common/exceptions.py`]\n\nThese will become exception class definitions."
+    },
+    "e_background_tasks": {
+      "title": "E. Background Tasks",
+      "description": "- [List specific task functions like `update_stock_data_task(symbol: str)`]\n- [Reference existing ta...",
+      "content": "- [List specific task functions like `update_stock_data_task(symbol: str)`]\n- [Reference existing task patterns from `cream_api/stock_data/tasks.py`]\n\nThese will become Celery task definitions."
+    },
+    "3_api_integration": {
+      "title": "3. API Integration",
+      "description": "",
+      "content": ""
+    },
+    "a_router_integration": {
+      "title": "A. Router Integration",
+      "description": "- [List specific router files like `cream_api/main.py` or `cream_api/stock_data/api.py`]\n- [Referenc...",
+      "content": "- [List specific router files like `cream_api/main.py` or `cream_api/stock_data/api.py`]\n- [Reference existing endpoint patterns like `/stock-data/track`]\n\nThis will become router registration code."
+    },
+    "b_endpoint_implementation": {
+      "title": "B. Endpoint Implementation",
+      "description": "- [List specific endpoints like `POST /stock-data/request`, `GET /stock-data/tracked`]\n- [Include sp...",
+      "content": "- [List specific endpoints like `POST /stock-data/request`, `GET /stock-data/tracked`]\n- [Include specific request/response formats with field names]\n- [List specific auth requirements like `@requires_auth`]\n\nThese will become FastAPI endpoint definitions."
+    },
+    "4_frontend_implementation": {
+      "title": "4. Frontend Implementation",
+      "description": "",
+      "content": ""
+    },
+    "a_api_client_functions": {
+      "title": "A. API Client Functions",
+      "description": "- **[FunctionName]**: [Specific function signature like `trackStock(symbol: string): Promise<Tracked...",
+      "content": "- **[FunctionName]**: [Specific function signature like `trackStock(symbol: string): Promise<TrackedStock>`]\n- [Include specific TypeScript interfaces with field names]\n\nThis will become the actual TypeScript API client code."
+    },
+    "b_pages": {
+      "title": "B. Pages",
+      "description": "- **[PageName]**: [Specific file path like `cream_ui/src/pages/stock-requests/StockRequestPage.tsx`]...",
+      "content": "- **[PageName]**: [Specific file path like `cream_ui/src/pages/stock-requests/StockRequestPage.tsx`]\n- [Describe specific form fields and validation rules]\n\nThis will become the React component implementation."
+    },
+    "c_components": {
+      "title": "C. Components",
+      "description": "- **[ComponentName]**: [Specific file path like `cream_ui/src/components/stock-requests/StockRequest...",
+      "content": "- **[ComponentName]**: [Specific file path like `cream_ui/src/components/stock-requests/StockRequestForm.tsx`]\n- [List specific props like `onSubmit: (symbol: string) => void`]\n\nThis will become the React component with props interface."
+    },
+    "5_user_experience_flow": {
+      "title": "5. User Experience Flow",
+      "description": "",
+      "content": ""
+    },
+    "a_primary_user_flow": {
+      "title": "A. Primary User Flow",
+      "description": "1. [Specific step like \"User navigates to `/stock-requests` page\"]\n2. [Include specific validation r...",
+      "content": "1. [Specific step like \"User navigates to `/stock-requests` page\"]\n2. [Include specific validation rules like \"Symbol must be 1-10 characters\"]\n3. [Describe specific success states like \"Shows confirmation message with stock symbol\"]\n\nThis will inform the component state management and routing."
+    },
+    "b_alternative_flows_if_applicable": {
+      "title": "B. Alternative Flows (if applicable)",
+      "description": "1. [Specific error scenarios like \"Invalid symbol shows error message\"]\n2. [Specific admin flows lik...",
+      "content": "1. [Specific error scenarios like \"Invalid symbol shows error message\"]\n2. [Specific admin flows like \"Admin sees additional management options\"]\n\nThis will inform error handling and conditional rendering."
+    },
+    "6_integration_points": {
+      "title": "6. Integration Points",
+      "description": "",
+      "content": ""
+    },
+    "a_existing_systems": {
+      "title": "A. Existing Systems",
+      "description": "- [List specific modules like `cream_api/stock_data/` and how they integrate]\n- [Reference specific ...",
+      "content": "- [List specific modules like `cream_api/stock_data/` and how they integrate]\n- [Reference specific functions like `update_all_tracked_stocks()`]\n\nThis will inform import statements and function calls."
+    },
+    "b_external_dependencies": {
+      "title": "B. External Dependencies",
+      "description": "- [List specific third-party services with API endpoints]\n- [List specific libraries with version re...",
+      "content": "- [List specific third-party services with API endpoints]\n- [List specific libraries with version requirements]\n\nThis will inform requirements.txt and package.json updates."
+    },
+    "c_background_processing": {
+      "title": "C. Background Processing",
+      "description": "- [List specific task functions and their schedules]\n- [Reference existing task patterns]\n\nThis will...",
+      "content": "- [List specific task functions and their schedules]\n- [Reference existing task patterns]\n\nThis will inform Celery task definitions and scheduling."
+    },
+    "technical_considerations": {
+      "title": "Technical Considerations",
+      "description": "",
+      "content": ""
+    },
+    "a_security": {
+      "title": "A. Security",
+      "description": "- [List specific security measures like \"Input sanitization for stock symbols\"]\n- [Reference existin...",
+      "content": "- [List specific security measures like \"Input sanitization for stock symbols\"]\n- [Reference existing security patterns]\n\nThis will inform input validation and security middleware."
+    },
+    "b_performance": {
+      "title": "B. Performance",
+      "description": "- [List specific performance optimizations like \"Database indexing on symbol field\"]\n- [Reference ex...",
+      "content": "- [List specific performance optimizations like \"Database indexing on symbol field\"]\n- [Reference existing performance patterns]\n\nThis will inform database migrations and query optimizations."
+    },
+    "c_error_handling": {
+      "title": "C. Error Handling",
+      "description": "- [List specific error scenarios and handling like \"Network timeout retry logic\"]\n- [Reference exist...",
+      "content": "- [List specific error scenarios and handling like \"Network timeout retry logic\"]\n- [Reference existing error handling patterns]\n\nThis will inform try-catch blocks and error recovery code."
+    },
+    "implementation_phases": {
+      "title": "Implementation Phases",
+      "description": "",
+      "content": ""
+    },
+    "phase_1_phase_name_timeline": {
+      "title": "Phase 1: [Phase Name] (Timeline)",
+      "description": "1. [Specific task like \"Create `cream_api/stock_data/schemas.py` with StockRequestCreate model\"]\n2. ...",
+      "content": "1. [Specific task like \"Create `cream_api/stock_data/schemas.py` with StockRequestCreate model\"]\n2. [Specific task like \"Add validation for stock symbol format\"]\n3. [Specific task like \"Write unit tests for new schemas\"]\n\nEach task should correspond to specific code files to be created."
+    },
+    "phase_2_phase_name_timeline": {
+      "title": "Phase 2: [Phase Name] (Timeline)",
+      "description": "1. [Specific task like \"Create `cream_ui/src/lib/api/stockRequests.ts`\"]\n2. [Specific task like \"Bui...",
+      "content": "1. [Specific task like \"Create `cream_ui/src/lib/api/stockRequests.ts`\"]\n2. [Specific task like \"Build StockRequestForm component with validation\"]\n3. [Specific task like \"Add error handling and loading states\"]\n\nEach task should correspond to specific component files to be created."
+    },
+    "phase_3_phase_name_timeline": {
+      "title": "Phase 3: [Phase Name] (Timeline)",
+      "description": "1. [Specific task like \"End-to-end testing of complete user flow\"]\n2. [Specific task like \"Performan...",
+      "content": "1. [Specific task like \"End-to-end testing of complete user flow\"]\n2. [Specific task like \"Performance testing with realistic data volumes\"]\n3. [Specific task like \"Update API documentation with new endpoints\"]\n\nThese tasks will generate test files and documentation updates."
+    },
+    "testing_strategy": {
+      "title": "Testing Strategy",
+      "description": "",
+      "content": ""
+    },
+    "a_backend_tests": {
+      "title": "A. Backend Tests",
+      "description": "- [List specific test files like `tests/stock_data/test_schemas.py`]\n- [List specific test functions...",
+      "content": "- [List specific test files like `tests/stock_data/test_schemas.py`]\n- [List specific test functions like `test_stock_request_validation()`]\n- [Reference existing test patterns]\n\nThese will become actual pytest test files and functions."
+    },
+    "b_frontend_tests": {
+      "title": "B. Frontend Tests",
+      "description": "- [List specific test files like `cream_ui/src/components/__tests__/StockRequestForm.test.tsx`]\n- [L...",
+      "content": "- [List specific test files like `cream_ui/src/components/__tests__/StockRequestForm.test.tsx`]\n- [List specific test scenarios like \"validates symbol format\", \"handles API errors\"]\n\nThese will become actual Jest/React Testing Library test files."
+    },
+    "c_performance_tests": {
+      "title": "C. Performance Tests",
+      "description": "- [List specific performance tests like \"API response time under load\"]\n- [List specific benchmarks ...",
+      "content": "- [List specific performance tests like \"API response time under load\"]\n- [List specific benchmarks like \"100 concurrent requests\"]\n\nThese will become actual load testing scripts."
+    },
+    "documentation_updates": {
+      "title": "Documentation Updates",
+      "description": "",
+      "content": ""
+    },
+    "a_api_documentation": {
+      "title": "A. API Documentation",
+      "description": "- [List specific OpenAPI updates like \"Add /stock-data/request endpoint\"]\n- [List specific examples ...",
+      "content": "- [List specific OpenAPI updates like \"Add /stock-data/request endpoint\"]\n- [List specific examples like \"Request/response examples for each endpoint\"]\n\nThese will become actual OpenAPI schema updates."
+    },
+    "b_user_documentation": {
+      "title": "B. User Documentation",
+      "description": "- [List specific documentation files like \"Update user guide with stock tracking feature\"]\n- [List s...",
+      "content": "- [List specific documentation files like \"Update user guide with stock tracking feature\"]\n- [List specific sections like \"Add troubleshooting guide for common errors\"]\n\nThese will become actual documentation file updates."
+    },
+    "success_criteria": {
+      "title": "Success Criteria",
+      "description": "1. [Specific criteria like \"Users can successfully request stock tracking with 95% success rate\"]\n2....",
+      "content": "1. [Specific criteria like \"Users can successfully request stock tracking with 95% success rate\"]\n2. [Specific UX criteria like \"Form provides feedback within 2 seconds\"]\n3. [Specific performance criteria like \"API endpoints respond within 200ms\"]\n4. [Specific quality criteria like \"90% test coverage for new code\"]\n5. [Specific documentation criteria like \"All new endpoints documented in OpenAPI\"]\n\nAll criteria must be measurable and testable."
+    },
+    "risks_and_mitigation": {
+      "title": "Risks and Mitigation",
+      "description": "| Risk     | Impact   | Probability   | Mitigation Strategy |\n| -------- | -------- | ------------- ...",
+      "content": "| Risk     | Impact   | Probability   | Mitigation Strategy |\n| -------- | -------- | ------------- | ------------------- |\n| [Specific risk like \"Invalid stock symbols cause API errors\"] | [Specific impact like \"API returns 500 errors\"] | [Probability like \"Medium\"] | [Specific mitigation like \"Add input validation and error handling\"] |\n\nMitigation strategies should inform actual code implementation."
+    },
+    "review_checklist": {
+      "title": "Review Checklist",
+      "description": "- [ ] Business requirements reviewed and approved\n- [ ] Technical design reviewed against existing p...",
+      "content": "- [ ] Business requirements reviewed and approved\n- [ ] Technical design reviewed against existing patterns\n- [ ] Security review completed with specific measures identified\n- [ ] Performance requirements validated with specific metrics\n- [ ] UI/UX design approved with specific user flows\n- [ ] Documentation completed for all new components\n- [ ] Test cases reviewed with specific coverage requirements\n- [ ] Deployment plan approved with specific steps\n- [ ] Integration points validated against existing systems\n- [ ] User experience flows tested with specific scenarios"
+    },
+    "notes": {
+      "title": "Notes",
+      "description": "[Additional information, decisions, or considerations]\n\n**AI Guidance**: Document any assumptions, d...",
+      "content": "[Additional information, decisions, or considerations]\n\n**AI Guidance**: Document any assumptions, decisions, or considerations that might affect implementation.\n\nNotes should inform implementation decisions and code comments."
+    },
+    "references": {
+      "title": "References",
+      "description": "- [List specific relevant documents like `../project_context/architecture_overview.json.replace(\".js...",
+      "content": "- [List specific relevant documents like `../project_context/architecture_overview.json.replace(\".json\", \".json\")`]\n- [List specific technical summaries like `../technical_summaries/stock_data_module_summary.json.replace(\".json\", \".json\")`]\n- [List specific existing patterns or code examples]\n\n---\n\n**AI Quality Checklist**: Before completing this template, ensure:\n- [ ] All placeholders are replaced with specific, actionable content\n- [ ] File paths and module names reference actual codebase structure\n- [ ] Requirements are specific and testable\n- [ ] Implementation plan references existing patterns\n- [ ] Success criteria are measurable\n- [ ] All sections are complete and consistent\n- [ ] Code generation hints are actionable\n- [ ] Validation rules are satisfied\n- [ ] Dependencies are properly referenced"
+    },
+    "implementation": {
+      "title": "Implementation",
+      "description": "",
+      "content": ""
+    },
+    "core_implementation": {
+      "title": "Core Implementation",
+      "description": "- **Primary Logic**: [Describe the main implementation approach]\n- **Data Flow**: [Explain how data ...",
+      "content": "- **Primary Logic**: [Describe the main implementation approach]\n- **Data Flow**: [Explain how data moves through the system]\n- **Integration Points**: [List where this feature connects to other systems]\n- **Error Handling**: [Detail error handling strategies]\n- **Performance Considerations**: [Note any performance implications]"
+    },
+    "ai_script_development": {
+      "title": "AI Script Development",
+      "description": "- **Purpose**: [Describe the script's purpose for AI consumption]\n  - What problem does this script ...",
+      "content": "- **Purpose**: [Describe the script's purpose for AI consumption]\n  - What problem does this script solve?\n  - How does it improve AI tool consumption?\n  - What insights does it provide?\n- **Inputs**: [List expected inputs and their formats]\n  - File paths, configuration files, command-line arguments\n  - Data formats, validation requirements, optional parameters\n- **Outputs**: [Describe both console and file outputs]\n  - Console output for immediate feedback during execution\n  - Markdown reports with AI metadata and cross-references\n  - JSON output for programmatic consumption and analysis\n- **Error Handling**: [Detail error handling and reporting strategies]\n  - Try/except blocks with comprehensive error collection\n  - Error categorization (critical issues vs. warnings)\n  - Resolution suggestions and actionable recommendations\n- **Testing**: [Include test scripts and validation methods]\n  - Unit tests for individual functions and methods\n  - Integration tests for end-to-end functionality\n  - Validation scripts to verify output quality\n- **Maintenance**: [Document update and maintenance procedures]\n  - How to update the script when requirements change\n  - How to extend functionality without breaking existing features\n  - How to maintain consistency with other AI scripts\n\nThis section will inform AI script development and maintenance throughout the project.\n\nAI scripts must include all required sections and follow established patterns."
+    }
+  },
+  "implementation_guidelines": {
+    "implementation_plan": {
+      "title": "Implementation Plan",
+      "content": ""
+    },
+    "2_backend_implementation": {
+      "title": "2. Backend Implementation",
+      "content": ""
+    },
+    "b_endpoint_implementation": {
+      "title": "B. Endpoint Implementation",
+      "content": "- [List specific endpoints like `POST /stock-data/request`, `GET /stock-data/tracked`]\n- [Include specific request/response formats with field names]\n- [List specific auth requirements like `@requires_auth`]\n\nThese will become FastAPI endpoint definitions."
+    },
+    "4_frontend_implementation": {
+      "title": "4. Frontend Implementation",
+      "content": ""
+    },
+    "implementation_phases": {
+      "title": "Implementation Phases",
+      "content": ""
+    },
+    "implementation": {
+      "title": "Implementation",
+      "content": ""
+    },
+    "core_implementation": {
+      "title": "Core Implementation",
+      "content": "- **Primary Logic**: [Describe the main implementation approach]\n- **Data Flow**: [Explain how data moves through the system]\n- **Integration Points**: [List where this feature connects to other systems]\n- **Error Handling**: [Detail error handling strategies]\n- **Performance Considerations**: [Note any performance implications]"
+    }
+  }
+}

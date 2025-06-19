@@ -1,0 +1,215 @@
+{
+  "metadata": {
+    "title": "Python Testing Style Guide",
+    "description": "Comprehensive testing standards and best practices for Python code in the CreamPie project",
+    "version": "1.0.0",
+    "last_updated": "2025-01-27",
+    "source": "humans/guides/python_testing_style_guide.md",
+    "cross_references": [
+      "cream_api/tests/conftest.py",
+      "cream_api/tests/test_auth.py",
+      "cream_api/tests/test_main.py",
+      "cream_api/tests/stock_data/",
+      "cream_api/tests/common/",
+      "pytest.ini"
+    ]
+  },
+  "sections": {
+    "general_principles": {
+      "title": "General Principles",
+      "description": "Core principles for writing effective tests",
+      "rules": [
+        "Test everything that could break: Focus on business logic, edge cases, and error conditions",
+        "Write tests first (TDD): Write tests before implementing features when possible",
+        "Keep tests simple and readable: Tests should be easy to understand and maintain",
+        "Test behavior, not implementation: Focus on what the code does, not how it does it",
+        "Use descriptive test names: Test names should clearly describe what is being tested",
+        "One assertion per test: Each test should verify one specific behavior",
+        "Tests should be independent: Tests should not depend on each other or external state",
+        "Use appropriate test isolation: Each test should run in isolation with clean state"
+      ]
+    },
+    "test_structure_and_organization": {
+      "title": "Test Structure and Organization",
+      "description": "Guidelines for organizing and structuring tests",
+      "rules": [
+        "Organize tests to mirror your source code structure",
+        "Use descriptive test class and method names",
+        "Group related tests using test classes or modules",
+        "Use conftest.py for shared fixtures and configuration"
+      ],
+      "example_structure": {
+        "tests": "tests/conftest.py, tests/unit/, tests/integration/, tests/fixtures/",
+        "unit_tests": "test_api.py, test_models.py, test_services.py",
+        "integration_tests": "test_database.py, test_external_apis.py"
+      }
+    },
+    "unit_testing_patterns": {
+      "title": "Unit Testing Patterns",
+      "description": "Patterns for writing effective unit tests",
+      "rules": [
+        "Test individual functions and methods in isolation",
+        "Use dependency injection to make code testable",
+        "Mock external dependencies (databases, APIs, file systems)",
+        "Test both happy path and error conditions",
+        "Use parameterized tests for multiple input scenarios"
+      ],
+      "test_method_naming": {
+        "pattern": "test_<method>_<scenario>_<expected_result>",
+        "examples": [
+          "test_create_user_with_valid_data_returns_user_object",
+          "test_create_user_with_invalid_email_raises_validation_error",
+          "test_get_user_by_id_when_user_exists_returns_user",
+          "test_get_user_by_id_when_user_not_found_returns_none"
+        ]
+      },
+      "test_class_structure": {
+        "setup": "def setup_method(self): self.user_service = UserService(); self.test_user_data = {...}",
+        "arrange_act_assert": "# Arrange\nuser_data = self.test_user_data.copy()\n\n# Act\nresult = self.user_service.create_user(user_data)\n\n# Assert\nassert result.email == user_data['email']"
+      }
+    },
+    "integration_testing": {
+      "title": "Integration Testing",
+      "description": "Guidelines for integration testing",
+      "rules": [
+        "Test interactions between multiple components",
+        "Use real databases and external services in controlled environments",
+        "Test complete workflows and user scenarios",
+        "Use test databases that can be reset between tests"
+      ],
+      "example": {
+        "async_integration": "@pytest.mark.asyncio\nasync def test_create_user_endpoint(self, client, test_db):\n    user_data = {'email': 'test@example.com', 'name': 'Test User'}\n    response = await client.post('/users/', json=user_data)\n    assert response.status_code == 201"
+      }
+    },
+    "test_fixtures_and_setup": {
+      "title": "Test Fixtures and Setup",
+      "description": "Best practices for test fixtures and setup",
+      "rules": [
+        "Use pytest fixtures for reusable test setup",
+        "Create fixtures for common test data and objects",
+        "Use fixture scopes appropriately (function, class, module, session)",
+        "Clean up resources in fixture teardown"
+      ],
+      "fixture_examples": {
+        "sample_data": "@pytest.fixture\ndef sample_user_data():\n    return {'email': 'test@example.com', 'name': 'Test User', 'password': 'secure_password'}",
+        "async_database": "@pytest.fixture\nasync def test_db():\n    engine = create_async_engine('sqlite+aiosqlite:///:memory:')\n    async with engine.begin() as conn:\n        await conn.run_sync(Base.metadata.create_all)\n    async_session = async_sessionmaker(engine)\n    async with async_session() as session:\n        yield session\n    async with engine.begin() as conn:\n        await conn.run_sync(Base.metadata.drop_all)",
+        "mock_external": "@pytest.fixture\ndef mock_external_api():\n    with patch('app.services.external_api.ExternalAPIClient') as mock:\n        mock.return_value.get_data.return_value = {'status': 'success'}\n        yield mock"
+      }
+    },
+    "mocking_and_patching": {
+      "title": "Mocking and Patching",
+      "description": "Guidelines for effective mocking and patching",
+      "rules": [
+        "Mock external dependencies to isolate units under test",
+        "Use unittest.mock or pytest-mock for mocking",
+        "Mock at the right level (prefer mocking interfaces over implementations)",
+        "Verify that mocks are called with expected arguments"
+      ],
+      "mocking_examples": {
+        "success_case": "@patch('app.services.stock_data.ExternalAPIClient')\ndef test_fetch_stock_data_success(self, mock_api_client):\n    mock_client = MagicMock()\n    mock_api_client.return_value = mock_client\n    mock_client.get_stock_data.return_value = {'symbol': 'AAPL', 'price': 150.0}\n    service = StockDataService()\n    result = service.fetch_stock_data('AAPL')\n    assert result['symbol'] == 'AAPL'\n    mock_client.get_stock_data.assert_called_once_with('AAPL')",
+        "error_case": "@patch('app.services.stock_data.ExternalAPIClient')\ndef test_fetch_stock_data_api_error(self, mock_api_client):\n    mock_client = MagicMock()\n    mock_api_client.return_value = mock_client\n    mock_client.get_stock_data.side_effect = APIError('Service unavailable')\n    service = StockDataService()\n    with pytest.raises(StockDataError):\n        service.fetch_stock_data('AAPL')"
+      }
+    },
+    "test_data_management": {
+      "title": "Test Data Management",
+      "description": "Best practices for managing test data",
+      "rules": [
+        "Use factories or builders for creating test data",
+        "Keep test data minimal and focused",
+        "Use parameterized tests for multiple data scenarios",
+        "Avoid hardcoded test data in test methods"
+      ],
+      "factory_example": {
+        "user_factory": "class UserFactory(factory.Factory):\n    class Meta:\n        model = dict\n    email = factory.LazyFunction(fake.email)\n    name = factory.LazyFunction(fake.name)\n    password = factory.LazyFunction(lambda: fake.password())",
+        "parameterized_test": "@pytest.mark.parametrize('invalid_email', [\n    'invalid-email',\n    'missing@domain',\n    '@nodomain.com',\n    'spaces @domain.com'\n])\ndef test_create_user_invalid_emails(self, invalid_email):\n    user_data = UserFactory(email=invalid_email)\n    with pytest.raises(ValidationError):\n        self.user_service.create_user(user_data)"
+      }
+    },
+    "performance_testing": {
+      "title": "Performance Testing",
+      "description": "Guidelines for performance testing",
+      "rules": [
+        "Test performance-critical code paths",
+        "Use benchmarks to measure performance improvements",
+        "Test with realistic data volumes",
+        "Monitor memory usage and execution time"
+      ],
+      "performance_examples": {
+        "bulk_operation": "def test_bulk_user_creation_performance(self):\n    users_data = [UserFactory() for _ in range(1000)]\n    start_time = time.time()\n    results = [self.user_service.create_user(data) for data in users_data]\n    end_time = time.time()\n    execution_time = end_time - start_time\n    assert len(results) == 1000\n    assert execution_time < 5.0",
+        "benchmark": "@pytest.mark.benchmark\ndef test_database_query_performance(self, benchmark):\n    def query_users():\n        return self.user_service.get_all_users()\n    result = benchmark(query_users)\n    assert len(result) > 0"
+      }
+    },
+    "coverage_and_quality_metrics": {
+      "title": "Coverage and Quality Metrics",
+      "description": "Guidelines for test coverage and quality",
+      "rules": [
+        "Aim for high test coverage (80%+ for critical code)",
+        "Use coverage tools to identify untested code",
+        "Focus on critical business logic coverage",
+        "Use mutation testing to verify test quality"
+      ],
+      "pytest_configuration": {
+        "pytest_ini": "[tool:pytest]\naddopts = \n    --cov=app\n    --cov-report=html\n    --cov-report=term-missing\n    --cov-fail-under=80\ntestpaths = tests\npython_files = test_*.py\npython_classes = Test*\npython_functions = test_*"
+      }
+    },
+    "best_practices_and_anti_patterns": {
+      "title": "Best Practices and Anti-patterns",
+      "description": "Best practices to follow and anti-patterns to avoid",
+      "best_practices": [
+        "Write tests that are easy to understand and maintain",
+        "Use descriptive test names that explain the scenario",
+        "Test one thing per test method",
+        "Use appropriate assertions and error messages",
+        "Keep tests fast and reliable",
+        "Use test doubles (mocks, stubs) appropriately"
+      ],
+      "anti_patterns": [
+        "Testing implementation details instead of behavior",
+        "Writing tests that are too brittle (break with refactoring)",
+        "Using shared state between tests",
+        "Testing multiple behaviors in a single test",
+        "Ignoring test failures or flaky tests",
+        "Writing tests that are hard to understand"
+      ]
+    }
+  },
+  "example_patterns": {
+    "complete_test_class": {
+      "title": "Complete Test Class Example",
+      "description": "A comprehensive example showing all testing patterns",
+      "code": "import pytest\nfrom unittest.mock import patch, MagicMock\nfrom app.services.user_service import UserService\nfrom app.models.user import User\nfrom app.exceptions import ValidationError, DuplicateEmailError\n\nclass TestUserService:\n    def setup_method(self):\n        self.user_service = UserService()\n        self.valid_user_data = {\n            'email': 'test@example.com',\n            'name': 'Test User',\n            'password': 'secure_password'\n        }\n\n    def test_create_user_with_valid_data_returns_user(self):\n        result = self.user_service.create_user(self.valid_user_data)\n        assert isinstance(result, User)\n        assert result.email == self.valid_user_data['email']\n        assert result.id is not None\n\n    def test_create_user_with_invalid_email_raises_error(self):\n        invalid_data = self.valid_user_data.copy()\n        invalid_data['email'] = 'invalid-email'\n        with pytest.raises(ValidationError, match='Invalid email format'):\n            self.user_service.create_user(invalid_data)\n\n    @patch('app.services.user_service.EmailValidator')\n    def test_create_user_validates_email_format(self, mock_validator):\n        mock_validator.return_value.is_valid.return_value = True\n        self.user_service.create_user(self.valid_user_data)\n        mock_validator.return_value.is_valid.assert_called_once_with(\n            self.valid_user_data['email']\n        )\n\n    @pytest.mark.parametrize('missing_field', ['email', 'name', 'password'])\n    def test_create_user_missing_required_fields_raises_error(self, missing_field):\n        incomplete_data = self.valid_user_data.copy()\n        del incomplete_data[missing_field]\n        with pytest.raises(ValidationError, match=f'Missing required field: {missing_field}'):\n            self.user_service.create_user(incomplete_data)"
+    },
+    "async_test_example": {
+      "title": "Async Test Example",
+      "description": "Example of testing async code",
+      "code": "import pytest\nfrom httpx import AsyncClient\n\nclass TestUserAPI:\n    @pytest.mark.asyncio\n    async def test_create_user_endpoint_success(self, async_client: AsyncClient):\n        user_data = {\n            'email': 'test@example.com',\n            'name': 'Test User',\n            'password': 'secure_password'\n        }\n        response = await async_client.post('/users/', json=user_data)\n        assert response.status_code == 201\n        result = response.json()\n        assert result['email'] == user_data['email']\n        assert 'id' in result\n\n    @pytest.mark.asyncio\n    async def test_get_user_endpoint_not_found(self, async_client: AsyncClient):\n        response = await async_client.get('/users/non-existent-id')\n        assert response.status_code == 404"
+    }
+  },
+  "implementation_guidelines": {
+    "for_developers": [
+      "Write tests for all new functionality",
+      "Use descriptive test names that explain the scenario",
+      "Test both success and failure cases",
+      "Use appropriate mocking to isolate units under test",
+      "Keep tests fast and reliable",
+      "Use fixtures for reusable test setup",
+      "Write tests that are easy to understand and maintain"
+    ],
+    "quality_checklist": [
+      "All new code has corresponding tests",
+      "Tests cover both happy path and error conditions",
+      "Tests are independent and can run in any order",
+      "Tests use appropriate assertions and error messages",
+      "Tests are fast and don't have external dependencies",
+      "Test names clearly describe what is being tested",
+      "Tests follow the Arrange-Act-Assert pattern",
+      "Coverage is maintained at 80%+ for critical code"
+    ],
+    "code_review_standards": {
+      "test_coverage": "Verify that new code has adequate test coverage",
+      "test_quality": "Ensure tests are well-written and maintainable",
+      "test_isolation": "Check that tests are properly isolated",
+      "test_naming": "Verify test names are descriptive and follow conventions",
+      "test_organization": "Ensure tests are properly organized and structured"
+    }
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "metadata": {
+    "title": "code_review_patterns",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "guide_docs/code_review_patterns.md",
+    "cross_references": [
+      "core_principles.json",
+      "../project_context/common_patterns.json",
+      "Language-Specific/python_style_guide.json"
+    ]
+  },
+  "sections": {
+    "code_review_patterns": {
+      "title": "code_review_patterns",
+      "description": "> This guide provides comprehensive patterns and best practices for conducting effective code review...",
+      "content": "> This guide provides comprehensive patterns and best practices for conducting effective code reviews. Use these patterns to ensure code quality, consistency, and maintainability."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Code review processes,...",
+      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Code review processes, style guides, conflict resolution, user interaction patterns\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:**\n- `core_principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `../project_context/common_patterns.json.replace(\".json\", \".json\")` - Project-specific patterns\n- `Language-Specific/python_style_guide.json.replace(\".json\", \".json\")` - Python coding standards\n- `domain_specific/` - domain_specific patterns and guidelines\n\n**Validation Rules:**\n- All suggestions must follow the standard format\n- Priority system must be consistently applied\n- Context awareness must be maintained throughout\n- Communication patterns must be constructive and educational\n- Conflict resolution must follow established frameworks\n\n**Keywords:** code review, suggestions, conflict resolution, communication patterns, priority system, context awareness"
+    },
+    "1_suggestion_structure": {
+      "title": "1. Suggestion Structure",
+      "description": "",
+      "content": ""
+    },
+    "standard_suggestion_format": {
+      "title": "Standard Suggestion Format",
+      "description": "```\n**Issue**: [Clear description of the problem]\n**Impact**: [Why this matters - performance, secur...",
+      "content": "```\n**Issue**: [Clear description of the problem]\n**Impact**: [Why this matters - performance, security, maintainability, etc.]\n**Solution**: [Specific, actionable fix]\n**Reasoning**: [Why this approach is preferred]\n```"
+    },
+    "example_suggestion": {
+      "title": "Example Suggestion",
+      "description": "```\n**Issue**: Magic number `5.0` used in performance assertion\n**Impact**: Reduces code readability...",
+      "content": "```\n**Issue**: Magic number `5.0` used in performance assertion\n**Impact**: Reduces code readability and makes maintenance harder\n**Solution**: Define `MAX_PROCESSING_TIME_SECONDS = 5.0` at module level\n**Reasoning**: Follows python_style_guide principle of avoiding magic numbers\n```"
+    },
+    "multi_issue_reviews": {
+      "title": "Multi-Issue Reviews",
+      "description": "When multiple issues exist, structure them by priority:\n\n```",
+      "content": "When multiple issues exist, structure them by priority:\n\n```"
+    },
+    "critical_issues": {
+      "title": "Critical Issues",
+      "description": "[Critical issues first]",
+      "content": "[Critical issues first]"
+    },
+    "high_priority_issues": {
+      "title": "High Priority Issues",
+      "description": "[Style guide violations, performance issues]",
+      "content": "[Style guide violations, performance issues]"
+    },
+    "medium_priority_issues": {
+      "title": "Medium Priority Issues",
+      "description": "[Code organization, documentation]",
+      "content": "[Code organization, documentation]"
+    },
+    "suggestions_for_future": {
+      "title": "Suggestions for Future",
+      "description": "[Optional improvements]\n```",
+      "content": "[Optional improvements]\n```"
+    },
+    "2_conflict_resolution": {
+      "title": "2. Conflict Resolution",
+      "description": "",
+      "content": ""
+    },
+    "when_guides_conflict": {
+      "title": "When Guides Conflict",
+      "description": "1. **Identify the conflict**: Clearly state what the guides say differently\n2. **Assess context**: C...",
+      "content": "1. **Identify the conflict**: Clearly state what the guides say differently\n2. **Assess context**: Consider the specific situation and user's needs\n3. **Recommend approach**: Suggest which guide to follow and why\n4. **Explain trade-offs**: Help user understand the implications"
+    },
+    "priority_based_resolution": {
+      "title": "Priority-Based Resolution",
+      "description": "1. **Security/Data Integrity**: Always follow strictest guidance\n2. **Project Consistency**: Follow ...",
+      "content": "1. **Security/Data Integrity**: Always follow strictest guidance\n2. **Project Consistency**: Follow established project patterns\n3. **Performance**: Use performance-focused guidance when relevant\n4. **Style**: Follow style guide unless there's a compelling reason not to"
+    },
+    "common_conflict_scenarios": {
+      "title": "Common Conflict Scenarios",
+      "description": "```\n**Scenario**: User wants to use pathlib in new code\n**Conflict**: python_style_guide specifies o...",
+      "content": "```\n**Scenario**: User wants to use pathlib in new code\n**Conflict**: python_style_guide specifies os.path preference\n**Resolution**: Follow python_style_guide - use os.path for consistency\n**Reasoning**: Project consistency takes priority over personal preference\n\n**Scenario**: User wants to use datetime.utcnow() in new code\n**Conflict**: python_style_guide specifies datetime.now(datetime.UTC)\n**Resolution**: Follow python_style_guide - use modern datetime approach\n**Reasoning**: Modern Python best practices take priority\n\n**Scenario**: User wants to use magic numbers in tests\n**Conflict**: python_style_guide prohibits magic numbers, Testing Guide shows examples\n**Resolution**: Follow python_style_guide - define constants for all magic numbers\n**Reasoning**: Consistency across all code (including tests) is important\n\n**Scenario**: User wants to use complex CSS selectors for HTML parsing\n**Conflict**: web_scraping_patterns prefer simple, semantic selectors\n**Resolution**: Follow web_scraping_patterns - use simple, resilient selectors\n**Reasoning**: Maintainability and resilience take priority over convenience\n\n**Scenario**: User wants to load configuration in each function\n**Conflict**: python_style_guide specifies loading once at module level\n**Resolution**: Follow python_style_guide - load configuration once at module level\n**Reasoning**: Performance and consistency take priority over convenience\n```"
+    },
+    "conflict_resolution_process": {
+      "title": "Conflict Resolution Process",
+      "description": "```\n1. **Identify the specific conflict** between guides\n2. **Apply the priority system**: Security ...",
+      "content": "```\n1. **Identify the specific conflict** between guides\n2. **Apply the priority system**: Security → Project Consistency → Performance → Style\n3. **Explain the reasoning** behind the recommendation\n4. **Provide specific guidance** on how to implement the preferred approach\n5. **Acknowledge trade-offs** and explain why the chosen approach is better\n```"
+    },
+    "3_context_aware_suggestions": {
+      "title": "3. Context-Aware Suggestions",
+      "description": "",
+      "content": ""
+    },
+    "file_type_context": {
+      "title": "File Type Context",
+      "description": "- **Configuration files**: Focus on clarity and maintainability\n- **Test files**: Focus on reliabili...",
+      "content": "- **Configuration files**: Focus on clarity and maintainability\n- **Test files**: Focus on reliability and coverage\n- **API files**: Focus on security and performance\n- **Utility files**: Focus on reusability and documentation"
+    },
+    "user_context": {
+      "title": "User Context",
+      "description": "- **Junior developers**: Provide more explanation and educational context\n- **Senior developers**: F...",
+      "content": "- **Junior developers**: Provide more explanation and educational context\n- **Senior developers**: Focus on technical details and trade-offs\n- **New to project**: Emphasize project-specific patterns\n- **Experienced with project**: Focus on improvements and optimizations"
+    },
+    "task_context": {
+      "title": "Task Context",
+      "description": "- **Bug fixes**: Focus on correctness and preventing regressions\n- **New features**: Focus on mainta...",
+      "content": "- **Bug fixes**: Focus on correctness and preventing regressions\n- **New features**: Focus on maintainability and future-proofing\n- **Refactoring**: Focus on consistency and established patterns\n- **Performance work**: Focus on measurable improvements"
+    },
+    "4_communication_patterns": {
+      "title": "4. Communication Patterns",
+      "description": "",
+      "content": ""
+    },
+    "positive_reinforcement": {
+      "title": "Positive Reinforcement",
+      "description": "- **Acknowledge good practices**: \"Good use of type hints here\"\n- **Recognize progress**: \"This is m...",
+      "content": "- **Acknowledge good practices**: \"Good use of type hints here\"\n- **Recognize progress**: \"This is much cleaner than the previous version\"\n- **Highlight improvements**: \"The error handling is now more robust\""
+    },
+    "constructive_criticism": {
+      "title": "Constructive Criticism",
+      "description": "- **Focus on code, not person**: \"This approach could be improved\" vs \"You're doing this wrong\"\n- **...",
+      "content": "- **Focus on code, not person**: \"This approach could be improved\" vs \"You're doing this wrong\"\n- **Provide alternatives**: Always suggest specific improvements\n- **Explain reasoning**: Help user understand why changes are beneficial"
+    },
+    "educational_moments": {
+      "title": "Educational Moments",
+      "description": "- **Explain patterns**: \"This follows the [pattern name] which is preferred because...\"\n- **Share kn...",
+      "content": "- **Explain patterns**: \"This follows the [pattern name] which is preferred because...\"\n- **Share knowledge**: \"In Python, it's better to use X because...\"\n- **Provide context**: \"This is important because it affects...\""
+    },
+    "5_handling_different_types_of_issues": {
+      "title": "5. Handling Different Types of Issues",
+      "description": "",
+      "content": ""
+    },
+    "style_violations": {
+      "title": "Style Violations",
+      "description": "```\n**Issue**: Inconsistent import organization\n**Impact**: Reduces code readability and maintainabi...",
+      "content": "```\n**Issue**: Inconsistent import organization\n**Impact**: Reduces code readability and maintainability\n**Solution**: Reorganize imports following python_style_guide order\n**Reasoning**: Consistent import organization makes code easier to scan and maintain\n```"
+    },
+    "performance_issues": {
+      "title": "Performance Issues",
+      "description": "```\n**Issue**: Redundant configuration loading in each function\n**Impact**: Unnecessary overhead and...",
+      "content": "```\n**Issue**: Redundant configuration loading in each function\n**Impact**: Unnecessary overhead and potential performance degradation\n**Solution**: Load configuration once at module level\n**Reasoning**: Reduces function call overhead and improves performance\n```"
+    },
+    "security_concerns": {
+      "title": "Security Concerns",
+      "description": "```\n**Issue**: Potential SQL injection vulnerability\n**Impact**: Security risk that could lead to da...",
+      "content": "```\n**Issue**: Potential SQL injection vulnerability\n**Impact**: Security risk that could lead to data compromise\n**Solution**: Use parameterized queries with SQLAlchemy\n**Reasoning**: Parameterized queries prevent SQL injection attacks\n```"
+    },
+    "maintainability_issues": {
+      "title": "Maintainability Issues",
+      "description": "```\n**Issue**: Duplicated logic across multiple functions\n**Impact**: Makes maintenance harder and i...",
+      "content": "```\n**Issue**: Duplicated logic across multiple functions\n**Impact**: Makes maintenance harder and increases bug risk\n**Solution**: Extract common logic into a shared function\n**Reasoning**: DRY principle reduces code duplication and maintenance burden\n```"
+    },
+    "6_review_scope_management": {
+      "title": "6. Review Scope Management",
+      "description": "",
+      "content": ""
+    },
+    "when_to_expand_scope": {
+      "title": "When to Expand Scope",
+      "description": "- **Related issues**: If fixing one issue reveals related problems\n- **Pattern violations**: If the ...",
+      "content": "- **Related issues**: If fixing one issue reveals related problems\n- **Pattern violations**: If the issue suggests a broader pattern problem\n- **User requests**: If user asks for broader review\n- **Critical issues**: If the issue affects multiple areas"
+    },
+    "when_to_stay_focused": {
+      "title": "When to Stay Focused",
+      "description": "- **User's explicit scope**: Respect user's stated boundaries\n- **Unrelated issues**: Don't suggest ...",
+      "content": "- **User's explicit scope**: Respect user's stated boundaries\n- **Unrelated issues**: Don't suggest changes outside current context\n- **Minor improvements**: Don't overwhelm with too many suggestions\n- **Future considerations**: Don't suggest premature optimizations"
+    },
+    "scope_communication": {
+      "title": "Scope Communication",
+      "description": "- **Current focus**: \"Focusing on the error handling in this function\"\n- **Related issues**: \"This a...",
+      "content": "- **Current focus**: \"Focusing on the error handling in this function\"\n- **Related issues**: \"This also affects the similar function in X\"\n- **Broader implications**: \"This pattern appears in several other files\"\n- **Future considerations**: \"Consider applying this pattern elsewhere\""
+    },
+    "7_follow_up_patterns": {
+      "title": "7. Follow-up Patterns",
+      "description": "",
+      "content": ""
+    },
+    "checking_implementation": {
+      "title": "Checking Implementation",
+      "description": "- **Verify changes**: Confirm that suggestions were implemented correctly\n- **Test integration**: En...",
+      "content": "- **Verify changes**: Confirm that suggestions were implemented correctly\n- **Test integration**: Ensure changes work with the rest of the codebase\n- **Validate assumptions**: Check that the reasoning still applies\n- **Provide feedback**: Acknowledge good implementations"
+    },
+    "iterative_improvement": {
+      "title": "Iterative Improvement",
+      "description": "- **Build on progress**: Use previous improvements as foundation\n- **Incremental suggestions**: Don'...",
+      "content": "- **Build on progress**: Use previous improvements as foundation\n- **Incremental suggestions**: Don't suggest everything at once\n- **Learning opportunities**: Help user understand patterns for future use\n- **Confidence building**: Acknowledge improvements and progress"
+    },
+    "documentation_updates": {
+      "title": "Documentation Updates",
+      "description": "- **Update guides**: If patterns evolve, update relevant guides\n- **Share learnings**: Document new ...",
+      "content": "- **Update guides**: If patterns evolve, update relevant guides\n- **Share learnings**: Document new patterns that work well\n- **Improve examples**: Update examples based on real usage\n- **Refine guidance**: Improve guidance based on user feedback"
+    },
+    "code_quality_standards": {
+      "title": "Code Quality Standards",
+      "description": "- **Readability**: Code should be self-documenting with clear variable and function names\n- **Consis...",
+      "content": "- **Readability**: Code should be self-documenting with clear variable and function names\n- **Consistency**: Follow established patterns and conventions throughout the codebase\n- **Maintainability**: Code should be easy to modify and extend without breaking existing functionality\n- **Performance**: Optimize for the specific use case while maintaining readability\n- **Security**: Follow security best practices and validate all inputs\n- **Testing**: Include comprehensive tests for all new functionality"
+    },
+    "ai_script_review_criteria": {
+      "title": "AI Script Review Criteria",
+      "description": "- **Linting Compliance**: All scripts must pass ruff, mypy, and other linting tools\n  - No E501 (lin...",
+      "content": "- **Linting Compliance**: All scripts must pass ruff, mypy, and other linting tools\n  - No E501 (line too long), B007 (unused variables), or PLR0911 (too many returns) errors\n  - Use underscore for unused loop variables (e.g., `for _ in range(1):`)\n  - Break complex functions into smaller, focused helper methods\n- **Report Generation**: Scripts should generate both human and machine-readable outputs\n  - Include Markdown reports with AI metadata and cross-references\n  - Provide JSON output for programmatic consumption\n  - Use consistent formatting and structure across all reports\n- **Error Handling**: Comprehensive error handling with detailed logging\n  - Collect errors in lists for batch reporting and analysis\n  - Provide both console output for immediate feedback and file output for persistence\n  - Include timestamps, error details, and resolution suggestions\n- **Performance**: Optimize for readability over performance in non-critical paths\n  - AI scripts are typically run infrequently, so maintainability is more important than speed\n  - Use clear, explicit logic even if it means multiple checks\n  - Prefer single return points for complex validation functions\n- **Maintainability**: Use helper methods to break down complex functions\n  - Extract complex logic into focused, well-named helper methods\n  - Use descriptive method names that clearly indicate their purpose\n  - Maintain clear separation of concerns between different functions\n- **Documentation**: Include AI metadata and cross-references in all generated content\n  - Use consistent AI metadata format across all generated reports\n  - Include bidirectional cross-references to related scripts and configuration\n  - Provide clear purpose, template version, and maintenance information\n\nThese criteria will inform AI script review and quality assurance throughout the project.\n\nAll AI scripts must meet these review criteria before being considered complete."
+    },
+    "review_process": {
+      "title": "Review Process",
+      "description": "",
+      "content": ""
+    }
+  },
+  "implementation_guidelines": {
+    "checking_implementation": {
+      "title": "Checking Implementation",
+      "content": "- **Verify changes**: Confirm that suggestions were implemented correctly\n- **Test integration**: Ensure changes work with the rest of the codebase\n- **Validate assumptions**: Check that the reasoning still applies\n- **Provide feedback**: Acknowledge good implementations"
+    }
+  }
+}

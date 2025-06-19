@@ -8,7 +8,7 @@ alwaysApply: true
 # - Project architecture and context documentation
 # - Development guides and patterns
 # - Technical summaries and decisions
-# - Domain-specific and language-specific guidelines
+# - domain_specific and language-specific guidelines
 ai/
 
 # Include key project configuration files
@@ -27,3 +27,6 @@ scripts/
 dev.md
 FEATURE_TEMPLATE.md
 cream.md
+
+# Include AI-generated outputs and reports
+ai/outputs/

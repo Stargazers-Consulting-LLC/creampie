@@ -1,0 +1,310 @@
+{
+  "metadata": {
+    "title": "Database Management Style Guide (PostgreSQL Focus)",
+    "description": "Best practices and standards for managing PostgreSQL databases in the CreamPie project",
+    "version": "1.0.0",
+    "last_updated": "2025-01-27",
+    "source": "humans/guides/database_style_guide.md",
+    "cross_references": [
+      "cream_api/db.py",
+      "cream_api/migrations/",
+      "cream_api/stock_data/models.py",
+      "cream_api/settings.py",
+      "alembic.ini"
+    ]
+  },
+  "sections": {
+    "general_principles": {
+      "title": "General Principles",
+      "description": "Core principles for database management",
+      "rules": [
+        "Use PostgreSQL as the primary RDBMS for all persistent data",
+        "Prefer declarative schema management (SQLAlchemy ORM, Alembic migrations, or raw SQL scripts tracked in VCS)",
+        "All schema changes must be version-controlled and peer-reviewed",
+        "Design for data integrity, scalability, and maintainability",
+        "Document all non-obvious schema decisions and business rules"
+      ]
+    },
+    "schema_and_table_design": {
+      "title": "Schema and Table Design",
+      "description": "Guidelines for designing database schemas and tables",
+      "rules": [
+        "Group related tables into schemas if the project grows large (e.g., 'public', 'analytics', 'auth')",
+        "Prefer narrow tables (fewer columns) and normalized design for transactional data",
+        "Always prefer a UUIDv4 (uuid_generate_v4() or gen_random_uuid()) over an integer ID for primary keys",
+        "Use surrogate primary keys (e.g., SERIAL, BIGSERIAL, or UUID) unless a natural key is clearly superior",
+        "Always define primary keys for every table",
+        "Use foreign keys to enforce referential integrity",
+        "Use NOT NULL constraints wherever possible",
+        "Avoid storing redundant or denormalized data unless justified for performance",
+        "Use check constraints for domain validation (e.g., CHECK (status IN ('active', 'inactive')))"
+      ],
+      "primary_key_guidance": {
+        "preferred": "UUIDv4 with gen_random_uuid()",
+        "example": "id UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+        "rationale": "UUIDs provide better security, avoid enumeration attacks, and work well in distributed systems"
+      }
+    },
+    "naming_conventions": {
+      "title": "Naming Conventions",
+      "description": "Standard naming patterns for database objects",
+      "general_rule": "Use lowercase with underscores for all identifiers (tables, columns, indexes, constraints)",
+      "specific_patterns": {
+        "table_names": {
+          "pattern": "plural nouns",
+          "examples": ["users", "orders", "stock_data"]
+        },
+        "column_names": {
+          "pattern": "singular, descriptive",
+          "examples": ["user_id", "created_at", "status"]
+        },
+        "primary_key": {
+          "pattern": "id or <table>_id",
+          "example": "user_id in users table"
+        },
+        "foreign_key": {
+          "pattern": "<referenced_table>_id",
+          "example": "user_id in orders"
+        },
+        "indexes": {
+          "pattern": "idx_<table>_<column1>_<column2>",
+          "example": "idx_users_email"
+        },
+        "unique_constraints": {
+          "pattern": "uq_<table>_<column1>_<column2>",
+          "example": "uq_users_email"
+        },
+        "check_constraints": {
+          "pattern": "ck_<table>_<description>",
+          "example": "ck_users_status_valid"
+        },
+        "foreign_key_constraints": {
+          "pattern": "fk_<fromtable>_<totable>",
+          "example": "fk_orders_users"
+        },
+        "sequences": {
+          "pattern": "seq_<table>_<column>",
+          "example": "seq_users_id"
+        }
+      }
+    },
+    "data_types_and_constraints": {
+      "title": "Data Types and Constraints",
+      "description": "Guidelines for choosing appropriate data types and constraints",
+      "data_type_rules": [
+        "Use the most specific data type possible (e.g., INTEGER for counts, BOOLEAN for flags, TIMESTAMP WITH TIME ZONE for times)",
+        "Use UUID for distributed or public-facing identifiers",
+        "Use TEXT for variable-length strings, VARCHAR(n) only if you must enforce a length",
+        "Use NUMERIC for monetary values (never FLOAT or REAL)",
+        "Use BOOLEAN for true/false fields",
+        "Use ARRAY, JSONB, or ENUM types only when justified"
+      ],
+      "constraint_rules": [
+        "Always specify DEFAULT values for columns where appropriate",
+        "Use CHECK constraints for value validation"
+      ],
+      "type_examples": {
+        "uuid": "UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+        "text": "TEXT NOT NULL",
+        "varchar": "VARCHAR(255) NOT NULL",
+        "numeric": "NUMERIC(10,2) NOT NULL",
+        "boolean": "BOOLEAN NOT NULL DEFAULT false",
+        "timestamp": "TIMESTAMPTZ NOT NULL DEFAULT now()",
+        "integer": "INTEGER NOT NULL",
+        "jsonb": "JSONB"
+      }
+    },
+    "indexing_and_performance": {
+      "title": "Indexing and Performance",
+      "description": "Best practices for database indexing and performance optimization",
+      "indexing_rules": [
+        "Always index primary and foreign keys",
+        "Add indexes for columns frequently used in WHERE, ORDER BY, or JOIN clauses",
+        "Use multi-column indexes for common query patterns",
+        "Avoid over-indexing; each index adds write overhead",
+        "Use EXPLAIN to analyze query plans and optimize as needed",
+        "Consider partial indexes for sparse data",
+        "Use UNIQUE indexes to enforce business rules"
+      ],
+      "performance_tips": [
+        "Use EXPLAIN ANALYZE to understand query performance",
+        "Monitor slow queries and optimize them",
+        "Use appropriate data types to minimize storage",
+        "Consider partitioning for large tables",
+        "Use connection pooling for application connections"
+      ],
+      "index_examples": {
+        "single_column": "CREATE INDEX idx_users_email ON users(email);",
+        "multi_column": "CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);",
+        "unique": "CREATE UNIQUE INDEX uq_users_email ON users(email);",
+        "partial": "CREATE INDEX idx_users_active ON users(email) WHERE status = 'active';"
+      }
+    },
+    "migrations_and_versioning": {
+      "title": "Migrations and Versioning",
+      "description": "Guidelines for managing database schema changes",
+      "migration_rules": [
+        "Use Alembic (or similar) for schema migrations; never edit the database schema manually in production",
+        "Each migration should be atomic and reversible",
+        "Name migration scripts descriptively (e.g., '20250127_add_user_status_column.py')",
+        "Test migrations on a staging or local environment before applying to production",
+        "Keep migration history in version control"
+      ],
+      "migration_best_practices": [
+        "Always include both upgrade() and downgrade() functions",
+        "Use server_default for default values in migrations",
+        "Test migrations on a copy of production data",
+        "Document complex migrations with comments",
+        "Use transactions for multi-step migrations"
+      ],
+      "alembic_examples": {
+        "add_column": {
+          "upgrade": "op.add_column('users', sa.Column('status', sa.Text(), nullable=False, server_default='active'))",
+          "downgrade": "op.drop_column('users', 'status')"
+        },
+        "add_index": {
+          "upgrade": "op.create_index('idx_users_email', 'users', ['email'])",
+          "downgrade": "op.drop_index('idx_users_email', 'users')"
+        },
+        "add_foreign_key": {
+          "upgrade": "op.create_foreign_key('fk_orders_users', 'orders', 'users', ['user_id'], ['id'])",
+          "downgrade": "op.drop_constraint('fk_orders_users', 'orders', type_='foreignkey')"
+        }
+      }
+    },
+    "security_and_access_control": {
+      "title": "Security and Access Control",
+      "description": "Security best practices for database management",
+      "security_rules": [
+        "Use least-privilege principle for database users/roles",
+        "Never use superuser or admin accounts for application connections",
+        "Store credentials securely (e.g., environment variables, secrets manager)",
+        "Use SSL/TLS for all database connections",
+        "Restrict network access to the database (firewall, VPC, etc.)",
+        "Regularly audit user privileges and revoke unused accounts",
+        "Use row-level security (RLS) if needed for multi-tenant data"
+      ],
+      "access_control_patterns": {
+        "application_user": "CREATE USER app_user WITH PASSWORD 'secure_password';",
+        "read_only_user": "CREATE USER readonly_user WITH PASSWORD 'secure_password';",
+        "grant_permissions": "GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_user;",
+        "revoke_permissions": "REVOKE ALL ON ALL TABLES IN SCHEMA public FROM readonly_user;"
+      },
+      "ssl_configuration": {
+        "postgresql_conf": "ssl = on\nssl_cert_file = '/path/to/server.crt'\nssl_key_file = '/path/to/server.key'",
+        "connection_string": "postgresql://user:pass@host:port/db?sslmode=require"
+      }
+    },
+    "backup_and_recovery": {
+      "title": "Backup and Recovery",
+      "description": "Guidelines for database backup and disaster recovery",
+      "backup_rules": [
+        "Schedule regular automated backups (e.g., pg_dump, managed service snapshots)",
+        "Test restore procedures regularly",
+        "Store backups securely and offsite if possible",
+        "Document backup and recovery procedures",
+        "Monitor backup job success/failure"
+      ],
+      "backup_methods": {
+        "pg_dump": "pg_dump -h localhost -U username -d database_name > backup.sql",
+        "pg_dump_custom": "pg_dump -h localhost -U username -d database_name -Fc > backup.dump",
+        "pg_dumpall": "pg_dumpall -h localhost -U username > all_databases.sql"
+      },
+      "restore_methods": {
+        "sql_restore": "psql -h localhost -U username -d database_name < backup.sql",
+        "custom_restore": "pg_restore -h localhost -U username -d database_name backup.dump",
+        "all_databases": "psql -h localhost -U username < all_databases.sql"
+      },
+      "backup_scheduling": {
+        "daily": "0 2 * * * pg_dump -h localhost -U username -d database_name > /backups/daily_$(date +%Y%m%d).sql",
+        "weekly": "0 3 * * 0 pg_dump -h localhost -U username -d database_name > /backups/weekly_$(date +%Y%m%d).sql"
+      }
+    },
+    "testing_and_local_development": {
+      "title": "Testing and Local Development",
+      "description": "Guidelines for database testing and development environments",
+      "development_rules": [
+        "Use a separate database for development and testing",
+        "Use fixtures or factories to seed test data",
+        "Run migrations as part of test setup",
+        "Use transaction rollbacks to isolate tests",
+        "Use in-memory or temporary databases for fast unit tests when possible",
+        "Never run destructive tests against production data"
+      ],
+      "test_database_setup": {
+        "sqlite_in_memory": "sqlite+aiosqlite:///:memory:",
+        "postgresql_test": "postgresql+psycopg://test_user:test_pass@localhost/test_db",
+        "docker_postgres": "docker run --name test-postgres -e POSTGRES_PASSWORD=test -e POSTGRES_DB=test_db -p 5433:5432 -d postgres:15"
+      },
+      "test_data_patterns": {
+        "fixtures": "Use pytest fixtures to create test data",
+        "factories": "Use factory_boy or similar for generating test data",
+        "seeding": "Use seed scripts for consistent test data"
+      }
+    }
+  },
+  "example_patterns": {
+    "table_definitions": {
+      "users_table": "CREATE TABLE users (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    email TEXT NOT NULL UNIQUE,\n    password_hash TEXT NOT NULL,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    status TEXT NOT NULL DEFAULT 'active',\n    CHECK (status IN ('active', 'inactive', 'banned'))\n);",
+      "orders_table": "CREATE TABLE orders (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,\n    total NUMERIC(10,2) NOT NULL,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);",
+      "stock_data_table": "CREATE TABLE stock_data (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    symbol TEXT NOT NULL,\n    date DATE NOT NULL,\n    open NUMERIC(10,4) NOT NULL,\n    high NUMERIC(10,4) NOT NULL,\n    low NUMERIC(10,4) NOT NULL,\n    close NUMERIC(10,4) NOT NULL,\n    volume INTEGER NOT NULL,\n    UNIQUE(symbol, date)\n);"
+    },
+    "indexes": {
+      "single_column": "CREATE INDEX idx_users_email ON users(email);",
+      "multi_column": "CREATE INDEX idx_orders_user_date ON orders(user_id, created_at DESC);",
+      "unique": "CREATE UNIQUE INDEX uq_users_email ON users(email);",
+      "partial": "CREATE INDEX idx_users_active ON users(email) WHERE status = 'active';"
+    },
+    "constraints": {
+      "check_constraint": "ALTER TABLE users ADD CONSTRAINT ck_users_status_valid CHECK (status IN ('active', 'inactive', 'banned'));",
+      "foreign_key": "ALTER TABLE orders ADD CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;",
+      "unique_constraint": "ALTER TABLE users ADD CONSTRAINT uq_users_email UNIQUE (email);"
+    },
+    "alembic_migrations": {
+      "add_column": "# 20250127_add_user_status_column.py\nfrom alembic import op\nimport sqlalchemy as sa\n\ndef upgrade():\n    op.add_column('users', sa.Column('status', sa.Text(), nullable=False, server_default='active'))\n\ndef downgrade():\n    op.drop_column('users', 'status')",
+      "add_index": "# 20250127_add_user_email_index.py\nfrom alembic import op\n\ndef upgrade():\n    op.create_index('idx_users_email', 'users', ['email'])\n\ndef downgrade():\n    op.drop_index('idx_users_email', 'users')",
+      "add_foreign_key": "# 20250127_add_orders_user_fk.py\nfrom alembic import op\n\ndef upgrade():\n    op.create_foreign_key('fk_orders_users', 'orders', 'users', ['user_id'], ['id'])\n\ndef downgrade():\n    op.drop_constraint('fk_orders_users', 'orders', type_='foreignkey')"
+    }
+  },
+  "sqlalchemy_patterns": {
+    "model_definitions": {
+      "base_model": "from sqlalchemy.orm import Mapped, mapped_column\nfrom sqlalchemy import String, DateTime, Boolean, Numeric\nfrom datetime import datetime\nimport uuid\n\nclass User(ModelBase):\n    __tablename__ = 'users'\n    \n    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)\n    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)\n    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)\n    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)",
+      "with_relationships": "class Order(ModelBase):\n    __tablename__ = 'orders'\n    \n    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)\n    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)\n    total: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)\n    \n    user: Mapped['User'] = relationship('User', back_populates='orders')"
+    },
+    "query_patterns": {
+      "select_with_join": "stmt = select(Order).join(User).where(User.email == 'user@example.com')",
+      "select_with_filter": "stmt = select(User).where(User.is_active == True)",
+      "select_with_order": "stmt = select(Order).order_by(Order.created_at.desc())",
+      "select_with_limit": "stmt = select(User).limit(10).offset(20)"
+    }
+  },
+  "implementation_guidelines": {
+    "for_developers": [
+      "Always use UUIDv4 for primary keys",
+      "Define appropriate indexes for query performance",
+      "Use foreign keys to maintain referential integrity",
+      "Write reversible migrations",
+      "Test migrations on staging before production",
+      "Use appropriate data types for each column",
+      "Document complex schema decisions",
+      "Use transactions for multi-step operations"
+    ],
+    "quality_checklist": [
+      "All tables have primary keys",
+      "Foreign keys are properly defined",
+      "Appropriate indexes are created",
+      "Data types are correctly chosen",
+      "Constraints are in place for data validation",
+      "Migrations are tested and reversible",
+      "Security measures are implemented",
+      "Backup procedures are documented"
+    ],
+    "code_review_standards": {
+      "schema_design": "Review table structure for normalization and efficiency",
+      "migrations": "Ensure migrations are atomic and reversible",
+      "performance": "Verify appropriate indexes are created",
+      "security": "Check that proper access controls are in place",
+      "data_integrity": "Confirm constraints and foreign keys are defined"
+    }
+  }
+}

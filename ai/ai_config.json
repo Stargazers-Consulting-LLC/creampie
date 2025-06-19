@@ -6,7 +6,7 @@
     "documentation_format": "json",
     "optimization_target": "ai_tool_consumption",
     "maintenance_scripts": [
-      "scripts/health_check.py",
+      "scripts/ai_health_check.py",
       "scripts/update_documentation.py",
       "scripts/test_paths.py",
       "scripts/convert_to_json.py"
@@ -16,34 +16,34 @@
     "format": "json",
     "optimization": "ai_tool_consumption",
     "core_documents": [
-      "README.json",
+      "readme.json",
       "ai_quick_reference.json",
       "search_index.json",
       "ai_usage_guide.json"
     ],
     "guide_docs": {
       "core": [
-        "Core Principles.json",
-        "Feature Template.json",
-        "Code Review Patterns.json",
-        "AI Tool Optimization Guide.json"
+        "core_principles.json",
+        "feature_template.json",
+        "code_review_patterns.json",
+        "ai_tool_optimization_guide.json"
       ],
       "language_specific": [
-        "Language-Specific/Python Style Guide.json",
-        "Language-Specific/FastAPI Development Guide.json",
-        "Language-Specific/Python Testing Guide.json"
+        "Language-Specific/python_style_guide.json",
+        "Language-Specific/fastapi_development_guide.json",
+        "Language-Specific/python_testing_guide.json"
       ],
       "domain_specific": [
-        "Domain-Specific/Database Management Guide.json",
-        "Domain-Specific/Frontend Style Guide.json",
-        "Domain-Specific/Shell Style Guide.json",
-        "Domain-Specific/Web Scraping Patterns.json"
+        "domain_specific/database_management_guide.json",
+        "domain_specific/frontend_style_guide.json",
+        "domain_specific/shell_style_guide.json",
+        "domain_specific/web_scraping_patterns.json"
       ]
     },
     "project_context": [
-      "Architecture Overview.json",
-      "Common Patterns.json",
-      "Development Workflow.json"
+      "architecture_overview.json",
+      "common_patterns.json",
+      "development_workflow.json"
     ],
     "features": {
       "plans": "features/plans/",
@@ -84,25 +84,25 @@
   },
   "priority_system": {
     "high_priority": [
-      "Core Principles.json",
-      "Python Style Guide.json",
-      "Architecture Overview.json"
+      "core_principles.json",
+      "python_style_guide.json",
+      "architecture_overview.json"
     ],
     "medium_priority": [
-      "Feature Template.json",
-      "Development Workflow.json",
-      "Database Management Guide.json"
+      "feature_template.json",
+      "development_workflow.json",
+      "database_management_guide.json"
     ],
     "low_priority": [
-      "AI Tool Optimization Guide.json",
-      "Web Scraping Patterns.json"
+      "ai_tool_optimization_guide.json",
+      "web_scraping_patterns.json"
     ]
   },
   "decision_frameworks": {
-    "architecture_decisions": "Core Principles.json",
-    "coding_standards": "Python Style Guide.json",
-    "testing_approaches": "Python Testing Guide.json",
-    "api_design": "FastAPI Development Guide.json"
+    "architecture_decisions": "core_principles.json",
+    "coding_standards": "python_style_guide.json",
+    "testing_approaches": "python_testing_guide.json",
+    "api_design": "fastapi_development_guide.json"
   },
   "documentation": {
     "template_version": "3.0",
@@ -119,14 +119,14 @@
     "documentation": "JSON-optimized for AI consumption"
   },
   "templates": {
-    "feature_documentation": "Feature Template.json",
-    "code_review": "Code Review Patterns.json",
+    "feature_documentation": "feature_template.json",
+    "code_review": "code_review_patterns.json",
     "ai_metadata": "standardized JSON format across all documents"
   },
   "scripts": {
     "health_check": {
       "purpose": "validate documentation quality and completeness",
-      "output": "outputs/health_check/healthcheck-result.md"
+      "output": "outputs/health_check/healthcheck-result.json"
     },
     "update_documentation": {
       "purpose": "maintain consistency and update metadata",

@@ -1,368 +1,182 @@
 {
-  "ai_metadata": {
-    "purpose": "",
-    "last_updated": "",
-    "template_version": "2.1",
-    "ai_tool_compatibility": "",
-    "ai_processing_level": "High",
-    "required_context": "Basic project understanding",
-    "validation_required": "Yes",
-    "code_generation": "Supported",
-    "cross_references": [],
-    "maintenance": ""
+  "metadata": {
+    "title": "AI Quick Reference",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "ai_quick_reference.md",
+    "cross_references": []
   },
-  "file_info": {
-    "file_path": "ai_quick_reference.md",
-    "original_format": "markdown",
-    "converted_at": "2025-06-18T19:14:30.243526",
-    "file_size": 7529,
-    "line_count": 207,
-    "optimized_at": "2025-06-18T19:19:47.724895",
-    "optimization_version": "1.0"
-  },
-  "content": {
-    "sections": [
-      {
-        "level": 1,
-        "title": "AI Quick Reference",
-        "content": "> This quick reference provides immediate access to common patterns, templates, and best practices for AI-assisted development. Use this for rapid implementation guidance.",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "AI Metadata",
-        "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Basic project understanding\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Keywords:** quick reference, patterns, navigation, decision making, code generation",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "🚀 Immediate Actions",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "User Request → Guide Selection",
-        "content": "- **\"Code review\"** → `guide_docs/Code Review Patterns.json.replace(\".json\", \".json\")` + Language guides\n- **\"New feature\"** → `guide_docs/Feature Template.json.replace(\".json\", \".json\")` + Architecture Overview\n- **\"Fix error\"** → `guide_docs/Core Principles.json.replace(\".json\", \".json\")` + Language guides\n- **\"Optimize\"** → `guide_docs/Core Principles.json.replace(\".json\", \".json\")` + Performance patterns\n- **\"Best practice\"** → `guide_docs/Core Principles.json.replace(\".json\", \".json\")` + Domain guides",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Priority System (Always Apply)",
-        "content": "1. **Critical**: Security, data integrity, breaking changes\n2. **High**: Style violations, performance, maintainability\n3. **Medium**: Code organization, documentation, optimizations\n4. **Low**: Preferences, cosmetics, future-proofing",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "📁 Essential Navigation",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Core Documents",
-        "content": "- **Decision Framework**: `guide_docs/Core Principles.json.replace(\".json\", \".json\")`\n- **Architecture**: `project_context/Architecture Overview.json.replace(\".json\", \".json\")`\n- **Patterns**: `project_context/Common Patterns.json.replace(\".json\", \".json\")`\n- **Workflow**: `project_context/Development Workflow.json.replace(\".json\", \".json\")`",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Language Guides",
-        "content": "- **Python**: `guide_docs/Language-Specific/Python Style Guide.json.replace(\".json\", \".json\")`\n- **FastAPI**: `guide_docs/Language-Specific/FastAPI Development Guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/Python Testing Guide.json.replace(\".json\", \".json\")`",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Domain Guides",
-        "content": "- **Database**: `guide_docs/Domain-Specific/Database Management Guide.json.replace(\".json\", \".json\")`\n- **Frontend**: `guide_docs/Domain-Specific/Frontend Style Guide.json.replace(\".json\", \".json\")`\n- **Web Scraping**: `guide_docs/Domain-Specific/Web Scraping Patterns.json.replace(\".json\", \".json\")`\n- **Shell**: `guide_docs/Domain-Specific/Shell Style Guide.json.replace(\".json\", \".json\")`",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Templates & Tools",
-        "content": "- **Feature Template**: `guide_docs/Feature Template.json.replace(\".json\", \".json\")`\n- **Search Index**: `search_index.json.replace(\".json\", \".json\")`\n- **AI Optimization**: `guide_docs/AI Tool Optimization Guide.json.replace(\".json\", \".json\")`",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "🔧 Common Patterns",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Code Generation Hints Format",
-        "content": "```markdown\n[Specific implementation guidance]\n[How to verify correctness]\n```",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Error Handling Pattern",
-        "content": "```python\ntry:\n    # Operation\n    result = perform_operation()\nexcept SpecificError as e:\n    # Handle specific error\n    logger.error(f\"Specific error: {e}\")\n    raise CustomError(\"User-friendly message\")\nexcept Exception as e:\n    # Handle unexpected errors\n    logger.error(f\"Unexpected error: {e}\")\n    raise GeneralError(\"Something went wrong\")\n```",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "API Endpoint Pattern",
-        "content": "```python\n@router.post(\"/endpoint\")\n@requires_auth\nasync def endpoint_name(\n    request: RequestSchema,\n    current_user: AppUser = Depends(get_current_user)\n) -> ResponseSchema:\n    try:\n        # Business logic\n        result = await process_request(request, current_user)\n        return ResponseSchema(data=result)\n    except ValidationError as e:\n        raise HTTPException(status_code=400, detail=str(e))\n    except NotFoundError as e:\n        raise HTTPException(status_code=404, detail=str(e))\n```",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Database Model Pattern",
-        "content": "```python\nclass ModelName(Base):\n    __tablename__ = \"table_name\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    created_at = Column(DateTime, default=datetime.utcnow)\n    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\n    # Relationships\n    user_id = Column(Integer, ForeignKey(\"users.id\"))\n    user = relationship(\"AppUser\", back_populates=\"models\")\n```",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "🎯 Decision Frameworks",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "When to Refactor vs. New Code",
-        "content": "- **Refactor**: Existing code with style violations, minor bugs, improvements\n- **New Code**: Feature doesn't exist, major architectural changes, explicit request",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "When to Be Strict vs. Flexible",
-        "content": "- **Strict**: Security, data integrity, critical business logic, project patterns\n- **Flexible**: Style preferences, minor optimizations, personal habits",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Context Awareness",
-        "content": "- **File context**: What file they're working in\n- **Task context**: What they're trying to accomplish\n- **Project context**: Overall architecture and constraints\n- **User context**: Experience level and preferences",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "📋 Quality Checklist",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Before Providing Code",
-        "content": "- [ ] Check Core Principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Before Making Suggestions",
-        "content": "- [ ] Understand user's current context\n- [ ] Identify appropriate priority level\n- [ ] Reference existing patterns\n- [ ] Explain reasoning clearly\n- [ ] Provide actionable guidance\n- [ ] Consider user's experience level",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "🔍 Quick Search",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "By Technology",
-        "content": "- **Python**: `guide_docs/Language-Specific/Python Style Guide.json.replace(\".json\", \".json\")`\n- **FastAPI**: `guide_docs/Language-Specific/FastAPI Development Guide.json.replace(\".json\", \".json\")`\n- **React**: `guide_docs/Domain-Specific/Frontend Style Guide.json.replace(\".json\", \".json\")`\n- **Database**: `guide_docs/Domain-Specific/Database Management Guide.json.replace(\".json\", \".json\")`",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "By Problem Type",
-        "content": "- **Performance**: `guide_docs/Core Principles.json.replace(\".json\", \".json\")` → Performance section\n- **Security**: `guide_docs/Core Principles.json.replace(\".json\", \".json\")` → Security section\n- **Testing**: `guide_docs/Language-Specific/Python Testing Guide.json.replace(\".json\", \".json\")`\n- **Error Handling**: `guide_docs/Core Principles.json.replace(\".json\", \".json\")` → Error handling section",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "By Task Type",
-        "content": "- **API Development**: FastAPI Guide + Database Guide + Testing Guide\n- **Frontend**: Frontend Guide + API integration patterns\n- **Database**: Database Guide + Migration patterns\n- **Automation**: Shell Guide + Background task patterns",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "🚨 Emergency Patterns",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "When User is Stuck",
-        "content": "1. **Acknowledge the issue** - Show understanding\n2. **Ask clarifying questions** - Get more context\n3. **Provide step-by-step guidance** - Break down the problem\n4. **Reference relevant documentation** - Point to specific guides\n5. **Offer alternatives** - Suggest different approaches",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "When Guides Conflict",
-        "content": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Security → Project Consistency → Performance → Style\n3. **Explain trade-offs** - Help user understand implications\n4. **Recommend approach** - Suggest best path forward",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "When Code Doesn't Work",
-        "content": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches",
-        "subsections": []
-      },
-      {
-        "level": 2,
-        "title": "📞 Communication Patterns",
-        "content": "",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Positive Feedback",
-        "content": "- \"Great approach! This follows our established patterns.\"\n- \"Excellent use of error handling here.\"\n- \"This is exactly the right pattern for this situation.\"",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Constructive Criticism",
-        "content": "- \"Consider using [pattern] for better [benefit].\"\n- \"This could be improved by [specific suggestion].\"\n- \"Let's follow our established pattern for [aspect].\"",
-        "subsections": []
-      },
-      {
-        "level": 3,
-        "title": "Educational Guidance",
-        "content": "- \"Here's why we use this pattern: [explanation].\"\n- \"This follows our [principle] because [reasoning].\"\n- \"For future reference, you can find this pattern in [guide].\"\n\n---\n\n**Remember**: Always maintain context awareness, follow established patterns, and prioritize user success over perfect code.",
-        "subsections": []
-      }
-    ],
-    "code_blocks": [
-      {
-        "language": "markdown",
-        "code": "[Specific implementation guidance]\n[How to verify correctness]"
-      },
-      {
-        "language": "python",
-        "code": "try:\n    # Operation\n    result = perform_operation()\nexcept SpecificError as e:\n    # Handle specific error\n    logger.error(f\"Specific error: {e}\")\n    raise CustomError(\"User-friendly message\")\nexcept Exception as e:\n    # Handle unexpected errors\n    logger.error(f\"Unexpected error: {e}\")\n    raise GeneralError(\"Something went wrong\")"
-      },
-      {
-        "language": "python",
-        "code": "@router.post(\"/endpoint\")\n@requires_auth\nasync def endpoint_name(\n    request: RequestSchema,\n    current_user: AppUser = Depends(get_current_user)\n) -> ResponseSchema:\n    try:\n        # Business logic\n        result = await process_request(request, current_user)\n        return ResponseSchema(data=result)\n    except ValidationError as e:\n        raise HTTPException(status_code=400, detail=str(e))\n    except NotFoundError as e:\n        raise HTTPException(status_code=404, detail=str(e))"
-      },
-      {
-        "language": "python",
-        "code": "class ModelName(Base):\n    __tablename__ = \"table_name\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    created_at = Column(DateTime, default=datetime.utcnow)\n    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\n    # Relationships\n    user_id = Column(Integer, ForeignKey(\"users.id\"))\n    user = relationship(\"AppUser\", back_populates=\"models\")"
-      }
-    ],
-    "links": [
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Code Review Patterns.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Feature Template.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Core Principles.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Core Principles.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Core Principles.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Core Principles.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "project_context/Architecture Overview.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "project_context/Common Patterns.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "project_context/Development Workflow.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Language-Specific/Python Style Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Language-Specific/FastAPI Development Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Language-Specific/Python Testing Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Domain-Specific/Database Management Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Domain-Specific/Frontend Style Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Domain-Specific/Web Scraping Patterns.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Domain-Specific/Shell Style Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/Feature Template.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "search_index.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "guide_docs/AI Tool Optimization Guide.md"
-      },
-      {
-        "type": "code_reference",
-        "text": "python\ntry:\n    # Operation\n    result = perform_operation()\nexcept SpecificError as e:\n    # Handle specific error\n    logger.error(f\"Specific error: {e}\")\n    raise CustomError(\"User-friendly message\")\nexcept Exception as e:\n    # Handle unexpected errors\n    logger.error(f\"Unexpected error: {e}\")\n    raise GeneralError(\"Something went wrong\")\n"
-      },
-      {
-        "type": "code_reference",
-        "text": "python\n@router.post(\"/endpoint\")\n@requires_auth\nasync def endpoint_name(\n    request: RequestSchema,\n    current_user: AppUser = Depends(get_current_user)\n) -> ResponseSchema:\n    try:\n        # Business logic\n        result = await process_request(request, current_user)\n        return ResponseSchema(data=result)\n    except ValidationError as e:\n        raise HTTPException(status_code=400, detail=str(e))\n    except NotFoundError as e:\n        raise HTTPException(status_code=404, detail=str(e))\n"
-      },
-      {
-        "type": "code_reference",
-        "text": "python\nclass ModelName(Base):\n    __tablename__ = \"table_name\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    created_at = Column(DateTime, default=datetime.utcnow)\n    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\n    # Relationships\n    user_id = Column(Integer, ForeignKey(\"users.id\"))\n    user = relationship(\"AppUser\", back_populates=\"models\")\n"
-      },
-      {
-        "type": "code_reference",
-        "text": "\n\n## 🎯 Decision Frameworks\n\n### When to Refactor vs. New Code\n- **Refactor**: Existing code with style violations, minor bugs, improvements\n- **New Code**: Feature doesn't exist, major architectural changes, explicit request\n\n### When to Be Strict vs. Flexible\n- **Strict**: Security, data integrity, critical business logic, project patterns\n- **Flexible**: Style preferences, minor optimizations, personal habits\n\n### Context Awareness\n- **File context**: What file they're working in\n- **Task context**: What they're trying to accomplish\n- **Project context**: Overall architecture and constraints\n- **User context**: Experience level and preferences\n\n## 📋 Quality Checklist\n\n### Before Providing Code\n- [ ] Check Core Principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices\n\n### Before Making Suggestions\n- [ ] Understand user's current context\n- [ ] Identify appropriate priority level\n- [ ] Reference existing patterns\n- [ ] Explain reasoning clearly\n- [ ] Provide actionable guidance\n- [ ] Consider user's experience level\n\n## 🔍 Quick Search\n\n### By Technology\n- **Python**: "
-      }
-    ],
-    "raw_content": "# AI Quick Reference\n\n> This quick reference provides immediate access to common patterns, templates, and best practices for AI-assisted development. Use this for rapid implementation guidance.\n\n## AI Metadata\n\n**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Basic project understanding\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Keywords:** quick reference, patterns, navigation, decision making, code generation\n\n## 🚀 Immediate Actions\n\n### User Request → Guide Selection\n- **\"Code review\"** → `guide_docs/Code Review Patterns.md` + Language guides\n- **\"New feature\"** → `guide_docs/Feature Template.md` + Architecture Overview\n- **\"Fix error\"** → `guide_docs/Core Principles.md` + Language guides\n- **\"Optimize\"** → `guide_docs/Core Principles.md` + Performance patterns\n- **\"Best practice\"** → `guide_docs/Core Principles.md` + Domain guides\n\n### Priority System (Always Apply)\n1. **Critical**: Security, data integrity, breaking changes\n2. **High**: Style violations, performance, maintainability\n3. **Medium**: Code organization, documentation, optimizations\n4. **Low**: Preferences, cosmetics, future-proofing\n\n## 📁 Essential Navigation\n\n### Core Documents\n- **Decision Framework**: `guide_docs/Core Principles.md`\n- **Architecture**: `project_context/Architecture Overview.md`\n- **Patterns**: `project_context/Common Patterns.md`\n- **Workflow**: `project_context/Development Workflow.md`\n\n### Language Guides\n- **Python**: `guide_docs/Language-Specific/Python Style Guide.md`\n- **FastAPI**: `guide_docs/Language-Specific/FastAPI Development Guide.md`\n- **Testing**: `guide_docs/Language-Specific/Python Testing Guide.md`\n\n### Domain Guides\n- **Database**: `guide_docs/Domain-Specific/Database Management Guide.md`\n- **Frontend**: `guide_docs/Domain-Specific/Frontend Style Guide.md`\n- **Web Scraping**: `guide_docs/Domain-Specific/Web Scraping Patterns.md`\n- **Shell**: `guide_docs/Domain-Specific/Shell Style Guide.md`\n\n### Templates & Tools\n- **Feature Template**: `guide_docs/Feature Template.md`\n- **Search Index**: `search_index.md`\n- **AI Optimization**: `guide_docs/AI Tool Optimization Guide.md`\n\n## 🔧 Common Patterns\n\n### Code Generation Hints Format\n```markdown\n[Specific implementation guidance]\n[How to verify correctness]\n```\n\n### Error Handling Pattern\n```python\ntry:\n    # Operation\n    result = perform_operation()\nexcept SpecificError as e:\n    # Handle specific error\n    logger.error(f\"Specific error: {e}\")\n    raise CustomError(\"User-friendly message\")\nexcept Exception as e:\n    # Handle unexpected errors\n    logger.error(f\"Unexpected error: {e}\")\n    raise GeneralError(\"Something went wrong\")\n```\n\n### API Endpoint Pattern\n```python\n@router.post(\"/endpoint\")\n@requires_auth\nasync def endpoint_name(\n    request: RequestSchema,\n    current_user: AppUser = Depends(get_current_user)\n) -> ResponseSchema:\n    try:\n        # Business logic\n        result = await process_request(request, current_user)\n        return ResponseSchema(data=result)\n    except ValidationError as e:\n        raise HTTPException(status_code=400, detail=str(e))\n    except NotFoundError as e:\n        raise HTTPException(status_code=404, detail=str(e))\n```\n\n### Database Model Pattern\n```python\nclass ModelName(Base):\n    __tablename__ = \"table_name\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    created_at = Column(DateTime, default=datetime.utcnow)\n    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\n    # Relationships\n    user_id = Column(Integer, ForeignKey(\"users.id\"))\n    user = relationship(\"AppUser\", back_populates=\"models\")\n```\n\n## 🎯 Decision Frameworks\n\n### When to Refactor vs. New Code\n- **Refactor**: Existing code with style violations, minor bugs, improvements\n- **New Code**: Feature doesn't exist, major architectural changes, explicit request\n\n### When to Be Strict vs. Flexible\n- **Strict**: Security, data integrity, critical business logic, project patterns\n- **Flexible**: Style preferences, minor optimizations, personal habits\n\n### Context Awareness\n- **File context**: What file they're working in\n- **Task context**: What they're trying to accomplish\n- **Project context**: Overall architecture and constraints\n- **User context**: Experience level and preferences\n\n## 📋 Quality Checklist\n\n### Before Providing Code\n- [ ] Check Core Principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices\n\n### Before Making Suggestions\n- [ ] Understand user's current context\n- [ ] Identify appropriate priority level\n- [ ] Reference existing patterns\n- [ ] Explain reasoning clearly\n- [ ] Provide actionable guidance\n- [ ] Consider user's experience level\n\n## 🔍 Quick Search\n\n### By Technology\n- **Python**: `guide_docs/Language-Specific/Python Style Guide.md`\n- **FastAPI**: `guide_docs/Language-Specific/FastAPI Development Guide.md`\n- **React**: `guide_docs/Domain-Specific/Frontend Style Guide.md`\n- **Database**: `guide_docs/Domain-Specific/Database Management Guide.md`\n\n### By Problem Type\n- **Performance**: `guide_docs/Core Principles.md` → Performance section\n- **Security**: `guide_docs/Core Principles.md` → Security section\n- **Testing**: `guide_docs/Language-Specific/Python Testing Guide.md`\n- **Error Handling**: `guide_docs/Core Principles.md` → Error handling section\n\n### By Task Type\n- **API Development**: FastAPI Guide + Database Guide + Testing Guide\n- **Frontend**: Frontend Guide + API integration patterns\n- **Database**: Database Guide + Migration patterns\n- **Automation**: Shell Guide + Background task patterns\n\n## 🚨 Emergency Patterns\n\n### When User is Stuck\n1. **Acknowledge the issue** - Show understanding\n2. **Ask clarifying questions** - Get more context\n3. **Provide step-by-step guidance** - Break down the problem\n4. **Reference relevant documentation** - Point to specific guides\n5. **Offer alternatives** - Suggest different approaches\n\n### When Guides Conflict\n1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Security → Project Consistency → Performance → Style\n3. **Explain trade-offs** - Help user understand implications\n4. **Recommend approach** - Suggest best path forward\n\n### When Code Doesn't Work\n1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches\n\n## 📞 Communication Patterns\n\n### Positive Feedback\n- \"Great approach! This follows our established patterns.\"\n- \"Excellent use of error handling here.\"\n- \"This is exactly the right pattern for this situation.\"\n\n### Constructive Criticism\n- \"Consider using [pattern] for better [benefit].\"\n- \"This could be improved by [specific suggestion].\"\n- \"Let's follow our established pattern for [aspect].\"\n\n### Educational Guidance\n- \"Here's why we use this pattern: [explanation].\"\n- \"This follows our [principle] because [reasoning].\"\n- \"For future reference, you can find this pattern in [guide].\"\n\n---\n\n**Remember**: Always maintain context awareness, follow established patterns, and prioritize user success over perfect code.\n"
-  },
-  "cross_references": [],
-  "code_generation_hints": [
-    {
-      "context": "general",
-      "hint": "[Specific implementation guidance]",
-      "validation": ""
+  "sections": {
+    "ai_quick_reference": {
+      "title": "AI Quick Reference",
+      "description": "> This quick reference provides immediate access to common patterns, templates, and best practices f...",
+      "content": "> This quick reference provides immediate access to common patterns, templates, and best practices for AI-assisted development. Use this for rapid implementation guidance."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Basic project understa...",
+      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Basic project understanding\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Keywords:** quick reference, patterns, navigation, decision making, code generation"
+    },
+    "_immediate_actions": {
+      "title": "🚀 Immediate Actions",
+      "description": "",
+      "content": ""
+    },
+    "user_request__guide_selection": {
+      "title": "User Request → Guide Selection",
+      "description": "- **\"Code review\"** → `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")` + Language gu...",
+      "content": "- **\"Code review\"** → `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")` + Language guides\n- **\"New feature\"** → `guide_docs/feature_template.json.replace(\".json\", \".json\")` + architecture_overview\n- **\"Fix error\"** → `guide_docs/core_principles.json.replace(\".json\", \".json\")` + Language guides\n- **\"Optimize\"** → `guide_docs/core_principles.json.replace(\".json\", \".json\")` + Performance patterns\n- **\"Best practice\"** → `guide_docs/core_principles.json.replace(\".json\", \".json\")` + Domain guides"
+    },
+    "priority_system_always_apply": {
+      "title": "Priority System (Always Apply)",
+      "description": "1. **Critical**: Security, data integrity, breaking changes\n2. **High**: Style violations, performan...",
+      "content": "1. **Critical**: Security, data integrity, breaking changes\n2. **High**: Style violations, performance, maintainability\n3. **Medium**: Code organization, documentation, optimizations\n4. **Low**: Preferences, cosmetics, future-proofing"
+    },
+    "_essential_navigation": {
+      "title": "📁 Essential Navigation",
+      "description": "",
+      "content": ""
+    },
+    "core_documents": {
+      "title": "Core Documents",
+      "description": "- **Decision Framework**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Architectu...",
+      "content": "- **Decision Framework**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Architecture**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Workflow**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
+    },
+    "language_guides": {
+      "title": "Language Guides",
+      "description": "- **Python**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **F...",
+      "content": "- **Python**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **FastAPI**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`"
+    },
+    "domain_guides": {
+      "title": "Domain Guides",
+      "description": "- **Database**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")...",
+      "content": "- **Database**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Frontend**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Web Scraping**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`\n- **Shell**: `guide_docs/domain_specific/shell_style_guide.json.replace(\".json\", \".json\")`"
+    },
+    "templates__tools": {
+      "title": "Templates & Tools",
+      "description": "- **feature_template**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Search Inde...",
+      "content": "- **feature_template**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Search Index**: `search_index.json.replace(\".json\", \".json\")`\n- **AI Optimization**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`"
+    },
+    "_common_patterns": {
+      "title": "🔧 common_patterns",
+      "description": "",
+      "content": ""
+    },
+    "code_generation_hints_format": {
+      "title": "Code Generation Hints Format",
+      "description": "```markdown\n[Specific implementation guidance]\n[How to verify correctness]\n```",
+      "content": "```markdown\n[Specific implementation guidance]\n[How to verify correctness]\n```"
+    },
+    "error_handling_pattern": {
+      "title": "Error Handling Pattern",
+      "description": "```python\ntry:\n    # Operation\n    result = perform_operation()\nexcept SpecificError as e:\n    # Han...",
+      "content": "```python\ntry:\n    # Operation\n    result = perform_operation()\nexcept SpecificError as e:\n    # Handle specific error\n    logger.error(f\"Specific error: {e}\")\n    raise CustomError(\"User-friendly message\")\nexcept Exception as e:\n    # Handle unexpected errors\n    logger.error(f\"Unexpected error: {e}\")\n    raise GeneralError(\"Something went wrong\")\n```"
+    },
+    "api_endpoint_pattern": {
+      "title": "API Endpoint Pattern",
+      "description": "```python\n@router.post(\"/endpoint\")\n@requires_auth\nasync def endpoint_name(\n    request: RequestSche...",
+      "content": "```python\n@router.post(\"/endpoint\")\n@requires_auth\nasync def endpoint_name(\n    request: RequestSchema,\n    current_user: AppUser = Depends(get_current_user)\n) -> ResponseSchema:\n    try:\n        # Business logic\n        result = await process_request(request, current_user)\n        return ResponseSchema(data=result)\n    except ValidationError as e:\n        raise HTTPException(status_code=400, detail=str(e))\n    except NotFoundError as e:\n        raise HTTPException(status_code=404, detail=str(e))\n```"
+    },
+    "database_model_pattern": {
+      "title": "Database Model Pattern",
+      "description": "```python\nclass ModelName(Base):\n    __tablename__ = \"table_name\"\n\n    id = Column(Integer, primary_...",
+      "content": "```python\nclass ModelName(Base):\n    __tablename__ = \"table_name\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    created_at = Column(DateTime, default=datetime.utcnow)\n    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\n\n    # Relationships\n    user_id = Column(Integer, ForeignKey(\"users.id\"))\n    user = relationship(\"AppUser\", back_populates=\"models\")\n```"
+    },
+    "_decision_frameworks": {
+      "title": "🎯 Decision Frameworks",
+      "description": "",
+      "content": ""
+    },
+    "when_to_refactor_vs_new_code": {
+      "title": "When to Refactor vs. New Code",
+      "description": "- **Refactor**: Existing code with style violations, minor bugs, improvements\n- **New Code**: Featur...",
+      "content": "- **Refactor**: Existing code with style violations, minor bugs, improvements\n- **New Code**: Feature doesn't exist, major architectural changes, explicit request"
+    },
+    "when_to_be_strict_vs_flexible": {
+      "title": "When to Be Strict vs. Flexible",
+      "description": "- **Strict**: Security, data integrity, critical business logic, project patterns\n- **Flexible**: St...",
+      "content": "- **Strict**: Security, data integrity, critical business logic, project patterns\n- **Flexible**: Style preferences, minor optimizations, personal habits"
+    },
+    "context_awareness": {
+      "title": "Context Awareness",
+      "description": "- **File context**: What file they're working in\n- **Task context**: What they're trying to accompli...",
+      "content": "- **File context**: What file they're working in\n- **Task context**: What they're trying to accomplish\n- **Project context**: Overall architecture and constraints\n- **User context**: Experience level and preferences"
+    },
+    "_quality_checklist": {
+      "title": "📋 Quality Checklist",
+      "description": "",
+      "content": ""
+    },
+    "before_providing_code": {
+      "title": "Before Providing Code",
+      "description": "- [ ] Check core_principles for decision framework\n- [ ] Reference appropriate language/domain guide...",
+      "content": "- [ ] Check core_principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices"
+    },
+    "before_making_suggestions": {
+      "title": "Before Making Suggestions",
+      "description": "- [ ] Understand user's current context\n- [ ] Identify appropriate priority level\n- [ ] Reference ex...",
+      "content": "- [ ] Understand user's current context\n- [ ] Identify appropriate priority level\n- [ ] Reference existing patterns\n- [ ] Explain reasoning clearly\n- [ ] Provide actionable guidance\n- [ ] Consider user's experience level"
+    },
+    "_quick_search": {
+      "title": "🔍 Quick Search",
+      "description": "",
+      "content": ""
+    },
+    "by_technology": {
+      "title": "By Technology",
+      "description": "- **Python**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **F...",
+      "content": "- **Python**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **FastAPI**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **React**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Database**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`"
+    },
+    "by_problem_type": {
+      "title": "By Problem Type",
+      "description": "- **Performance**: `guide_docs/core_principles.json.replace(\".json\", \".json\")` → Performance section...",
+      "content": "- **Performance**: `guide_docs/core_principles.json.replace(\".json\", \".json\")` → Performance section\n- **Security**: `guide_docs/core_principles.json.replace(\".json\", \".json\")` → Security section\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Error Handling**: `guide_docs/core_principles.json.replace(\".json\", \".json\")` → Error handling section"
+    },
+    "by_task_type": {
+      "title": "By Task Type",
+      "description": "- **API Development**: FastAPI Guide + Database Guide + Testing Guide\n- **Frontend**: Frontend Guide...",
+      "content": "- **API Development**: FastAPI Guide + Database Guide + Testing Guide\n- **Frontend**: Frontend Guide + API integration patterns\n- **Database**: Database Guide + Migration patterns\n- **Automation**: Shell Guide + Background task patterns"
+    },
+    "_emergency_patterns": {
+      "title": "🚨 Emergency Patterns",
+      "description": "",
+      "content": ""
+    },
+    "when_user_is_stuck": {
+      "title": "When User is Stuck",
+      "description": "1. **Acknowledge the issue** - Show understanding\n2. **Ask clarifying questions** - Get more context...",
+      "content": "1. **Acknowledge the issue** - Show understanding\n2. **Ask clarifying questions** - Get more context\n3. **Provide step-by-step guidance** - Break down the problem\n4. **Reference relevant documentation** - Point to specific guides\n5. **Offer alternatives** - Suggest different approaches"
+    },
+    "when_guides_conflict": {
+      "title": "When Guides Conflict",
+      "description": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Security → Proj...",
+      "content": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Security → Project Consistency → Performance → Style\n3. **Explain trade-offs** - Help user understand implications\n4. **Recommend approach** - Suggest best path forward"
+    },
+    "when_code_doesnt_work": {
+      "title": "When Code Doesn't Work",
+      "description": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all impor...",
+      "content": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches"
+    },
+    "_communication_patterns": {
+      "title": "📞 Communication Patterns",
+      "description": "",
+      "content": ""
+    },
+    "positive_feedback": {
+      "title": "Positive Feedback",
+      "description": "- \"Great approach! This follows our established patterns.\"\n- \"Excellent use of error handling here.\"...",
+      "content": "- \"Great approach! This follows our established patterns.\"\n- \"Excellent use of error handling here.\"\n- \"This is exactly the right pattern for this situation.\""
+    },
+    "constructive_criticism": {
+      "title": "Constructive Criticism",
+      "description": "- \"Consider using [pattern] for better [benefit].\"\n- \"This could be improved by [specific suggestion...",
+      "content": "- \"Consider using [pattern] for better [benefit].\"\n- \"This could be improved by [specific suggestion].\"\n- \"Let's follow our established pattern for [aspect].\""
+    },
+    "educational_guidance": {
+      "title": "Educational Guidance",
+      "description": "- \"Here's why we use this pattern: [explanation].\"\n- \"This follows our [principle] because [reasonin...",
+      "content": "- \"Here's why we use this pattern: [explanation].\"\n- \"This follows our [principle] because [reasoning].\"\n- \"For future reference, you can find this pattern in [guide].\"\n\n---\n\n**Remember**: Always maintain context awareness, follow established patterns, and prioritize user success over perfect code."
     }
-  ],
-  "validation_rules": [
-    "[How to verify correctness]\n```"
-  ],
-  "optimization": {
-    "version": "1.0",
-    "optimized_at": "2025-06-18T19:19:47.724900",
-    "improvements": [
-      "fixed_file_references",
-      "extracted_ai_metadata",
-      "structured_cross_references",
-      "extracted_code_hints",
-      "structured_validation_rules"
-    ],
-    "literal_strings_cleaned": true,
-    "cleaned_at": "2025-06-18T19:30:00.000000"
   }
 }

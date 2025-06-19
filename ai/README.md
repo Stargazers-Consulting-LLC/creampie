@@ -58,11 +58,11 @@
 - **[FastAPI Development Guide](guide_docs/Language-Specific/FastAPI%20Development%20Guide.md)** - FastAPI best practices and patterns
 - **[Python Testing Guide](guide_docs/Language-Specific/Python%20Testing%20Guide.md)** - Testing strategies and patterns
 
-#### Domain-Specific Guides
-- **[Database Management Guide](guide_docs/Domain-Specific/Database%20Management%20Guide.md)** - Database patterns and migration strategies
-- **[Web Scraping Patterns](guide_docs/Domain-Specific/Web%20Scraping%20Patterns.md)** - Web scraping best practices
-- **[Frontend Style Guide](guide_docs/Domain-Specific/Frontend%20Style%20Guide.md)** - React/TypeScript development standards
-- **[Shell Style Guide](guide_docs/Domain-Specific/Shell%20Style%20Guide.md)** - Bash scripting and automation patterns
+#### domain_specific Guides
+- **[Database Management Guide](guide_docs/domain_specific/Database%20Management%20Guide.md)** - Database patterns and migration strategies
+- **[Web Scraping Patterns](guide_docs/domain_specific/Web%20Scraping%20Patterns.md)** - Web scraping best practices
+- **[Frontend Style Guide](guide_docs/domain_specific/Frontend%20Style%20Guide.md)** - React/TypeScript development standards
+- **[Shell Style Guide](guide_docs/domain_specific/Shell%20Style%20Guide.md)** - Bash scripting and automation patterns
 
 #### Templates
 - **[Feature Template](guide_docs/Feature Template.md)** - Standardized feature development template
@@ -95,7 +95,7 @@
 ### 📁 Maintenance Tools
 **Purpose**: Tools for maintaining and validating AI documentation
 
-- **[Health Check Script](scripts/health_check.py)** - Validates AI documentation quality and completeness
+- **[Health Check Script](scripts/ai_health_check.py)** - Validates AI documentation quality and completeness
 - **[Update Script](scripts/update_documentation.py)** - Updates metadata and maintains consistency
 - **[Test Paths Script](scripts/test_paths.py)** - Tests path resolution and system structure
 - **[Version Tracking](ai_config.json)** - Consistent template versioning across all documents
@@ -193,7 +193,7 @@ Validation Rules → Testing Standards → Code Review → Deployment
 
 ### When Implementing Code:
 1. **Use language-specific guides** for coding standards
-2. **Apply domain-specific patterns** for specialized tasks
+2. **Apply domain_specific patterns** for specialized tasks
 3. **Include comprehensive testing** following testing guides
 4. **Follow error handling patterns** from all guides
 
@@ -258,7 +258,7 @@ Validation Rules → Testing Standards → Code Review → Deployment
 - Maintain cross-reference accuracy
 
 ### Automated Maintenance
-- **Health Checks**: Run `python scripts/health_check.py` to validate documentation
+- **Health Checks**: Run `python scripts/ai_health_check.py` to validate documentation
 - **Updates**: Run `python scripts/update_documentation.py --update-all` to maintain consistency
 - **Path Testing**: Run `python scripts/test_paths.py` to verify system structure
 - **Configuration**: Use `ai_config.json` for programmatic access to documentation structure
@@ -290,7 +290,7 @@ Validation Rules → Testing Standards → Code Review → Deployment
 
 ## 🛠️ Tools and Scripts
 
-- **[Health Check Script](scripts/health_check.py)** - Validates AI documentation quality and completeness
+- **[Health Check Script](scripts/ai_health_check.py)** - Validates AI documentation quality and completeness
 - **[Update Script](scripts/update_documentation.py)** - Updates metadata and maintains consistency
 - **[Test Paths Script](scripts/test_paths.py)** - Tests path resolution and system structure
 - **[AI Configuration](ai_config.json)** - Structured configuration for AI tools

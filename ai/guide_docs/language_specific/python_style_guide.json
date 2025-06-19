@@ -1,0 +1,391 @@
+{
+  "metadata": {
+    "title": "Python Style Guide",
+    "description": "Comprehensive Python coding standards and best practices for the CreamPie project",
+    "version": "1.0.0",
+    "last_updated": "2025-01-27",
+    "source": "humans/guides/python_style_guide.md",
+    "cross_references": [
+      "cream_api/main.py",
+      "cream_api/settings.py",
+      "cream_api/stock_data/api.py",
+      "cream_api/stock_data/models.py",
+      "cream_api/tests/conftest.py",
+      "pyproject.toml"
+    ]
+  },
+  "sections": {
+    "code_style_and_formatting": {
+      "title": "Code Style and Formatting",
+      "description": "General formatting rules and naming conventions",
+      "guidelines": [
+        "Follow PEP 8 style guide with project-specific modifications",
+        "Use type hints for all function parameters and return values",
+        "Use docstrings for all modules, classes, and functions",
+        "Use meaningful variable and function names",
+        "Keep functions small and focused (ideally under 50 lines)",
+        "Use descriptive names that clearly indicate purpose",
+        "Prefer composition over inheritance"
+      ],
+      "line_length_and_formatting": {
+        "line_length": "120 characters (configured in pyproject.toml)",
+        "indentation": "4 spaces",
+        "string_style": "Double quotes (configured in ruff)",
+        "long_strings": "Break into multiple lines by wrapping in parentheses",
+        "example": {
+          "long_string": "long_message = (\n    \"This is a very long string that spans multiple lines \"\n    \"by being wrapped in parentheses, which is the preferred \"\n    \"way to handle long strings in Python.\"\n)",
+          "imports": "from fastapi import (\n    APIRouter,\n    BackgroundTasks,\n    Depends,\n    HTTPException\n)"
+        }
+      },
+      "naming_conventions": {
+        "variables_and_functions": "snake_case",
+        "classes": "PascalCase",
+        "constants": "UPPER_CASE",
+        "examples": {
+          "good": [
+            "user_name = \"john_doe\"",
+            "def get_user_by_id(user_id: int) -> User:",
+            "class UserService:",
+            "MAX_RETRY_ATTEMPTS = 3",
+            "def calculate_total_price_with_tax(items: list[Item]) -> float:"
+          ],
+          "avoid": [
+            "def calc(items: list) -> float:"
+          ]
+        }
+      }
+    },
+    "project_structure": {
+      "title": "Project Structure",
+      "description": "Guidelines for organizing Python projects",
+      "directory_organization": {
+        "principles": [
+          "Organize code by feature or domain when possible",
+          "Group related modules into packages (folders with __init__.py)",
+          "Separate application code, tests, configuration, and documentation",
+          "Use clear, descriptive names for all directories and files",
+          "Avoid deeply nested directory structures",
+          "Keep each module focused on a single responsibility"
+        ],
+        "standard_directories": {
+          "src_or_main_package": "Core application code",
+          "tests": "All test code and fixtures",
+          "scripts": "Utility or management scripts",
+          "config": "Configuration files at the root",
+          "docs_or_humans_guides": "Documentation and guides",
+          "common_or_utils": "Reusable utilities or shared code"
+        },
+        "package_requirements": [
+          "Always include __init__.py file in each package directory",
+          "Store tests close to the code they test or in top-level tests/ directory",
+          "Place configuration files at the project root"
+        ]
+      },
+      "module_organization": {
+        "structure": [
+          "Module docstring explaining the module's purpose",
+          "Standard library imports",
+          "Third-party imports",
+          "Local application imports",
+          "Module-level constants",
+          "Module-level variables",
+          "Classes",
+          "Functions"
+        ],
+        "example": {
+          "docstring": "\"\"\"Module docstring explaining the module's purpose.\"\"\"",
+          "imports": "# Standard library imports\nimport logging\nfrom datetime import datetime\nfrom typing import Annotated\n\n# Third-party imports\nfrom fastapi import APIRouter, Depends\nfrom pydantic import BaseModel\n\n# Local imports\nfrom cream_api.db import get_async_db\nfrom cream_api.settings import get_app_settings",
+          "constants": "DEFAULT_TIMEOUT = 30",
+          "variables": "logger = logging.getLogger(__name__)"
+        }
+      }
+    },
+    "import_organization": {
+      "title": "Import Organization",
+      "description": "Rules for organizing and structuring imports",
+      "import_order": [
+        "Standard library imports",
+        "Third-party imports",
+        "Local application imports"
+      ],
+      "import_guidelines": [
+        "Use absolute imports for clarity",
+        "Group imports with a blank line between groups",
+        "Remove unused imports to keep code clean",
+        "Use specific imports rather than wildcard imports",
+        "Use 'from' imports for commonly used items"
+      ],
+      "examples": {
+        "good": [
+          "from fastapi import APIRouter, Depends",
+          "from sqlalchemy import select"
+        ],
+        "avoid": [
+          "from fastapi import *",
+          "from sqlalchemy import *"
+        ],
+        "standard_library": [
+          "import logging",
+          "import os",
+          "from collections.abc import AsyncGenerator",
+          "from contextlib import asynccontextmanager",
+          "from datetime import datetime",
+          "from typing import Annotated"
+        ],
+        "third_party": [
+          "from fastapi import FastAPI, APIRouter, Depends, HTTPException",
+          "from pydantic import BaseModel, Field",
+          "from sqlalchemy import select",
+          "from sqlalchemy.ext.asyncio import AsyncSession"
+        ],
+        "local": [
+          "from cream_api.db import get_async_db",
+          "from cream_api.settings import get_app_settings",
+          "from cream_api.stock_data.models import TrackedStock"
+        ]
+      }
+    },
+    "type_hints": {
+      "title": "Type Hints",
+      "description": "Type annotation patterns and best practices",
+      "function_type_hints": {
+        "basic_pattern": "def function_name(param: type) -> return_type:",
+        "async_pattern": "async def function_name(param: type) -> return_type:",
+        "examples": {
+          "simple": "def get_user_by_id(user_id: int) -> Optional[User]:",
+          "async_with_annotated": "async def create_user(\n    name: str,\n    email: str,\n    created_at: Annotated[datetime, Field(default_factory=datetime.now)]\n) -> User:"
+        }
+      },
+      "variable_type_hints": {
+        "simple_types": {
+          "user_id": "int = 123",
+          "user_name": "str = \"john_doe\"",
+          "is_active": "bool = True"
+        },
+        "complex_types": {
+          "user_ids": "list[int] = [1, 2, 3]",
+          "user_data": "dict[str, str] = {\"name\": \"John\", \"email\": \"john@example.com\"}",
+          "optional_user": "Optional[User] = None"
+        }
+      },
+      "fastapi_patterns": {
+        "dependency_injection": "async def get_user(\n    user_id: int,\n    db: Annotated[AsyncSession, Depends(get_async_db)]\n) -> User:",
+        "request_models": "class UserCreate(BaseModel):\n    name: str\n    email: str",
+        "response_models": "class UserResponse(BaseModel):\n    id: int\n    name: str\n    email: str"
+      }
+    },
+    "documentation": {
+      "title": "Documentation",
+      "description": "Docstring patterns and documentation standards",
+      "module_docstrings": {
+        "pattern": "\"\"\"Brief description.\n\nExtended description if needed.\"\"\"",
+        "example": "\"\"\"FastAPI endpoints for stock data retrieval.\n\nThis module provides REST API endpoints for managing stock data,\nincluding tracking new stocks and retrieving historical data.\"\"\""
+      },
+      "function_docstrings": {
+        "pattern": "\"\"\"Brief description.\n\nArgs:\n    param: Description\n\nReturns:\n    Description\n\nRaises:\n    ExceptionType: Description\"\"\"",
+        "example": "\"\"\"Start tracking a new stock symbol.\n\nArgs:\n    request: TrackStockRequest containing the symbol to track\n    background_tasks: FastAPI background tasks manager\n    db: Database session\n\nReturns:\n    dict: Response indicating the stock is now being tracked\n\nRaises:\n    HTTPException: If there's an error starting tracking\"\"\""
+      },
+      "class_docstrings": {
+        "pattern": "\"\"\"Brief description.\n\nExtended description if needed.\"\"\"",
+        "example": "\"\"\"Model for storing historical stock data.\n\nThis model represents the core stock data table with OHLCV data\nand supports efficient querying by symbol and date.\"\"\""
+      }
+    },
+    "error_handling": {
+      "title": "Error Handling",
+      "description": "Exception handling patterns and logging practices",
+      "exception_handling_patterns": {
+        "database_operations": {
+          "pattern": "try:\n    # Database operation\n    await db.commit()\n    return result\nexcept SQLAlchemyError as e:\n    await db.rollback()\n    logger.error(f\"Database error: {e}\")\n    raise HTTPException(status_code=500, detail=\"Database error\")\nexcept Exception as e:\n    await db.rollback()\n    logger.error(f\"Unexpected error: {e}\")\n    raise HTTPException(status_code=500, detail=\"Internal server error\")",
+          "imports": "from fastapi import HTTPException\nfrom sqlalchemy.exc import SQLAlchemyError"
+        }
+      },
+      "custom_exceptions": {
+        "base_exception": "class StockDataError(Exception):\n    \"\"\"Base exception for stock data operations.\"\"\"\n    pass",
+        "specific_exceptions": [
+          "class StockNotFoundError(StockDataError):\n    \"\"\"Raised when a stock is not found.\"\"\"\n    pass",
+          "class InvalidStockSymbolError(StockDataError):\n    \"\"\"Raised when an invalid stock symbol is provided.\"\"\"\n    pass"
+        ]
+      },
+      "logging": {
+        "setup": "import logging\nlogger = logging.getLogger(__name__)",
+        "patterns": {
+          "info": "logger.info(f\"Starting to process stock data for {symbol}\")",
+          "debug": "logger.debug(f\"Processing data for {symbol}\")",
+          "error": "logger.error(f\"Error processing stock data for {symbol}: {e}\")"
+        },
+        "example": "def process_stock_data(symbol: str) -> None:\n    \"\"\"Process stock data with comprehensive logging.\"\"\"\n    logger.info(f\"Starting to process stock data for {symbol}\")\n    \n    try:\n        # Process data\n        logger.debug(f\"Processing data for {symbol}\")\n        # ... processing logic\n        logger.info(f\"Successfully processed stock data for {symbol}\")\n    except Exception as e:\n        logger.error(f\"Error processing stock data for {symbol}: {e}\")\n        raise"
+      }
+    },
+    "database_patterns": {
+      "title": "Database Patterns",
+      "description": "SQLAlchemy patterns and database operations",
+      "sqlalchemy_models": {
+        "base_imports": [
+          "from datetime import UTC, datetime",
+          "from sqlalchemy import Boolean, DateTime, Float, Integer, String, UniqueConstraint",
+          "from sqlalchemy.dialects.postgresql import UUID",
+          "from sqlalchemy.orm import Mapped, mapped_column",
+          "import uuid",
+          "from cream_api.db import ModelBase"
+        ],
+        "model_pattern": "class StockData(ModelBase):\n    \"\"\"Model for storing historical stock data.\"\"\"\n\n    __tablename__ = \"stock_data\"\n\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    symbol: Mapped[str] = mapped_column(String, nullable=False, index=True)\n    date: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)\n    # ... other fields\n\n    __table_args__ = (UniqueConstraint(\"symbol\", \"date\", name=\"uix_symbol_date\"),)",
+        "field_patterns": {
+          "primary_key": "id: Mapped[int] = mapped_column(Integer, primary_key=True)",
+          "indexed_field": "symbol: Mapped[str] = mapped_column(String, nullable=False, index=True)",
+          "uuid_field": "id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)",
+          "datetime_field": "date: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=lambda: datetime.now(UTC))"
+        }
+      },
+      "database_operations": {
+        "query_pattern": "async def get_stock_data(symbol: str, db: AsyncSession) -> list[StockData]:\n    \"\"\"Get stock data for a symbol.\"\"\"\n    stmt = select(StockData).where(StockData.symbol == symbol)\n    result = await db.execute(stmt)\n    return result.scalars().all()",
+        "create_pattern": "async def create_stock_data(stock_data: StockData, db: AsyncSession) -> StockData:\n    \"\"\"Create new stock data.\"\"\"\n    db.add(stock_data)\n    await db.commit()\n    await db.refresh(stock_data)\n    return stock_data",
+        "imports": "from sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession"
+      },
+      "database_configuration": {
+        "settings_pattern": "class Settings(BaseSettings):\n    \"\"\"Configuration for database and application settings.\"\"\"\n\n    # Database configuration\n    db_user: str = \"creamapp\"\n    db_host: str = \"\"\n    db_name: str = \"\"\n    db_password: str = \"\"\n\n    def get_connection_string(self) -> str:\n        \"\"\"Get database connection string.\"\"\"\n        if not self.db_host or not self.db_name:\n            return \"sqlite+aiosqlite:///:memory:\"\n        return f\"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}\"\n\n    model_config = SettingsConfigDict(env_file=\".env\")",
+        "imports": "from pydantic_settings import BaseSettings, SettingsConfigDict"
+      }
+    },
+    "fastapi_patterns": {
+      "title": "FastAPI Patterns",
+      "description": "FastAPI-specific patterns and best practices",
+      "router_organization": {
+        "setup": "from fastapi import APIRouter, Depends, HTTPException\nfrom pydantic import BaseModel, Field\n\nrouter = APIRouter(prefix=\"/stock-data\", tags=[\"stock-data\"])",
+        "request_model": "class TrackStockRequest(BaseModel):\n    \"\"\"Request model for tracking a new stock.\"\"\"\n    symbol: str = Field(..., min_length=1, description=\"Stock symbol to track\")",
+        "endpoint_pattern": "@router.post(\"/track\")\nasync def track_stock(\n    request: TrackStockRequest,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> dict:\n    \"\"\"Start tracking a new stock symbol.\"\"\"\n    pass"
+      },
+      "dependency_injection": {
+        "pattern": "async def get_current_user(\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n    settings: Annotated[Settings, Depends(get_app_settings)]\n) -> User:\n    \"\"\"Get current authenticated user.\"\"\"\n    pass",
+        "imports": "from typing import Annotated\nfrom fastapi import Depends\nfrom sqlalchemy.ext.asyncio import AsyncSession"
+      },
+      "request_response_models": {
+        "create_model": "class StockDataCreate(BaseModel):\n    \"\"\"Model for creating stock data.\"\"\"\n    symbol: str = Field(..., min_length=1, max_length=10)\n    date: datetime\n    open: float = Field(..., gt=0)\n    high: float = Field(..., gt=0)\n    low: float = Field(..., gt=0)\n    close: float = Field(..., gt=0)\n    volume: int = Field(..., ge=0)",
+        "response_model": "class StockDataResponse(BaseModel):\n    \"\"\"Model for stock data responses.\"\"\"\n    id: int\n    symbol: str\n    date: datetime\n    close: float\n    volume: int\n\n    class Config:\n        from_attributes = True",
+        "imports": "from pydantic import BaseModel, Field\nfrom datetime import datetime"
+      }
+    },
+    "testing": {
+      "title": "Testing",
+      "description": "Testing patterns and best practices",
+      "test_structure": {
+        "class_pattern": "class TestStockDataAPI:\n    \"\"\"Test cases for stock data API endpoints.\"\"\"\n\n    @pytest_asyncio.fixture\n    async def test_db(self) -> AsyncSession:\n        \"\"\"Create test database session.\"\"\"\n        async with async_test_db() as session:\n            yield session\n\n    async def test_track_stock_success(self, test_db: AsyncSession):\n        \"\"\"Test successful stock tracking.\"\"\"\n        # Test implementation\n        pass",
+        "imports": "import pytest\nimport pytest_asyncio\nfrom fastapi.testclient import TestClient\nfrom sqlalchemy.ext.asyncio import AsyncSession"
+      },
+      "test_fixtures": {
+        "settings_fixture": "@pytest.fixture\ndef test_settings() -> Settings:\n    \"\"\"Test settings with in-memory SQLite database.\"\"\"\n    return Settings(\n        db_user=\"test\",\n        db_host=\"localhost\",\n        db_name=\"test\",\n        db_password=\"test\",\n    )",
+        "async_db_fixture": "@pytest_asyncio.fixture\nasync def async_test_db(test_settings: Settings) -> AsyncGenerator[AsyncSession, None]:\n    \"\"\"Create an async test database session.\"\"\"\n    # Create SQLite in-memory database\n    test_db_url = \"sqlite+aiosqlite:///:memory:\"\n    engine = create_async_engine(test_db_url)\n    \n    async with engine.begin() as conn:\n        await conn.run_sync(ModelBase.metadata.create_all)\n    \n    async with async_sessionmaker(engine)() as session:\n        yield session\n    \n    async with engine.begin() as conn:\n        await conn.run_sync(ModelBase.metadata.drop_all)"
+      },
+      "test_patterns": {
+        "success_test": "@pytest.mark.asyncio\nasync def test_process_stock_data_success(self):\n    \"\"\"Test successful stock data processing.\"\"\"\n    with patch.object(self.service, '_validate_data') as mock_validate:\n        mock_validate.return_value = True\n        \n        result = await self.service.process_data(sample_data)\n        \n        assert result is True\n        mock_validate.assert_called_once_with(sample_data)",
+        "failure_test": "@pytest.mark.asyncio\nasync def test_process_stock_data_validation_failure(self):\n    \"\"\"Test stock data processing with validation failure.\"\"\"\n    with patch.object(self.service, '_validate_data') as mock_validate:\n        mock_validate.return_value = False\n        \n        result = await self.service.process_data(sample_data)\n        \n        assert result is False",
+        "imports": "import pytest\nfrom unittest.mock import AsyncMock, patch"
+      }
+    },
+    "configuration_management": {
+      "title": "Configuration Management",
+      "description": "Settings patterns and environment variable management",
+      "settings_pattern": {
+        "class_structure": "class Settings(BaseSettings):\n    \"\"\"Application configuration settings.\"\"\"\n\n    # Database settings\n    db_user: str = \"creamapp\"\n    db_host: str = \"\"\n    db_name: str = \"\"\n    db_password: str = \"\"\n\n    # Application settings\n    enable_background_tasks: bool = True\n    frontend_url: str = \"\"\n\n    def get_connection_string(self) -> str:\n        \"\"\"Get database connection string.\"\"\"\n        if not self.db_host or not self.db_name:\n            return \"sqlite+aiosqlite:///:memory:\"\n        return f\"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}\"\n\n    model_config = SettingsConfigDict(env_file=\".env\")",
+        "global_instance": "app_settings = Settings()\n\ndef get_app_settings() -> Settings:\n    \"\"\"Get application configuration settings.\"\"\"\n    return app_settings",
+        "imports": "from pydantic_settings import BaseSettings, SettingsConfigDict"
+      },
+      "environment_variables": {
+        "env_file_example": "# .env file\nDB_USER=creamapp\nDB_HOST=localhost\nDB_NAME=creamdb\nDB_PASSWORD=secure_password\nENABLE_BACKGROUND_TASKS=true\nFRONTEND_URL=http://localhost:5173"
+      }
+    },
+    "security_best_practices": {
+      "title": "Security Best Practices",
+      "description": "Security patterns and input validation",
+      "input_validation": {
+        "pydantic_validation": "class StockSymbolRequest(BaseModel):\n    \"\"\"Request model with input validation.\"\"\"\n    symbol: str = Field(..., min_length=1, max_length=10)\n\n    @validator('symbol')\n    def validate_symbol(cls, v):\n        \"\"\"Validate stock symbol format.\"\"\"\n        if not re.match(r'^[A-Z]{1,5}$', v):\n            raise ValueError('Symbol must be 1-5 uppercase letters')\n        return v.upper()",
+        "imports": "from pydantic import BaseModel, Field, validator\nimport re"
+      },
+      "authentication_authorization": {
+        "jwt_validation": "async def get_current_user(\n    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]\n) -> User:\n    \"\"\"Get current authenticated user.\"\"\"\n    try:\n        # Validate JWT token\n        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[\"HS256\"])\n        user_id = payload.get(\"sub\")\n        if user_id is None:\n            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)\n    except JWTError:\n        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)\n    \n    user = get_user_by_id(user_id)\n    if user is None:\n        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)\n    return user",
+        "imports": "from fastapi import Depends, HTTPException, status\nfrom fastapi.security import HTTPBearer, HTTPAuthorizationCredentials\n\nsecurity = HTTPBearer()"
+      },
+      "sql_injection_prevention": {
+        "good": "async def get_stock_by_symbol(symbol: str, db: AsyncSession) -> StockData:\n    \"\"\"Get stock by symbol using safe ORM query.\"\"\"\n    stmt = select(StockData).where(StockData.symbol == symbol)\n    result = await db.execute(stmt)\n    return result.scalar_one_or_none()",
+        "avoid": "# BAD: f\"SELECT * FROM stocks WHERE symbol = '{symbol}'\""
+      }
+    },
+    "performance_considerations": {
+      "title": "Performance Considerations",
+      "description": "Performance optimization patterns",
+      "database_optimization": {
+        "indexes": "class StockData(ModelBase):\n    __tablename__ = \"stock_data\"\n    \n    symbol: Mapped[str] = mapped_column(String, nullable=False, index=True)\n    date: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)",
+        "efficient_queries": "async def get_recent_stocks(symbol: str, limit: int = 100) -> list[StockData]:\n    \"\"\"Get recent stock data efficiently.\"\"\"\n    stmt = (\n        select(StockData)\n        .where(StockData.symbol == symbol)\n        .order_by(StockData.date.desc())\n        .limit(limit)\n    )\n    result = await db.execute(stmt)\n    return result.scalars().all()"
+      },
+      "async_await_patterns": {
+        "concurrent_processing": "async def process_multiple_stocks(symbols: list[str]) -> list[dict]:\n    \"\"\"Process multiple stocks concurrently.\"\"\"\n    tasks = [process_single_stock(symbol) for symbol in symbols]\n    results = await asyncio.gather(*tasks, return_exceptions=True)\n    return [r for r in results if not isinstance(r, Exception)]",
+        "imports": "import asyncio\nfrom typing import List"
+      },
+      "caching": {
+        "lru_cache": "@lru_cache(maxsize=128)\ndef get_stock_config(symbol: str) -> Optional[dict]:\n    \"\"\"Get stock configuration with caching.\"\"\"\n    # Expensive operation\n    pass",
+        "imports": "from functools import lru_cache\nfrom typing import Optional"
+      }
+    },
+    "file_naming_conventions": {
+      "title": "File Naming Conventions",
+      "description": "Naming conventions for Python files and modules",
+      "python_files": {
+        "convention": "Use lowercase with underscores for all Python files",
+        "examples": ["main.py", "stock_data.py", "user_service.py"],
+        "rules": [
+          "No spaces, hyphens, or special characters in filenames",
+          "Ensures cross-platform compatibility and consistent imports"
+        ]
+      },
+      "module_files": {
+        "convention": "Use descriptive names that indicate the module's purpose",
+        "examples": ["api.py", "models.py", "config.py", "tasks.py"],
+        "rule": "Keep names short but descriptive"
+      },
+      "test_files": {
+        "convention": "Prefix test files with 'test_'",
+        "examples": ["test_api.py", "test_models.py", "test_services.py"],
+        "rule": "Use descriptive names that indicate what is being tested"
+      },
+      "configuration_files": {
+        "convention": "Use lowercase with underscores for config files",
+        "examples": ["settings.py", "config.py", "alembic.ini"],
+        "rule": "Be consistent within each project"
+      }
+    }
+  },
+  "implementation_guidelines": {
+    "for_developers": [
+      "Follow these patterns for all Python code implementation",
+      "Use type hints for all function parameters and return values",
+      "Include comprehensive docstrings for all modules, classes, and functions",
+      "Write tests for all new functionality",
+      "Use proper error handling with specific exception types",
+      "Follow FastAPI best practices for API development",
+      "Use SQLAlchemy ORM for database operations",
+      "Implement proper logging for debugging and monitoring"
+    ],
+    "quality_checklist": [
+      "Type hints are used for all functions and variables",
+      "Docstrings are included for all modules, classes, and functions",
+      "Error handling is implemented with specific exceptions",
+      "Tests are written for new functionality",
+      "Code follows PEP 8 style guidelines",
+      "Imports are properly organized",
+      "Security best practices are followed",
+      "Performance considerations are addressed"
+    ],
+    "code_review_standards": {
+      "type_safety": "All code must have proper type hints",
+      "documentation": "All public APIs must be documented",
+      "testing": "All new features must have corresponding tests",
+      "error_handling": "Proper exception handling must be implemented",
+      "security": "Input validation and authentication must be in place",
+      "performance": "Database queries and async operations must be optimized"
+    }
+  },
+  "complete_example": {
+    "title": "Complete Module Example",
+    "description": "A complete example showing all patterns in action",
+    "module": "\"\"\"Stock data processing module.\n\nThis module provides functionality for processing and managing stock data,\nincluding data validation, storage, and retrieval operations.\n\"\"\"\n\nimport logging\nfrom datetime import datetime\nfrom typing import Annotated, List, Optional\n\nfrom fastapi import APIRouter, Depends, HTTPException\nfrom pydantic import BaseModel, Field\nfrom sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom cream_api.db import get_async_db\nfrom cream_api.stock_data.models import StockData\nfrom cream_api.settings import get_app_settings\n\nlogger = logging.getLogger(__name__)\n\nrouter = APIRouter(prefix=\"/stock-data\", tags=[\"stock-data\"])\n\nclass StockDataCreate(BaseModel):\n    \"\"\"Model for creating stock data.\"\"\"\n    symbol: str = Field(..., min_length=1, max_length=10)\n    date: datetime\n    open: float = Field(..., gt=0)\n    high: float = Field(..., gt=0)\n    low: float = Field(..., gt=0)\n    close: float = Field(..., gt=0)\n    volume: int = Field(..., ge=0)\n\nclass StockDataResponse(BaseModel):\n    \"\"\"Model for stock data responses.\"\"\"\n    id: int\n    symbol: str\n    date: datetime\n    close: float\n    volume: int\n\n    class Config:\n        from_attributes = True\n\n@router.post(\"/\", response_model=StockDataResponse)\nasync def create_stock_data(\n    data: StockDataCreate,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> StockDataResponse:\n    \"\"\"Create new stock data entry.\n    \n    Args:\n        data: Stock data to create\n        db: Database session\n        \n    Returns:\n        StockDataResponse: Created stock data\n        \n    Raises:\n        HTTPException: If there's an error creating the data\n    \"\"\"\n    try:\n        logger.info(f\"Creating stock data for {data.symbol}\")\n        \n        stock_data = StockData(**data.dict())\n        db.add(stock_data)\n        await db.commit()\n        await db.refresh(stock_data)\n        \n        logger.info(f\"Successfully created stock data for {data.symbol}\")\n        return StockDataResponse.from_orm(stock_data)\n        \n    except Exception as e:\n        await db.rollback()\n        logger.error(f\"Error creating stock data for {data.symbol}: {e}\")\n        raise HTTPException(status_code=500, detail=\"Failed to create stock data\")\n\n@router.get(\"/{symbol}\", response_model=List[StockDataResponse])\nasync def get_stock_data(\n    symbol: str,\n    limit: int = 100,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> List[StockDataResponse]:\n    \"\"\"Get stock data for a symbol.\n    \n    Args:\n        symbol: Stock symbol to retrieve data for\n        limit: Maximum number of records to return\n        db: Database session\n        \n    Returns:\n        List[StockDataResponse]: List of stock data records\n    \"\"\"\n    logger.info(f\"Retrieving stock data for {symbol}\")\n    \n    stmt = (\n        select(StockData)\n        .where(StockData.symbol == symbol.upper())\n        .order_by(StockData.date.desc())\n        .limit(limit)\n    )\n    \n    result = await db.execute(stmt)\n    stock_data = result.scalars().all()\n    \n    logger.info(f\"Retrieved {len(stock_data)} records for {symbol}\")\n    return [StockDataResponse.from_orm(data) for data in stock_data]"
+  }
+}

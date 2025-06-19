@@ -37,18 +37,34 @@ JS_STATUS="success"
 
 if [ "$RUN_PYTHON" = true ]; then
     print_status "📝 Running Python checks..."
-    pushd cream_api > /dev/null
 
-    if run_command "poetry run autoflake -i -r --remove-all-unused-imports --recursive --remove-unused-variables --in-place --quiet --exclude=__init__.py ." && \
-       run_command "poetry run ruff check --fix ." && \
-       run_command "poetry run ruff format ." && \
-       run_command "poetry run mypy --config-file=../pyproject.toml ."; then
-        print_success "✅ Python checks completed!"
+    # Run autoflake on cream_api
+    pushd cream_api > /dev/null
+    if run_command "poetry run autoflake -i -r --remove-all-unused-imports --recursive --remove-unused-variables --in-place --quiet --exclude=__init__.py ."; then
+        print_success "✅ Autoflake completed!"
     else
         PYTHON_STATUS="failed"
-        print_error "❌ Python checks failed!"
+        print_error "❌ Autoflake failed!"
+    fi
+    popd > /dev/null
+
+    # Run ruff on entire project (including scripts) to match pre-commit
+    if run_command "poetry run ruff check --fix ." && \
+       run_command "poetry run ruff format ."; then
+        print_success "✅ Ruff checks completed!"
+    else
+        PYTHON_STATUS="failed"
+        print_error "❌ Ruff checks failed!"
     fi
 
+    # Run mypy on cream_api
+    pushd cream_api > /dev/null
+    if run_command "poetry run mypy --config-file=../pyproject.toml ."; then
+        print_success "✅ MyPy checks completed!"
+    else
+        PYTHON_STATUS="failed"
+        print_error "❌ MyPy checks failed!"
+    fi
     popd > /dev/null
 fi
 

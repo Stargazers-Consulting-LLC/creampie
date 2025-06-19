@@ -1,0 +1,150 @@
+{
+  "metadata": {
+    "title": "AI Documentation System",
+    "description": "Main documentation hub for AI tools working with this project. Provides comprehensive guidance, patterns, and tools for effective AI-assisted development.",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "README.md",
+    "cross_references": [
+      "ai_quick_reference.json",
+      "search_index.json",
+      "ai_config.json",
+      "guide_docs/",
+      "project_context/",
+      "features/",
+      "scripts/ai_health_check.py",
+      "scripts/update_documentation.py"
+    ]
+  },
+  "sections": {
+    "overview": {
+      "title": "AI Documentation System",
+      "description": "Main documentation hub for AI tools working with this project",
+      "content": "This is the main documentation hub for AI tools working with this project. It provides comprehensive guidance, patterns, and tools for effective AI-assisted development."
+    },
+    "ai_optimization_features": {
+      "title": "AI Tool Optimizations",
+      "description": "Features designed to optimize AI tool consumption",
+      "features": [
+        "Semantic Search: All documents include relevant keywords and concepts",
+        "Structured Metadata: Consistent metadata format across all files",
+        "Cross-Reference System: Bidirectional linking between related documents",
+        "Code Generation Hints: Specific guidance for implementation",
+        "Validation Rules: Clear quality standards for each document type"
+      ]
+    },
+    "document_types": {
+      "title": "Document Types",
+      "description": "Different types of documentation in the system",
+      "types": {
+        "plans": "Implementation plans for new features (features/plans/)",
+        "summaries": "Documentation of completed modules (features/summaries/)",
+        "guides": "Reusable patterns and standards (guide_docs/)",
+        "context": "Project-specific architecture and patterns (project_context/)"
+      }
+    },
+    "navigation_structure": {
+      "title": "Navigation Structure",
+      "description": "How to navigate the documentation system",
+      "structure": {
+        "guide_docs": {
+          "purpose": "Reusable patterns, standards, and best practices",
+          "core": [
+            "core_principles.json - Decision-making frameworks and architectural principles",
+            "code_review_patterns.json - How to structure suggestions and handle conflicts",
+            "ai_tool_optimization_guide.json - Patterns for optimizing AI tool consumption"
+          ],
+          "language_specific": [
+            "python_style_guide.json - Python coding standards and patterns",
+            "react_style_guide.json - React/TypeScript development standards",
+            "python_testing_style_guide.json - Testing strategies and patterns"
+          ],
+          "domain_specific": [
+            "database_management_guide.json - Database patterns and migration strategies",
+            "shell_style_guide.json - Bash scripting and automation patterns"
+          ],
+          "templates": [
+            "feature_template.json - Standardized feature development template"
+          ]
+        },
+        "project_context": {
+          "purpose": "Project-specific architecture, patterns, and context",
+          "files": [
+            "architecture_overview.json - System architecture and component relationships",
+            "common_patterns.json - Project-specific implementation patterns",
+            "development_workflow.json - Git workflow, CI/CD, and deployment procedures"
+          ]
+        },
+        "features": {
+          "purpose": "Feature implementation plans and completed module documentation",
+          "plans": [
+            "[IN-PROGRESS] Stock Tracking Request Plan - Active implementation plan"
+          ],
+          "summaries": [
+            "[COMPLETED] Stock Data Processing Pipeline - Completed module documentation"
+          ]
+        },
+        "ai_tools": {
+          "purpose": "Enhanced AI tool consumption and navigation",
+          "files": [
+            "ai_quick_reference.json - Essential patterns and navigation for immediate use",
+            "search_index.json - Comprehensive search index for quick navigation",
+            "ai_usage_guide.json - Comprehensive guide for AI tools",
+            "ai_config.json - Structured configuration for AI tools"
+          ]
+        },
+        "maintenance_tools": {
+          "purpose": "Tools for maintaining and validating AI documentation",
+          "scripts": [
+            "scripts/ai_health_check.py - Validates AI documentation quality and completeness",
+            "scripts/update_documentation.py - Updates metadata and maintains consistency",
+            "scripts/validate_paths.py - Tests path resolution and system structure"
+          ]
+        }
+      }
+    }
+  },
+  "implementation_guidelines": {
+    "getting_started": {
+      "new_feature_development": "Start with guide_docs/feature_template.json",
+      "code_implementation": "Reference language-specific guides in guide_docs/language_specific/",
+      "architecture_decisions": "Check project_context/architecture_overview.json",
+      "testing_strategy": "Use guide_docs/language_specific/python_testing_style_guide.json"
+    },
+    "common_tasks": {
+      "api_development": "FastAPI Guide + Database Guide + Testing Guide",
+      "frontend_components": "React Style Guide + React patterns",
+      "shell_scripts": "Shell Style Guide + automation patterns",
+      "database_changes": "Database Management Guide + Migration patterns",
+      "deployment": "Development Workflow + CI/CD patterns"
+    },
+    "usage_examples": {
+      "new_api_endpoint": {
+        "step1": "Check existing patterns: fastapi_development_guide → API endpoint patterns, database_management_guide → Data model patterns, python_testing_guide → Test implementation",
+        "step2": "Follow development workflow: development_workflow → Git workflow and testing, python_style_guide → Code organization",
+        "step3": "Update documentation: feature_template → Document the new feature"
+      },
+      "react_component": {
+        "step1": "Reference frontend patterns: react_style_guide → Component structure and styling, core_principles → Design decisions",
+        "step2": "Follow testing patterns: python_testing_guide → Test organization (applies to frontend too)",
+        "step3": "Update feature documentation: feature_template → Document UI changes"
+      }
+    }
+  },
+  "maintenance": {
+    "script_features": [
+      "Comprehensive Reporting: Both human-readable (Markdown) and machine-readable (JSON) outputs",
+      "Intelligent Validation: Smart false-positive detection for links and system components",
+      "Error Handling: Detailed error collection and actionable recommendations",
+      "Performance Optimization: Readability-focused design for maintainability",
+      "Linting Compliance: Full compliance with ruff, mypy, and other linting tools",
+      "AI Metadata: Consistent metadata and cross-references in all generated content"
+    ],
+    "ai_consumable_reports": {
+      "health_check_results": "outputs/health_check/healthcheck-result.json - Comprehensive validation results",
+      "update_results": "outputs/updates/update-results.json - Documentation update status and statistics",
+      "test_results": "outputs/test_results/path-test-results.json - System structure and path validation",
+      "json_reports": "outputs/ - Machine-readable data for programmatic access"
+    }
+  }
+}

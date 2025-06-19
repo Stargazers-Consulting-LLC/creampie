@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "title": "Common Development Patterns",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "project_context/common_patterns.md",
+    "cross_references": [
+      "../guide_docs/core_principles.json",
+      "architecture_overview.json",
+      "development_workflow.json",
+      "../guide_docs/Language-Specific/python_style_guide.json",
+      "../guide_docs/Language-Specific/fastapi_development_guide.json"
+    ]
+  },
+  "sections": {
+    "common_development_patterns": {
+      "title": "Common Development Patterns",
+      "description": "> This document outlines common patterns and practices used throughout the project. Use these patter...",
+      "content": "> This document outlines common patterns and practices used throughout the project. Use these patterns to ensure consistency and follow established conventions."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, ...",
+      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, existing codebase, implementation requirements\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../guide_docs/core_principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `architecture_overview.json.replace(\".json\", \".json\")` - System architecture\n- `development_workflow.json.replace(\".json\", \".json\")` - Development process\n- `../guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")` - Python implementation patterns\n- `../guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")` - API development patterns\n\n**Validation Rules:**\n- All patterns must reference actual project structure and files\n- Code examples must follow established project conventions\n- Pattern application must be consistent across the codebase\n- Implementation must align with project architecture\n- Error handling must follow established patterns"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "**Document Purpose:** Established patterns and conventions for the CreamPie project\n**Scope:** All c...",
+      "content": "**Document Purpose:** Established patterns and conventions for the CreamPie project\n**Scope:** All code organization, database operations, API development, and background tasks\n**Target Users:** AI assistants and developers implementing project features\n**Last Updated:** Current\n\n**AI Context:** This document provides the foundational patterns that must be followed when implementing any feature in the CreamPie project. It ensures consistency, maintainability, and alignment with the established architecture."
+    },
+    "code_organization_patterns": {
+      "title": "Code Organization Patterns",
+      "description": "",
+      "content": ""
+    },
+    "module_structure": {
+      "title": "Module Structure",
+      "description": "```python",
+      "content": "```python"
+    },
+    "standard_module_organization": {
+      "title": "Standard module organization",
+      "description": "\"\"\"\nModule docstring explaining purpose and usage.\n\"\"\"",
+      "content": "\"\"\"\nModule docstring explaining purpose and usage.\n\"\"\""
+    },
+    "imports_organized_by_type": {
+      "title": "Imports organized by type",
+      "description": "import os\nimport logging\nfrom typing import Optional\n\nimport aiohttp\nfrom sqlalchemy.ext.asyncio imp...",
+      "content": "import os\nimport logging\nfrom typing import Optional\n\nimport aiohttp\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom .config import get_module_config\nfrom .exceptions import ModuleSpecificException"
+    },
+    "module_level_configuration": {
+      "title": "Module-level configuration",
+      "description": "config = get_module_config()\nlogger = logging.getLogger(__name__)",
+      "content": "config = get_module_config()\nlogger = logging.getLogger(__name__)"
+    },
+    "constants": {
+      "title": "Constants",
+      "description": "DEFAULT_TIMEOUT = 30\nMAX_RETRIES = 3",
+      "content": "DEFAULT_TIMEOUT = 30\nMAX_RETRIES = 3"
+    },
+    "main_classes_and_functions": {
+      "title": "Main classes and functions",
+      "description": "class MainClass:\n    \"\"\"Primary class for this module.\"\"\"\n\n    def __init__(self, config: dict):\n   ...",
+      "content": "class MainClass:\n    \"\"\"Primary class for this module.\"\"\"\n\n    def __init__(self, config: dict):\n        self.config = config\n\n    async def main_method(self) -> dict:\n        \"\"\"Main method with proper error handling.\"\"\"\n        try:\n            result = await self._internal_method()\n            return result\n        except Exception as e:\n            logger.error(f\"Main method failed: {e}\")\n            raise ModuleSpecificException(\"User-friendly message\") from e\n\n    async def _internal_method(self) -> dict:\n        \"\"\"Internal method for implementation details.\"\"\"\n        pass\n```\n\nThis pattern will inform the structure of all new modules and classes in the project.\n\nModule structure must follow this exact organization with proper imports, configuration, and error handling."
+    },
+    "configuration_pattern": {
+      "title": "Configuration Pattern",
+      "description": "```python",
+      "content": "```python"
+    },
+    "load_configuration_once_at_module_level": {
+      "title": "Load configuration once at module level",
+      "description": "config = get_module_config()\n\ndef some_function():\n    # Use module-level config instead of loading ...",
+      "content": "config = get_module_config()\n\ndef some_function():\n    # Use module-level config instead of loading again\n    processor = DataProcessor(config=config)\n```\n\nThis pattern will inform how to handle configuration loading and usage throughout the project.\n\nConfiguration must be loaded once at module level and reused, not loaded multiple times."
+    },
+    "error_handling_pattern": {
+      "title": "Error Handling Pattern",
+      "description": "```python\ntry:\n    # Operation that might fail\n    result = await some_operation()\nexcept SpecificEx...",
+      "content": "```python\ntry:\n    # Operation that might fail\n    result = await some_operation()\nexcept SpecificException as e:\n    logger.error(f\"Operation failed: {e}\")\n    raise CustomException(\"User-friendly message\") from e\nexcept Exception as e:\n    logger.error(f\"Unexpected error: {e}\")\n    raise CustomException(\"An unexpected error occurred\") from e\n```\n\nThis pattern will inform error handling implementation for all async operations and external calls.\n\nError handling must include specific exception types, proper logging, and user-friendly error messages."
+    },
+    "database_patterns": {
+      "title": "Database Patterns",
+      "description": "",
+      "content": ""
+    },
+    "session_management": {
+      "title": "Session Management",
+      "description": "```python\nasync with AsyncSessionLocal() as session:\n    async with session.begin():\n        # Datab...",
+      "content": "```python\nasync with AsyncSessionLocal() as session:\n    async with session.begin():\n        # Database operations\n        session.add(model)\n        await session.commit()\n```\n\nThis pattern will inform database session management for all database operations.\n\nDatabase sessions must use proper async context managers and transaction management."
+    },
+    "model_definition": {
+      "title": "Model Definition",
+      "description": "```python\nfrom sqlalchemy import Column, Integer, String, DateTime\nfrom sqlalchemy.ext.declarative i...",
+      "content": "```python\nfrom sqlalchemy import Column, Integer, String, DateTime\nfrom sqlalchemy.ext.declarative import declarative_base\n\nBase = declarative_base()\n\nclass StockData(Base):\n    __tablename__ = \"stock_data\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    symbol = Column(String, index=True, nullable=False)\n    date = Column(DateTime, nullable=False)\n    price = Column(Integer, nullable=False)\n```\n\nThis pattern will inform SQLAlchemy model definitions with proper indexing and constraints.\n\nModels must include proper indexes, constraints, and follow naming conventions."
+    },
+    "migration_pattern": {
+      "title": "Migration Pattern",
+      "description": "```python\n\"\"\"Add stock data table\n\nRevision ID: abc123def456\nRevises: previous_revision\nCreate Date:...",
+      "content": "```python\n\"\"\"Add stock data table\n\nRevision ID: abc123def456\nRevises: previous_revision\nCreate Date: 2024-01-01 12:00:00.000000\n\"\"\"\n\nfrom alembic import op\nimport sqlalchemy as sa\n\ndef upgrade():\n    op.create_table(\n        'stock_data',\n        sa.Column('id', sa.Integer(), nullable=False),\n        sa.Column('symbol', sa.String(), nullable=False),\n        sa.Column('date', sa.DateTime(), nullable=False),\n        sa.Column('price', sa.Integer(), nullable=False),\n        sa.PrimaryKeyConstraint('id')\n    )\n    op.create_index(op.f('ix_stock_data_symbol'), 'stock_data', ['symbol'], unique=False)\n\ndef downgrade():\n    op.drop_index(op.f('ix_stock_data_symbol'), table_name='stock_data')\n    op.drop_table('stock_data')\n```\n\nThis pattern will inform Alembic migration file structure and database schema changes.\n\nMigrations must include proper upgrade and downgrade functions with descriptive docstrings."
+    },
+    "api_patterns": {
+      "title": "API Patterns",
+      "description": "",
+      "content": ""
+    },
+    "fastapi_endpoint": {
+      "title": "FastAPI Endpoint",
+      "description": "```python\nfrom fastapi import APIRouter, Depends, HTTPException\nfrom sqlalchemy.ext.asyncio import A...",
+      "content": "```python\nfrom fastapi import APIRouter, Depends, HTTPException\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom ..db import get_session\nfrom ..models import StockData\nfrom ..schemas import StockDataResponse\n\nrouter = APIRouter()\n\n@router.get(\"/stock-data/{symbol}\", response_model=StockDataResponse)\nasync def get_stock_data(\n    symbol: str,\n    session: AsyncSession = Depends(get_session)\n) -> StockDataResponse:\n    \"\"\"Get stock data for a specific symbol.\"\"\"\n    try:\n        # Business logic here\n        data = await get_stock_data_from_db(session, symbol)\n        return StockDataResponse.from_orm(data)\n    except ValueError as e:\n        raise HTTPException(status_code=400, detail=str(e))\n    except Exception as e:\n        logger.error(f\"Failed to get stock data: {e}\")\n        raise HTTPException(status_code=500, detail=\"Internal server error\")\n```\n\nThis pattern will inform FastAPI endpoint implementation with proper error handling and response models.\n\nEndpoints must include proper error handling, logging, and response model validation."
+    },
+    "pydantic_schema": {
+      "title": "Pydantic Schema",
+      "description": "```python\nfrom pydantic import BaseModel, Field\nfrom datetime import datetime\nfrom typing import Opt...",
+      "content": "```python\nfrom pydantic import BaseModel, Field\nfrom datetime import datetime\nfrom typing import Optional\n\nclass StockDataResponse(BaseModel):\n    id: int\n    symbol: str = Field(..., description=\"Stock symbol\")\n    date: datetime\n    price: int = Field(..., description=\"Price in cents\")\n\n    class Config:\n        from_attributes = True\n```\n\nThis pattern will inform Pydantic schema definitions with proper field validation and descriptions.\n\nSchemas must include proper field types, descriptions, and configuration for ORM compatibility."
+    },
+    "background_task_patterns": {
+      "title": "Background Task Patterns",
+      "description": "",
+      "content": ""
+    },
+    "task_definition": {
+      "title": "Task Definition",
+      "description": "```python\nfrom .background_tasks import background_task\n\n@background_task\nasync def process_stock_da...",
+      "content": "```python\nfrom .background_tasks import background_task\n\n@background_task\nasync def process_stock_data():\n    \"\"\"Background task for processing stock data.\"\"\"\n    try:\n        config = get_stock_data_config()\n        processor = StockDataProcessor(config)\n        await processor.process_all_files()\n    except Exception as e:\n        logger.error(f\"Stock data processing failed: {e}\")\n        # Don't re-raise - background tasks should handle errors gracefully\n```\n\nThis pattern will inform background task implementation with proper error handling and logging.\n\nBackground tasks must handle errors gracefully and not re-raise exceptions."
+    },
+    "task_scheduling": {
+      "title": "Task Scheduling",
+      "description": "```python",
+      "content": "```python"
+    },
+    "in_mainpy_or_appropriate_startup_location": {
+      "title": "In main.py or appropriate startup location",
+      "description": "from .background_tasks import schedule_periodic_task",
+      "content": "from .background_tasks import schedule_periodic_task"
+    },
+    "schedule_periodic_tasks": {
+      "title": "Schedule periodic tasks",
+      "description": "schedule_periodic_task(\n    task_name=\"process_stock_data\",\n    interval_seconds=300,  # 5 minutes\n ...",
+      "content": "schedule_periodic_task(\n    task_name=\"process_stock_data\",\n    interval_seconds=300,  # 5 minutes\n    task_function=process_stock_data\n)\n```\n\nThis pattern will inform how to schedule and configure background tasks.\n\nTask scheduling must include proper intervals and error handling."
+    },
+    "file_processing_patterns": {
+      "title": "File Processing Patterns",
+      "description": "",
+      "content": ""
+    },
+    "file_organization": {
+      "title": "File Organization",
+      "description": "```python",
+      "content": "```python"
+    },
+    "standard_file_organization_structure": {
+      "title": "Standard file organization structure",
+      "description": "cream_api/\n├── files/\n│   ├── raw_responses/      # Raw data files\n│   └── parsed_responses/   # Pro...",
+      "content": "cream_api/\n├── files/\n│   ├── raw_responses/      # Raw data files\n│   └── parsed_responses/   # Processed data files\n├── stock_data/\n│   ├── config.py          # Configuration\n│   ├── models.py          # Database models\n│   ├── retriever.py       # Data retrieval\n│   ├── parser.py          # Data parsing\n│   ├── loader.py          # Data loading\n│   ├── processor.py       # File processing\n│   ├── tasks.py           # Background tasks\n│   └── api.py             # API endpoints\n```\n\nThis pattern will inform file organization and module structure for new features.\n\nFile organization must follow this structure for consistency and maintainability."
+    },
+    "file_processing_workflow": {
+      "title": "File Processing Workflow",
+      "description": "```python\nclass FileProcessor:\n    \"\"\"Orchestrates file processing workflow.\"\"\"\n\n    def __init__(se...",
+      "content": "```python\nclass FileProcessor:\n    \"\"\"Orchestrates file processing workflow.\"\"\"\n\n    def __init__(self, config: dict):\n        self.config = config\n        self.parser = DataParser(config)\n        self.loader = DataLoader(config)\n\n    async def process_file(self, file_path: str) -> bool:\n        \"\"\"Process a single file through the complete pipeline.\"\"\"\n        try:\n            # Parse the file\n            data = await self.parser.parse_file(file_path)\n\n            # Load data to database\n            await self.loader.load_data(data)\n\n            # Move file to processed directory\n            await self._move_to_processed(file_path)\n\n            return True\n        except Exception as e:\n            logger.error(f\"File processing failed for {file_path}: {e}\")\n            return False\n```\n\nThis pattern will inform file processing workflow implementation with proper error handling.\n\nFile processing must include proper error handling, logging, and file movement operations."
+    },
+    "testing_patterns": {
+      "title": "Testing Patterns",
+      "description": "",
+      "content": ""
+    },
+    "unit_test_structure": {
+      "title": "Unit Test Structure",
+      "description": "```python\nimport pytest\nfrom unittest.mock import AsyncMock, patch\nfrom .models import StockData\nfro...",
+      "content": "```python\nimport pytest\nfrom unittest.mock import AsyncMock, patch\nfrom .models import StockData\nfrom .processor import FileProcessor\n\nclass TestFileProcessor:\n    \"\"\"Test cases for FileProcessor class.\"\"\"\n\n    @pytest.fixture\n    def processor(self):\n        \"\"\"Create processor instance for testing.\"\"\"\n        config = {\"test\": True}\n        return FileProcessor(config)\n\n    @pytest.mark.asyncio\n    async def test_process_file_success(self, processor):\n        \"\"\"Test successful file processing.\"\"\"\n        with patch.object(processor.parser, 'parse_file') as mock_parse:\n            mock_parse.return_value = [{\"symbol\": \"AAPL\", \"price\": 150}]\n\n            result = await processor.process_file(\"test_file.txt\")\n\n            assert result is True\n            mock_parse.assert_called_once_with(\"test_file.txt\")\n\n    @pytest.mark.asyncio\n    async def test_process_file_failure(self, processor):\n        \"\"\"Test file processing failure.\"\"\"\n        with patch.object(processor.parser, 'parse_file') as mock_parse:\n            mock_parse.side_effect = Exception(\"Parse failed\")\n\n            result = await processor.process_file(\"test_file.txt\")\n\n            assert result is False\n```\n\nThis pattern will inform unit test structure with proper fixtures and async testing.\n\nTests must include proper fixtures, async testing, and comprehensive error case coverage."
+    },
+    "integration_test_structure": {
+      "title": "Integration Test Structure",
+      "description": "```python\nimport pytest\nfrom sqlalchemy.ext.asyncio import AsyncSession\nfrom .models import StockDat...",
+      "content": "```python\nimport pytest\nfrom sqlalchemy.ext.asyncio import AsyncSession\nfrom .models import StockData\nfrom .api import get_stock_data\n\n@pytest.mark.asyncio\nasync def test_get_stock_data_integration(async_session: AsyncSession):\n    \"\"\"Test stock data retrieval integration.\"\"\"\n    # Setup test data\n    test_data = StockData(\n        symbol=\"AAPL\",\n        date=datetime.now(),\n        price=15000\n    )\n    async_session.add(test_data)\n    await async_session.commit()\n\n    # Test the endpoint\n    result = await get_stock_data(\"AAPL\", async_session)\n\n    assert result.symbol == \"AAPL\"\n    assert result.price == 15000\n```\n\nThis pattern will inform integration test structure with database setup and teardown.\n\nIntegration tests must include proper database setup, test data creation, and cleanup."
+    },
+    "configuration_patterns": {
+      "title": "Configuration Patterns",
+      "description": "",
+      "content": ""
+    },
+    "environment_based_configuration": {
+      "title": "Environment-Based Configuration",
+      "description": "```python\nimport os\nfrom pydantic import BaseSettings\n\nclass StockDataConfig(BaseSettings):\n    \"\"\"C...",
+      "content": "```python\nimport os\nfrom pydantic import BaseSettings\n\nclass StockDataConfig(BaseSettings):\n    \"\"\"Configuration for stock data processing.\"\"\"\n\n    # File paths\n    raw_responses_dir: str = \"cream_api/files/raw_responses\"\n    parsed_responses_dir: str = \"cream_api/files/parsed_responses\"\n\n    # HTTP settings\n    timeout_seconds: int = 30\n    max_retries: int = 3\n    retry_delay_seconds: int = 5\n\n    # Processing settings\n    batch_size: int = 100\n    max_concurrent_files: int = 5\n\n    class Config:\n        env_prefix = \"STOCK_DATA_\"\n```\n\nThis pattern will inform configuration class structure with environment variable support.\n\nConfiguration must use Pydantic for validation and support environment variable overrides."
+    },
+    "configuration_loading": {
+      "title": "Configuration Loading",
+      "description": "```python\ndef get_stock_data_config() -> StockDataConfig:\n    \"\"\"Get stock data configuration.\"\"\"\n  ...",
+      "content": "```python\ndef get_stock_data_config() -> StockDataConfig:\n    \"\"\"Get stock data configuration.\"\"\"\n    return StockDataConfig()"
+    },
+    "load_once_at_module_level": {
+      "title": "Load once at module level",
+      "description": "config = get_stock_data_config()\n```\n\nThis pattern will inform configuration loading and usage throu...",
+      "content": "config = get_stock_data_config()\n```\n\nThis pattern will inform configuration loading and usage throughout modules.\n\nConfiguration must be loaded once at module level and reused, not loaded multiple times."
+    },
+    "logging_patterns": {
+      "title": "Logging Patterns",
+      "description": "",
+      "content": ""
+    },
+    "structured_logging": {
+      "title": "Structured Logging",
+      "description": "```python\nimport logging\nimport json\nfrom datetime import datetime\n\nclass StructuredFormatter(loggin...",
+      "content": "```python\nimport logging\nimport json\nfrom datetime import datetime\n\nclass StructuredFormatter(logging.Formatter):\n    \"\"\"Structured JSON logging formatter.\"\"\"\n\n    def format(self, record):\n        log_entry = {\n            \"timestamp\": datetime.utcnow().isoformat(),\n            \"level\": record.levelname,\n            \"module\": record.module,\n            \"function\": record.funcName,\n            \"line\": record.lineno,\n            \"message\": record.getMessage()\n        }\n\n        if hasattr(record, 'extra_fields'):\n            log_entry.update(record.extra_fields)\n\n        return json.dumps(log_entry)"
+    },
+    "configure_logging": {
+      "title": "Configure logging",
+      "description": "logger = logging.getLogger(__name__)\nhandler = logging.StreamHandler()\nhandler.setFormatter(Structur...",
+      "content": "logger = logging.getLogger(__name__)\nhandler = logging.StreamHandler()\nhandler.setFormatter(StructuredFormatter())\nlogger.addHandler(handler)\nlogger.setLevel(logging.INFO)\n```\n\nThis pattern will inform structured logging implementation with JSON formatting.\n\nLogging must include structured format with timestamps, levels, and contextual information."
+    },
+    "logging_usage": {
+      "title": "Logging Usage",
+      "description": "```python",
+      "content": "```python"
+    },
+    "standard_logging_patterns": {
+      "title": "Standard logging patterns",
+      "description": "logger.info(\"Processing started\", extra={\"file_count\": 10})\nlogger.warning(\"Retry attempt\", extra={\"...",
+      "content": "logger.info(\"Processing started\", extra={\"file_count\": 10})\nlogger.warning(\"Retry attempt\", extra={\"attempt\": 3, \"max_retries\": 5})\nlogger.error(\"Processing failed\", extra={\"file\": \"data.txt\", \"error\": str(e)})\nlogger.debug(\"Debug information\", extra={\"data_size\": len(data)})\n```\n\nThis pattern will inform logging usage with proper levels and contextual information.\n\nLogging must use appropriate levels and include relevant contextual information."
+    },
+    "error_handling_patterns": {
+      "title": "Error Handling Patterns",
+      "description": "",
+      "content": ""
+    },
+    "custom_exceptions": {
+      "title": "Custom Exceptions",
+      "description": "```python\nclass StockDataException(Exception):\n    \"\"\"Base exception for stock data operations.\"\"\"\n ...",
+      "content": "```python\nclass StockDataException(Exception):\n    \"\"\"Base exception for stock data operations.\"\"\"\n    pass\n\nclass StockDataRetrievalError(StockDataException):\n    \"\"\"Raised when stock data retrieval fails.\"\"\"\n    pass\n\nclass StockDataParsingError(StockDataException):\n    \"\"\"Raised when stock data parsing fails.\"\"\"\n    pass\n\nclass StockDataLoadingError(StockDataException):\n    \"\"\"Raised when stock data loading fails.\"\"\"\n    pass\n```\n\nThis pattern will inform custom exception hierarchy for domain_specific error handling.\n\nCustom exceptions must inherit from appropriate base classes and provide meaningful error messages."
+    },
+    "error_recovery": {
+      "title": "Error Recovery",
+      "description": "```python\nasync def process_with_retry(operation, max_retries: int = 3):\n    \"\"\"Execute operation wi...",
+      "content": "```python\nasync def process_with_retry(operation, max_retries: int = 3):\n    \"\"\"Execute operation with retry logic.\"\"\"\n    for attempt in range(max_retries):\n        try:\n            return await operation()\n        except Exception as e:\n            if attempt == max_retries - 1:\n                raise\n            logger.warning(f\"Attempt {attempt + 1} failed, retrying: {e}\")\n            await asyncio.sleep(2 ** attempt)  # Exponential backoff\n```\n\nThis pattern will inform retry logic implementation with exponential backoff.\n\nRetry logic must include proper backoff strategies and maximum retry limits."
+    },
+    "performance_patterns": {
+      "title": "Performance Patterns",
+      "description": "",
+      "content": ""
+    },
+    "async_operations": {
+      "title": "Async Operations",
+      "description": "```python\nasync def process_files_concurrently(files: list[str], max_concurrent: int = 5):\n    \"\"\"Pr...",
+      "content": "```python\nasync def process_files_concurrently(files: list[str], max_concurrent: int = 5):\n    \"\"\"Process multiple files concurrently with semaphore limiting.\"\"\"\n    semaphore = asyncio.Semaphore(max_concurrent)\n\n    async def process_single_file(file_path: str):\n        async with semaphore:\n            return await process_file(file_path)\n\n    tasks = [process_single_file(file) for file in files]\n    results = await asyncio.gather(*tasks, return_exceptions=True)\n\n    return results\n```\n\nThis pattern will inform concurrent processing implementation with proper resource limiting.\n\nConcurrent operations must include proper resource limiting and error handling."
+    },
+    "database_optimization": {
+      "title": "Database Optimization",
+      "description": "```python\nasync def batch_insert_data(session: AsyncSession, data: list[dict]):\n    \"\"\"Insert data i...",
+      "content": "```python\nasync def batch_insert_data(session: AsyncSession, data: list[dict]):\n    \"\"\"Insert data in batches for better performance.\"\"\"\n    batch_size = 1000\n\n    for i in range(0, len(data), batch_size):\n        batch = data[i:i + batch_size]\n        models = [StockData(**item) for item in batch]\n        session.add_all(models)\n        await session.commit()\n```\n\nThis pattern will inform batch database operations for improved performance.\n\nBatch operations must include proper batch sizes and transaction management."
+    },
+    "security_patterns": {
+      "title": "Security Patterns",
+      "description": "",
+      "content": ""
+    },
+    "input_validation": {
+      "title": "Input Validation",
+      "description": "```python\nfrom pydantic import BaseModel, validator\nimport re\n\nclass StockSymbolRequest(BaseModel):\n...",
+      "content": "```python\nfrom pydantic import BaseModel, validator\nimport re\n\nclass StockSymbolRequest(BaseModel):\n    symbol: str\n\n    @validator('symbol')\n    def validate_symbol(cls, v):\n        if not re.match(r'^[A-Z]{1,10}$', v):\n            raise ValueError('Symbol must be 1-10 uppercase letters')\n        return v.upper()\n```\n\nThis pattern will inform input validation implementation with Pydantic validators.\n\nInput validation must include proper regex patterns and meaningful error messages."
+    },
+    "authentication_and_authorization": {
+      "title": "Authentication and Authorization",
+      "description": "```python\nfrom fastapi import Depends, HTTPException, status\nfrom fastapi.security import HTTPBearer...",
+      "content": "```python\nfrom fastapi import Depends, HTTPException, status\nfrom fastapi.security import HTTPBearer\n\nsecurity = HTTPBearer()\n\nasync def get_current_user(token: str = Depends(security)):\n    \"\"\"Validate user authentication.\"\"\"\n    try:\n        # Validate token and return user\n        user = validate_token(token.credentials)\n        return user\n    except Exception:\n        raise HTTPException(\n            status_code=status.HTTP_401_UNAUTHORIZED,\n            detail=\"Invalid authentication credentials\"\n        )\n\nasync def require_admin(user = Depends(get_current_user)):\n    \"\"\"Require admin privileges.\"\"\"\n    if not user.is_admin:\n        raise HTTPException(\n            status_code=status.HTTP_403_FORBIDDEN,\n            detail=\"Admin privileges required\"\n        )\n    return user\n```\n\nThis pattern will inform authentication and authorization implementation.\n\nAuthentication must include proper token validation and role-based access control."
+    },
+    "implementation_guidelines": {
+      "title": "Implementation Guidelines",
+      "description": "",
+      "content": ""
+    },
+    "for_ai_assistants": {
+      "title": "For AI Assistants",
+      "description": "1. **Reference this document** for all pattern implementations\n2. **Follow established conventions**...",
+      "content": "1. **Reference this document** for all pattern implementations\n2. **Follow established conventions** for consistency\n3. **Apply patterns consistently** across similar functionality\n4. **Validate implementations** against pattern requirements\n5. **Update patterns** when new best practices emerge"
+    },
+    "for_human_developers": {
+      "title": "For Human Developers",
+      "description": "1. **Follow these patterns** for all new implementations\n2. **Reference patterns** when reviewing co...",
+      "content": "1. **Follow these patterns** for all new implementations\n2. **Reference patterns** when reviewing code\n3. **Suggest pattern improvements** when better approaches are found\n4. **Maintain consistency** with established conventions\n5. **Document deviations** when patterns cannot be followed"
+    },
+    "quality_assurance": {
+      "title": "Quality Assurance",
+      "description": "",
+      "content": ""
+    },
+    "pattern_compliance": {
+      "title": "Pattern Compliance",
+      "description": "- All implementations must follow established patterns\n- Deviations must be justified and documented...",
+      "content": "- All implementations must follow established patterns\n- Deviations must be justified and documented\n- Pattern updates must be reviewed and approved\n- Consistency must be maintained across the codebase"
+    },
+    "code_quality": {
+      "title": "Code Quality",
+      "description": "- All code must follow project style guidelines\n- Error handling must be comprehensive\n- Performance...",
+      "content": "- All code must follow project style guidelines\n- Error handling must be comprehensive\n- Performance must meet established requirements\n- Security must follow established patterns"
+    },
+    "documentation": {
+      "title": "Documentation",
+      "description": "- All patterns must be documented with examples\n- Implementation guidelines must be clear\n- Validati...",
+      "content": "- All patterns must be documented with examples\n- Implementation guidelines must be clear\n- Validation rules must be specific\n- Updates must be communicated to the team\n\n---\n\n**AI Quality Checklist**: Before implementing patterns, ensure:\n- [x] Pattern is appropriate for the specific use case\n- [x] Implementation follows established conventions\n- [x] Error handling is comprehensive\n- [x] Performance requirements are met\n- [x] Security patterns are followed\n- [x] Code quality standards are maintained\n- [x] Documentation is updated\n- [x] Tests are implemented"
+    }
+  },
+  "implementation_guidelines": {
+    "logging_usage": {
+      "title": "Logging Usage",
+      "content": "```python"
+    },
+    "implementation_guidelines": {
+      "title": "Implementation Guidelines",
+      "content": ""
+    }
+  }
+}

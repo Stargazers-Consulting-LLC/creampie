@@ -1,0 +1,425 @@
+{
+  "metadata": {
+    "title": "ai_tool_optimization_guide",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "guide_docs/ai_tool_optimization_guide.md",
+    "cross_references": []
+  },
+  "sections": {
+    "ai_tool_optimization_guide": {
+      "title": "ai_tool_optimization_guide",
+      "description": "> This guide provides comprehensive patterns and strategies for optimizing AI documentation for maxi...",
+      "content": "> This guide provides comprehensive patterns and strategies for optimizing AI documentation for maximum tool consumption efficiency. Use these patterns to create AI-friendly documentation systems."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "[Comprehensive metadata section]",
+      "content": "[Comprehensive metadata section]"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "[Clear purpose and scope]",
+      "content": "[Clear purpose and scope]"
+    },
+    "1_metadata_standards": {
+      "title": "1. Metadata Standards",
+      "description": "",
+      "content": ""
+    },
+    "required_ai_metadata_fields": {
+      "title": "Required AI Metadata Fields",
+      "description": "Every document should include these metadata fields:\n\n```markdown",
+      "content": "Every document should include these metadata fields:\n\n```markdown"
+    },
+    "metadata_field_guidelines": {
+      "title": "Metadata Field Guidelines",
+      "description": "",
+      "content": ""
+    },
+    "template_version": {
+      "title": "Template Version",
+      "description": "- **Format**: Semantic versioning (e.g., 1.0, 2.1)\n- **Purpose**: Track document evolution and compa...",
+      "content": "- **Format**: Semantic versioning (e.g., 1.0, 2.1)\n- **Purpose**: Track document evolution and compatibility\n- **Update**: Increment when making significant changes"
+    },
+    "ai_processing_level": {
+      "title": "AI Processing Level",
+      "description": "- **High**: Complex patterns, multiple dependencies, extensive code generation\n- **Medium**: Standar...",
+      "content": "- **High**: Complex patterns, multiple dependencies, extensive code generation\n- **Medium**: Standard patterns, moderate dependencies, some code generation\n- **Low**: Simple patterns, minimal dependencies, no code generation"
+    },
+    "required_context": {
+      "title": "Required Context",
+      "description": "- **Be specific**: List exact files or concepts needed\n- **Include paths**: Reference actual file lo...",
+      "content": "- **Be specific**: List exact files or concepts needed\n- **Include paths**: Reference actual file locations\n- **Prioritize**: List most important context first"
+    },
+    "validation_rules": {
+      "title": "Validation Rules",
+      "description": "- **Be actionable**: Rules should guide implementation\n- **Be measurable**: Rules should be verifiab...",
+      "content": "- **Be actionable**: Rules should guide implementation\n- **Be measurable**: Rules should be verifiable\n- **Be consistent**: Align with project standards"
+    },
+    "2_search_optimization": {
+      "title": "2. Search Optimization",
+      "description": "",
+      "content": ""
+    },
+    "keyword_strategy": {
+      "title": "Keyword Strategy",
+      "description": "",
+      "content": ""
+    },
+    "primary_keywords": {
+      "title": "Primary Keywords",
+      "description": "- **Technology-specific**: Python, FastAPI, React, TypeScript, SQLAlchemy\n- **Pattern-specific**: AP...",
+      "content": "- **Technology-specific**: Python, FastAPI, React, TypeScript, SQLAlchemy\n- **Pattern-specific**: API design, testing, error handling, authentication\n- **domain_specific**: Stock data, web scraping, database management"
+    },
+    "secondary_keywords": {
+      "title": "Secondary Keywords",
+      "description": "- **Concept-specific**: Architecture, patterns, best practices, guidelines\n- **Process-specific**: D...",
+      "content": "- **Concept-specific**: Architecture, patterns, best practices, guidelines\n- **Process-specific**: Development workflow, code review, deployment\n- **Quality-specific**: Testing, validation, error handling, performance"
+    },
+    "semantic_tags": {
+      "title": "Semantic Tags",
+      "description": "- **Action-oriented**: \"How to\", \"Implement\", \"Create\", \"Debug\"\n- **Context-specific**: \"Backend\", \"...",
+      "content": "- **Action-oriented**: \"How to\", \"Implement\", \"Create\", \"Debug\"\n- **Context-specific**: \"Backend\", \"Frontend\", \"Database\", \"API\"\n- **Complexity-specific**: \"Beginner\", \"Intermediate\", \"Advanced\""
+    },
+    "search_optimization_patterns": {
+      "title": "Search Optimization Patterns",
+      "description": "",
+      "content": ""
+    },
+    "document_structure": {
+      "title": "Document Structure",
+      "description": "```markdown",
+      "content": "```markdown"
+    },
+    "clear_descriptive_title": {
+      "title": "[Clear, Descriptive Title]",
+      "description": "> **For AI Assistants**: [Brief purpose and usage guidance]",
+      "content": "> **For AI Assistants**: [Brief purpose and usage guidance]"
+    },
+    "main_content_sections": {
+      "title": "[Main Content Sections]",
+      "description": "[Well-structured content with clear headings]",
+      "content": "[Well-structured content with clear headings]"
+    },
+    "related_documents": {
+      "title": "Related Documents",
+      "description": "- **[Related Guide](path/to/guide.json.replace(\".json\", \".json\"))** - [Brief description of relation...",
+      "content": "- **[Related Guide](path/to/guide.json.replace(\".json\", \".json\"))** - [Brief description of relationship]\n- **[Implementation Example](path/to/example.json.replace(\".json\", \".json\"))** - [Brief description of example]\n- **[Pattern Reference](path/to/pattern.json.replace(\".json\", \".json\"))** - [Brief description of pattern]\n```"
+    },
+    "content_organization": {
+      "title": "Content Organization",
+      "description": "- **Hierarchical headings**: Use clear heading structure (H1, H2, H3)\n- **Consistent formatting**: U...",
+      "content": "- **Hierarchical headings**: Use clear heading structure (H1, H2, H3)\n- **Consistent formatting**: Use consistent markdown patterns\n- **Clear sections**: Separate different concepts into distinct sections\n- **Logical flow**: Organize content in logical progression"
+    },
+    "3_code_generation_hints": {
+      "title": "3. Code Generation Hints",
+      "description": "",
+      "content": ""
+    },
+    "hint_structure": {
+      "title": "Hint Structure",
+      "description": "",
+      "content": ""
+    },
+    "standard_code_generation_hint_format": {
+      "title": "Standard Code Generation Hint Format",
+      "description": "```markdown\n[Specific guidance for implementation]\n\n[How to verify the generated code is correct]\n``...",
+      "content": "```markdown\n[Specific guidance for implementation]\n\n[How to verify the generated code is correct]\n```"
+    },
+    "hint_types": {
+      "title": "Hint Types",
+      "description": "",
+      "content": ""
+    },
+    "implementation_hints": {
+      "title": "Implementation Hints",
+      "description": "- **Function signatures**: Provide exact function signatures\n- **Class structures**: Define class pr...",
+      "content": "- **Function signatures**: Provide exact function signatures\n- **Class structures**: Define class properties and methods\n- **File organization**: Specify file structure and imports\n- **Error handling**: Define error handling patterns"
+    },
+    "integration_hints": {
+      "title": "Integration Hints",
+      "description": "- **API endpoints**: Specify endpoint patterns and responses\n- **Database models**: Define model rel...",
+      "content": "- **API endpoints**: Specify endpoint patterns and responses\n- **Database models**: Define model relationships and constraints\n- **Frontend components**: Specify component props and state\n- **Testing patterns**: Define test structure and assertions"
+    },
+    "configuration_hints": {
+      "title": "Configuration Hints",
+      "description": "- **Environment setup**: Specify configuration requirements\n- **Dependency management**: Define pack...",
+      "content": "- **Environment setup**: Specify configuration requirements\n- **Dependency management**: Define package requirements\n- **Build processes**: Specify build and deployment steps\n- **Security patterns**: Define authentication and authorization"
+    },
+    "code_generation_best_practices": {
+      "title": "Code Generation Best Practices",
+      "description": "",
+      "content": ""
+    },
+    "be_specific": {
+      "title": "Be Specific",
+      "description": "- **Use exact names**: Reference actual file paths and function names\n- **Provide examples**: Includ...",
+      "content": "- **Use exact names**: Reference actual file paths and function names\n- **Provide examples**: Include concrete examples from existing codebase\n- **Specify types**: Define exact data types and structures\n- **Include validation**: Specify how to verify correctness"
+    },
+    "be_contextual": {
+      "title": "Be Contextual",
+      "description": "- **Reference existing patterns**: Point to similar implementations\n- **Consider dependencies**: Acc...",
+      "content": "- **Reference existing patterns**: Point to similar implementations\n- **Consider dependencies**: Account for required imports and setup\n- **Follow conventions**: Use established naming and structure patterns\n- **Maintain consistency**: Align with existing codebase standards"
+    },
+    "be_actionable": {
+      "title": "Be Actionable",
+      "description": "- **Provide clear steps**: Break down complex implementations\n- **Include error handling**: Specify ...",
+      "content": "- **Provide clear steps**: Break down complex implementations\n- **Include error handling**: Specify how to handle common issues\n- **Define success criteria**: Specify how to verify completion\n- **Consider edge cases**: Address potential problems and solutions"
+    },
+    "4_cross_reference_system": {
+      "title": "4. Cross-Reference System",
+      "description": "",
+      "content": ""
+    },
+    "reference_types": {
+      "title": "Reference Types",
+      "description": "",
+      "content": ""
+    },
+    "dependency_references": {
+      "title": "Dependency References",
+      "description": "```markdown\n**Dependencies:**\n- `../project_context/architecture_overview.json.replace(\".json\", \".js...",
+      "content": "```markdown\n**Dependencies:**\n- `../project_context/architecture_overview.json.replace(\".json\", \".json\")` - System architecture\n- `../guide_docs/core_principles.json.replace(\".json\", \".json\")` - Decision frameworks\n- `../features/summaries/module_summary.json.replace(\".json\", \".json\")` - Implementation details\n```"
+    },
+    "related_content_references": {
+      "title": "Related Content References",
+      "description": "```markdown",
+      "content": "```markdown"
+    },
+    "bidirectional_linking": {
+      "title": "Bidirectional Linking",
+      "description": "- **Forward references**: Link to content that builds on current document\n- **Backward references**:...",
+      "content": "- **Forward references**: Link to content that builds on current document\n- **Backward references**: Link to foundational content\n- **Lateral references**: Link to related content at same level\n- **Context references**: Link to broader context and background"
+    },
+    "cross_reference_best_practices": {
+      "title": "Cross-Reference Best Practices",
+      "description": "",
+      "content": ""
+    },
+    "maintain_accuracy": {
+      "title": "Maintain Accuracy",
+      "description": "- **Verify links**: Ensure all references point to valid content\n- **Update regularly**: Keep refere...",
+      "content": "- **Verify links**: Ensure all references point to valid content\n- **Update regularly**: Keep references current as content evolves\n- **Check relevance**: Ensure references are actually relevant\n- **Test navigation**: Verify that references help with navigation"
+    },
+    "provide_context": {
+      "title": "Provide Context",
+      "description": "- **Explain relationships**: Describe why content is related\n- **Specify purpose**: Explain how refe...",
+      "content": "- **Explain relationships**: Describe why content is related\n- **Specify purpose**: Explain how referenced content should be used\n- **Indicate priority**: Show which references are most important\n- **Include summaries**: Provide brief descriptions of referenced content"
+    },
+    "5_context_awareness": {
+      "title": "5. Context Awareness",
+      "description": "",
+      "content": ""
+    },
+    "context_types": {
+      "title": "Context Types",
+      "description": "",
+      "content": ""
+    },
+    "user_context": {
+      "title": "User Context",
+      "description": "- **Experience level**: Beginner, intermediate, advanced\n- **Current focus**: What they're working o...",
+      "content": "- **Experience level**: Beginner, intermediate, advanced\n- **Current focus**: What they're working on right now\n- **Previous interactions**: What they've done before\n- **Preferences**: How they like to work"
+    },
+    "project_context": {
+      "title": "Project Context",
+      "description": "- **Architecture**: Overall system design and structure\n- **Patterns**: Established conventions and ...",
+      "content": "- **Architecture**: Overall system design and structure\n- **Patterns**: Established conventions and approaches\n- **Constraints**: Technical and business limitations\n- **Goals**: What the project is trying to achieve"
+    },
+    "code_context": {
+      "title": "Code Context",
+      "description": "- **Current file**: What file they're working in\n- **Related files**: Files that are connected or de...",
+      "content": "- **Current file**: What file they're working in\n- **Related files**: Files that are connected or dependent\n- **Recent changes**: What they've been modifying\n- **Error context**: What problems they're encountering"
+    },
+    "context_awareness_techniques": {
+      "title": "Context Awareness Techniques",
+      "description": "",
+      "content": ""
+    },
+    "progressive_disclosure": {
+      "title": "Progressive Disclosure",
+      "description": "- **Start simple**: Begin with basic concepts\n- **Build complexity**: Add details as needed\n- **Prov...",
+      "content": "- **Start simple**: Begin with basic concepts\n- **Build complexity**: Add details as needed\n- **Provide options**: Offer different levels of detail\n- **Respect boundaries**: Don't overwhelm with unnecessary information"
+    },
+    "adaptive_responses": {
+      "title": "Adaptive Responses",
+      "description": "- **Match complexity**: Adjust detail level to user's needs\n- **Focus relevance**: Prioritize inform...",
+      "content": "- **Match complexity**: Adjust detail level to user's needs\n- **Focus relevance**: Prioritize information that's immediately useful\n- **Provide context**: Explain why information is relevant\n- **Offer alternatives**: Suggest different approaches when appropriate"
+    },
+    "context_switching": {
+      "title": "Context Switching",
+      "description": "- **Maintain awareness**: Keep track of multiple contexts\n- **Smooth transitions**: Help users move ...",
+      "content": "- **Maintain awareness**: Keep track of multiple contexts\n- **Smooth transitions**: Help users move between contexts\n- **Preserve state**: Remember important information across contexts\n- **Provide summaries**: Give quick context refreshers when needed"
+    },
+    "6_quality_assurance": {
+      "title": "6. Quality Assurance",
+      "description": "",
+      "content": ""
+    },
+    "documentation_quality": {
+      "title": "Documentation Quality",
+      "description": "",
+      "content": ""
+    },
+    "completeness": {
+      "title": "Completeness",
+      "description": "- **All sections filled**: No empty or placeholder content\n- **Comprehensive coverage**: Address all...",
+      "content": "- **All sections filled**: No empty or placeholder content\n- **Comprehensive coverage**: Address all relevant aspects\n- **Clear examples**: Provide concrete, actionable examples\n- **Updated information**: Keep content current and accurate"
+    },
+    "consistency": {
+      "title": "Consistency",
+      "description": "- **Formatting standards**: Use consistent markdown patterns\n- **Naming conventions**: Follow establ...",
+      "content": "- **Formatting standards**: Use consistent markdown patterns\n- **Naming conventions**: Follow established naming patterns\n- **Structure patterns**: Use consistent document organization\n- **Style guidelines**: Follow established writing style"
+    },
+    "accuracy": {
+      "title": "Accuracy",
+      "description": "- **Factual correctness**: Ensure all information is accurate\n- **Current status**: Keep information...",
+      "content": "- **Factual correctness**: Ensure all information is accurate\n- **Current status**: Keep information up to date\n- **Valid references**: Ensure all links and references work\n- **Tested examples**: Verify that examples are correct and work"
+    },
+    "implementation_quality": {
+      "title": "Implementation Quality",
+      "description": "",
+      "content": ""
+    },
+    "code_standards": {
+      "title": "Code Standards",
+      "description": "- **Style compliance**: Follow established coding standards\n- **Error handling**: Include proper err...",
+      "content": "- **Style compliance**: Follow established coding standards\n- **Error handling**: Include proper error handling patterns\n- **Testing coverage**: Include comprehensive testing\n- **Documentation**: Include clear comments and documentation"
+    },
+    "integration_quality": {
+      "title": "Integration Quality",
+      "description": "- **Compatibility**: Ensure compatibility with existing systems\n- **Performance**: Consider performa...",
+      "content": "- **Compatibility**: Ensure compatibility with existing systems\n- **Performance**: Consider performance implications\n- **Security**: Follow security best practices\n- **Maintainability**: Ensure code is maintainable and extensible"
+    },
+    "7_maintenance_guidelines": {
+      "title": "7. Maintenance Guidelines",
+      "description": "",
+      "content": ""
+    },
+    "regular_reviews": {
+      "title": "Regular Reviews",
+      "description": "",
+      "content": ""
+    },
+    "content_reviews": {
+      "title": "Content Reviews",
+      "description": "- **Monthly reviews**: Check for outdated information\n- **Quarterly audits**: Comprehensive content ...",
+      "content": "- **Monthly reviews**: Check for outdated information\n- **Quarterly audits**: Comprehensive content audits\n- **User feedback**: Incorporate user suggestions and feedback\n- **Usage analytics**: Track which content is most used"
+    },
+    "structure_reviews": {
+      "title": "Structure Reviews",
+      "description": "- **Organization**: Ensure logical content organization\n- **Navigation**: Verify easy navigation bet...",
+      "content": "- **Organization**: Ensure logical content organization\n- **Navigation**: Verify easy navigation between documents\n- **Cross-references**: Check accuracy of all references\n- **Metadata**: Update metadata as needed"
+    },
+    "update_procedures": {
+      "title": "Update Procedures",
+      "description": "",
+      "content": ""
+    },
+    "version_control": {
+      "title": "Version Control",
+      "description": "- **Track changes**: Document all significant changes\n- **Maintain history**: Keep change history fo...",
+      "content": "- **Track changes**: Document all significant changes\n- **Maintain history**: Keep change history for reference\n- **Backward compatibility**: Maintain compatibility where possible\n- **Migration guides**: Provide guides for major changes"
+    },
+    "communication": {
+      "title": "Communication",
+      "description": "- **Announce changes**: Notify users of significant updates\n- **Explain reasoning**: Provide context...",
+      "content": "- **Announce changes**: Notify users of significant updates\n- **Explain reasoning**: Provide context for changes\n- **Offer support**: Help users adapt to changes\n- **Gather feedback**: Collect feedback on changes"
+    },
+    "8_best_practices_summary": {
+      "title": "8. Best Practices Summary",
+      "description": "",
+      "content": ""
+    },
+    "for_ai_assistants": {
+      "title": "For AI Assistants",
+      "description": "1. **Always check metadata** before using any document\n2. **Follow cross-references** to understand ...",
+      "content": "1. **Always check metadata** before using any document\n2. **Follow cross-references** to understand full context\n3. **Use code generation hints** for implementation guidance\n4. **Maintain context awareness** throughout interactions\n5. **Validate outputs** against established rules"
+    },
+    "for_documentation_maintainers": {
+      "title": "For Documentation Maintainers",
+      "description": "1. **Keep metadata current** and comprehensive\n2. **Maintain cross-references** and ensure accuracy\n...",
+      "content": "1. **Keep metadata current** and comprehensive\n2. **Maintain cross-references** and ensure accuracy\n3. **Update content regularly** to reflect current state\n4. **Test documentation** with actual AI tools\n5. **Gather feedback** and continuously improve"
+    },
+    "for_users": {
+      "title": "For Users",
+      "description": "1. **Start with overview** documents to understand structure\n2. **Follow cross-references** to find ...",
+      "content": "1. **Start with overview** documents to understand structure\n2. **Follow cross-references** to find related information\n3. **Use search features** to find specific content\n4. **Provide feedback** to improve documentation\n5. **Stay updated** with documentation changes\n\n---\n\n**AI Tool Optimization Checklist**: Before publishing any AI documentation, ensure:\n- [x] Comprehensive AI metadata is included\n- [x] Keywords are relevant and searchable\n- [x] Cross-references are accurate and bidirectional\n- [x] Code generation hints are specific and actionable\n- [x] Context awareness is maintained throughout\n- [x] Quality standards are met and validated\n- [x] Documentation is current and accurate\n- [x] User experience is optimized for AI tool consumption"
+    },
+    "code_generation_support": {
+      "title": "Code Generation Support",
+      "description": "- **Specific File Paths**: Exact references to codebase structure\n- **Implementation Hints**: Clear ...",
+      "content": "- **Specific File Paths**: Exact references to codebase structure\n- **Implementation Hints**: Clear guidance for code generation\n- **Pattern Examples**: Concrete examples from existing codebase\n- **Validation Rules**: Quality standards for generated code"
+    },
+    "script_optimization_patterns": {
+      "title": "Script Optimization Patterns",
+      "description": "- **Health Check Scripts**: Generate comprehensive reports with success/failure metrics\n  - Include ...",
+      "content": "- **Health Check Scripts**: Generate comprehensive reports with success/failure metrics\n  - Include detailed statistics (total checks, successful checks, errors, warnings)\n  - Provide actionable recommendations based on results\n  - Use consistent formatting and structure across all reports\n- **Update Scripts**: Track detailed statistics and provide actionable recommendations\n  - Monitor files processed, updated, and errors encountered\n  - Generate success rate calculations and improvement suggestions\n  - Maintain audit trails of all changes made\n- **Test Scripts**: Validate system structure and provide insights for AI consumption\n  - Test path resolution, file accessibility, and configuration validity\n  - Generate structured reports with system health metrics\n  - Provide both human-readable and machine-readable outputs\n- **Report Structure**: Use consistent AI metadata and cross-references in all generated reports\n  - Include purpose, template version, AI compatibility, and maintenance information\n  - Provide bidirectional cross-references to related scripts and configuration\n  - Use standardized formatting for consistency across all reports\n- **Error Reporting**: Provide both console output and structured file output\n  - Console output for immediate feedback during script execution\n  - File output for persistent records and AI consumption\n  - Include timestamps, error details, and resolution suggestions\n- **Configuration Management**: Use JSON files for structured AI tool configuration\n  - Maintain version tracking and last-updated timestamps\n  - Include comprehensive documentation structure and tool settings\n  - Provide programmatic access to all configuration data\n\nThese patterns will inform AI script development and optimization throughout the project.\n\nAI scripts must follow these optimization patterns for effective tool consumption and maintenance."
+    },
+    "context_awareness": {
+      "title": "Context Awareness",
+      "description": "",
+      "content": ""
+    },
+    "4_json_format_optimization": {
+      "title": "4. JSON Format Optimization",
+      "description": "",
+      "content": ""
+    },
+    "why_json_over_markdown": {
+      "title": "Why JSON Over Markdown",
+      "description": "JSON format provides significant advantages for AI consumption:\n\n- **Structured Data Access**: Direc...",
+      "content": "JSON format provides significant advantages for AI consumption:\n\n- **Structured Data Access**: Direct access to nested data without text parsing\n- **No Markdown Parsing**: Eliminates need to handle formatting, links, headers\n- **Consistent Schema**: All files follow the same structure\n- **Better Performance**: Faster processing and querying for AI tools\n- **Easier Integration**: Can be consumed by APIs and services\n- **Version Control Friendly**: Better diff tracking and merge resolution"
+    },
+    "json_structure_best_practices": {
+      "title": "JSON Structure Best Practices",
+      "description": "Optimal JSON structure for AI consumption:\n\n```json\n{\n  \"ai_metadata\": {\n    \"purpose\": \"\",\n    \"tem...",
+      "content": "Optimal JSON structure for AI consumption:\n\n```json\n{\n  \"ai_metadata\": {\n    \"purpose\": \"\",\n    \"template_version\": \"\",\n    \"ai_processing_level\": \"\",\n    \"required_context\": \"\",\n    \"validation_required\": \"\",\n    \"code_generation\": \"\",\n    \"cross_references\": []\n  },\n  \"file_info\": {\n    \"file_path\": \"\",\n    \"original_format\": \"\",\n    \"converted_at\": \"\",\n    \"optimized_at\": \"\",\n    \"optimization_version\": \"\"\n  },\n  \"content\": {\n    \"sections\": [],\n    \"code_blocks\": [],\n    \"links\": [],\n    \"raw_content\": \"\"\n  },\n  \"cross_references\": [],\n  \"code_generation_hints\": [],\n  \"validation_rules\": [],\n  \"optimization\": {\n    \"version\": \"\",\n    \"optimized_at\": \"\",\n    \"improvements\": []\n  }\n}\n```"
+    },
+    "conversion_process_lessons": {
+      "title": "Conversion Process Lessons",
+      "description": "Successful conversion from Markdown to JSON requires:\n\n1. **Extract AI Metadata**: Parse AI assistan...",
+      "content": "Successful conversion from Markdown to JSON requires:\n\n1. **Extract AI Metadata**: Parse AI assistant sections and metadata fields\n2. **Structure Content**: Convert markdown sections to structured arrays\n3. **Preserve Code Blocks**: Extract with language specification\n4. **Fix References**: Update all file references (.md → .json)\n5. **Add Optimization Metadata**: Track conversion and optimization details\n6. **Validate Structure**: Ensure all required sections are present\n7. **Clean Up Originals**: Remove markdown files after successful conversion"
+    },
+    "health_check_optimization": {
+      "title": "Health Check Optimization",
+      "description": "Health check scripts need updates for JSON format:\n\n- **Check JSON Structure**: Validate required se...",
+      "content": "Health check scripts need updates for JSON format:\n\n- **Check JSON Structure**: Validate required sections (ai_metadata, file_info, content)\n- **Handle URL Encoding**: Smart detection of URL-encoded paths (%20 → spaces)\n- **Exclude Output Files**: Skip files with different structures (reports, results)\n- **Ignore False Positives**: Script files, config files, directory references\n- **Consolidate Returns**: Use boolean variables for complex validation functions\n- **Split Complex Functions**: Break large functions into focused helpers"
+    },
+    "cross_reference_management": {
+      "title": "Cross-Reference Management",
+      "description": "Structured cross-references provide better AI consumption:\n\n```json\n{\n  \"cross_references\": [\n    {\n...",
+      "content": "Structured cross-references provide better AI consumption:\n\n```json\n{\n  \"cross_references\": [\n    {\n      \"title\": \"core_principles\",\n      \"path\": \"guide_docs/core_principles.json\",\n      \"type\": \"guide\",\n      \"relevance\": \"high\"\n    }\n  ]\n}\n```\n\n**Benefits**:\n- **Type Classification**: Categorize references (guide, context, feature, script)\n- **Relevance Scoring**: Prioritize references (high, medium, low)\n- **Direct Access**: No parsing needed to understand relationships\n- **Bidirectional Linking**: Easy to find all references to a file"
+    },
+    "performance_considerations": {
+      "title": "Performance Considerations",
+      "description": "JSON optimization priorities for AI tools:\n\n- **Readability Over Speed**: AI scripts run infrequentl...",
+      "content": "JSON optimization priorities for AI tools:\n\n- **Readability Over Speed**: AI scripts run infrequently, maintainability is key\n- **Structured Data**: Prefer arrays and objects over text parsing\n- **Metadata Extraction**: Make AI metadata easily accessible\n- **Validation Rules**: Structure validation requirements as arrays\n- **Code Generation Hints**: Extract hints into structured format\n- **Error Handling**: Comprehensive error collection and reporting"
+    },
+    "5_maintenance_and_validation": {
+      "title": "5. Maintenance and Validation",
+      "description": "",
+      "content": ""
+    }
+  },
+  "implementation_guidelines": {
+    "metadata_field_guidelines": {
+      "title": "Metadata Field Guidelines",
+      "content": ""
+    },
+    "implementation_hints": {
+      "title": "Implementation Hints",
+      "content": "- **Function signatures**: Provide exact function signatures\n- **Class structures**: Define class properties and methods\n- **File organization**: Specify file structure and imports\n- **Error handling**: Define error handling patterns"
+    },
+    "implementation_quality": {
+      "title": "Implementation Quality",
+      "content": ""
+    },
+    "7_maintenance_guidelines": {
+      "title": "7. Maintenance Guidelines",
+      "content": ""
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "title": "Script Structure",
+    "description": "Comprehensive shell scripting standards and best practices for AI code generation, review, and validation.",
+    "version": "3.0",
+    "last_updated": "2025-06-18",
+    "source": "guide_docs/domain_specific/shell_style_guide.json",
+    "cross_references": [
+      "../../../../scripts/common.sh",
+      "../../../../scripts/lint.sh",
+      "../../../../scripts/migrate.sh",
+      "../../../../scripts/kill_servers.sh",
+      "../../../../scripts/rollback_migration.sh",
+      "../../../../scripts/grant_table_permissions.sh",
+      "../../../../scripts/run_pytest.sh",
+      "../../../../humans/guides/shell_style_guide.md"
+    ]
+  },
+  "sections": {
+    "script_structure": {
+      "title": "Script Structure",
+      "description": "All scripts must start with a header, strict mode, and clear sectioning.\n\n- Use #!/bin/bash\n- Use se...",
+      "content": "All scripts must start with a header, strict mode, and clear sectioning.\n\n- Use #!/bin/bash\n- Use set -euo pipefail and traps for error handling\n- Source common.sh for shared functions\n- Organize into CONFIGURATION, FUNCTIONS, VALIDATION, MAIN SCRIPT\n- Example scripts: common.sh, lint.sh, migrate.sh\n"
+    },
+    "error_handling": {
+      "title": "Error Handling",
+      "description": "- Always use strict mode: set -euo pipefail\n- Use error_exit and cleanup functions\n- Trap ERR, EXIT,...",
+      "content": "- Always use strict mode: set -euo pipefail\n- Use error_exit and cleanup functions\n- Trap ERR, EXIT, INT, TERM\n- Validate all inputs before processing\n- Example: See error handling in common.sh, lint.sh\n"
+    },
+    "logging_and_output": {
+      "title": "Logging and Output",
+      "description": "- Use color-coded and leveled logging (DEBUG, INFO, WARN, ERROR)\n- Use log_info, log_warn, log_error...",
+      "content": "- Use color-coded and leveled logging (DEBUG, INFO, WARN, ERROR)\n- Use log_info, log_warn, log_error, log_debug\n- Print clear status and error messages\n- Example: See logging in common.sh\n"
+    },
+    "file_and_directory_operations": {
+      "title": "File and Directory Operations",
+      "description": "- Always validate file/dir existence before operations\n- Use create_directory, copy_file, move_file,...",
+      "content": "- Always validate file/dir existence before operations\n- Use create_directory, copy_file, move_file, remove_file, create_backup\n- Example: See file ops in common.sh, grant_table_permissions.sh\n"
+    },
+    "process_management": {
+      "title": "Process Management",
+      "description": "- Use execute_command, execute_command_output for safe command execution\n- Manage background jobs wi...",
+      "content": "- Use execute_command, execute_command_output for safe command execution\n- Manage background jobs with run_background, wait_for_process, kill_process\n- Example: See process management in kill_servers.sh, run_pytest.sh\n"
+    },
+    "configuration_management": {
+      "title": "Configuration Management",
+      "description": "- Load config and env files with load_config, load_env_file\n- Validate config with validate_config, ...",
+      "content": "- Load config and env files with load_config, load_env_file\n- Validate config with validate_config, set_defaults\n- Example: See config loading in migrate.sh, lint.sh\n"
+    },
+    "command_line_arguments": {
+      "title": "Command Line Arguments",
+      "description": "- Parse arguments with getopts or manual parsing\n- Provide usage/help output\n- Use confirmation prom...",
+      "content": "- Parse arguments with getopts or manual parsing\n- Provide usage/help output\n- Use confirmation prompts for destructive actions\n- Example: See argument parsing in rollback_migration.sh, kill_servers.sh\n"
+    },
+    "security_best_practices": {
+      "title": "Security Best Practices",
+      "description": "- Always validate and sanitize all inputs\n- Check for required privileges (root/user)\n- Prevent dire...",
+      "content": "- Always validate and sanitize all inputs\n- Check for required privileges (root/user)\n- Prevent directory traversal and unsafe paths\n- Example: See input validation in common.sh\n"
+    },
+    "testing_and_validation": {
+      "title": "Testing and Validation",
+      "description": "- Check for required dependencies with validate_dependencies\n- Validate environment with validate_en...",
+      "content": "- Check for required dependencies with validate_dependencies\n- Validate environment with validate_environment\n- Example: See dependency checks in lint.sh, run_pytest.sh\n"
+    },
+    "documentation_standards": {
+      "title": "Documentation Standards",
+      "description": "- Every script must have a header with name, description, usage, author, version, dependencies, exit...",
+      "content": "- Every script must have a header with name, description, usage, author, version, dependencies, exit codes, env vars\n- Document all functions with usage, arguments, returns, and examples\n- Example: See headers in all scripts in /scripts\n"
+    },
+    "file_naming_conventions": {
+      "title": "File Naming Conventions",
+      "description": "- Script files: lowercase with underscores (e.g., lint.sh, kill_servers.sh)\n- Output files: descript...",
+      "content": "- Script files: lowercase with underscores (e.g., lint.sh, kill_servers.sh)\n- Output files: descriptive, use hyphens and timestamps (e.g., lint-report-20250618_200225.json)\n- Config files: lowercase with underscores or hyphens\n- Log files: descriptive with timestamps\n- No spaces, hyphens, or special chars in script names\n"
+    },
+    "implementation_guidelines": {
+      "title": "Implementation Guidelines",
+      "description": "- Follow all patterns above for every new or updated shell script\n- Use strict mode, logging, valida...",
+      "content": "- Follow all patterns above for every new or updated shell script\n- Use strict mode, logging, validation, and documentation\n- Reference and reuse patterns from /scripts/common.sh\n- See humans/guides/shell_style_guide.md for full human-readable details\n"
+    }
+  },
+  "implementation_guidelines": {
+    "implementation_guidelines": {
+      "title": "Implementation Guidelines",
+      "content": "- Follow all patterns above for every new or updated shell script\n- Use strict mode, logging, validation, and documentation\n- Reference and reuse patterns from /scripts/common.sh\n- See humans/guides/shell_style_guide.md for full human-readable details\n"
+    }
+  }
+}

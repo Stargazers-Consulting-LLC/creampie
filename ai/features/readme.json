@@ -1,0 +1,183 @@
+{
+  "metadata": {
+    "title": "Features Documentation",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "features/readme.md",
+    "cross_references": [
+      "../guide_docs/feature_template.json",
+      "../guide_docs/core_principles.json",
+      "../project_context/architecture_overview.json",
+      "../project_context/common_patterns.json",
+      "../project_context/development_workflow.json"
+    ]
+  },
+  "sections": {
+    "features_documentation": {
+      "title": "Features Documentation",
+      "description": "> This folder contains feature-specific documentation, plans, and summaries. Use this for understand...",
+      "content": "> This folder contains feature-specific documentation, plans, and summaries. Use this for understanding current features, planned implementations, and completed work."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Feature development li...",
+      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Feature development lifecycle, project architecture, implementation patterns\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:**\n- `../guide_docs/feature_template.json.replace(\".json\", \".json\")` - Feature development template\n- `../guide_docs/core_principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `../project_context/architecture_overview.json.replace(\".json\", \".json\")` - System architecture\n- `../project_context/common_patterns.json.replace(\".json\", \".json\")` - Project patterns\n- `../project_context/development_workflow.json.replace(\".json\", \".json\")` - Development process\n\n**Validation Rules:**\n- All feature plans must use the standardized template\n- Technical summaries must include comprehensive implementation details\n- Cross-references must be maintained and accurate\n- Feature lifecycle must be properly tracked and updated\n- Documentation must preserve planning context in completed features\n\n**Keywords:** feature documentation, planning, implementation, technical analysis, lifecycle management, development workflow"
+    },
+    "structure": {
+      "title": "Structure",
+      "description": "```\nai/features/\n├── readme.json           # This file - Workflow and organization guide\n├── plans/ ...",
+      "content": "```\nai/features/\n├── readme.json           # This file - Workflow and organization guide\n├── plans/              # Active feature planning and development\n│   ├── [DRAFT]-Feature-Name.json\n│   └── [IN-PROGRESS]-Feature-Name.json\n└── summaries/          # Completed implementations and technical analysis\n    ├── existing_module_summary.json\n    └── completed_feature_summary.json\n```"
+    },
+    "purpose": {
+      "title": "Purpose",
+      "description": "The features directory provides:\n- **Unified feature lifecycle management** from planning to impleme...",
+      "content": "The features directory provides:\n- **Unified feature lifecycle management** from planning to implementation\n- **Comprehensive documentation** for both planning context and technical details\n- **AI-optimized structure** for effective code generation and analysis\n- **Clear progression** from concept to completed feature"
+    },
+    "workflow": {
+      "title": "Workflow",
+      "description": "",
+      "content": ""
+    },
+    "feature_lifecycle": {
+      "title": "Feature Lifecycle",
+      "description": "```\n1. Planning Phase\n   ├── Create plan in features/plans/[DRAFT]-Feature-Name.json\n   ├── Use AI-o...",
+      "content": "```\n1. Planning Phase\n   ├── Create plan in features/plans/[DRAFT]-Feature-Name.json\n   ├── Use AI-optimized template from ../guide_docs/feature_template.json\n   └── Reference existing patterns and technical summaries\n\n2. Development Phase\n   ├── Move to features/plans/[IN-PROGRESS]-Feature-Name.json\n   ├── Update plan as implementation progresses\n   └── Reference technical summaries for integration points\n\n3. Completion Phase\n   ├── Move completed plan to features/summaries/\n   ├── Create comprehensive technical summary\n   ├── Preserve planning context alongside implementation details\n   └── Update cross-references in other documentation\n\n4. Maintenance Phase\n   ├── Update technical summaries as features evolve\n   ├── Reference completed features for new planning\n   └── Maintain documentation accuracy\n```"
+    },
+    "status_progression": {
+      "title": "Status Progression",
+      "description": "| Status | Location | Purpose |\n|--------|----------|---------|\n| `[DRAFT]` | `features/plans/` | In...",
+      "content": "| Status | Location | Purpose |\n|--------|----------|---------|\n| `[DRAFT]` | `features/plans/` | Initial planning and requirements gathering |\n| `[IN-PROGRESS]` | `features/plans/` | Active development and implementation |\n| `[COMPLETED]` | `features/summaries/` | Final implementation and technical documentation |\n| `[DEPRECATED]` | `features/summaries/` | Historical reference with deprecation notes |"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "",
+      "content": ""
+    },
+    "plans_directory_featuresplans": {
+      "title": "Plans Directory (`features/plans/`)",
+      "description": "**Purpose**: Active feature planning and development tracking\n\n**Content**:\n- AI-optimized feature p...",
+      "content": "**Purpose**: Active feature planning and development tracking\n\n**Content**:\n- AI-optimized feature plans using `../guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- Development status tracking with clear progression\n- Implementation guidance and code generation hints\n- Integration planning with existing systems\n\n**File Naming**:\n- `[DRAFT]-Feature-Name.json.replace(\".json\", \".json\")` - Initial planning phase\n- `[IN-PROGRESS]-Feature-Name.json.replace(\".json\", \".json\")` - Active development\n- Plans move to `summaries/` when completed or deprecated"
+    },
+    "summaries_directory_featuressummaries": {
+      "title": "Summaries Directory (`features/summaries/`)",
+      "description": "**Purpose**: Technical documentation of completed implementations and existing modules\n\n**Content**:...",
+      "content": "**Purpose**: Technical documentation of completed implementations and existing modules\n\n**Content**:\n- Technical analysis of existing modules and components\n- Implementation details of completed features\n- Architecture patterns and integration points\n- Performance characteristics and optimization notes\n- Historical planning context for completed features\n\n**File Naming**:\n- `module_name_summary.json.replace(\".json\", \".json\")` - Technical analysis of existing modules\n- `feature_name_summary.json.replace(\".json\", \".json\")` - Completed feature documentation\n- `deprecated_feature_summary.json.replace(\".json\", \".json\")` - Historical reference with deprecation notes"
+    },
+    "usage_for_ai_assistants": {
+      "title": "Usage for AI Assistants",
+      "description": "",
+      "content": ""
+    },
+    "when_planning_new_features": {
+      "title": "When Planning New Features",
+      "description": "1. **Check existing summaries** for relevant patterns and integration points\n2. **Create plan** in `...",
+      "content": "1. **Check existing summaries** for relevant patterns and integration points\n2. **Create plan** in `features/plans/[DRAFT]-Feature-Name.json.replace(\".json\", \".json\")`\n3. **Use AI-optimized template** from `../guide_docs/feature_template.json.replace(\".json\", \".json\")`\n4. **Reference existing patterns** from `features/summaries/`\n5. **Update status** as development progresses"
+    },
+    "when_working_with_existing_features": {
+      "title": "When Working with Existing Features",
+      "description": "1. **Read technical summary** in `features/summaries/` for implementation details\n2. **Reference pla...",
+      "content": "1. **Read technical summary** in `features/summaries/` for implementation details\n2. **Reference planning context** for design decisions and requirements\n3. **Update summary** when making significant changes\n4. **Maintain cross-references** with other documentation"
+    },
+    "when_completing_features": {
+      "title": "When Completing Features",
+      "description": "1. **Move completed plan** from `features/plans/` to `features/summaries/`\n2. **Create comprehensive...",
+      "content": "1. **Move completed plan** from `features/plans/` to `features/summaries/`\n2. **Create comprehensive technical summary** with implementation details\n3. **Preserve planning context** alongside technical documentation\n4. **Update all cross-references** in other documentation"
+    },
+    "quality_standards": {
+      "title": "Quality Standards",
+      "description": "",
+      "content": ""
+    },
+    "for_plans": {
+      "title": "For Plans",
+      "description": "- **AI Metadata** with proper dependencies and validation rules\n- **Specific file paths** and module...",
+      "content": "- **AI Metadata** with proper dependencies and validation rules\n- **Specific file paths** and module references\n- **Measurable requirements** with acceptance criteria\n- **Code generation hints** for implementation guidance\n- **Validation checkpoints** for quality assurance"
+    },
+    "for_summaries": {
+      "title": "For Summaries",
+      "description": "- **Comprehensive technical analysis** of implementation\n- **Architecture patterns** and design deci...",
+      "content": "- **Comprehensive technical analysis** of implementation\n- **Architecture patterns** and design decisions\n- **Integration points** with existing systems\n- **Performance characteristics** and optimization notes\n- **Historical context** from original planning"
+    },
+    "integration_with_ai_documentation": {
+      "title": "Integration with AI Documentation",
+      "description": "",
+      "content": ""
+    },
+    "dependencies": {
+      "title": "Dependencies",
+      "description": "Features integrate with other AI documentation:\n- **Project Context** (`../project_context/`) - Arch...",
+      "content": "Features integrate with other AI documentation:\n- **Project Context** (`../project_context/`) - Architecture and patterns\n- **Guide Docs** (`../guide_docs/`) - Templates and principles\n- **core_principles** (`../guide_docs/core_principles.json.replace(\".json\", \".json\")`) - Decision frameworks"
+    },
+    "cross_references": {
+      "title": "Cross-References",
+      "description": "Each feature should reference:\n- Existing architecture patterns\n- Current module implementations\n- E...",
+      "content": "Each feature should reference:\n- Existing architecture patterns\n- Current module implementations\n- Established development workflows\n- Relevant technical summaries"
+    },
+    "maintenance": {
+      "title": "Maintenance",
+      "description": "",
+      "content": ""
+    },
+    "regular_updates": {
+      "title": "Regular Updates",
+      "description": "- **Update plan status** as features progress through development\n- **Move completed plans** to summ...",
+      "content": "- **Update plan status** as features progress through development\n- **Move completed plans** to summaries directory\n- **Update technical summaries** when implementations evolve\n- **Maintain cross-references** across all documentation"
+    },
+    "version_control": {
+      "title": "Version Control",
+      "description": "- **Template Version** - Track template version used in each plan\n- **AI Processing Level** - Indica...",
+      "content": "- **Template Version** - Track template version used in each plan\n- **AI Processing Level** - Indicate complexity for AI tools\n- **Dependencies** - Keep dependency references current\n- **Validation Rules** - Update validation requirements as needed"
+    },
+    "best_practices": {
+      "title": "Best Practices",
+      "description": "",
+      "content": ""
+    },
+    "for_ai_tools": {
+      "title": "For AI Tools",
+      "description": "1. **Use unified structure** - Leverage both planning and implementation docs\n2. **Follow lifecycle ...",
+      "content": "1. **Use unified structure** - Leverage both planning and implementation docs\n2. **Follow lifecycle workflow** - Progress features through appropriate phases\n3. **Reference existing patterns** - Use summaries for integration guidance\n4. **Maintain context** - Preserve planning context in completed features\n5. **Update cross-references** - Keep documentation relationships current"
+    },
+    "for_human_developers": {
+      "title": "For Human Developers",
+      "description": "1. **Follow lifecycle workflow** - Use appropriate directories for each phase\n2. **Preserve planning...",
+      "content": "1. **Follow lifecycle workflow** - Use appropriate directories for each phase\n2. **Preserve planning context** - Maintain design decisions and requirements\n3. **Update documentation** - Keep both plans and summaries current\n4. **Reference existing patterns** - Use summaries for implementation guidance\n5. **Maintain quality** - Follow established standards for both plans and summaries"
+    },
+    "current_features": {
+      "title": "Current Features",
+      "description": "",
+      "content": ""
+    },
+    "active_development": {
+      "title": "Active Development",
+      "description": "- **in_progress_stock_tracking_request_plan.json** - UI feature for users to request stock tracking",
+      "content": "- **in_progress_stock_tracking_request_plan.json** - UI feature for users to request stock tracking"
+    },
+    "completed_implementations": {
+      "title": "Completed Implementations",
+      "description": "- **stock_data_module_summary.json** - Technical analysis of the stock data processing pipeline",
+      "content": "- **stock_data_module_summary.json** - Technical analysis of the stock data processing pipeline"
+    },
+    "planned_features": {
+      "title": "Planned Features",
+      "description": "- No draft plans currently",
+      "content": "- No draft plans currently"
+    },
+    "migration_notes": {
+      "title": "Migration Notes",
+      "description": "This structure consolidates the previous separate `plans/` and `technical_summaries/` directories in...",
+      "content": "This structure consolidates the previous separate `plans/` and `technical_summaries/` directories into a unified feature documentation system. The workflow now provides clear progression from planning to implementation while preserving context and maintaining comprehensive documentation."
+    }
+  },
+  "implementation_guidelines": {
+    "usage_for_ai_assistants": {
+      "title": "Usage for AI Assistants",
+      "content": ""
+    },
+    "completed_implementations": {
+      "title": "Completed Implementations",
+      "content": "- **stock_data_module_summary.json** - Technical analysis of the stock data processing pipeline"
+    }
+  }
+}

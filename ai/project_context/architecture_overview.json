@@ -1,0 +1,259 @@
+{
+  "metadata": {
+    "title": "architecture_overview",
+    "description": "",
+    "version": "2.1",
+    "last_updated": "2025-06-18",
+    "source": "project_context/architecture_overview.md",
+    "cross_references": [
+      "../guide_docs/core_principles.json",
+      "../guide_docs/Language-Specific/fastapi_development_guide.json",
+      "../guide_docs/Language-Specific/python_style_guide.json",
+      "common_patterns.json",
+      "../features/summaries/completed_stock_data_processing_pipeline_summary.json"
+    ]
+  },
+  "sections": {
+    "architecture_overview": {
+      "title": "architecture_overview",
+      "description": "> This document provides a comprehensive overview of the system architecture. Use this for understan...",
+      "content": "> This document provides a comprehensive overview of the system architecture. Use this for understanding the overall system design, component relationships, and architectural decisions."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** System architecture, m...",
+      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** System architecture, microservices, API design, database design\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../guide_docs/core_principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `../guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")` - API implementation patterns\n- `../guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")` - Python implementation patterns\n- `common_patterns.json.replace(\".json\", \".json\")` - Project-specific patterns\n- `../features/summaries/completed_stock_data_processing_pipeline_summary.json.replace(\".json\", \".json\")` - Stock data implementation\n\n**Validation Rules:**\n- All architectural decisions must align with established patterns\n- Component relationships must be clearly defined\n- Data flow must be traceable and documented\n- Technology choices must be justified and consistent\n- Integration points must be well-defined"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "**Document Purpose:** High-level system architecture and component relationships for the CreamPie pr...",
+      "content": "**Document Purpose:** High-level system architecture and component relationships for the CreamPie project\n**Scope:** Complete system architecture, data flow, technology stack, and integration patterns\n**Target Users:** AI assistants and developers understanding system design\n**Last Updated:** Current\n\n**AI Context:** This document serves as the architectural foundation for all development decisions. It provides the system context needed to understand component relationships, data flow, and technology choices throughout the project."
+    },
+    "system_architecture": {
+      "title": "System Architecture",
+      "description": "",
+      "content": ""
+    },
+    "high_level_components": {
+      "title": "High-Level Components",
+      "description": "```\n┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐\n│   cream_ui      │    │   cre...",
+      "content": "```\n┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐\n│   cream_ui      │    │   cream_api     │    │   External      │\n│   (Frontend)    │◄──►│   (Backend)     │◄──►│   Data Sources  │\n│                 │    │                 │    │                 │\n│ - React/TS      │    │ - FastAPI       │    │ - Stock APIs    │\n│ - Vite          │    │ - SQLAlchemy    │    │ - Web Scraping  │\n│ - Tailwind      │    │ - Alembic       │    │ - File Storage  │\n└─────────────────┘    └─────────────────┘    └─────────────────┘\n```\n\nThis architecture diagram will inform all component design and integration decisions.\n\nAll components must follow this architectural pattern and maintain clear separation of concerns."
+    },
+    "core_modules": {
+      "title": "Core Modules",
+      "description": "",
+      "content": ""
+    },
+    "backend_cream_api": {
+      "title": "Backend (`cream_api/`)",
+      "description": "- **`main.py`** - FastAPI application entry point and configuration\n- **`db.py`** - Database connect...",
+      "content": "- **`main.py`** - FastAPI application entry point and configuration\n- **`db.py`** - Database connection and session management\n- **`settings.py`** - Application configuration and environment variables\n- **`users/`** - User authentication and session management\n- **`stock_data/`** - Stock data retrieval, processing, and storage\n- **`migrations/`** - Database schema management with Alembic\n- **`background_tasks/`** - Asynchronous task processing\n\nThis module structure will inform all backend development and file organization.\n\nAll backend modules must follow this structure and naming conventions."
+    },
+    "frontend_cream_ui": {
+      "title": "Frontend (`cream_ui/`)",
+      "description": "- **`src/App.tsx`** - Main application component\n- **`src/pages/`** - Page components (Landing, Auth...",
+      "content": "- **`src/App.tsx`** - Main application component\n- **`src/pages/`** - Page components (Landing, Auth, etc.)\n- **`src/components/`** - Reusable UI components\n- **`src/hooks/`** - Custom React hooks\n- **`src/lib/`** - Utility functions and configurations\n\nThis module structure will inform all frontend development and component organization.\n\nAll frontend modules must follow this structure and React/TypeScript patterns."
+    },
+    "data_flow": {
+      "title": "Data Flow",
+      "description": "",
+      "content": ""
+    },
+    "stock_data_pipeline": {
+      "title": "Stock Data Pipeline",
+      "description": "```\nExternal Source → Retriever → Parser → Processor → Database\n     ↓              ↓         ↓     ...",
+      "content": "```\nExternal Source → Retriever → Parser → Processor → Database\n     ↓              ↓         ↓         ↓           ↓\n  HTML Files    Raw Data   Parsed    Processed   Stored\n                Storage    Data      Data        Data\n```\n\nThis data flow will inform all stock data processing implementation and error handling.\n\nAll stock data processing must follow this pipeline pattern with proper error handling at each stage."
+    },
+    "user_authentication_flow": {
+      "title": "User Authentication Flow",
+      "description": "```\nFrontend → API → Authentication → Session → Database\n   ↓        ↓         ↓            ↓       ...",
+      "content": "```\nFrontend → API → Authentication → Session → Database\n   ↓        ↓         ↓            ↓         ↓\nLogin    Validate   Create      Store     Persist\nForm     Credentials Session    Token     Session\n```\n\nThis authentication flow will inform all user authentication implementation and security patterns.\n\nAll authentication flows must follow this pattern with proper security measures and session management."
+    },
+    "key_design_patterns": {
+      "title": "Key Design Patterns",
+      "description": "",
+      "content": ""
+    },
+    "1_separation_of_concerns": {
+      "title": "1. Separation of Concerns",
+      "description": "- **Data Retrieval**: `stock_data/retriever.py` - Handles external data fetching\n- **Data Parsing**:...",
+      "content": "- **Data Retrieval**: `stock_data/retriever.py` - Handles external data fetching\n- **Data Parsing**: `stock_data/parser.py` - Converts raw data to structured format\n- **Data Processing**: `stock_data/processor.py` - Business logic and data transformation\n- **Data Storage**: `stock_data/loader.py` - Database operations\n\nThis separation of concerns will inform all module design and responsibility assignment.\n\nAll modules must maintain clear separation of concerns and single responsibility principle."
+    },
+    "2_configuration_management": {
+      "title": "2. Configuration Management",
+      "description": "- **Environment-based**: Settings loaded from environment variables\n- **Module-specific**: Each modu...",
+      "content": "- **Environment-based**: Settings loaded from environment variables\n- **Module-specific**: Each module has its own configuration\n- **Type-safe**: Pydantic models for configuration validation\n\nThis configuration pattern will inform all settings management and environment variable usage.\n\nAll configuration must use Pydantic models and environment variable support."
+    },
+    "3_background_processing": {
+      "title": "3. Background Processing",
+      "description": "- **Asynchronous Tasks**: Long-running operations handled in background\n- **File Processing**: Batch...",
+      "content": "- **Asynchronous Tasks**: Long-running operations handled in background\n- **File Processing**: Batch processing of downloaded files\n- **Periodic Tasks**: Scheduled data retrieval and processing\n\nThis background processing pattern will inform all asynchronous task implementation.\n\nAll background tasks must include proper error handling and lifecycle management."
+    },
+    "4_error_handling": {
+      "title": "4. Error Handling",
+      "description": "- **Custom Exceptions**: domain_specific error types\n- **Graceful Degradation**: System continues op...",
+      "content": "- **Custom Exceptions**: domain_specific error types\n- **Graceful Degradation**: System continues operating despite failures\n- **Comprehensive Logging**: Detailed error tracking and debugging\n\nThis error handling pattern will inform all exception handling and logging implementation.\n\nAll error handling must follow established patterns with proper logging and graceful degradation."
+    },
+    "technology_stack": {
+      "title": "Technology Stack",
+      "description": "",
+      "content": ""
+    },
+    "backend": {
+      "title": "Backend",
+      "description": "- **FastAPI**: Modern, fast web framework for APIs\n- **SQLAlchemy**: SQL toolkit and ORM\n- **Alembic...",
+      "content": "- **FastAPI**: Modern, fast web framework for APIs\n- **SQLAlchemy**: SQL toolkit and ORM\n- **Alembic**: Database migration tool\n- **Pydantic**: Data validation and settings management\n- **aiohttp**: Asynchronous HTTP client/server\n- **BeautifulSoup**: HTML parsing and web scraping\n\nThis technology stack will inform all backend implementation and dependency choices.\n\nAll backend development must use these technologies and follow their best practices."
+    },
+    "frontend": {
+      "title": "Frontend",
+      "description": "- **React**: UI library with TypeScript\n- **Vite**: Fast build tool and dev server\n- **Tailwind CSS*...",
+      "content": "- **React**: UI library with TypeScript\n- **Vite**: Fast build tool and dev server\n- **Tailwind CSS**: Utility-first CSS framework\n- **shadcn/ui**: High-quality component library\n\nThis technology stack will inform all frontend implementation and component development.\n\nAll frontend development must use these technologies and follow their established patterns."
+    },
+    "database": {
+      "title": "Database",
+      "description": "- **PostgreSQL**: Primary database\n- **SQLite**: Development and testing database\n\nThis database str...",
+      "content": "- **PostgreSQL**: Primary database\n- **SQLite**: Development and testing database\n\nThis database strategy will inform all database design and migration decisions.\n\nAll database operations must support both PostgreSQL and SQLite environments."
+    },
+    "development_tools": {
+      "title": "Development Tools",
+      "description": "- **Poetry**: Python dependency management\n- **Yarn**: JavaScript package management\n- **pytest**: P...",
+      "content": "- **Poetry**: Python dependency management\n- **Yarn**: JavaScript package management\n- **pytest**: Python testing framework\n- **ESLint**: JavaScript/TypeScript linting\n\nThis tooling will inform all development workflow and quality assurance processes.\n\nAll development must use these tools and follow their established workflows."
+    },
+    "integration_points": {
+      "title": "Integration Points",
+      "description": "",
+      "content": ""
+    },
+    "api_endpoints": {
+      "title": "API Endpoints",
+      "description": "- **Authentication**: `/auth/*` - Login, registration, session management\n- **Stock Data**: `/stock-...",
+      "content": "- **Authentication**: `/auth/*` - Login, registration, session management\n- **Stock Data**: `/stock-data/*` - Data retrieval and processing\n- **User Management**: `/users/*` - User profile and preferences\n\nThis API structure will inform all endpoint design and routing decisions.\n\nAll API endpoints must follow this structure and include proper documentation."
+    },
+    "database_schema": {
+      "title": "Database Schema",
+      "description": "- **Users**: Authentication and session data\n- **Stock Data**: Processed financial data\n- **File Sto...",
+      "content": "- **Users**: Authentication and session data\n- **Stock Data**: Processed financial data\n- **File Storage**: Raw and parsed data files\n\nThis database schema will inform all data modeling and migration decisions.\n\nAll database schema changes must maintain data integrity and follow established patterns."
+    },
+    "external_integrations": {
+      "title": "External Integrations",
+      "description": "- **Stock APIs**: Real-time and historical data\n- **Web Scraping**: Alternative data sources\n- **Fil...",
+      "content": "- **Stock APIs**: Real-time and historical data\n- **Web Scraping**: Alternative data sources\n- **File System**: Local storage for downloaded data\n\nThis integration strategy will inform all external service integration and error handling.\n\nAll external integrations must include proper error handling and fallback mechanisms."
+    },
+    "development_workflow": {
+      "title": "development_workflow",
+      "description": "",
+      "content": ""
+    },
+    "feature_development": {
+      "title": "Feature Development",
+      "description": "1. **Database**: Create migrations for schema changes\n2. **Backend**: Implement API endpoints and bu...",
+      "content": "1. **Database**: Create migrations for schema changes\n2. **Backend**: Implement API endpoints and business logic\n3. **Frontend**: Create UI components and integrate with API\n4. **Testing**: Write unit and integration tests\n5. **Documentation**: Update guides and technical summaries\n\nThis development workflow will inform all feature implementation and project management.\n\nAll feature development must follow this workflow and include proper testing and documentation."
+    },
+    "deployment_pipeline": {
+      "title": "Deployment Pipeline",
+      "description": "1. **Development**: Local development with hot reloading\n2. **Testing**: Automated tests and code qu...",
+      "content": "1. **Development**: Local development with hot reloading\n2. **Testing**: Automated tests and code quality checks\n3. **Staging**: Environment for integration testing\n4. **Production**: Live deployment with monitoring\n\nThis deployment pipeline will inform all deployment and environment management decisions.\n\nAll deployments must follow this pipeline and include proper testing and monitoring."
+    },
+    "common_patterns": {
+      "title": "common_patterns",
+      "description": "",
+      "content": ""
+    },
+    "error_handling": {
+      "title": "Error Handling",
+      "description": "```python\ntry:\n    # Operation that might fail\n    result = await some_operation()\nexcept SpecificEx...",
+      "content": "```python\ntry:\n    # Operation that might fail\n    result = await some_operation()\nexcept SpecificException as e:\n    logger.error(f\"Operation failed: {e}\")\n    raise CustomException(\"User-friendly message\") from e\n```\n\nThis error handling pattern will inform all exception handling implementation.\n\nAll error handling must follow this pattern with proper logging and user-friendly messages."
+    },
+    "configuration_loading": {
+      "title": "Configuration Loading",
+      "description": "```python",
+      "content": "```python"
+    },
+    "load_once_at_module_level": {
+      "title": "Load once at module level",
+      "description": "config = get_module_config()\n\ndef some_function():\n    # Use module-level config\n    processor = Dat...",
+      "content": "config = get_module_config()\n\ndef some_function():\n    # Use module-level config\n    processor = DataProcessor(config=config)\n```\n\nThis configuration pattern will inform all settings management implementation.\n\nAll configuration must be loaded at module level and cached appropriately."
+    },
+    "database_operations": {
+      "title": "Database Operations",
+      "description": "```python\nasync with AsyncSessionLocal() as session:\n    async with session.begin():\n        # Datab...",
+      "content": "```python\nasync with AsyncSessionLocal() as session:\n    async with session.begin():\n        # Database operations\n        session.add(model)\n        await session.commit()\n```\n\nThis database pattern will inform all database operation implementation.\n\nAll database operations must use proper session management and transaction handling."
+    },
+    "background_tasks": {
+      "title": "Background Tasks",
+      "description": "```python\n@background_task\nasync def process_files():\n    # Long-running operation\n    await file_pr...",
+      "content": "```python\n@background_task\nasync def process_files():\n    # Long-running operation\n    await file_processor.process_all_files()\n```\n\nThis background task pattern will inform all asynchronous task implementation.\n\nAll background tasks must include proper error handling and lifecycle management."
+    },
+    "architecture_principles": {
+      "title": "Architecture Principles",
+      "description": "",
+      "content": ""
+    },
+    "1_scalability": {
+      "title": "1. Scalability",
+      "description": "- **Horizontal Scaling**: Design for multiple instances\n- **Database Optimization**: Efficient queri...",
+      "content": "- **Horizontal Scaling**: Design for multiple instances\n- **Database Optimization**: Efficient queries and indexing\n- **Caching Strategy**: Reduce database load\n- **Async Processing**: Handle concurrent requests\n\nThese scalability principles will inform all performance optimization decisions.\n\nAll components must be designed for scalability and performance."
+    },
+    "2_maintainability": {
+      "title": "2. Maintainability",
+      "description": "- **Clear Separation**: Well-defined module boundaries\n- **Consistent Patterns**: Standardized imple...",
+      "content": "- **Clear Separation**: Well-defined module boundaries\n- **Consistent Patterns**: Standardized implementation approaches\n- **Comprehensive Testing**: High test coverage\n- **Documentation**: Clear and up-to-date documentation\n\nThese maintainability principles will inform all code organization and quality decisions.\n\nAll code must follow maintainability principles and include proper documentation."
+    },
+    "3_security": {
+      "title": "3. Security",
+      "description": "- **Authentication**: Secure user authentication\n- **Authorization**: Role-based access control\n- **...",
+      "content": "- **Authentication**: Secure user authentication\n- **Authorization**: Role-based access control\n- **Data Validation**: Input validation and sanitization\n- **Secure Communication**: HTTPS and secure headers\n\nThese security principles will inform all security implementation and validation.\n\nAll components must implement proper security measures and validation."
+    },
+    "4_reliability": {
+      "title": "4. Reliability",
+      "description": "- **Error Handling**: Comprehensive exception handling\n- **Graceful Degradation**: System continues ...",
+      "content": "- **Error Handling**: Comprehensive exception handling\n- **Graceful Degradation**: System continues operating despite failures\n- **Monitoring**: Health checks and performance monitoring\n- **Backup Strategy**: Data backup and recovery procedures\n\nThese reliability principles will inform all system resilience and monitoring decisions.\n\nAll components must include proper error handling and monitoring."
+    },
+    "implementation_guidelines": {
+      "title": "Implementation Guidelines",
+      "description": "",
+      "content": ""
+    },
+    "for_ai_assistants": {
+      "title": "For AI Assistants",
+      "description": "1. **Reference this architecture** for all development decisions\n2. **Follow established patterns** ...",
+      "content": "1. **Reference this architecture** for all development decisions\n2. **Follow established patterns** for consistency\n3. **Maintain separation of concerns** in all modules\n4. **Use appropriate technologies** from the defined stack\n5. **Implement proper error handling** and logging\n6. **Follow security best practices** for all components\n7. **Design for scalability** and performance\n8. **Include comprehensive testing** for all features"
+    },
+    "for_human_developers": {
+      "title": "For Human Developers",
+      "description": "1. **Understand the architecture** before making changes\n2. **Follow established patterns** for cons...",
+      "content": "1. **Understand the architecture** before making changes\n2. **Follow established patterns** for consistency\n3. **Maintain code quality** and documentation\n4. **Test thoroughly** before deployment\n5. **Monitor performance** and errors\n6. **Update documentation** when making changes\n7. **Follow security guidelines** for all implementations"
+    },
+    "quality_assurance": {
+      "title": "Quality Assurance",
+      "description": "",
+      "content": ""
+    },
+    "architectural_standards": {
+      "title": "Architectural Standards",
+      "description": "- All components must follow established architectural patterns\n- Data flow must be traceable and we...",
+      "content": "- All components must follow established architectural patterns\n- Data flow must be traceable and well-documented\n- Integration points must be clearly defined\n- Technology choices must be consistent and justified"
+    },
+    "performance_standards": {
+      "title": "Performance Standards",
+      "description": "- API response times must be under 500ms for simple operations\n- Database queries must be optimized ...",
+      "content": "- API response times must be under 500ms for simple operations\n- Database queries must be optimized and indexed\n- Background tasks must not block main application flow\n- System must handle concurrent requests efficiently"
+    },
+    "security_standards": {
+      "title": "Security Standards",
+      "description": "- All endpoints must implement proper authentication\n- Data validation must be comprehensive\n- Sensi...",
+      "content": "- All endpoints must implement proper authentication\n- Data validation must be comprehensive\n- Sensitive data must be encrypted\n- Security headers must be properly configured"
+    },
+    "reliability_standards": {
+      "title": "Reliability Standards",
+      "description": "- System must handle failures gracefully\n- Error logging must be comprehensive\n- Health checks must ...",
+      "content": "- System must handle failures gracefully\n- Error logging must be comprehensive\n- Health checks must be implemented\n- Backup and recovery procedures must be in place\n\n---\n\n**AI Quality Checklist**: Before implementing architectural changes, ensure:\n- [x] Changes align with established architectural patterns\n- [x] Data flow is properly documented and traceable\n- [x] Integration points are clearly defined\n- [x] Technology choices are consistent and justified\n- [x] Performance implications are considered\n- [x] Security measures are implemented\n- [x] Error handling is comprehensive\n- [x] Documentation is updated accordingly"
+    }
+  },
+  "implementation_guidelines": {
+    "implementation_guidelines": {
+      "title": "Implementation Guidelines",
+      "content": ""
+    }
+  }
+}
