@@ -80,6 +80,55 @@
       "priority_systems": true,
       "decision_frameworks": true,
       "error_handling": true
+    },
+    "content_exclusions": {
+      "methodology_terms": [
+        "sprint",
+        "sprints",
+        "agile",
+        "scrum",
+        "iteration",
+        "sprint planning",
+        "sprint review",
+        "sprint retrospective"
+      ],
+      "time_based_placeholders": [
+        "week 1",
+        "week 2",
+        "sprint 1",
+        "sprint 2",
+        "iteration 1"
+      ],
+      "rule": "Do not include sprint/agile methodology concepts unless explicitly requested by the user"
+    },
+    "content_guidelines": {
+      "plan_documents": {
+        "focus": "high_level_strategy",
+        "avoid": [
+          "detailed_code_snippets",
+          "implementation_specifics",
+          "step_by_step_instructions",
+          "exact_file_contents"
+        ],
+        "include": [
+          "overall_approach",
+          "key_decisions",
+          "architecture_considerations",
+          "risk_assessment",
+          "success_criteria"
+        ],
+        "rule": "Plans should focus on WHAT and WHY, not HOW. Implementation details belong in separate implementation guides."
+      },
+      "implementation_guides": {
+        "focus": "detailed_implementation",
+        "include": [
+          "step_by_step_instructions",
+          "code_examples",
+          "file_paths",
+          "testing_strategies"
+        ],
+        "rule": "Implementation guides can include detailed code and step-by-step instructions."
+      }
     }
   },
   "priority_system": {

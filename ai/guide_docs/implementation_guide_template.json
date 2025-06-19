@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "title": "Implementation Guide Template",
+    "description": "Template for creating detailed implementation guides with code examples and step-by-step instructions",
+    "version": "1.0",
+    "last_updated": "2025-06-18",
+    "source": "guide_docs/implementation_guide_template.md",
+    "cross_references": [
+      "feature_template.json",
+      "../project_context/architecture_overview.json",
+      "../project_context/common_patterns.json"
+    ]
+  },
+  "sections": {
+    "implementation_guide_template": {
+      "title": "Implementation Guide Template",
+      "description": "> Template for creating detailed implementation guides. Use this for step-by-step implementation instructions with code examples.",
+      "content": "> Template for creating detailed implementation guides. Use this for step-by-step implementation instructions with code examples."
+    },
+    "ai_metadata": {
+      "title": "AI Metadata",
+      "description": "**Template Version:** 1.0\n**AI Processing Level:** High\n**Required Context:** Feature plan, project architecture, existing patterns\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `feature_template.json` - Feature plan reference\n- `../project_context/architecture_overview.json` - System architecture\n- `../project_context/common_patterns.json` - Project patterns\n\n**Validation Rules:**\n- All code examples must be syntactically correct\n- File paths must reference actual codebase structure\n- Implementation steps must be sequential and complete\n- Code examples must follow existing patterns\n- All imports and dependencies must be specified"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "**Feature:** [Feature Name]\n**Implementation Guide Version:** [Version]\n**Estimated Time:** [Time estimate]\n**Prerequisites:** [List of prerequisites]\n\n**Purpose:** This guide provides step-by-step implementation instructions for [Feature Name].",
+      "content": "**Feature:** [Feature Name]\n**Implementation Guide Version:** [Version]\n**Estimated Time:** [Time estimate]\n**Prerequisites:** [List of prerequisites]\n\n**Purpose:** This guide provides step-by-step implementation instructions for [Feature Name]."
+    },
+    "prerequisites": {
+      "title": "Prerequisites",
+      "description": "[List of prerequisites including:\n- Required knowledge/skills\n- Required tools/software\n- Required access/permissions\n- Required setup steps]",
+      "content": "[List of prerequisites including:\n- Required knowledge/skills\n- Required tools/software\n- Required access/permissions\n- Required setup steps]"
+    },
+    "implementation_phases": {
+      "title": "Implementation Phases",
+      "description": "[List of implementation phases with time estimates]",
+      "content": "[List of implementation phases with time estimates]"
+    },
+    "phase_1_backend_setup": {
+      "title": "Phase 1: Backend Setup",
+      "description": "[Detailed backend implementation steps with code examples]",
+      "content": "[Detailed backend implementation steps with code examples]"
+    },
+    "phase_2_frontend_setup": {
+      "title": "Phase 2: Frontend Setup",
+      "description": "[Detailed frontend implementation steps with code examples]",
+      "content": "[Detailed frontend implementation steps with code examples]"
+    },
+    "phase_3_integration": {
+      "title": "Phase 3: Integration",
+      "description": "[Detailed integration steps with code examples]",
+      "content": "[Detailed integration steps with code examples]"
+    },
+    "phase_4_testing": {
+      "title": "Phase 4: Testing",
+      "description": "[Detailed testing steps with code examples]",
+      "content": "[Detailed testing steps with code examples]"
+    },
+    "code_examples": {
+      "title": "Code Examples",
+      "description": "[Detailed code examples for key components]",
+      "content": "[Detailed code examples for key components]"
+    },
+    "backend_examples": {
+      "title": "Backend Code Examples",
+      "description": "[Backend code examples with file paths and explanations]",
+      "content": "[Backend code examples with file paths and explanations]"
+    },
+    "frontend_examples": {
+      "title": "Frontend Code Examples",
+      "description": "[Frontend code examples with file paths and explanations]",
+      "content": "[Frontend code examples with file paths and explanations]"
+    },
+    "testing_examples": {
+      "title": "Testing Code Examples",
+      "description": "[Testing code examples with file paths and explanations]",
+      "content": "[Testing code examples with file paths and explanations]"
+    },
+    "common_issues": {
+      "title": "Common Issues and Solutions",
+      "description": "[Common issues that may arise during implementation and their solutions]",
+      "content": "[Common issues that may arise during implementation and their solutions]"
+    },
+    "verification_steps": {
+      "title": "Verification Steps",
+      "description": "[Steps to verify the implementation is working correctly]",
+      "content": "[Steps to verify the implementation is working correctly]"
+    },
+    "next_steps": {
+      "title": "Next Steps",
+      "description": "[What to do after completing this implementation]",
+      "content": "[What to do after completing this implementation]"
+    },
+    "references": {
+      "title": "References",
+      "description": "[List of relevant references and documentation]",
+      "content": "[List of relevant references and documentation]"
+    }
+  },
+  "implementation_guidelines": {
+    "guide_focus": {
+      "title": "Guide Focus",
+      "content": "Implementation guides should focus on HOW with detailed step-by-step instructions and code examples."
+    },
+    "include_in_guides": {
+      "title": "Include in Guides",
+      "content": "- Step-by-step implementation instructions\n- Detailed code examples\n- File paths and exact locations\n- Testing strategies\n- Common issues and solutions\n- Verification steps"
+    },
+    "code_requirements": {
+      "title": "Code Requirements",
+      "content": "- All code must be syntactically correct\n- Follow existing project patterns\n- Include all necessary imports\n- Provide context for each code block\n- Reference actual file paths"
+    }
+  }
+}

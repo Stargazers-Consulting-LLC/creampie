@@ -1,17 +1,51 @@
 {
   "metadata": {
     "title": "AI Quick Reference",
-    "description": "",
+    "description": "Quick reference for AI tool usage and documentation patterns",
     "version": "2.1",
     "last_updated": "2025-06-18",
     "source": "ai_quick_reference.md",
-    "cross_references": []
+    "cross_references": [
+      "ai_config.json",
+      "guide_docs/feature_template.json",
+      "guide_docs/implementation_guide_template.json"
+    ]
   },
   "sections": {
     "ai_quick_reference": {
       "title": "AI Quick Reference",
-      "description": "> This quick reference provides immediate access to common patterns, templates, and best practices f...",
-      "content": "> This quick reference provides immediate access to common patterns, templates, and best practices for AI-assisted development. Use this for rapid implementation guidance."
+      "description": "> Quick reference for AI tool usage and documentation patterns. Use this for understanding how to interact with the AI system effectively.",
+      "content": "> Quick reference for AI tool usage and documentation patterns. Use this for understanding how to interact with the AI system effectively."
+    },
+    "documentation_types": {
+      "title": "Documentation Types",
+      "description": "**Feature Plans:** High-level strategy documents focusing on WHAT and WHY\n- Use `guide_docs/feature_template.json`\n- Focus on overall approach, key decisions, architecture\n- Avoid detailed code snippets and implementation steps\n\n**Implementation Guides:** Detailed step-by-step instructions with code examples\n- Use `guide_docs/implementation_guide_template.json`\n- Include detailed code examples and file paths\n- Focus on HOW with specific implementation steps\n\n**Technical Summaries:** Module-specific technical details\n- Located in `technical_summaries/`\n- Focus on existing code structure and patterns\n\n**Style Guides:** Language and domain-specific guidelines\n- Located in `guide_docs/language_specific/` and `guide_docs/domain_specific/`\n- Focus on coding standards and best practices",
+      "content": "**Feature Plans:** High-level strategy documents focusing on WHAT and WHY\n- Use `guide_docs/feature_template.json`\n- Focus on overall approach, key decisions, architecture\n- Avoid detailed code snippets and implementation steps\n\n**Implementation Guides:** Detailed step-by-step instructions with code examples\n- Use `guide_docs/implementation_guide_template.json`\n- Include detailed code examples and file paths\n- Focus on HOW with specific implementation steps\n\n**Technical Summaries:** Module-specific technical details\n- Located in `technical_summaries/`\n- Focus on existing code structure and patterns\n\n**Style Guides:** Language and domain-specific guidelines\n- Located in `guide_docs/language_specific/` and `guide_docs/domain_specific/`\n- Focus on coding standards and best practices"
+    },
+    "plan_vs_implementation": {
+      "title": "Plan vs Implementation Guide",
+      "description": "**Feature Plans (WHAT/WHY):**\n- Overall strategy and approach\n- Key architectural decisions\n- High-level requirements\n- Success criteria\n- Risk assessment\n- Integration points\n\n**Implementation Guides (HOW):**\n- Step-by-step instructions\n- Detailed code examples\n- File paths and exact locations\n- Testing strategies\n- Common issues and solutions\n- Verification steps\n\n**Rule:** Plans focus on strategy, implementation guides focus on execution.",
+      "content": "**Feature Plans (WHAT/WHY):**\n- Overall strategy and approach\n- Key architectural decisions\n- High-level requirements\n- Success criteria\n- Risk assessment\n- Integration points\n\n**Implementation Guides (HOW):**\n- Step-by-step instructions\n- Detailed code examples\n- File paths and exact locations\n- Testing strategies\n- Common issues and solutions\n- Verification steps\n\n**Rule:** Plans focus on strategy, implementation guides focus on execution."
+    },
+    "ai_tool_usage": {
+      "title": "AI Tool Usage",
+      "description": "**File Operations:**\n- `read_file`: Read file contents with line ranges\n- `edit_file`: Make precise edits to files\n- `delete_file`: Remove files safely\n- `file_search`: Find files by fuzzy matching\n\n**Code Analysis:**\n- `codebase_search`: Semantic search for code patterns\n- `grep_search`: Exact text/regex pattern matching\n- `list_dir`: Explore directory structure\n\n**Execution:**\n- `run_terminal_cmd`: Execute shell commands\n- Background tasks supported with `is_background: true`\n\n**Best Practices:**\n- Use semantic search for understanding patterns\n- Use grep for exact matches\n- Read files before editing\n- Validate file paths exist",
+      "content": "**File Operations:**\n- `read_file`: Read file contents with line ranges\n- `edit_file`: Make precise edits to files\n- `delete_file`: Remove files safely\n- `file_search`: Find files by fuzzy matching\n\n**Code Analysis:**\n- `codebase_search`: Semantic search for code patterns\n- `grep_search`: Exact text/regex pattern matching\n- `list_dir`: Explore directory structure\n\n**Execution:**\n- `run_terminal_cmd`: Execute shell commands\n- Background tasks supported with `is_background: true`\n\n**Best Practices:**\n- Use semantic search for understanding patterns\n- Use grep for exact matches\n- Read files before editing\n- Validate file paths exist"
+    },
+    "documentation_patterns": {
+      "title": "Documentation Patterns",
+      "description": "**JSON Format:** All documentation uses JSON for AI optimization\n**Cross-References:** Use relative paths to other documentation\n**Metadata:** Include version, last_updated, source file\n**Validation:** All documentation must pass validation rules\n**Consistency:** Follow established patterns and naming conventions\n\n**File Naming:**\n- Use descriptive names with underscores\n- Include version numbers for major changes\n- Group related files in directories\n\n**Content Structure:**\n- Use clear section titles\n- Include AI guidance in descriptions\n- Provide actionable content\n- Reference existing patterns",
+      "content": "**JSON Format:** All documentation uses JSON for AI optimization\n**Cross-References:** Use relative paths to other documentation\n**Metadata:** Include version, last_updated, source file\n**Validation:** All documentation must pass validation rules\n**Consistency:** Follow established patterns and naming conventions\n\n**File Naming:**\n- Use descriptive names with underscores\n- Include version numbers for major changes\n- Group related files in directories\n\n**Content Structure:**\n- Use clear section titles\n- Include AI guidance in descriptions\n- Provide actionable content\n- Reference existing patterns"
+    },
+    "common_patterns": {
+      "title": "Common Patterns",
+      "description": "**Error Handling:** Consistent try/except patterns across modules\n**Code Organization:** Modular structure with clear separation\n**Testing:** Comprehensive test coverage with fixtures\n**Documentation:** JSON-optimized for AI consumption\n\n**Backend Patterns:**\n- FastAPI with Pydantic models\n- SQLAlchemy for database operations\n- Celery for background tasks\n- Alembic for migrations\n\n**Frontend Patterns:**\n- React with TypeScript\n- Tailwind CSS for styling\n- React Router for navigation\n- Axios for API calls\n\n**Testing Patterns:**\n- Pytest for backend testing\n- Jest/React Testing Library for frontend\n- Fixtures for test data\n- Mocking for external dependencies",
+      "content": "**Error Handling:** Consistent try/except patterns across modules\n**Code Organization:** Modular structure with clear separation\n**Testing:** Comprehensive test coverage with fixtures\n**Documentation:** JSON-optimized for AI consumption\n\n**Backend Patterns:**\n- FastAPI with Pydantic models\n- SQLAlchemy for database operations\n- Celery for background tasks\n- Alembic for migrations\n\n**Frontend Patterns:**\n- React with TypeScript\n- Tailwind CSS for styling\n- React Router for navigation\n- Axios for API calls\n\n**Testing Patterns:**\n- Pytest for backend testing\n- Jest/React Testing Library for frontend\n- Fixtures for test data\n- Mocking for external dependencies"
+    },
+    "validation_rules": {
+      "title": "Validation Rules",
+      "description": "**Documentation Quality:**\n- All placeholders must be replaced\n- File paths must reference actual structure\n- Requirements must be measurable\n- Cross-references must be valid\n\n**Code Quality:**\n- Follow existing patterns\n- Include proper error handling\n- Add comprehensive tests\n- Update documentation\n\n**AI Optimization:**\n- Use JSON format consistently\n- Include AI metadata\n- Provide clear guidance\n- Reference existing patterns\n\n**Content Guidelines:**\n- Plans focus on WHAT/WHY\n- Implementation guides focus on HOW\n- Avoid detailed code in plans\n- Include code examples in guides",
+      "content": "**Documentation Quality:**\n- All placeholders must be replaced\n- File paths must reference actual structure\n- Requirements must be measurable\n- Cross-references must be valid\n\n**Code Quality:**\n- Follow existing patterns\n- Include proper error handling\n- Add comprehensive tests\n- Update documentation\n\n**AI Optimization:**\n- Use JSON format consistently\n- Include AI metadata\n- Provide clear guidance\n- Reference existing patterns\n\n**Content Guidelines:**\n- Plans focus on WHAT/WHY\n- Implementation guides focus on HOW\n- Avoid detailed code in plans\n- Include code examples in guides"
     },
     "ai_metadata": {
       "title": "AI Metadata",
