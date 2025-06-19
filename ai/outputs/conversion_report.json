@@ -1,0 +1,33 @@
+{
+  "conversion_summary": {
+    "total_files_converted": 23,
+    "errors": 0,
+    "conversion_time": "2025-06-18T19:14:30.272499"
+  },
+  "converted_files": [
+    "ai/README.json",
+    "ai/search_index.json",
+    "ai/ai_quick_reference.json",
+    "ai/ai_usage_guide.json",
+    "ai/guide_docs/README.json",
+    "ai/guide_docs/AI Tool Optimization Guide.json",
+    "ai/guide_docs/Feature Template.json",
+    "ai/guide_docs/Code Review Patterns.json",
+    "ai/guide_docs/Core Principles.json",
+    "ai/guide_docs/Language-Specific/FastAPI Development Guide.json",
+    "ai/guide_docs/Language-Specific/Python Testing Guide.json",
+    "ai/guide_docs/Language-Specific/Python Style Guide.json",
+    "ai/guide_docs/Domain-Specific/Shell Style Guide.json",
+    "ai/guide_docs/Domain-Specific/Database Management Guide.json",
+    "ai/guide_docs/Domain-Specific/Web Scraping Patterns.json",
+    "ai/guide_docs/Domain-Specific/Frontend Style Guide.json",
+    "ai/project_context/Development Workflow.json",
+    "ai/project_context/README.json",
+    "ai/project_context/Architecture Overview.json",
+    "ai/project_context/Common Patterns.json",
+    "ai/features/README.json",
+    "ai/features/summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json",
+    "ai/features/plans/[IN-PROGRESS]-Stock Tracking Request Plan.json"
+  ],
+  "errors": []
+}

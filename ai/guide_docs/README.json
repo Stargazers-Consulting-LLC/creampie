@@ -1,0 +1,430 @@
+{
+  "ai_metadata": {
+    "purpose": "",
+    "last_updated": "",
+    "template_version": "2.1",
+    "ai_tool_compatibility": "",
+    "ai_processing_level": "High",
+    "required_context": "AI development assistance, documentation structure, project patterns",
+    "validation_required": "Yes",
+    "code_generation": "Supported",
+    "cross_references": [
+      "Core%20Principles.json",
+      "Feature Template.json",
+      "../project_context/Architecture%20Overview.json",
+      "../project_context/Common%20Patterns.json",
+      "../project_context/Development%20Workflow.json"
+    ],
+    "maintenance": ""
+  },
+  "file_info": {
+    "file_path": "guide_docs/README.md",
+    "original_format": "markdown",
+    "converted_at": "2025-06-18T19:14:30.245075",
+    "file_size": 9665,
+    "line_count": 209,
+    "optimized_at": "2025-06-18T19:19:47.734582",
+    "optimization_version": "1.0"
+  },
+  "content": {
+    "sections": [
+      {
+        "level": 1,
+        "title": "Documentation Guides",
+        "content": "> This folder contains comprehensive documentation guides organized by language and domain. Use these guides for implementation patterns, best practices, and development standards.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "AI Metadata",
+        "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** AI development assistance, documentation structure, project patterns\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:**\n- `Core%20Principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `Feature Template.json.replace(\".json\", \".json\")` - Feature development patterns\n- `../project_context/Architecture%20Overview.json.replace(\".json\", \".json\")` - System architecture\n- `../project_context/Common%20Patterns.json.replace(\".json\", \".json\")` - Project patterns\n- `../project_context/Development%20Workflow.json.replace(\".json\", \".json\")` - Development process\n\n**Validation Rules:**\n- All guides must include comprehensive AI metadata\n- Cross-references must be accurate and bidirectional\n- Code generation hints must be specific and actionable\n- Context awareness must be maintained throughout\n- Quality standards must be consistently applied\n\n**Keywords:** AI development guides, code assistance, patterns, best practices, language-specific, domain-specific",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Guide Structure",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "📁 Core Principles",
+        "content": "- **[Core Principles.json](Core%20Principles.json.replace(\".json\", \".json\"))** - Fundamental decision-making frameworks and philosophies\n- **[Code Review Patterns.json](Code%20Review%20Patterns.json.replace(\".json\", \".json\"))** - How to structure suggestions and handle conflicts\n- **[AI Tool Optimization Guide.json](AI%20Tool%20Optimization%20Guide.json.replace(\".json\", \".json\"))** - Patterns for optimizing AI tool consumption",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "📁 Project Context",
+        "content": "- **[Architecture Overview.json](../project_context/Architecture%20Overview.json.replace(\".json\", \".json\"))** - High-level system design and component relationships\n- **[Development Workflow.json](../project_context/Development%20Workflow.json.replace(\".json\", \".json\"))** - How features flow from idea to deployment\n- **[Common Patterns.json](../project_context/Common%20Patterns.json.replace(\".json\", \".json\"))** - Project-specific patterns and conventions",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "📁 Language-Specific",
+        "content": "- **[Python Style Guide.json](Language-Specific/Python%20Style%20Guide.json.replace(\".json\", \".json\"))** - Pure Python style rules\n- **[Python Testing Guide.json](Language-Specific/Python%20Testing%20Guide.json.replace(\".json\", \".json\"))** - Pure testing patterns\n- **[FastAPI Development Guide.json](Language-Specific/FastAPI%20Development%20Guide.json.replace(\".json\", \".json\"))** - General FastAPI patterns",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "📁 Domain-Specific",
+        "content": "- **[Database Management Guide.json](Domain-Specific/Database%20Management%20Guide.json.replace(\".json\", \".json\"))** - Database patterns and migrations\n- **[Frontend Style Guide.json](Domain-Specific/Frontend%20Style%20Guide.json.replace(\".json\", \".json\"))** - React and frontend patterns\n- **[Shell Style Guide.json](Domain-Specific/Shell%20Style%20Guide.json.replace(\".json\", \".json\"))** - Shell script patterns\n- **[Web Scraping Patterns.json](Domain-Specific/Web%20Scraping%20Patterns.json.replace(\".json\", \".json\"))** - Project-specific web scraping patterns (HTML parsing, background tasks, file processing)",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "📁 Templates",
+        "content": "- **[Feature Template.json](Feature Template.json.replace(\".json\", \".json\"))** - Standardized feature development template",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "📁 Search & Navigation",
+        "content": "- **[Search Index.json](../search_index.json.replace(\".json\", \".json\"))** - Comprehensive search index for quick navigation",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "How to Use These Guides",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "For AI Assistants",
+        "content": "1. **Start with Core Principles** - Understand the fundamental frameworks for decision-making\n2. **Understand Project Context** - Learn about the specific project architecture and patterns\n3. **Apply Language-Specific Rules** - Use the appropriate language guide for the code you're working with\n4. **Consider Domain Context** - Apply domain-specific patterns when relevant\n5. **Use Code Review Patterns** - Structure your suggestions and handle conflicts appropriately\n6. **Optimize for AI Tools** - Follow AI Tool Optimization Guide for better tool consumption",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Decision-Making Flow",
+        "content": "```\nUser Request → Core Principles → Project Context → Language-Specific → Domain-Specific → Code Review Patterns → AI Tool Optimization\n```",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Example Workflow",
+        "content": "1. **User asks for code review**\n   - Check Core Principles for decision-making framework\n   - Review Project Context for established patterns\n   - Apply Python Style Guide for style violations\n   - Use Code Review Patterns to structure suggestions\n   - Apply AI Tool Optimization for better communication\n\n2. **User asks for new feature**\n   - Check Core Principles for context awareness\n   - Review Architecture Overview for system design\n   - Apply FastAPI Guide for general API patterns\n   - Consider Web Scraping Patterns for data processing needs\n   - Consider Database Guide for data modeling\n   - Use Feature Template for structured planning\n\n3. **User encounters conflict**\n   - Use Code Review Patterns for conflict resolution\n   - Apply Core Principles for priority assessment\n   - Check Common Patterns for established conventions\n   - Explain reasoning using appropriate guides\n   - Apply AI Tool Optimization for clear communication",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Guide Relationships",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Hierarchy",
+        "content": "- **Core Principles** → **Project Context** → **Language-Specific** → **Domain-Specific**\n- Each level builds on the previous level\n- Conflicts are resolved using priority systems from Core Principles\n- AI Tool Optimization applies to all levels",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Cross-References",
+        "content": "- Guides reference each other when appropriate\n- Core Principles provide the foundation for all other guides\n- Project Context provides project-specific understanding\n- Code Review Patterns provide frameworks for applying all guides\n- AI Tool Optimization ensures effective tool consumption",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Maintenance",
+        "content": "- Update Core Principles when fundamental patterns change\n- Update Project Context when architecture evolves\n- Update Language-Specific guides when language patterns evolve\n- Update Domain-Specific guides when domain requirements change\n- Keep guides consistent and avoid duplication\n- Maintain AI Tool Optimization standards across all guides",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Best Practices for AI Assistants",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "When Using These Guides",
+        "content": "1. **Always start with context** - Understand what the user is trying to accomplish\n2. **Apply principles hierarchically** - Core → Project Context → Language → Domain\n3. **Explain your reasoning** - Help users understand why you're suggesting changes\n4. **Be consistent** - Apply the same patterns across similar situations\n5. **Learn and adapt** - Update your approach based on user feedback\n6. **Optimize for tools** - Use AI Tool Optimization patterns for better effectiveness",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "When Guides Conflict",
+        "content": "1. **Identify the conflict** - Clearly state what the guides say differently\n2. **Assess context** - Consider the specific situation and user's needs\n3. **Apply priority system** - Security/Data Integrity → Project Consistency → Performance → Style\n4. **Explain trade-offs** - Help user understand the implications of your recommendation\n5. **Use AI optimization** - Structure response for maximum clarity and effectiveness",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "When Suggesting Changes",
+        "content": "1. **Structure suggestions** - Use the standard format from Code Review Patterns\n2. **Prioritize issues** - Critical → High → Medium → Low\n3. **Provide context** - Explain why changes are beneficial\n4. **Be educational** - Help users understand patterns for future use\n5. **Apply AI patterns** - Use optimization techniques for better communication",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "AI Tool Optimization Features",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Enhanced Metadata",
+        "content": "- **Comprehensive metadata** - All guides include detailed AI metadata\n- **Search optimization** - Keywords and semantic tags for better discovery\n- **Cross-reference system** - Bidirectional linking between related content\n- **Version tracking** - Template versions and change history",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Code Generation Support",
+        "content": "- **Specific file paths** - Exact references to codebase structure\n- **Implementation hints** - Clear guidance for code generation\n- **Pattern examples** - Concrete examples from existing codebase\n- **Validation rules** - Quality standards for generated code",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Context Awareness",
+        "content": "- **Dependency mapping** - Clear relationships between documents\n- **Priority systems** - Guidance on what to focus on first\n- **Decision frameworks** - Structured approaches to common problems\n- **Error handling** - Consistent patterns for troubleshooting",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Guide Evolution",
+        "content": "These guides should evolve based on:\n- **User feedback** - What works well and what doesn't\n- **Pattern recognition** - Common issues and successful solutions\n- **Technology changes** - New tools, libraries, and best practices\n- **Project growth** - New requirements and architectural decisions\n- **AI tool improvements** - New capabilities and optimization opportunities\n\nKeep the guides updated and relevant to ensure they remain valuable for both AI assistants and human developers.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Quality Standards",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Documentation Quality",
+        "content": "- All documents include comprehensive AI metadata\n- Consistent formatting and organization across all guides\n- Clear cross-references and dependency mapping\n- Regular updates and version tracking",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Implementation Quality",
+        "content": "- Follow established patterns and standards\n- Include proper error handling and validation\n- Comprehensive testing coverage\n- Proper documentation and comments",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "AI Tool Optimization",
+        "content": "- Enhanced searchability with relevant keywords\n- Structured metadata for better tool parsing\n- Code generation hints for implementation guidance\n- Context awareness for better user experience\n\n---\n\n**AI Quality Checklist**: Before using these guides, ensure:\n- [x] Appropriate guide is selected for the task\n- [x] Core principles are understood and applied\n- [x] Project context is considered\n- [x] Language-specific patterns are followed\n- [x] Domain-specific requirements are met\n- [x] Code review patterns are applied\n- [x] AI tool optimization techniques are used\n- [x] Documentation is updated with any changes",
+        "subsections": []
+      }
+    ],
+    "code_blocks": [
+      {
+        "language": "text",
+        "code": "User Request → Core Principles → Project Context → Language-Specific → Domain-Specific → Code Review Patterns → AI Tool Optimization"
+      }
+    ],
+    "links": [
+      {
+        "type": "markdown",
+        "text": "Core Principles.md",
+        "url": "Core%20Principles.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Code Review Patterns.md",
+        "url": "Code%20Review%20Patterns.md"
+      },
+      {
+        "type": "markdown",
+        "text": "AI Tool Optimization Guide.md",
+        "url": "AI%20Tool%20Optimization%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Architecture Overview.md",
+        "url": "../project_context/Architecture%20Overview.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Development Workflow.md",
+        "url": "../project_context/Development%20Workflow.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Common Patterns.md",
+        "url": "../project_context/Common%20Patterns.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Python Style Guide.md",
+        "url": "Language-Specific/Python%20Style%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Python Testing Guide.md",
+        "url": "Language-Specific/Python%20Testing%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "FastAPI Development Guide.md",
+        "url": "Language-Specific/FastAPI%20Development%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Database Management Guide.md",
+        "url": "Domain-Specific/Database%20Management%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Frontend Style Guide.md",
+        "url": "Domain-Specific/Frontend%20Style%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Shell Style Guide.md",
+        "url": "Domain-Specific/Shell%20Style%20Guide.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Web Scraping Patterns.md",
+        "url": "Domain-Specific/Web%20Scraping%20Patterns.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Feature Template.md",
+        "url": "Feature Template.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Search Index.md",
+        "url": "../search_index.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "Core%20Principles.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "Feature Template.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../project_context/Architecture%20Overview.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../project_context/Common%20Patterns.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../project_context/Development%20Workflow.md"
+      }
+    ],
+    "raw_content": "# Documentation Guides\n\n> This folder contains comprehensive documentation guides organized by language and domain. Use these guides for implementation patterns, best practices, and development standards.\n\n## AI Metadata\n\n**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** AI development assistance, documentation structure, project patterns\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:**\n- `Core%20Principles.md` - Decision-making frameworks\n- `Feature Template.md` - Feature development patterns\n- `../project_context/Architecture%20Overview.md` - System architecture\n- `../project_context/Common%20Patterns.md` - Project patterns\n- `../project_context/Development%20Workflow.md` - Development process\n\n**Validation Rules:**\n- All guides must include comprehensive AI metadata\n- Cross-references must be accurate and bidirectional\n- Code generation hints must be specific and actionable\n- Context awareness must be maintained throughout\n- Quality standards must be consistently applied\n\n**Keywords:** AI development guides, code assistance, patterns, best practices, language-specific, domain-specific\n\n## Guide Structure\n\n### 📁 Core Principles\n- **[Core Principles.md](Core%20Principles.md)** - Fundamental decision-making frameworks and philosophies\n- **[Code Review Patterns.md](Code%20Review%20Patterns.md)** - How to structure suggestions and handle conflicts\n- **[AI Tool Optimization Guide.md](AI%20Tool%20Optimization%20Guide.md)** - Patterns for optimizing AI tool consumption\n\n### 📁 Project Context\n- **[Architecture Overview.md](../project_context/Architecture%20Overview.md)** - High-level system design and component relationships\n- **[Development Workflow.md](../project_context/Development%20Workflow.md)** - How features flow from idea to deployment\n- **[Common Patterns.md](../project_context/Common%20Patterns.md)** - Project-specific patterns and conventions\n\n### 📁 Language-Specific\n- **[Python Style Guide.md](Language-Specific/Python%20Style%20Guide.md)** - Pure Python style rules\n- **[Python Testing Guide.md](Language-Specific/Python%20Testing%20Guide.md)** - Pure testing patterns\n- **[FastAPI Development Guide.md](Language-Specific/FastAPI%20Development%20Guide.md)** - General FastAPI patterns\n\n### 📁 Domain-Specific\n- **[Database Management Guide.md](Domain-Specific/Database%20Management%20Guide.md)** - Database patterns and migrations\n- **[Frontend Style Guide.md](Domain-Specific/Frontend%20Style%20Guide.md)** - React and frontend patterns\n- **[Shell Style Guide.md](Domain-Specific/Shell%20Style%20Guide.md)** - Shell script patterns\n- **[Web Scraping Patterns.md](Domain-Specific/Web%20Scraping%20Patterns.md)** - Project-specific web scraping patterns (HTML parsing, background tasks, file processing)\n\n### 📁 Templates\n- **[Feature Template.md](Feature Template.md)** - Standardized feature development template\n\n### 📁 Search & Navigation\n- **[Search Index.md](../search_index.md)** - Comprehensive search index for quick navigation\n\n## How to Use These Guides\n\n### For AI Assistants\n\n1. **Start with Core Principles** - Understand the fundamental frameworks for decision-making\n2. **Understand Project Context** - Learn about the specific project architecture and patterns\n3. **Apply Language-Specific Rules** - Use the appropriate language guide for the code you're working with\n4. **Consider Domain Context** - Apply domain-specific patterns when relevant\n5. **Use Code Review Patterns** - Structure your suggestions and handle conflicts appropriately\n6. **Optimize for AI Tools** - Follow AI Tool Optimization Guide for better tool consumption\n\n### Decision-Making Flow\n\n```\nUser Request → Core Principles → Project Context → Language-Specific → Domain-Specific → Code Review Patterns → AI Tool Optimization\n```\n\n### Example Workflow\n\n1. **User asks for code review**\n   - Check Core Principles for decision-making framework\n   - Review Project Context for established patterns\n   - Apply Python Style Guide for style violations\n   - Use Code Review Patterns to structure suggestions\n   - Apply AI Tool Optimization for better communication\n\n2. **User asks for new feature**\n   - Check Core Principles for context awareness\n   - Review Architecture Overview for system design\n   - Apply FastAPI Guide for general API patterns\n   - Consider Web Scraping Patterns for data processing needs\n   - Consider Database Guide for data modeling\n   - Use Feature Template for structured planning\n\n3. **User encounters conflict**\n   - Use Code Review Patterns for conflict resolution\n   - Apply Core Principles for priority assessment\n   - Check Common Patterns for established conventions\n   - Explain reasoning using appropriate guides\n   - Apply AI Tool Optimization for clear communication\n\n## Guide Relationships\n\n### Hierarchy\n- **Core Principles** → **Project Context** → **Language-Specific** → **Domain-Specific**\n- Each level builds on the previous level\n- Conflicts are resolved using priority systems from Core Principles\n- AI Tool Optimization applies to all levels\n\n### Cross-References\n- Guides reference each other when appropriate\n- Core Principles provide the foundation for all other guides\n- Project Context provides project-specific understanding\n- Code Review Patterns provide frameworks for applying all guides\n- AI Tool Optimization ensures effective tool consumption\n\n### Maintenance\n- Update Core Principles when fundamental patterns change\n- Update Project Context when architecture evolves\n- Update Language-Specific guides when language patterns evolve\n- Update Domain-Specific guides when domain requirements change\n- Keep guides consistent and avoid duplication\n- Maintain AI Tool Optimization standards across all guides\n\n## Best Practices for AI Assistants\n\n### When Using These Guides\n1. **Always start with context** - Understand what the user is trying to accomplish\n2. **Apply principles hierarchically** - Core → Project Context → Language → Domain\n3. **Explain your reasoning** - Help users understand why you're suggesting changes\n4. **Be consistent** - Apply the same patterns across similar situations\n5. **Learn and adapt** - Update your approach based on user feedback\n6. **Optimize for tools** - Use AI Tool Optimization patterns for better effectiveness\n\n### When Guides Conflict\n1. **Identify the conflict** - Clearly state what the guides say differently\n2. **Assess context** - Consider the specific situation and user's needs\n3. **Apply priority system** - Security/Data Integrity → Project Consistency → Performance → Style\n4. **Explain trade-offs** - Help user understand the implications of your recommendation\n5. **Use AI optimization** - Structure response for maximum clarity and effectiveness\n\n### When Suggesting Changes\n1. **Structure suggestions** - Use the standard format from Code Review Patterns\n2. **Prioritize issues** - Critical → High → Medium → Low\n3. **Provide context** - Explain why changes are beneficial\n4. **Be educational** - Help users understand patterns for future use\n5. **Apply AI patterns** - Use optimization techniques for better communication\n\n## AI Tool Optimization Features\n\n### Enhanced Metadata\n- **Comprehensive metadata** - All guides include detailed AI metadata\n- **Search optimization** - Keywords and semantic tags for better discovery\n- **Cross-reference system** - Bidirectional linking between related content\n- **Version tracking** - Template versions and change history\n\n### Code Generation Support\n- **Specific file paths** - Exact references to codebase structure\n- **Implementation hints** - Clear guidance for code generation\n- **Pattern examples** - Concrete examples from existing codebase\n- **Validation rules** - Quality standards for generated code\n\n### Context Awareness\n- **Dependency mapping** - Clear relationships between documents\n- **Priority systems** - Guidance on what to focus on first\n- **Decision frameworks** - Structured approaches to common problems\n- **Error handling** - Consistent patterns for troubleshooting\n\n## Guide Evolution\n\nThese guides should evolve based on:\n- **User feedback** - What works well and what doesn't\n- **Pattern recognition** - Common issues and successful solutions\n- **Technology changes** - New tools, libraries, and best practices\n- **Project growth** - New requirements and architectural decisions\n- **AI tool improvements** - New capabilities and optimization opportunities\n\nKeep the guides updated and relevant to ensure they remain valuable for both AI assistants and human developers.\n\n## Quality Standards\n\n### Documentation Quality\n- All documents include comprehensive AI metadata\n- Consistent formatting and organization across all guides\n- Clear cross-references and dependency mapping\n- Regular updates and version tracking\n\n### Implementation Quality\n- Follow established patterns and standards\n- Include proper error handling and validation\n- Comprehensive testing coverage\n- Proper documentation and comments\n\n### AI Tool Optimization\n- Enhanced searchability with relevant keywords\n- Structured metadata for better tool parsing\n- Code generation hints for implementation guidance\n- Context awareness for better user experience\n\n---\n\n**AI Quality Checklist**: Before using these guides, ensure:\n- [x] Appropriate guide is selected for the task\n- [x] Core principles are understood and applied\n- [x] Project context is considered\n- [x] Language-specific patterns are followed\n- [x] Domain-specific requirements are met\n- [x] Code review patterns are applied\n- [x] AI tool optimization techniques are used\n- [x] Documentation is updated with any changes\n"
+  },
+  "cross_references": [
+    {
+      "title": "Core Principles.md",
+      "path": "Core%20Principles.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Code Review Patterns.md",
+      "path": "Code%20Review%20Patterns.json",
+      "type": "guide",
+      "relevance": "medium"
+    },
+    {
+      "title": "AI Tool Optimization Guide.md",
+      "path": "AI%20Tool%20Optimization%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Architecture Overview.md",
+      "path": "../project_context/Architecture%20Overview.json",
+      "type": "context",
+      "relevance": "medium"
+    },
+    {
+      "title": "Development Workflow.md",
+      "path": "../project_context/Development%20Workflow.json",
+      "type": "context",
+      "relevance": "medium"
+    },
+    {
+      "title": "Common Patterns.md",
+      "path": "../project_context/Common%20Patterns.json",
+      "type": "context",
+      "relevance": "medium"
+    },
+    {
+      "title": "Python Style Guide.md",
+      "path": "Language-Specific/Python%20Style%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Python Testing Guide.md",
+      "path": "Language-Specific/Python%20Testing%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "FastAPI Development Guide.md",
+      "path": "Language-Specific/FastAPI%20Development%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Database Management Guide.md",
+      "path": "Domain-Specific/Database%20Management%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Frontend Style Guide.md",
+      "path": "Domain-Specific/Frontend%20Style%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Shell Style Guide.md",
+      "path": "Domain-Specific/Shell%20Style%20Guide.json",
+      "type": "guide",
+      "relevance": "high"
+    },
+    {
+      "title": "Web Scraping Patterns.md",
+      "path": "Domain-Specific/Web%20Scraping%20Patterns.json",
+      "type": "guide",
+      "relevance": "medium"
+    },
+    {
+      "title": "Feature Template.md",
+      "path": "Feature Template.json",
+      "type": "guide",
+      "relevance": "medium"
+    },
+    {
+      "title": "Search Index.md",
+      "path": "../search_index.json",
+      "type": "guide",
+      "relevance": "medium"
+    }
+  ],
+  "code_generation_hints": [],
+  "validation_rules": [
+    "Code generation hints must be specific and actionable",
+    "All guides must include comprehensive AI metadata",
+    "Quality standards must be consistently applied",
+    "Context awareness must be maintained throughout",
+    "Cross-references must be accurate and bidirectional"
+  ],
+  "optimization": {
+    "version": "1.0",
+    "optimized_at": "2025-06-18T19:19:47.734586",
+    "improvements": [
+      "fixed_file_references",
+      "extracted_ai_metadata",
+      "structured_cross_references",
+      "extracted_code_hints",
+      "structured_validation_rules"
+    ],
+    "literal_strings_cleaned": true,
+    "cleaned_at": "2025-06-18T19:30:00.000000"
+  }
+}

@@ -1,0 +1,884 @@
+{
+  "ai_metadata": {
+    "purpose": "",
+    "last_updated": "",
+    "template_version": "2.1",
+    "ai_tool_compatibility": "",
+    "ai_processing_level": "High",
+    "required_context": "Bash, shell scripting, Linux/Unix systems, automation",
+    "validation_required": "Yes",
+    "code_generation": "Supported",
+    "cross_references": [
+      "../Core%20Principles.json",
+      "../Language-Specific/Python%20Testing%20Guide.json",
+      "../../project_context/Architecture%20Overview.json",
+      "../../project_context/Common%20Patterns.json"
+    ],
+    "maintenance": ""
+  },
+  "file_info": {
+    "file_path": "guide_docs/Domain-Specific/Shell Style Guide.md",
+    "original_format": "markdown",
+    "converted_at": "2025-06-18T19:14:30.256262",
+    "file_size": 26589,
+    "line_count": 977,
+    "optimized_at": "2025-06-18T19:19:47.753743",
+    "optimization_version": "1.0"
+  },
+  "content": {
+    "sections": [
+      {
+        "level": 1,
+        "title": "Shell Style Guide",
+        "content": "> This guide provides comprehensive patterns and best practices for shell scripting and command-line operations. Use these patterns to create reliable, maintainable shell scripts.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "AI Metadata",
+        "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Bash, shell scripting, Linux/Unix systems, automation\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../Core%20Principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `../Language-Specific/Python%20Testing%20Guide.json.replace(\".json\", \".json\")` - Testing patterns\n- `../../project_context/Architecture%20Overview.json.replace(\".json\", \".json\")` - System architecture\n- `../../project_context/Common%20Patterns.json.replace(\".json\", \".json\")` - Project-specific patterns\n\n**Validation Rules:**\n- All scripts must include proper error handling and exit codes\n- Scripts must use strict mode and fail-fast behavior\n- All variables must be properly quoted and validated\n- Scripts must include comprehensive logging and debugging\n- All commands must be idempotent and safe to re-run",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Overview",
+        "content": "**Document Purpose:** Shell scripting standards and best practices for the CreamPie project\n**Scope:** Bash scripting, automation, deployment, and system administration\n**Target Users:** AI assistants and developers writing shell scripts\n**Last Updated:** Current\n\n**AI Context:** This guide provides the foundational shell scripting patterns that must be followed for all automation and deployment tasks in the project. It ensures robust, maintainable, and secure shell scripts.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "1. Script Structure",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Header and Metadata",
+        "content": "```bash\n#!/usr/bin/env bash\n#",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Script Name: deploy_application.sh",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Description: Deploy the CreamPie application to production",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Author: AI Assistant",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Version: 1.0.0",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Created: 2024-01-01",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Last Modified: 2024-01-01",
+        "content": "#",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Usage: ./deploy_application.sh [environment] [version]",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Example: ./deploy_application.sh production v1.2.3",
+        "content": "#",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Dependencies:",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "- docker",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "- docker-compose",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "- git",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "- jq",
+        "content": "#",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Exit Codes:",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "0 - Success",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "1 - General error",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "2 - Invalid arguments",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "3 - Dependency missing",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "4 - Configuration error",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "5 - Deployment failed",
+        "content": "#",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Environment Variables:",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "DEPLOY_ENV - Target environment (default: production)",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "APP_VERSION - Application version to deploy",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "LOG_LEVEL - Logging level (default: INFO)",
+        "content": "#\n\nset -euo pipefail  # Strict mode: exit on error, undefined vars, pipe failures\nIFS=$'\\n\\t'        # Internal field separator for safer word splitting\n```\n\nThis header pattern will inform all shell script structure and metadata.\n\nAll scripts must include proper header documentation and strict mode settings.",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Script Organization",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "CONFIGURATION",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Default values",
+        "content": "readonly DEFAULT_ENV=\"production\"\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nreadonly SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nreadonly PROJECT_ROOT=\"$(dirname \"$SCRIPT_DIR\")\"",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Configuration variables",
+        "content": "DEPLOY_ENV=\"${DEPLOY_ENV:-$DEFAULT_ENV}\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\nAPP_VERSION=\"\"",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "FUNCTIONS",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Logging functions",
+        "content": "log_info() {\n    echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n}\n\nlog_warn() {\n    echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Error handling",
+        "content": "error_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n    log_error \"$error_message\"\n    exit \"$exit_code\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Cleanup function",
+        "content": "cleanup() {\n    log_info \"Cleaning up...\"\n    # Add cleanup logic here\n    log_info \"Cleanup completed\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "VALIDATION FUNCTIONS",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "validate_dependencies() {\n    local missing_deps=()\n\n    for dep in docker docker-compose git jq; do\n        if ! command -v \"$dep\" >/dev/null 2>&1; then\n            missing_deps+=(\"$dep\")\n        fi\n    done\n\n    if [[ ${#missing_deps[@]} -gt 0 ]]; then\n        error_exit 3 \"Missing dependencies: ${missing_deps[*]}\"\n    fi\n\n    log_info \"All dependencies are available\"\n}\n\nvalidate_environment() {\n    local valid_envs=(\"development\" \"staging\" \"production\")\n    local env_valid=false\n\n    for env in \"${valid_envs[@]}\"; do\n        if [[ \"$DEPLOY_ENV\" == \"$env\" ]]; then\n            env_valid=true\n            break\n        fi\n    done\n\n    if [[ \"$env_valid\" == false ]]; then\n        error_exit 2 \"Invalid environment: $DEPLOY_ENV. Valid options: ${valid_envs[*]}\"\n    fi\n\n    log_info \"Environment validation passed: $DEPLOY_ENV\"\n}\n\nvalidate_version() {\n    if [[ -z \"$APP_VERSION\" ]]; then\n        error_exit 2 \"Application version is required\"\n    fi\n\n    # Validate version format (semantic versioning)\n    if [[ ! \"$APP_VERSION\" =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+$ ]]; then\n        error_exit 2 \"Invalid version format: $APP_VERSION. Expected format: vX.Y.Z\"\n    fi\n\n    log_info \"Version validation passed: $APP_VERSION\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "MAIN FUNCTIONS",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "deploy_application() {\n    log_info \"Starting deployment to $DEPLOY_ENV environment\"\n    log_info \"Deploying version: $APP_VERSION\"\n\n    # Add deployment logic here\n    log_info \"Deployment completed successfully\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "MAIN SCRIPT",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "=============================================================================",
+        "content": "main() {\n    # Set up signal handlers\n    trap cleanup EXIT\n    trap 'error_exit 1 \"Script interrupted\"' INT TERM\n\n    # Parse command line arguments\n    while [[ $# -gt 0 ]]; do\n        case $1 in\n            -e|--environment)\n                DEPLOY_ENV=\"$2\"\n                shift 2\n                ;;\n            -v|--version)\n                APP_VERSION=\"$2\"\n                shift 2\n                ;;\n            -h|--help)\n                echo \"Usage: $0 [OPTIONS]\"\n                echo \"Options:\"\n                echo \"  -e, --environment ENV  Target environment (default: production)\"\n                echo \"  -v, --version VERSION  Application version to deploy\"\n                echo \"  -h, --help            Show this help message\"\n                exit 0\n                ;;\n            *)\n                error_exit 2 \"Unknown option: $1\"\n                ;;\n        esac\n    done\n\n    # Validate inputs\n    validate_dependencies\n    validate_environment\n    validate_version\n\n    # Execute main logic\n    deploy_application\n\n    log_info \"Script completed successfully\"\n    exit 0\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Execute main function if script is run directly",
+        "content": "if [[ \"${BASH_SOURCE[0]}\" == \"${0}\" ]]; then\n    main \"$@\"\nfi\n```\n\nThis script structure pattern will inform all shell script organization and implementation.\n\nAll scripts must follow this structure with proper sections and error handling.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "2. Error Handling Patterns",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Strict Mode and Safety",
+        "content": "```bash\n#!/usr/bin/env bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Strict mode settings",
+        "content": "set -euo pipefail  # Exit on error, undefined vars, pipe failures\nset -o errtrace    # ERR trap is inherited by shell functions\nset -o functrace   # DEBUG and RETURN traps are inherited by shell functions",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Error handling",
+        "content": "trap 'error_exit $? \"Error on line $LINENO\"' ERR",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Function to handle errors",
+        "content": "error_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $error_message\" >&2\n    echo \"[ERROR] Exit code: $exit_code\" >&2\n\n    # Log error details\n    if [[ -n \"${BASH_VERSION:-}\" ]]; then\n        echo \"[ERROR] Bash version: $BASH_VERSION\" >&2\n        echo \"[ERROR] Script: ${BASH_SOURCE[0]}\" >&2\n        echo \"[ERROR] Line: $LINENO\" >&2\n    fi\n\n    exit \"$exit_code\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Cleanup function",
+        "content": "cleanup() {\n    local exit_code=$?\n\n    echo \"[INFO] Cleaning up...\"\n\n    # Add cleanup logic here\n    # - Remove temporary files\n    # - Stop background processes\n    # - Close file descriptors\n\n    if [[ $exit_code -ne 0 ]]; then\n        echo \"[WARN] Script exited with code: $exit_code\"\n    fi\n\n    echo \"[INFO] Cleanup completed\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Set up traps",
+        "content": "trap cleanup EXIT\ntrap 'error_exit 1 \"Script interrupted\"' INT TERM\n```\n\nThis error handling pattern will inform all shell script error handling implementation.\n\nAll scripts must include proper error handling with traps and cleanup functions.",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Input Validation",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate required arguments",
+        "content": "validate_required_args() {\n    local required_args=(\"$@\")\n    local missing_args=()\n\n    for arg in \"${required_args[@]}\"; do\n        if [[ -z \"${!arg:-}\" ]]; then\n            missing_args+=(\"$arg\")\n        fi\n    done\n\n    if [[ ${#missing_args[@]} -gt 0 ]]; then\n        error_exit 2 \"Missing required arguments: ${missing_args[*]}\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate file existence",
+        "content": "validate_file_exists() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ ! -f \"$file_path\" ]]; then\n        error_exit 4 \"$description does not exist: $file_path\"\n    fi\n\n    if [[ ! -r \"$file_path\" ]]; then\n        error_exit 4 \"$description is not readable: $file_path\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate directory existence",
+        "content": "validate_directory_exists() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        error_exit 4 \"$description does not exist: $dir_path\"\n    fi\n\n    if [[ ! -r \"$dir_path\" ]]; then\n        error_exit 4 \"$description is not readable: $dir_path\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate command availability",
+        "content": "validate_command() {\n    local command_name=\"$1\"\n\n    if ! command -v \"$command_name\" >/dev/null 2>&1; then\n        error_exit 3 \"Required command not found: $command_name\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate numeric input",
+        "content": "validate_numeric() {\n    local value=\"$1\"\n    local description=\"${2:-Value}\"\n\n    if [[ ! \"$value\" =~ ^[0-9]+$ ]]; then\n        error_exit 2 \"$description must be a positive integer: $value\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate boolean input",
+        "content": "validate_boolean() {\n    local value=\"$1\"\n    local description=\"${2:-Value}\"\n\n    case \"$value\" in\n        true|false|0|1|yes|no)\n            return 0\n            ;;\n        *)\n            error_exit 2 \"$description must be a boolean value: $value\"\n            ;;\n    esac\n}\n```\n\nThis validation pattern will inform all input validation implementation.\n\nAll scripts must include comprehensive input validation for all parameters and files.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "3. Logging and Debugging",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Logging Functions",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Logging configuration",
+        "content": "readonly LOG_LEVELS=(\"DEBUG\" \"INFO\" \"WARN\" \"ERROR\")\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate log level",
+        "content": "validate_log_level() {\n    local valid_level=false\n    for level in \"${LOG_LEVELS[@]}\"; do\n        if [[ \"$LOG_LEVEL\" == \"$level\" ]]; then\n            valid_level=true\n            break\n        fi\n    done\n\n    if [[ \"$valid_level\" == false ]]; then\n        error_exit 2 \"Invalid log level: $LOG_LEVEL. Valid levels: ${LOG_LEVELS[*]}\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Logging functions",
+        "content": "log_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_info() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" ]]; then\n        echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_warn() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" || \"$LOG_LEVEL\" == \"WARN\" ]]; then\n        echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n    fi\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Debug functions",
+        "content": "debug_variables() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Environment variables:\"\n        for var in \"$@\"; do\n            echo \"[DEBUG]   $var=${!var:-<unset>}\"\n        done\n    fi\n}\n\ndebug_command() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Executing: $*\"\n    fi\n    \"$@\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Progress indicator",
+        "content": "show_progress() {\n    local message=\"$1\"\n    local duration=\"${2:-2}\"\n\n    echo -n \"$message\"\n    for i in $(seq 1 \"$duration\"); do\n        echo -n \".\"\n        sleep 0.5\n    done\n    echo \" done\"\n}\n```\n\nThis logging pattern will inform all shell script logging implementation.\n\nAll scripts must include proper logging with configurable levels and debug functions.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "4. File and Directory Operations",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Safe File Operations",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Create directory safely",
+        "content": "create_directory() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        log_info \"Creating $description: $dir_path\"\n        if ! mkdir -p \"$dir_path\"; then\n            error_exit 4 \"Failed to create $description: $dir_path\"\n        fi\n    else\n        log_debug \"$description already exists: $dir_path\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Copy file safely",
+        "content": "copy_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Copying $description: $source -> $destination\"\n    if ! cp \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to copy $description: $source -> $destination\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Move file safely",
+        "content": "move_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Moving $description: $source -> $destination\"\n    if ! mv \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to move $description: $source -> $destination\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Remove file safely",
+        "content": "remove_file() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        log_info \"Removing $description: $file_path\"\n        if ! rm \"$file_path\"; then\n            error_exit 4 \"Failed to remove $description: $file_path\"\n        fi\n    else\n        log_debug \"$description does not exist: $file_path\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Create backup",
+        "content": "create_backup() {\n    local file_path=\"$1\"\n    local backup_suffix=\"${2:-.backup.$(date +%Y%m%d_%H%M%S)}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        local backup_path=\"$file_path$backup_suffix\"\n        log_info \"Creating backup: $file_path -> $backup_path\"\n        copy_file \"$file_path\" \"$backup_path\" \"backup\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Find files safely",
+        "content": "find_files() {\n    local search_path=\"$1\"\n    local pattern=\"$2\"\n    local max_depth=\"${3:-3}\"\n\n    validate_directory_exists \"$search_path\" \"Search directory\"\n\n    log_debug \"Searching for files matching '$pattern' in $search_path (max depth: $max_depth)\"\n\n    local files=()\n    while IFS= read -r -d '' file; do\n        files+=(\"$file\")\n    done < <(find \"$search_path\" -maxdepth \"$max_depth\" -name \"$pattern\" -print0 2>/dev/null)\n\n    echo \"${files[@]}\"\n}\n```\n\nThis file operation pattern will inform all file and directory manipulation implementation.\n\nAll file operations must include proper validation and error handling.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "5. Process and Command Management",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Command Execution",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Execute command with error handling",
+        "content": "execute_command() {\n    local command=\"$1\"\n    local description=\"${2:-Command}\"\n    local exit_on_error=\"${3:-true}\"\n\n    log_debug \"Executing $description: $command\"\n\n    if eval \"$command\"; then\n        log_debug \"$description completed successfully\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"$description failed with exit code: $exit_code\"\n\n        if [[ \"$exit_on_error\" == \"true\" ]]; then\n            error_exit \"$exit_code\" \"$description failed\"\n        fi\n\n        return \"$exit_code\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Execute command and capture output",
+        "content": "execute_command_output() {\n    local command=\"$1\"\n    local description=\"${2:-Command}\"\n    local capture_stderr=\"${3:-false}\"\n\n    log_debug \"Executing $description: $command\"\n\n    local output\n    local exit_code\n\n    if [[ \"$capture_stderr\" == \"true\" ]]; then\n        output=$(eval \"$command\" 2>&1)\n        exit_code=$?\n    else\n        output=$(eval \"$command\")\n        exit_code=$?\n    fi\n\n    if [[ $exit_code -eq 0 ]]; then\n        log_debug \"$description completed successfully\"\n        echo \"$output\"\n        return 0\n    else\n        log_error \"$description failed with exit code: $exit_code\"\n        if [[ \"$capture_stderr\" == \"true\" ]]; then\n            echo \"$output\" >&2\n        fi\n        return \"$exit_code\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Run command in background",
+        "content": "run_background() {\n    local command=\"$1\"\n    local description=\"${2:-Background process}\"\n    local log_file=\"${3:-/dev/null}\"\n\n    log_info \"Starting $description in background\"\n\n    if nohup eval \"$command\" > \"$log_file\" 2>&1 &; then\n        local pid=$!\n        log_info \"$description started with PID: $pid\"\n        echo \"$pid\"\n    else\n        error_exit 1 \"Failed to start $description\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Wait for process",
+        "content": "wait_for_process() {\n    local pid=\"$1\"\n    local timeout=\"${2:-30}\"\n    local description=\"${3:-Process}\"\n\n    log_info \"Waiting for $description (PID: $pid, timeout: ${timeout}s)\"\n\n    local elapsed=0\n    while kill -0 \"$pid\" 2>/dev/null && [[ $elapsed -lt $timeout ]]; do\n        sleep 1\n        ((elapsed++))\n    done\n\n    if kill -0 \"$pid\" 2>/dev/null; then\n        log_warn \"$description (PID: $pid) did not complete within timeout\"\n        return 1\n    else\n        log_info \"$description (PID: $pid) completed\"\n        return 0\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Kill process safely",
+        "content": "kill_process() {\n    local pid=\"$1\"\n    local description=\"${2:-Process}\"\n    local timeout=\"${3:-10}\"\n\n    if ! kill -0 \"$pid\" 2>/dev/null; then\n        log_debug \"$description (PID: $pid) is not running\"\n        return 0\n    fi\n\n    log_info \"Stopping $description (PID: $pid)\"\n\n    # Try graceful shutdown first\n    kill \"$pid\"\n\n    # Wait for graceful shutdown\n    local elapsed=0\n    while kill -0 \"$pid\" 2>/dev/null && [[ $elapsed -lt $timeout ]]; do\n        sleep 1\n        ((elapsed++))\n    done\n\n    # Force kill if still running\n    if kill -0 \"$pid\" 2>/dev/null; then\n        log_warn \"Force killing $description (PID: $pid)\"\n        kill -9 \"$pid\"\n        sleep 1\n\n        if kill -0 \"$pid\" 2>/dev/null; then\n            error_exit 1 \"Failed to kill $description (PID: $pid)\"\n        fi\n    fi\n\n    log_info \"$description (PID: $pid) stopped\"\n}\n```\n\nThis process management pattern will inform all command execution and process handling implementation.\n\nAll command execution must include proper error handling and process management.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "6. Configuration Management",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Configuration Loading",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Load configuration from file",
+        "content": "load_config() {\n    local config_file=\"$1\"\n    local description=\"${2:-Configuration}\"\n\n    validate_file_exists \"$config_file\" \"$description file\"\n\n    log_info \"Loading $description from: $config_file\"\n\n    # Source the configuration file\n    if ! source \"$config_file\"; then\n        error_exit 4 \"Failed to load $description from: $config_file\"\n    fi\n\n    log_debug \"$description loaded successfully\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Load environment variables from file",
+        "content": "load_env_file() {\n    local env_file=\"$1\"\n\n    if [[ -f \"$env_file\" ]]; then\n        log_info \"Loading environment variables from: $env_file\"\n\n        # Read and export environment variables\n        while IFS= read -r line; do\n            # Skip comments and empty lines\n            if [[ \"$line\" =~ ^[[:space:]]*# ]] || [[ -z \"$line\" ]]; then\n                continue\n            fi\n\n            # Export variable if it's a valid assignment\n            if [[ \"$line\" =~ ^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*= ]]; then\n                export \"$line\"\n                log_debug \"Exported: $line\"\n            fi\n        done < \"$env_file\"\n    else\n        log_warn \"Environment file not found: $env_file\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Validate configuration",
+        "content": "validate_config() {\n    local required_vars=(\"$@\")\n    local missing_vars=()\n\n    for var in \"${required_vars[@]}\"; do\n        if [[ -z \"${!var:-}\" ]]; then\n            missing_vars+=(\"$var\")\n        fi\n    done\n\n    if [[ ${#missing_vars[@]} -gt 0 ]]; then\n        error_exit 4 \"Missing required configuration variables: ${missing_vars[*]}\"\n    fi\n\n    log_info \"Configuration validation passed\"\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Set default values",
+        "content": "set_defaults() {\n    local defaults=(\"$@\")\n\n    for default in \"${defaults[@]}\"; do\n        IFS='=' read -r var_name default_value <<< \"$default\"\n        if [[ -z \"${!var_name:-}\" ]]; then\n            export \"$var_name\"=\"$default_value\"\n            log_debug \"Set default for $var_name: $default_value\"\n        fi\n    done\n}\n```\n\nThis configuration pattern will inform all configuration management implementation.\n\nAll configuration loading must include proper validation and default value handling.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "7. Network and API Operations",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "HTTP Requests",
+        "content": "```bash",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Make HTTP GET request",
+        "content": "http_get() {\n    local url=\"$1\"\n    local headers=\"${2:-}\"\n    local timeout=\"${3:-30}\"\n\n    log_debug \"Making GET request to: $url\"\n\n    local curl_opts=(\n        \"--silent\"\n        \"--show-error\"\n        \"--max-time\" \"$timeout\"\n        \"--fail\"\n    )\n\n    if [[ -n \"$headers\" ]]; then\n        while IFS=':' read -r key value; do\n            curl_opts+=(\"--header\" \"$key: $value\")\n        done <<< \"$headers\"\n    fi\n\n    if response=$(curl \"${curl_opts[@]}\" \"$url\" 2>&1); then\n        log_debug \"GET request successful\"\n        echo \"$response\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"GET request failed: $response\"\n        return \"$exit_code\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Make HTTP POST request",
+        "content": "http_post() {\n    local url=\"$1\"\n    local data=\"$2\"\n    local content_type=\"${3:-application/json}\"\n    local headers=\"${4:-}\"\n    local timeout=\"${5:-30}\"\n\n    log_debug \"Making POST request to: $url\"\n\n    local curl_opts=(\n        \"--silent\"\n        \"--show-error\"\n        \"--max-time\" \"$timeout\"\n        \"--fail\"\n        \"--header\" \"Content-Type: $content_type\"\n        \"--data\" \"$data\"\n    )\n\n    if [[ -n \"$headers\" ]]; then\n        while IFS=':' read -r key value; do\n            curl_opts+=(\"--header\" \"$key: $value\")\n        done <<< \"$headers\"\n    fi\n\n    if response=$(curl \"${curl_opts[@]}\" \"$url\" 2>&1); then\n        log_debug \"POST request successful\"\n        echo \"$response\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"POST request failed: $response\"\n        return \"$exit_code\"\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Check if URL is accessible",
+        "content": "check_url() {\n    local url=\"$1\"\n    local timeout=\"${2:-10}\"\n\n    log_debug \"Checking URL accessibility: $url\"\n\n    if curl --silent --show-error --max-time \"$timeout\" --fail --head \"$url\" >/dev/null 2>&1; then\n        log_debug \"URL is accessible: $url\"\n        return 0\n    else\n        log_debug \"URL is not accessible: $url\"\n        return 1\n    fi\n}",
+        "subsections": []
+      },
+      {
+        "level": 1,
+        "title": "Wait for URL to become accessible",
+        "content": "wait_for_url() {\n    local url=\"$1\"\n    local timeout=\"${2:-60}\"\n    local interval=\"${3:-5}\"\n    local description=\"${4:-URL}\"\n\n    log_info \"Waiting for $description to become accessible: $url\"\n\n    local elapsed=0\n    while [[ $elapsed -lt $timeout ]]; do\n        if check_url \"$url\" \"$interval\"; then\n            log_info \"$description is now accessible: $url\"\n            return 0\n        fi\n\n        sleep \"$interval\"\n        ((elapsed += interval))\n    done\n\n    error_exit 1 \"$description did not become accessible within timeout: $url\"\n}\n```\n\nThis network pattern will inform all HTTP request and network operation implementation.\n\nAll network operations must include proper error handling and timeout management.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Implementation Guidelines",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "For AI Assistants",
+        "content": "1. **Follow these patterns** for all shell script implementation\n2. **Use strict mode** with proper error handling\n3. **Include comprehensive logging** with configurable levels\n4. **Validate all inputs** and dependencies\n5. **Implement proper cleanup** and signal handling\n6. **Use safe file operations** with validation\n7. **Include proper documentation** and usage examples\n8. **Follow security best practices** for all operations",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "For Human Developers",
+        "content": "1. **Reference these patterns** when writing shell scripts\n2. **Use strict mode** for robust error handling\n3. **Include comprehensive logging** for debugging\n4. **Validate all inputs** before processing\n5. **Implement proper cleanup** for resource management\n6. **Test scripts thoroughly** with different scenarios\n7. **Follow security guidelines** for production scripts",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Quality Assurance",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Script Standards",
+        "content": "- All scripts must use strict mode with proper error handling\n- Scripts must include comprehensive logging and debugging\n- All inputs must be validated before processing\n- Scripts must be idempotent and safe to re-run\n- Proper cleanup must be implemented for all resources",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Security Standards",
+        "content": "- Scripts must not expose sensitive information in logs\n- File permissions must be set appropriately\n- Input validation must prevent command injection\n- Environment variables must be properly sanitized\n- Temporary files must be created securely",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Performance Standards",
+        "content": "- Scripts must handle large files efficiently\n- Background processes must be properly managed\n- Resource cleanup must be timely and complete\n- Timeouts must be set for all external operations\n- Memory usage must be monitored and controlled",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Testing Standards",
+        "content": "- Unit tests must be written for complex functions\n- Integration tests must cover script workflows\n- Error scenarios must be tested thoroughly\n- Performance tests must be implemented\n- Security tests must validate input handling\n\n---\n\n**AI Quality Checklist**: Before implementing shell scripts, ensure:\n- [x] Strict mode is enabled with proper error handling\n- [x] Comprehensive logging is implemented with configurable levels\n- [x] All inputs and dependencies are validated\n- [x] Proper cleanup and signal handling is implemented\n- [x] File operations are safe with proper validation\n- [x] Documentation includes usage examples and exit codes\n- [x] Security best practices are followed\n- [x] Scripts are idempotent and safe to re-run",
+        "subsections": []
+      }
+    ],
+    "code_blocks": [
+      {
+        "language": "bash",
+        "code": "#!/usr/bin/env bash\n#\n# Script Name: deploy_application.sh\n# Description: Deploy the CreamPie application to production\n# Author: AI Assistant\n# Version: 1.0.0\n# Created: 2024-01-01\n# Last Modified: 2024-01-01\n#\n# Usage: ./deploy_application.sh [environment] [version]\n# Example: ./deploy_application.sh production v1.2.3\n#\n# Dependencies:\n#   - docker\n#   - docker-compose\n#   - git\n#   - jq\n#\n# Exit Codes:\n#   0 - Success\n#   1 - General error\n#   2 - Invalid arguments\n#   3 - Dependency missing\n#   4 - Configuration error\n#   5 - Deployment failed\n#\n# Environment Variables:\n#   DEPLOY_ENV - Target environment (default: production)\n#   APP_VERSION - Application version to deploy\n#   LOG_LEVEL - Logging level (default: INFO)\n#\n\nset -euo pipefail  # Strict mode: exit on error, undefined vars, pipe failures\nIFS=$'\\n\\t'        # Internal field separator for safer word splitting"
+      },
+      {
+        "language": "bash",
+        "code": "# =============================================================================\n# CONFIGURATION\n# =============================================================================\n\n# Default values\nreadonly DEFAULT_ENV=\"production\"\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nreadonly SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nreadonly PROJECT_ROOT=\"$(dirname \"$SCRIPT_DIR\")\"\n\n# Configuration variables\nDEPLOY_ENV=\"${DEPLOY_ENV:-$DEFAULT_ENV}\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\nAPP_VERSION=\"\"\n\n# =============================================================================\n# FUNCTIONS\n# =============================================================================\n\n# Logging functions\nlog_info() {\n    echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n}\n\nlog_warn() {\n    echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\n# Error handling\nerror_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n    log_error \"$error_message\"\n    exit \"$exit_code\"\n}\n\n# Cleanup function\ncleanup() {\n    log_info \"Cleaning up...\"\n    # Add cleanup logic here\n    log_info \"Cleanup completed\"\n}\n\n# =============================================================================\n# VALIDATION FUNCTIONS\n# =============================================================================\n\nvalidate_dependencies() {\n    local missing_deps=()\n\n    for dep in docker docker-compose git jq; do\n        if ! command -v \"$dep\" >/dev/null 2>&1; then\n            missing_deps+=(\"$dep\")\n        fi\n    done\n\n    if [[ ${#missing_deps[@]} -gt 0 ]]; then\n        error_exit 3 \"Missing dependencies: ${missing_deps[*]}\"\n    fi\n\n    log_info \"All dependencies are available\"\n}\n\nvalidate_environment() {\n    local valid_envs=(\"development\" \"staging\" \"production\")\n    local env_valid=false\n\n    for env in \"${valid_envs[@]}\"; do\n        if [[ \"$DEPLOY_ENV\" == \"$env\" ]]; then\n            env_valid=true\n            break\n        fi\n    done\n\n    if [[ \"$env_valid\" == false ]]; then\n        error_exit 2 \"Invalid environment: $DEPLOY_ENV. Valid options: ${valid_envs[*]}\"\n    fi\n\n    log_info \"Environment validation passed: $DEPLOY_ENV\"\n}\n\nvalidate_version() {\n    if [[ -z \"$APP_VERSION\" ]]; then\n        error_exit 2 \"Application version is required\"\n    fi\n\n    # Validate version format (semantic versioning)\n    if [[ ! \"$APP_VERSION\" =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+$ ]]; then\n        error_exit 2 \"Invalid version format: $APP_VERSION. Expected format: vX.Y.Z\"\n    fi\n\n    log_info \"Version validation passed: $APP_VERSION\"\n}\n\n# =============================================================================\n# MAIN FUNCTIONS\n# =============================================================================\n\ndeploy_application() {\n    log_info \"Starting deployment to $DEPLOY_ENV environment\"\n    log_info \"Deploying version: $APP_VERSION\"\n\n    # Add deployment logic here\n    log_info \"Deployment completed successfully\"\n}\n\n# =============================================================================\n# MAIN SCRIPT\n# =============================================================================\n\nmain() {\n    # Set up signal handlers\n    trap cleanup EXIT\n    trap 'error_exit 1 \"Script interrupted\"' INT TERM\n\n    # Parse command line arguments\n    while [[ $# -gt 0 ]]; do\n        case $1 in\n            -e|--environment)\n                DEPLOY_ENV=\"$2\"\n                shift 2\n                ;;\n            -v|--version)\n                APP_VERSION=\"$2\"\n                shift 2\n                ;;\n            -h|--help)\n                echo \"Usage: $0 [OPTIONS]\"\n                echo \"Options:\"\n                echo \"  -e, --environment ENV  Target environment (default: production)\"\n                echo \"  -v, --version VERSION  Application version to deploy\"\n                echo \"  -h, --help            Show this help message\"\n                exit 0\n                ;;\n            *)\n                error_exit 2 \"Unknown option: $1\"\n                ;;\n        esac\n    done\n\n    # Validate inputs\n    validate_dependencies\n    validate_environment\n    validate_version\n\n    # Execute main logic\n    deploy_application\n\n    log_info \"Script completed successfully\"\n    exit 0\n}\n\n# Execute main function if script is run directly\nif [[ \"${BASH_SOURCE[0]}\" == \"${0}\" ]]; then\n    main \"$@\"\nfi"
+      },
+      {
+        "language": "bash",
+        "code": "#!/usr/bin/env bash\n\n# Strict mode settings\nset -euo pipefail  # Exit on error, undefined vars, pipe failures\nset -o errtrace    # ERR trap is inherited by shell functions\nset -o functrace   # DEBUG and RETURN traps are inherited by shell functions\n\n# Error handling\ntrap 'error_exit $? \"Error on line $LINENO\"' ERR\n\n# Function to handle errors\nerror_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $error_message\" >&2\n    echo \"[ERROR] Exit code: $exit_code\" >&2\n\n    # Log error details\n    if [[ -n \"${BASH_VERSION:-}\" ]]; then\n        echo \"[ERROR] Bash version: $BASH_VERSION\" >&2\n        echo \"[ERROR] Script: ${BASH_SOURCE[0]}\" >&2\n        echo \"[ERROR] Line: $LINENO\" >&2\n    fi\n\n    exit \"$exit_code\"\n}\n\n# Cleanup function\ncleanup() {\n    local exit_code=$?\n\n    echo \"[INFO] Cleaning up...\"\n\n    # Add cleanup logic here\n    # - Remove temporary files\n    # - Stop background processes\n    # - Close file descriptors\n\n    if [[ $exit_code -ne 0 ]]; then\n        echo \"[WARN] Script exited with code: $exit_code\"\n    fi\n\n    echo \"[INFO] Cleanup completed\"\n}\n\n# Set up traps\ntrap cleanup EXIT\ntrap 'error_exit 1 \"Script interrupted\"' INT TERM"
+      },
+      {
+        "language": "bash",
+        "code": "# Validate required arguments\nvalidate_required_args() {\n    local required_args=(\"$@\")\n    local missing_args=()\n\n    for arg in \"${required_args[@]}\"; do\n        if [[ -z \"${!arg:-}\" ]]; then\n            missing_args+=(\"$arg\")\n        fi\n    done\n\n    if [[ ${#missing_args[@]} -gt 0 ]]; then\n        error_exit 2 \"Missing required arguments: ${missing_args[*]}\"\n    fi\n}\n\n# Validate file existence\nvalidate_file_exists() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ ! -f \"$file_path\" ]]; then\n        error_exit 4 \"$description does not exist: $file_path\"\n    fi\n\n    if [[ ! -r \"$file_path\" ]]; then\n        error_exit 4 \"$description is not readable: $file_path\"\n    fi\n}\n\n# Validate directory existence\nvalidate_directory_exists() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        error_exit 4 \"$description does not exist: $dir_path\"\n    fi\n\n    if [[ ! -r \"$dir_path\" ]]; then\n        error_exit 4 \"$description is not readable: $dir_path\"\n    fi\n}\n\n# Validate command availability\nvalidate_command() {\n    local command_name=\"$1\"\n\n    if ! command -v \"$command_name\" >/dev/null 2>&1; then\n        error_exit 3 \"Required command not found: $command_name\"\n    fi\n}\n\n# Validate numeric input\nvalidate_numeric() {\n    local value=\"$1\"\n    local description=\"${2:-Value}\"\n\n    if [[ ! \"$value\" =~ ^[0-9]+$ ]]; then\n        error_exit 2 \"$description must be a positive integer: $value\"\n    fi\n}\n\n# Validate boolean input\nvalidate_boolean() {\n    local value=\"$1\"\n    local description=\"${2:-Value}\"\n\n    case \"$value\" in\n        true|false|0|1|yes|no)\n            return 0\n            ;;\n        *)\n            error_exit 2 \"$description must be a boolean value: $value\"\n            ;;\n    esac\n}"
+      },
+      {
+        "language": "bash",
+        "code": "# Logging configuration\nreadonly LOG_LEVELS=(\"DEBUG\" \"INFO\" \"WARN\" \"ERROR\")\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\n\n# Validate log level\nvalidate_log_level() {\n    local valid_level=false\n    for level in \"${LOG_LEVELS[@]}\"; do\n        if [[ \"$LOG_LEVEL\" == \"$level\" ]]; then\n            valid_level=true\n            break\n        fi\n    done\n\n    if [[ \"$valid_level\" == false ]]; then\n        error_exit 2 \"Invalid log level: $LOG_LEVEL. Valid levels: ${LOG_LEVELS[*]}\"\n    fi\n}\n\n# Logging functions\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_info() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" ]]; then\n        echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_warn() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" || \"$LOG_LEVEL\" == \"WARN\" ]]; then\n        echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n    fi\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\n# Debug functions\ndebug_variables() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Environment variables:\"\n        for var in \"$@\"; do\n            echo \"[DEBUG]   $var=${!var:-<unset>}\"\n        done\n    fi\n}\n\ndebug_command() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Executing: $*\"\n    fi\n    \"$@\"\n}\n\n# Progress indicator\nshow_progress() {\n    local message=\"$1\"\n    local duration=\"${2:-2}\"\n\n    echo -n \"$message\"\n    for i in $(seq 1 \"$duration\"); do\n        echo -n \".\"\n        sleep 0.5\n    done\n    echo \" done\"\n}"
+      },
+      {
+        "language": "bash",
+        "code": "# Create directory safely\ncreate_directory() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        log_info \"Creating $description: $dir_path\"\n        if ! mkdir -p \"$dir_path\"; then\n            error_exit 4 \"Failed to create $description: $dir_path\"\n        fi\n    else\n        log_debug \"$description already exists: $dir_path\"\n    fi\n}\n\n# Copy file safely\ncopy_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Copying $description: $source -> $destination\"\n    if ! cp \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to copy $description: $source -> $destination\"\n    fi\n}\n\n# Move file safely\nmove_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Moving $description: $source -> $destination\"\n    if ! mv \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to move $description: $source -> $destination\"\n    fi\n}\n\n# Remove file safely\nremove_file() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        log_info \"Removing $description: $file_path\"\n        if ! rm \"$file_path\"; then\n            error_exit 4 \"Failed to remove $description: $file_path\"\n        fi\n    else\n        log_debug \"$description does not exist: $file_path\"\n    fi\n}\n\n# Create backup\ncreate_backup() {\n    local file_path=\"$1\"\n    local backup_suffix=\"${2:-.backup.$(date +%Y%m%d_%H%M%S)}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        local backup_path=\"$file_path$backup_suffix\"\n        log_info \"Creating backup: $file_path -> $backup_path\"\n        copy_file \"$file_path\" \"$backup_path\" \"backup\"\n    fi\n}\n\n# Find files safely\nfind_files() {\n    local search_path=\"$1\"\n    local pattern=\"$2\"\n    local max_depth=\"${3:-3}\"\n\n    validate_directory_exists \"$search_path\" \"Search directory\"\n\n    log_debug \"Searching for files matching '$pattern' in $search_path (max depth: $max_depth)\"\n\n    local files=()\n    while IFS= read -r -d '' file; do\n        files+=(\"$file\")\n    done < <(find \"$search_path\" -maxdepth \"$max_depth\" -name \"$pattern\" -print0 2>/dev/null)\n\n    echo \"${files[@]}\"\n}"
+      },
+      {
+        "language": "bash",
+        "code": "# Execute command with error handling\nexecute_command() {\n    local command=\"$1\"\n    local description=\"${2:-Command}\"\n    local exit_on_error=\"${3:-true}\"\n\n    log_debug \"Executing $description: $command\"\n\n    if eval \"$command\"; then\n        log_debug \"$description completed successfully\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"$description failed with exit code: $exit_code\"\n\n        if [[ \"$exit_on_error\" == \"true\" ]]; then\n            error_exit \"$exit_code\" \"$description failed\"\n        fi\n\n        return \"$exit_code\"\n    fi\n}\n\n# Execute command and capture output\nexecute_command_output() {\n    local command=\"$1\"\n    local description=\"${2:-Command}\"\n    local capture_stderr=\"${3:-false}\"\n\n    log_debug \"Executing $description: $command\"\n\n    local output\n    local exit_code\n\n    if [[ \"$capture_stderr\" == \"true\" ]]; then\n        output=$(eval \"$command\" 2>&1)\n        exit_code=$?\n    else\n        output=$(eval \"$command\")\n        exit_code=$?\n    fi\n\n    if [[ $exit_code -eq 0 ]]; then\n        log_debug \"$description completed successfully\"\n        echo \"$output\"\n        return 0\n    else\n        log_error \"$description failed with exit code: $exit_code\"\n        if [[ \"$capture_stderr\" == \"true\" ]]; then\n            echo \"$output\" >&2\n        fi\n        return \"$exit_code\"\n    fi\n}\n\n# Run command in background\nrun_background() {\n    local command=\"$1\"\n    local description=\"${2:-Background process}\"\n    local log_file=\"${3:-/dev/null}\"\n\n    log_info \"Starting $description in background\"\n\n    if nohup eval \"$command\" > \"$log_file\" 2>&1 &; then\n        local pid=$!\n        log_info \"$description started with PID: $pid\"\n        echo \"$pid\"\n    else\n        error_exit 1 \"Failed to start $description\"\n    fi\n}\n\n# Wait for process\nwait_for_process() {\n    local pid=\"$1\"\n    local timeout=\"${2:-30}\"\n    local description=\"${3:-Process}\"\n\n    log_info \"Waiting for $description (PID: $pid, timeout: ${timeout}s)\"\n\n    local elapsed=0\n    while kill -0 \"$pid\" 2>/dev/null && [[ $elapsed -lt $timeout ]]; do\n        sleep 1\n        ((elapsed++))\n    done\n\n    if kill -0 \"$pid\" 2>/dev/null; then\n        log_warn \"$description (PID: $pid) did not complete within timeout\"\n        return 1\n    else\n        log_info \"$description (PID: $pid) completed\"\n        return 0\n    fi\n}\n\n# Kill process safely\nkill_process() {\n    local pid=\"$1\"\n    local description=\"${2:-Process}\"\n    local timeout=\"${3:-10}\"\n\n    if ! kill -0 \"$pid\" 2>/dev/null; then\n        log_debug \"$description (PID: $pid) is not running\"\n        return 0\n    fi\n\n    log_info \"Stopping $description (PID: $pid)\"\n\n    # Try graceful shutdown first\n    kill \"$pid\"\n\n    # Wait for graceful shutdown\n    local elapsed=0\n    while kill -0 \"$pid\" 2>/dev/null && [[ $elapsed -lt $timeout ]]; do\n        sleep 1\n        ((elapsed++))\n    done\n\n    # Force kill if still running\n    if kill -0 \"$pid\" 2>/dev/null; then\n        log_warn \"Force killing $description (PID: $pid)\"\n        kill -9 \"$pid\"\n        sleep 1\n\n        if kill -0 \"$pid\" 2>/dev/null; then\n            error_exit 1 \"Failed to kill $description (PID: $pid)\"\n        fi\n    fi\n\n    log_info \"$description (PID: $pid) stopped\"\n}"
+      },
+      {
+        "language": "bash",
+        "code": "# Load configuration from file\nload_config() {\n    local config_file=\"$1\"\n    local description=\"${2:-Configuration}\"\n\n    validate_file_exists \"$config_file\" \"$description file\"\n\n    log_info \"Loading $description from: $config_file\"\n\n    # Source the configuration file\n    if ! source \"$config_file\"; then\n        error_exit 4 \"Failed to load $description from: $config_file\"\n    fi\n\n    log_debug \"$description loaded successfully\"\n}\n\n# Load environment variables from file\nload_env_file() {\n    local env_file=\"$1\"\n\n    if [[ -f \"$env_file\" ]]; then\n        log_info \"Loading environment variables from: $env_file\"\n\n        # Read and export environment variables\n        while IFS= read -r line; do\n            # Skip comments and empty lines\n            if [[ \"$line\" =~ ^[[:space:]]*# ]] || [[ -z \"$line\" ]]; then\n                continue\n            fi\n\n            # Export variable if it's a valid assignment\n            if [[ \"$line\" =~ ^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*= ]]; then\n                export \"$line\"\n                log_debug \"Exported: $line\"\n            fi\n        done < \"$env_file\"\n    else\n        log_warn \"Environment file not found: $env_file\"\n    fi\n}\n\n# Validate configuration\nvalidate_config() {\n    local required_vars=(\"$@\")\n    local missing_vars=()\n\n    for var in \"${required_vars[@]}\"; do\n        if [[ -z \"${!var:-}\" ]]; then\n            missing_vars+=(\"$var\")\n        fi\n    done\n\n    if [[ ${#missing_vars[@]} -gt 0 ]]; then\n        error_exit 4 \"Missing required configuration variables: ${missing_vars[*]}\"\n    fi\n\n    log_info \"Configuration validation passed\"\n}\n\n# Set default values\nset_defaults() {\n    local defaults=(\"$@\")\n\n    for default in \"${defaults[@]}\"; do\n        IFS='=' read -r var_name default_value <<< \"$default\"\n        if [[ -z \"${!var_name:-}\" ]]; then\n            export \"$var_name\"=\"$default_value\"\n            log_debug \"Set default for $var_name: $default_value\"\n        fi\n    done\n}"
+      },
+      {
+        "language": "bash",
+        "code": "# Make HTTP GET request\nhttp_get() {\n    local url=\"$1\"\n    local headers=\"${2:-}\"\n    local timeout=\"${3:-30}\"\n\n    log_debug \"Making GET request to: $url\"\n\n    local curl_opts=(\n        \"--silent\"\n        \"--show-error\"\n        \"--max-time\" \"$timeout\"\n        \"--fail\"\n    )\n\n    if [[ -n \"$headers\" ]]; then\n        while IFS=':' read -r key value; do\n            curl_opts+=(\"--header\" \"$key: $value\")\n        done <<< \"$headers\"\n    fi\n\n    if response=$(curl \"${curl_opts[@]}\" \"$url\" 2>&1); then\n        log_debug \"GET request successful\"\n        echo \"$response\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"GET request failed: $response\"\n        return \"$exit_code\"\n    fi\n}\n\n# Make HTTP POST request\nhttp_post() {\n    local url=\"$1\"\n    local data=\"$2\"\n    local content_type=\"${3:-application/json}\"\n    local headers=\"${4:-}\"\n    local timeout=\"${5:-30}\"\n\n    log_debug \"Making POST request to: $url\"\n\n    local curl_opts=(\n        \"--silent\"\n        \"--show-error\"\n        \"--max-time\" \"$timeout\"\n        \"--fail\"\n        \"--header\" \"Content-Type: $content_type\"\n        \"--data\" \"$data\"\n    )\n\n    if [[ -n \"$headers\" ]]; then\n        while IFS=':' read -r key value; do\n            curl_opts+=(\"--header\" \"$key: $value\")\n        done <<< \"$headers\"\n    fi\n\n    if response=$(curl \"${curl_opts[@]}\" \"$url\" 2>&1); then\n        log_debug \"POST request successful\"\n        echo \"$response\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"POST request failed: $response\"\n        return \"$exit_code\"\n    fi\n}\n\n# Check if URL is accessible\ncheck_url() {\n    local url=\"$1\"\n    local timeout=\"${2:-10}\"\n\n    log_debug \"Checking URL accessibility: $url\"\n\n    if curl --silent --show-error --max-time \"$timeout\" --fail --head \"$url\" >/dev/null 2>&1; then\n        log_debug \"URL is accessible: $url\"\n        return 0\n    else\n        log_debug \"URL is not accessible: $url\"\n        return 1\n    fi\n}\n\n# Wait for URL to become accessible\nwait_for_url() {\n    local url=\"$1\"\n    local timeout=\"${2:-60}\"\n    local interval=\"${3:-5}\"\n    local description=\"${4:-URL}\"\n\n    log_info \"Waiting for $description to become accessible: $url\"\n\n    local elapsed=0\n    while [[ $elapsed -lt $timeout ]]; do\n        if check_url \"$url\" \"$interval\"; then\n            log_info \"$description is now accessible: $url\"\n            return 0\n        fi\n\n        sleep \"$interval\"\n        ((elapsed += interval))\n    done\n\n    error_exit 1 \"$description did not become accessible within timeout: $url\"\n}"
+      }
+    ],
+    "links": [
+      {
+        "type": "code_reference",
+        "text": "../Core%20Principles.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../Language-Specific/Python%20Testing%20Guide.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../../project_context/Architecture%20Overview.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../../project_context/Common%20Patterns.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "bash\n#!/usr/bin/env bash\n#\n# Script Name: deploy_application.sh\n# Description: Deploy the CreamPie application to production\n# Author: AI Assistant\n# Version: 1.0.0\n# Created: 2024-01-01\n# Last Modified: 2024-01-01\n#\n# Usage: ./deploy_application.sh [environment] [version]\n# Example: ./deploy_application.sh production v1.2.3\n#\n# Dependencies:\n#   - docker\n#   - docker-compose\n#   - git\n#   - jq\n#\n# Exit Codes:\n#   0 - Success\n#   1 - General error\n#   2 - Invalid arguments\n#   3 - Dependency missing\n#   4 - Configuration error\n#   5 - Deployment failed\n#\n# Environment Variables:\n#   DEPLOY_ENV - Target environment (default: production)\n#   APP_VERSION - Application version to deploy\n#   LOG_LEVEL - Logging level (default: INFO)\n#\n\nset -euo pipefail  # Strict mode: exit on error, undefined vars, pipe failures\nIFS=$'\\n\\t'        # Internal field separator for safer word splitting\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis header pattern will inform all shell script structure and metadata.\n\nAll scripts must include proper header documentation and strict mode settings.\n\n### Script Organization\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "bash\n# =============================================================================\n# CONFIGURATION\n# =============================================================================\n\n# Default values\nreadonly DEFAULT_ENV=\"production\"\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nreadonly SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nreadonly PROJECT_ROOT=\"$(dirname \"$SCRIPT_DIR\")\"\n\n# Configuration variables\nDEPLOY_ENV=\"${DEPLOY_ENV:-$DEFAULT_ENV}\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\nAPP_VERSION=\"\"\n\n# =============================================================================\n# FUNCTIONS\n# =============================================================================\n\n# Logging functions\nlog_info() {\n    echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n}\n\nlog_warn() {\n    echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\n# Error handling\nerror_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n    log_error \"$error_message\"\n    exit \"$exit_code\"\n}\n\n# Cleanup function\ncleanup() {\n    log_info \"Cleaning up...\"\n    # Add cleanup logic here\n    log_info \"Cleanup completed\"\n}\n\n# =============================================================================\n# VALIDATION FUNCTIONS\n# =============================================================================\n\nvalidate_dependencies() {\n    local missing_deps=()\n\n    for dep in docker docker-compose git jq; do\n        if ! command -v \"$dep\" >/dev/null 2>&1; then\n            missing_deps+=(\"$dep\")\n        fi\n    done\n\n    if [[ ${#missing_deps[@]} -gt 0 ]]; then\n        error_exit 3 \"Missing dependencies: ${missing_deps[*]}\"\n    fi\n\n    log_info \"All dependencies are available\"\n}\n\nvalidate_environment() {\n    local valid_envs=(\"development\" \"staging\" \"production\")\n    local env_valid=false\n\n    for env in \"${valid_envs[@]}\"; do\n        if [[ \"$DEPLOY_ENV\" == \"$env\" ]]; then\n            env_valid=true\n            break\n        fi\n    done\n\n    if [[ \"$env_valid\" == false ]]; then\n        error_exit 2 \"Invalid environment: $DEPLOY_ENV. Valid options: ${valid_envs[*]}\"\n    fi\n\n    log_info \"Environment validation passed: $DEPLOY_ENV\"\n}\n\nvalidate_version() {\n    if [[ -z \"$APP_VERSION\" ]]; then\n        error_exit 2 \"Application version is required\"\n    fi\n\n    # Validate version format (semantic versioning)\n    if [[ ! \"$APP_VERSION\" =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+$ ]]; then\n        error_exit 2 \"Invalid version format: $APP_VERSION. Expected format: vX.Y.Z\"\n    fi\n\n    log_info \"Version validation passed: $APP_VERSION\"\n}\n\n# =============================================================================\n# MAIN FUNCTIONS\n# =============================================================================\n\ndeploy_application() {\n    log_info \"Starting deployment to $DEPLOY_ENV environment\"\n    log_info \"Deploying version: $APP_VERSION\"\n\n    # Add deployment logic here\n    log_info \"Deployment completed successfully\"\n}\n\n# =============================================================================\n# MAIN SCRIPT\n# =============================================================================\n\nmain() {\n    # Set up signal handlers\n    trap cleanup EXIT\n    trap 'error_exit 1 \"Script interrupted\"' INT TERM\n\n    # Parse command line arguments\n    while [[ $# -gt 0 ]]; do\n        case $1 in\n            -e|--environment)\n                DEPLOY_ENV=\"$2\"\n                shift 2\n                ;;\n            -v|--version)\n                APP_VERSION=\"$2\"\n                shift 2\n                ;;\n            -h|--help)\n                echo \"Usage: $0 [OPTIONS]\"\n                echo \"Options:\"\n                echo \"  -e, --environment ENV  Target environment (default: production)\"\n                echo \"  -v, --version VERSION  Application version to deploy\"\n                echo \"  -h, --help            Show this help message\"\n                exit 0\n                ;;\n            *)\n                error_exit 2 \"Unknown option: $1\"\n                ;;\n        esac\n    done\n\n    # Validate inputs\n    validate_dependencies\n    validate_environment\n    validate_version\n\n    # Execute main logic\n    deploy_application\n\n    log_info \"Script completed successfully\"\n    exit 0\n}\n\n# Execute main function if script is run directly\nif [[ \"${BASH_SOURCE[0]}\" == \"${0}\" ]]; then\n    main \"$@\"\nfi\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis script structure pattern will inform all shell script organization and implementation.\n\nAll scripts must follow this structure with proper sections and error handling.\n\n## 2. Error Handling Patterns\n\n### Strict Mode and Safety\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "bash\n#!/usr/bin/env bash\n\n# Strict mode settings\nset -euo pipefail  # Exit on error, undefined vars, pipe failures\nset -o errtrace    # ERR trap is inherited by shell functions\nset -o functrace   # DEBUG and RETURN traps are inherited by shell functions\n\n# Error handling\ntrap 'error_exit $? \"Error on line $LINENO\"' ERR\n\n# Function to handle errors\nerror_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $error_message\" >&2\n    echo \"[ERROR] Exit code: $exit_code\" >&2\n\n    # Log error details\n    if [[ -n \"${BASH_VERSION:-}\" ]]; then\n        echo \"[ERROR] Bash version: $BASH_VERSION\" >&2\n        echo \"[ERROR] Script: ${BASH_SOURCE[0]}\" >&2\n        echo \"[ERROR] Line: $LINENO\" >&2\n    fi\n\n    exit \"$exit_code\"\n}\n\n# Cleanup function\ncleanup() {\n    local exit_code=$?\n\n    echo \"[INFO] Cleaning up...\"\n\n    # Add cleanup logic here\n    # - Remove temporary files\n    # - Stop background processes\n    # - Close file descriptors\n\n    if [[ $exit_code -ne 0 ]]; then\n        echo \"[WARN] Script exited with code: $exit_code\"\n    fi\n\n    echo \"[INFO] Cleanup completed\"\n}\n\n# Set up traps\ntrap cleanup EXIT\ntrap 'error_exit 1 \"Script interrupted\"' INT TERM\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis error handling pattern will inform all shell script error handling implementation.\n\nAll scripts must include proper error handling with traps and cleanup functions.\n\n### Input Validation\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis validation pattern will inform all input validation implementation.\n\nAll scripts must include comprehensive input validation for all parameters and files.\n\n## 3. Logging and Debugging\n\n### Logging Functions\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "bash\n# Logging configuration\nreadonly LOG_LEVELS=(\"DEBUG\" \"INFO\" \"WARN\" \"ERROR\")\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\n\n# Validate log level\nvalidate_log_level() {\n    local valid_level=false\n    for level in \"${LOG_LEVELS[@]}\"; do\n        if [[ \"$LOG_LEVEL\" == \"$level\" ]]; then\n            valid_level=true\n            break\n        fi\n    done\n\n    if [[ \"$valid_level\" == false ]]; then\n        error_exit 2 \"Invalid log level: $LOG_LEVEL. Valid levels: ${LOG_LEVELS[*]}\"\n    fi\n}\n\n# Logging functions\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_info() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" ]]; then\n        echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_warn() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" || \"$LOG_LEVEL\" == \"WARN\" ]]; then\n        echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n    fi\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\n# Debug functions\ndebug_variables() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Environment variables:\"\n        for var in \"$@\"; do\n            echo \"[DEBUG]   $var=${!var:-<unset>}\"\n        done\n    fi\n}\n\ndebug_command() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Executing: $*\"\n    fi\n    \"$@\"\n}\n\n# Progress indicator\nshow_progress() {\n    local message=\"$1\"\n    local duration=\"${2:-2}\"\n\n    echo -n \"$message\"\n    for i in $(seq 1 \"$duration\"); do\n        echo -n \".\"\n        sleep 0.5\n    done\n    echo \" done\"\n}\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis logging pattern will inform all shell script logging implementation.\n\nAll scripts must include proper logging with configurable levels and debug functions.\n\n## 4. File and Directory Operations\n\n### Safe File Operations\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "bash\n# Create directory safely\ncreate_directory() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        log_info \"Creating $description: $dir_path\"\n        if ! mkdir -p \"$dir_path\"; then\n            error_exit 4 \"Failed to create $description: $dir_path\"\n        fi\n    else\n        log_debug \"$description already exists: $dir_path\"\n    fi\n}\n\n# Copy file safely\ncopy_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Copying $description: $source -> $destination\"\n    if ! cp \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to copy $description: $source -> $destination\"\n    fi\n}\n\n# Move file safely\nmove_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Moving $description: $source -> $destination\"\n    if ! mv \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to move $description: $source -> $destination\"\n    fi\n}\n\n# Remove file safely\nremove_file() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        log_info \"Removing $description: $file_path\"\n        if ! rm \"$file_path\"; then\n            error_exit 4 \"Failed to remove $description: $file_path\"\n        fi\n    else\n        log_debug \"$description does not exist: $file_path\"\n    fi\n}\n\n# Create backup\ncreate_backup() {\n    local file_path=\"$1\"\n    local backup_suffix=\"${2:-.backup.$(date +%Y%m%d_%H%M%S)}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        local backup_path=\"$file_path$backup_suffix\"\n        log_info \"Creating backup: $file_path -> $backup_path\"\n        copy_file \"$file_path\" \"$backup_path\" \"backup\"\n    fi\n}\n\n# Find files safely\nfind_files() {\n    local search_path=\"$1\"\n    local pattern=\"$2\"\n    local max_depth=\"${3:-3}\"\n\n    validate_directory_exists \"$search_path\" \"Search directory\"\n\n    log_debug \"Searching for files matching '$pattern' in $search_path (max depth: $max_depth)\"\n\n    local files=()\n    while IFS= read -r -d '' file; do\n        files+=(\"$file\")\n    done < <(find \"$search_path\" -maxdepth \"$max_depth\" -name \"$pattern\" -print0 2>/dev/null)\n\n    echo \"${files[@]}\"\n}\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis file operation pattern will inform all file and directory manipulation implementation.\n\nAll file operations must include proper validation and error handling.\n\n## 5. Process and Command Management\n\n### Command Execution\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis process management pattern will inform all command execution and process handling implementation.\n\nAll command execution must include proper error handling and process management.\n\n## 6. Configuration Management\n\n### Configuration Loading\n"
+      },
+      {
+        "type": "code_reference",
+        "text": "\n\nThis configuration pattern will inform all configuration management implementation.\n\nAll configuration loading must include proper validation and default value handling.\n\n## 7. Network and API Operations\n\n### HTTP Requests\n"
+      }
+    ],
+    "raw_content": "# Shell Style Guide\n\n> This guide provides comprehensive patterns and best practices for shell scripting and command-line operations. Use these patterns to create reliable, maintainable shell scripts.\n\n## AI Metadata\n\n**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Bash, shell scripting, Linux/Unix systems, automation\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../Core%20Principles.md` - Decision-making frameworks\n- `../Language-Specific/Python%20Testing%20Guide.md` - Testing patterns\n- `../../project_context/Architecture%20Overview.md` - System architecture\n- `../../project_context/Common%20Patterns.md` - Project-specific patterns\n\n**Validation Rules:**\n- All scripts must include proper error handling and exit codes\n- Scripts must use strict mode and fail-fast behavior\n- All variables must be properly quoted and validated\n- Scripts must include comprehensive logging and debugging\n- All commands must be idempotent and safe to re-run\n\n## Overview\n\n**Document Purpose:** Shell scripting standards and best practices for the CreamPie project\n**Scope:** Bash scripting, automation, deployment, and system administration\n**Target Users:** AI assistants and developers writing shell scripts\n**Last Updated:** Current\n\n**AI Context:** This guide provides the foundational shell scripting patterns that must be followed for all automation and deployment tasks in the project. It ensures robust, maintainable, and secure shell scripts.\n\n## 1. Script Structure\n\n### Header and Metadata\n```bash\n#!/usr/bin/env bash\n#\n# Script Name: deploy_application.sh\n# Description: Deploy the CreamPie application to production\n# Author: AI Assistant\n# Version: 1.0.0\n# Created: 2024-01-01\n# Last Modified: 2024-01-01\n#\n# Usage: ./deploy_application.sh [environment] [version]\n# Example: ./deploy_application.sh production v1.2.3\n#\n# Dependencies:\n#   - docker\n#   - docker-compose\n#   - git\n#   - jq\n#\n# Exit Codes:\n#   0 - Success\n#   1 - General error\n#   2 - Invalid arguments\n#   3 - Dependency missing\n#   4 - Configuration error\n#   5 - Deployment failed\n#\n# Environment Variables:\n#   DEPLOY_ENV - Target environment (default: production)\n#   APP_VERSION - Application version to deploy\n#   LOG_LEVEL - Logging level (default: INFO)\n#\n\nset -euo pipefail  # Strict mode: exit on error, undefined vars, pipe failures\nIFS=$'\\n\\t'        # Internal field separator for safer word splitting\n```\n\nThis header pattern will inform all shell script structure and metadata.\n\nAll scripts must include proper header documentation and strict mode settings.\n\n### Script Organization\n```bash\n# =============================================================================\n# CONFIGURATION\n# =============================================================================\n\n# Default values\nreadonly DEFAULT_ENV=\"production\"\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nreadonly SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nreadonly PROJECT_ROOT=\"$(dirname \"$SCRIPT_DIR\")\"\n\n# Configuration variables\nDEPLOY_ENV=\"${DEPLOY_ENV:-$DEFAULT_ENV}\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\nAPP_VERSION=\"\"\n\n# =============================================================================\n# FUNCTIONS\n# =============================================================================\n\n# Logging functions\nlog_info() {\n    echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n}\n\nlog_warn() {\n    echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\n# Error handling\nerror_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n    log_error \"$error_message\"\n    exit \"$exit_code\"\n}\n\n# Cleanup function\ncleanup() {\n    log_info \"Cleaning up...\"\n    # Add cleanup logic here\n    log_info \"Cleanup completed\"\n}\n\n# =============================================================================\n# VALIDATION FUNCTIONS\n# =============================================================================\n\nvalidate_dependencies() {\n    local missing_deps=()\n\n    for dep in docker docker-compose git jq; do\n        if ! command -v \"$dep\" >/dev/null 2>&1; then\n            missing_deps+=(\"$dep\")\n        fi\n    done\n\n    if [[ ${#missing_deps[@]} -gt 0 ]]; then\n        error_exit 3 \"Missing dependencies: ${missing_deps[*]}\"\n    fi\n\n    log_info \"All dependencies are available\"\n}\n\nvalidate_environment() {\n    local valid_envs=(\"development\" \"staging\" \"production\")\n    local env_valid=false\n\n    for env in \"${valid_envs[@]}\"; do\n        if [[ \"$DEPLOY_ENV\" == \"$env\" ]]; then\n            env_valid=true\n            break\n        fi\n    done\n\n    if [[ \"$env_valid\" == false ]]; then\n        error_exit 2 \"Invalid environment: $DEPLOY_ENV. Valid options: ${valid_envs[*]}\"\n    fi\n\n    log_info \"Environment validation passed: $DEPLOY_ENV\"\n}\n\nvalidate_version() {\n    if [[ -z \"$APP_VERSION\" ]]; then\n        error_exit 2 \"Application version is required\"\n    fi\n\n    # Validate version format (semantic versioning)\n    if [[ ! \"$APP_VERSION\" =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+$ ]]; then\n        error_exit 2 \"Invalid version format: $APP_VERSION. Expected format: vX.Y.Z\"\n    fi\n\n    log_info \"Version validation passed: $APP_VERSION\"\n}\n\n# =============================================================================\n# MAIN FUNCTIONS\n# =============================================================================\n\ndeploy_application() {\n    log_info \"Starting deployment to $DEPLOY_ENV environment\"\n    log_info \"Deploying version: $APP_VERSION\"\n\n    # Add deployment logic here\n    log_info \"Deployment completed successfully\"\n}\n\n# =============================================================================\n# MAIN SCRIPT\n# =============================================================================\n\nmain() {\n    # Set up signal handlers\n    trap cleanup EXIT\n    trap 'error_exit 1 \"Script interrupted\"' INT TERM\n\n    # Parse command line arguments\n    while [[ $# -gt 0 ]]; do\n        case $1 in\n            -e|--environment)\n                DEPLOY_ENV=\"$2\"\n                shift 2\n                ;;\n            -v|--version)\n                APP_VERSION=\"$2\"\n                shift 2\n                ;;\n            -h|--help)\n                echo \"Usage: $0 [OPTIONS]\"\n                echo \"Options:\"\n                echo \"  -e, --environment ENV  Target environment (default: production)\"\n                echo \"  -v, --version VERSION  Application version to deploy\"\n                echo \"  -h, --help            Show this help message\"\n                exit 0\n                ;;\n            *)\n                error_exit 2 \"Unknown option: $1\"\n                ;;\n        esac\n    done\n\n    # Validate inputs\n    validate_dependencies\n    validate_environment\n    validate_version\n\n    # Execute main logic\n    deploy_application\n\n    log_info \"Script completed successfully\"\n    exit 0\n}\n\n# Execute main function if script is run directly\nif [[ \"${BASH_SOURCE[0]}\" == \"${0}\" ]]; then\n    main \"$@\"\nfi\n```\n\nThis script structure pattern will inform all shell script organization and implementation.\n\nAll scripts must follow this structure with proper sections and error handling.\n\n## 2. Error Handling Patterns\n\n### Strict Mode and Safety\n```bash\n#!/usr/bin/env bash\n\n# Strict mode settings\nset -euo pipefail  # Exit on error, undefined vars, pipe failures\nset -o errtrace    # ERR trap is inherited by shell functions\nset -o functrace   # DEBUG and RETURN traps are inherited by shell functions\n\n# Error handling\ntrap 'error_exit $? \"Error on line $LINENO\"' ERR\n\n# Function to handle errors\nerror_exit() {\n    local exit_code=\"${1:-1}\"\n    local error_message=\"${2:-Unknown error occurred}\"\n\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $error_message\" >&2\n    echo \"[ERROR] Exit code: $exit_code\" >&2\n\n    # Log error details\n    if [[ -n \"${BASH_VERSION:-}\" ]]; then\n        echo \"[ERROR] Bash version: $BASH_VERSION\" >&2\n        echo \"[ERROR] Script: ${BASH_SOURCE[0]}\" >&2\n        echo \"[ERROR] Line: $LINENO\" >&2\n    fi\n\n    exit \"$exit_code\"\n}\n\n# Cleanup function\ncleanup() {\n    local exit_code=$?\n\n    echo \"[INFO] Cleaning up...\"\n\n    # Add cleanup logic here\n    # - Remove temporary files\n    # - Stop background processes\n    # - Close file descriptors\n\n    if [[ $exit_code -ne 0 ]]; then\n        echo \"[WARN] Script exited with code: $exit_code\"\n    fi\n\n    echo \"[INFO] Cleanup completed\"\n}\n\n# Set up traps\ntrap cleanup EXIT\ntrap 'error_exit 1 \"Script interrupted\"' INT TERM\n```\n\nThis error handling pattern will inform all shell script error handling implementation.\n\nAll scripts must include proper error handling with traps and cleanup functions.\n\n### Input Validation\n```bash\n# Validate required arguments\nvalidate_required_args() {\n    local required_args=(\"$@\")\n    local missing_args=()\n\n    for arg in \"${required_args[@]}\"; do\n        if [[ -z \"${!arg:-}\" ]]; then\n            missing_args+=(\"$arg\")\n        fi\n    done\n\n    if [[ ${#missing_args[@]} -gt 0 ]]; then\n        error_exit 2 \"Missing required arguments: ${missing_args[*]}\"\n    fi\n}\n\n# Validate file existence\nvalidate_file_exists() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ ! -f \"$file_path\" ]]; then\n        error_exit 4 \"$description does not exist: $file_path\"\n    fi\n\n    if [[ ! -r \"$file_path\" ]]; then\n        error_exit 4 \"$description is not readable: $file_path\"\n    fi\n}\n\n# Validate directory existence\nvalidate_directory_exists() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        error_exit 4 \"$description does not exist: $dir_path\"\n    fi\n\n    if [[ ! -r \"$dir_path\" ]]; then\n        error_exit 4 \"$description is not readable: $dir_path\"\n    fi\n}\n\n# Validate command availability\nvalidate_command() {\n    local command_name=\"$1\"\n\n    if ! command -v \"$command_name\" >/dev/null 2>&1; then\n        error_exit 3 \"Required command not found: $command_name\"\n    fi\n}\n\n# Validate numeric input\nvalidate_numeric() {\n    local value=\"$1\"\n    local description=\"${2:-Value}\"\n\n    if [[ ! \"$value\" =~ ^[0-9]+$ ]]; then\n        error_exit 2 \"$description must be a positive integer: $value\"\n    fi\n}\n\n# Validate boolean input\nvalidate_boolean() {\n    local value=\"$1\"\n    local description=\"${2:-Value}\"\n\n    case \"$value\" in\n        true|false|0|1|yes|no)\n            return 0\n            ;;\n        *)\n            error_exit 2 \"$description must be a boolean value: $value\"\n            ;;\n    esac\n}\n```\n\nThis validation pattern will inform all input validation implementation.\n\nAll scripts must include comprehensive input validation for all parameters and files.\n\n## 3. Logging and Debugging\n\n### Logging Functions\n```bash\n# Logging configuration\nreadonly LOG_LEVELS=(\"DEBUG\" \"INFO\" \"WARN\" \"ERROR\")\nreadonly DEFAULT_LOG_LEVEL=\"INFO\"\nLOG_LEVEL=\"${LOG_LEVEL:-$DEFAULT_LOG_LEVEL}\"\n\n# Validate log level\nvalidate_log_level() {\n    local valid_level=false\n    for level in \"${LOG_LEVELS[@]}\"; do\n        if [[ \"$LOG_LEVEL\" == \"$level\" ]]; then\n            valid_level=true\n            break\n        fi\n    done\n\n    if [[ \"$valid_level\" == false ]]; then\n        error_exit 2 \"Invalid log level: $LOG_LEVEL. Valid levels: ${LOG_LEVELS[*]}\"\n    fi\n}\n\n# Logging functions\nlog_debug() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_info() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" ]]; then\n        echo \"[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*\"\n    fi\n}\n\nlog_warn() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" || \"$LOG_LEVEL\" == \"INFO\" || \"$LOG_LEVEL\" == \"WARN\" ]]; then\n        echo \"[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n    fi\n}\n\nlog_error() {\n    echo \"[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*\" >&2\n}\n\n# Debug functions\ndebug_variables() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Environment variables:\"\n        for var in \"$@\"; do\n            echo \"[DEBUG]   $var=${!var:-<unset>}\"\n        done\n    fi\n}\n\ndebug_command() {\n    if [[ \"$LOG_LEVEL\" == \"DEBUG\" ]]; then\n        echo \"[DEBUG] Executing: $*\"\n    fi\n    \"$@\"\n}\n\n# Progress indicator\nshow_progress() {\n    local message=\"$1\"\n    local duration=\"${2:-2}\"\n\n    echo -n \"$message\"\n    for i in $(seq 1 \"$duration\"); do\n        echo -n \".\"\n        sleep 0.5\n    done\n    echo \" done\"\n}\n```\n\nThis logging pattern will inform all shell script logging implementation.\n\nAll scripts must include proper logging with configurable levels and debug functions.\n\n## 4. File and Directory Operations\n\n### Safe File Operations\n```bash\n# Create directory safely\ncreate_directory() {\n    local dir_path=\"$1\"\n    local description=\"${2:-Directory}\"\n\n    if [[ ! -d \"$dir_path\" ]]; then\n        log_info \"Creating $description: $dir_path\"\n        if ! mkdir -p \"$dir_path\"; then\n            error_exit 4 \"Failed to create $description: $dir_path\"\n        fi\n    else\n        log_debug \"$description already exists: $dir_path\"\n    fi\n}\n\n# Copy file safely\ncopy_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Copying $description: $source -> $destination\"\n    if ! cp \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to copy $description: $source -> $destination\"\n    fi\n}\n\n# Move file safely\nmove_file() {\n    local source=\"$1\"\n    local destination=\"$2\"\n    local description=\"${3:-File}\"\n\n    validate_file_exists \"$source\" \"Source $description\"\n\n    log_info \"Moving $description: $source -> $destination\"\n    if ! mv \"$source\" \"$destination\"; then\n        error_exit 4 \"Failed to move $description: $source -> $destination\"\n    fi\n}\n\n# Remove file safely\nremove_file() {\n    local file_path=\"$1\"\n    local description=\"${2:-File}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        log_info \"Removing $description: $file_path\"\n        if ! rm \"$file_path\"; then\n            error_exit 4 \"Failed to remove $description: $file_path\"\n        fi\n    else\n        log_debug \"$description does not exist: $file_path\"\n    fi\n}\n\n# Create backup\ncreate_backup() {\n    local file_path=\"$1\"\n    local backup_suffix=\"${2:-.backup.$(date +%Y%m%d_%H%M%S)}\"\n\n    if [[ -f \"$file_path\" ]]; then\n        local backup_path=\"$file_path$backup_suffix\"\n        log_info \"Creating backup: $file_path -> $backup_path\"\n        copy_file \"$file_path\" \"$backup_path\" \"backup\"\n    fi\n}\n\n# Find files safely\nfind_files() {\n    local search_path=\"$1\"\n    local pattern=\"$2\"\n    local max_depth=\"${3:-3}\"\n\n    validate_directory_exists \"$search_path\" \"Search directory\"\n\n    log_debug \"Searching for files matching '$pattern' in $search_path (max depth: $max_depth)\"\n\n    local files=()\n    while IFS= read -r -d '' file; do\n        files+=(\"$file\")\n    done < <(find \"$search_path\" -maxdepth \"$max_depth\" -name \"$pattern\" -print0 2>/dev/null)\n\n    echo \"${files[@]}\"\n}\n```\n\nThis file operation pattern will inform all file and directory manipulation implementation.\n\nAll file operations must include proper validation and error handling.\n\n## 5. Process and Command Management\n\n### Command Execution\n```bash\n# Execute command with error handling\nexecute_command() {\n    local command=\"$1\"\n    local description=\"${2:-Command}\"\n    local exit_on_error=\"${3:-true}\"\n\n    log_debug \"Executing $description: $command\"\n\n    if eval \"$command\"; then\n        log_debug \"$description completed successfully\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"$description failed with exit code: $exit_code\"\n\n        if [[ \"$exit_on_error\" == \"true\" ]]; then\n            error_exit \"$exit_code\" \"$description failed\"\n        fi\n\n        return \"$exit_code\"\n    fi\n}\n\n# Execute command and capture output\nexecute_command_output() {\n    local command=\"$1\"\n    local description=\"${2:-Command}\"\n    local capture_stderr=\"${3:-false}\"\n\n    log_debug \"Executing $description: $command\"\n\n    local output\n    local exit_code\n\n    if [[ \"$capture_stderr\" == \"true\" ]]; then\n        output=$(eval \"$command\" 2>&1)\n        exit_code=$?\n    else\n        output=$(eval \"$command\")\n        exit_code=$?\n    fi\n\n    if [[ $exit_code -eq 0 ]]; then\n        log_debug \"$description completed successfully\"\n        echo \"$output\"\n        return 0\n    else\n        log_error \"$description failed with exit code: $exit_code\"\n        if [[ \"$capture_stderr\" == \"true\" ]]; then\n            echo \"$output\" >&2\n        fi\n        return \"$exit_code\"\n    fi\n}\n\n# Run command in background\nrun_background() {\n    local command=\"$1\"\n    local description=\"${2:-Background process}\"\n    local log_file=\"${3:-/dev/null}\"\n\n    log_info \"Starting $description in background\"\n\n    if nohup eval \"$command\" > \"$log_file\" 2>&1 &; then\n        local pid=$!\n        log_info \"$description started with PID: $pid\"\n        echo \"$pid\"\n    else\n        error_exit 1 \"Failed to start $description\"\n    fi\n}\n\n# Wait for process\nwait_for_process() {\n    local pid=\"$1\"\n    local timeout=\"${2:-30}\"\n    local description=\"${3:-Process}\"\n\n    log_info \"Waiting for $description (PID: $pid, timeout: ${timeout}s)\"\n\n    local elapsed=0\n    while kill -0 \"$pid\" 2>/dev/null && [[ $elapsed -lt $timeout ]]; do\n        sleep 1\n        ((elapsed++))\n    done\n\n    if kill -0 \"$pid\" 2>/dev/null; then\n        log_warn \"$description (PID: $pid) did not complete within timeout\"\n        return 1\n    else\n        log_info \"$description (PID: $pid) completed\"\n        return 0\n    fi\n}\n\n# Kill process safely\nkill_process() {\n    local pid=\"$1\"\n    local description=\"${2:-Process}\"\n    local timeout=\"${3:-10}\"\n\n    if ! kill -0 \"$pid\" 2>/dev/null; then\n        log_debug \"$description (PID: $pid) is not running\"\n        return 0\n    fi\n\n    log_info \"Stopping $description (PID: $pid)\"\n\n    # Try graceful shutdown first\n    kill \"$pid\"\n\n    # Wait for graceful shutdown\n    local elapsed=0\n    while kill -0 \"$pid\" 2>/dev/null && [[ $elapsed -lt $timeout ]]; do\n        sleep 1\n        ((elapsed++))\n    done\n\n    # Force kill if still running\n    if kill -0 \"$pid\" 2>/dev/null; then\n        log_warn \"Force killing $description (PID: $pid)\"\n        kill -9 \"$pid\"\n        sleep 1\n\n        if kill -0 \"$pid\" 2>/dev/null; then\n            error_exit 1 \"Failed to kill $description (PID: $pid)\"\n        fi\n    fi\n\n    log_info \"$description (PID: $pid) stopped\"\n}\n```\n\nThis process management pattern will inform all command execution and process handling implementation.\n\nAll command execution must include proper error handling and process management.\n\n## 6. Configuration Management\n\n### Configuration Loading\n```bash\n# Load configuration from file\nload_config() {\n    local config_file=\"$1\"\n    local description=\"${2:-Configuration}\"\n\n    validate_file_exists \"$config_file\" \"$description file\"\n\n    log_info \"Loading $description from: $config_file\"\n\n    # Source the configuration file\n    if ! source \"$config_file\"; then\n        error_exit 4 \"Failed to load $description from: $config_file\"\n    fi\n\n    log_debug \"$description loaded successfully\"\n}\n\n# Load environment variables from file\nload_env_file() {\n    local env_file=\"$1\"\n\n    if [[ -f \"$env_file\" ]]; then\n        log_info \"Loading environment variables from: $env_file\"\n\n        # Read and export environment variables\n        while IFS= read -r line; do\n            # Skip comments and empty lines\n            if [[ \"$line\" =~ ^[[:space:]]*# ]] || [[ -z \"$line\" ]]; then\n                continue\n            fi\n\n            # Export variable if it's a valid assignment\n            if [[ \"$line\" =~ ^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*= ]]; then\n                export \"$line\"\n                log_debug \"Exported: $line\"\n            fi\n        done < \"$env_file\"\n    else\n        log_warn \"Environment file not found: $env_file\"\n    fi\n}\n\n# Validate configuration\nvalidate_config() {\n    local required_vars=(\"$@\")\n    local missing_vars=()\n\n    for var in \"${required_vars[@]}\"; do\n        if [[ -z \"${!var:-}\" ]]; then\n            missing_vars+=(\"$var\")\n        fi\n    done\n\n    if [[ ${#missing_vars[@]} -gt 0 ]]; then\n        error_exit 4 \"Missing required configuration variables: ${missing_vars[*]}\"\n    fi\n\n    log_info \"Configuration validation passed\"\n}\n\n# Set default values\nset_defaults() {\n    local defaults=(\"$@\")\n\n    for default in \"${defaults[@]}\"; do\n        IFS='=' read -r var_name default_value <<< \"$default\"\n        if [[ -z \"${!var_name:-}\" ]]; then\n            export \"$var_name\"=\"$default_value\"\n            log_debug \"Set default for $var_name: $default_value\"\n        fi\n    done\n}\n```\n\nThis configuration pattern will inform all configuration management implementation.\n\nAll configuration loading must include proper validation and default value handling.\n\n## 7. Network and API Operations\n\n### HTTP Requests\n```bash\n# Make HTTP GET request\nhttp_get() {\n    local url=\"$1\"\n    local headers=\"${2:-}\"\n    local timeout=\"${3:-30}\"\n\n    log_debug \"Making GET request to: $url\"\n\n    local curl_opts=(\n        \"--silent\"\n        \"--show-error\"\n        \"--max-time\" \"$timeout\"\n        \"--fail\"\n    )\n\n    if [[ -n \"$headers\" ]]; then\n        while IFS=':' read -r key value; do\n            curl_opts+=(\"--header\" \"$key: $value\")\n        done <<< \"$headers\"\n    fi\n\n    if response=$(curl \"${curl_opts[@]}\" \"$url\" 2>&1); then\n        log_debug \"GET request successful\"\n        echo \"$response\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"GET request failed: $response\"\n        return \"$exit_code\"\n    fi\n}\n\n# Make HTTP POST request\nhttp_post() {\n    local url=\"$1\"\n    local data=\"$2\"\n    local content_type=\"${3:-application/json}\"\n    local headers=\"${4:-}\"\n    local timeout=\"${5:-30}\"\n\n    log_debug \"Making POST request to: $url\"\n\n    local curl_opts=(\n        \"--silent\"\n        \"--show-error\"\n        \"--max-time\" \"$timeout\"\n        \"--fail\"\n        \"--header\" \"Content-Type: $content_type\"\n        \"--data\" \"$data\"\n    )\n\n    if [[ -n \"$headers\" ]]; then\n        while IFS=':' read -r key value; do\n            curl_opts+=(\"--header\" \"$key: $value\")\n        done <<< \"$headers\"\n    fi\n\n    if response=$(curl \"${curl_opts[@]}\" \"$url\" 2>&1); then\n        log_debug \"POST request successful\"\n        echo \"$response\"\n        return 0\n    else\n        local exit_code=$?\n        log_error \"POST request failed: $response\"\n        return \"$exit_code\"\n    fi\n}\n\n# Check if URL is accessible\ncheck_url() {\n    local url=\"$1\"\n    local timeout=\"${2:-10}\"\n\n    log_debug \"Checking URL accessibility: $url\"\n\n    if curl --silent --show-error --max-time \"$timeout\" --fail --head \"$url\" >/dev/null 2>&1; then\n        log_debug \"URL is accessible: $url\"\n        return 0\n    else\n        log_debug \"URL is not accessible: $url\"\n        return 1\n    fi\n}\n\n# Wait for URL to become accessible\nwait_for_url() {\n    local url=\"$1\"\n    local timeout=\"${2:-60}\"\n    local interval=\"${3:-5}\"\n    local description=\"${4:-URL}\"\n\n    log_info \"Waiting for $description to become accessible: $url\"\n\n    local elapsed=0\n    while [[ $elapsed -lt $timeout ]]; do\n        if check_url \"$url\" \"$interval\"; then\n            log_info \"$description is now accessible: $url\"\n            return 0\n        fi\n\n        sleep \"$interval\"\n        ((elapsed += interval))\n    done\n\n    error_exit 1 \"$description did not become accessible within timeout: $url\"\n}\n```\n\nThis network pattern will inform all HTTP request and network operation implementation.\n\nAll network operations must include proper error handling and timeout management.\n\n## Implementation Guidelines\n\n### For AI Assistants\n1. **Follow these patterns** for all shell script implementation\n2. **Use strict mode** with proper error handling\n3. **Include comprehensive logging** with configurable levels\n4. **Validate all inputs** and dependencies\n5. **Implement proper cleanup** and signal handling\n6. **Use safe file operations** with validation\n7. **Include proper documentation** and usage examples\n8. **Follow security best practices** for all operations\n\n### For Human Developers\n1. **Reference these patterns** when writing shell scripts\n2. **Use strict mode** for robust error handling\n3. **Include comprehensive logging** for debugging\n4. **Validate all inputs** before processing\n5. **Implement proper cleanup** for resource management\n6. **Test scripts thoroughly** with different scenarios\n7. **Follow security guidelines** for production scripts\n\n## Quality Assurance\n\n### Script Standards\n- All scripts must use strict mode with proper error handling\n- Scripts must include comprehensive logging and debugging\n- All inputs must be validated before processing\n- Scripts must be idempotent and safe to re-run\n- Proper cleanup must be implemented for all resources\n\n### Security Standards\n- Scripts must not expose sensitive information in logs\n- File permissions must be set appropriately\n- Input validation must prevent command injection\n- Environment variables must be properly sanitized\n- Temporary files must be created securely\n\n### Performance Standards\n- Scripts must handle large files efficiently\n- Background processes must be properly managed\n- Resource cleanup must be timely and complete\n- Timeouts must be set for all external operations\n- Memory usage must be monitored and controlled\n\n### Testing Standards\n- Unit tests must be written for complex functions\n- Integration tests must cover script workflows\n- Error scenarios must be tested thoroughly\n- Performance tests must be implemented\n- Security tests must validate input handling\n\n---\n\n**AI Quality Checklist**: Before implementing shell scripts, ensure:\n- [x] Strict mode is enabled with proper error handling\n- [x] Comprehensive logging is implemented with configurable levels\n- [x] All inputs and dependencies are validated\n- [x] Proper cleanup and signal handling is implemented\n- [x] File operations are safe with proper validation\n- [x] Documentation includes usage examples and exit codes\n- [x] Security best practices are followed\n- [x] Scripts are idempotent and safe to re-run\n"
+  },
+  "cross_references": [],
+  "code_generation_hints": [
+    {
+      "context": "general",
+      "hint": "This header pattern will inform all shell script structure and metadata.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This script structure pattern will inform all shell script organization and implementation.",
+      "validation": ""
+    },
+    {
+      "context": "error handling",
+      "hint": "This error handling pattern will inform all shell script error handling implementation.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This validation pattern will inform all input validation implementation.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This logging pattern will inform all shell script logging implementation.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This file operation pattern will inform all file and directory manipulation implementation.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This process management pattern will inform all command execution and process handling implementation.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This configuration pattern will inform all configuration management implementation.",
+      "validation": ""
+    },
+    {
+      "context": "general",
+      "hint": "This network pattern will inform all HTTP request and network operation implementation.",
+      "validation": ""
+    }
+  ],
+  "validation_rules": [
+    "Scripts must include comprehensive logging and debugging",
+    "gt 0 ]]; then\n        error_exit 4 \"Missing required configuration variables: ${missing_vars[*]}\"\n    fi",
+    "9]+$ ]]; then\n        error_exit 2 \"$description must be a positive integer: $value\"\n    fi\n}",
+    "Unit tests must be written for complex functions",
+    "All scripts must follow this structure with proper sections and error handling",
+    "v \"$command_name\" >/dev/null 2>&1; then\n        error_exit 3 \"Required command not found: $command_name\"\n    fi\n}",
+    "File permissions must be set appropriately",
+    "All command execution must include proper error handling and process management",
+    "Scripts must handle large files efficiently",
+    "All commands must be idempotent and safe to re-run",
+    "Performance tests must be implemented",
+    "Scripts must not expose sensitive information in logs",
+    "Error scenarios must be tested thoroughly",
+    "All scripts must include proper header documentation and strict mode settings",
+    "All inputs must be validated before processing",
+    "Temporary files must be created securely",
+    "All file operations must include proper validation and error handling",
+    "All scripts must include comprehensive input validation for all parameters and files",
+    "gt 0 ]]; then\n        error_exit 2 \"Missing required arguments: ${missing_args[*]}\"\n    fi\n}",
+    "Resource cleanup must be timely and complete",
+    "All configuration loading must include proper validation and default value handling",
+    "All network operations must include proper error handling and timeout management",
+    "z \"$APP_VERSION\" ]]; then\n        error_exit 2 \"Application version is required\"\n    fi",
+    "Integration tests must cover script workflows",
+    "Scripts must be idempotent and safe to re-run",
+    "Scripts must use strict mode and fail-fast behavior",
+    "All scripts must use strict mode with proper error handling",
+    "All scripts must include proper error handling with traps and cleanup functions",
+    "Security tests must validate input handling",
+    "Input validation must prevent command injection",
+    "Proper cleanup must be implemented for all resources",
+    "Timeouts must be set for all external operations",
+    "Memory usage must be monitored and controlled",
+    "Environment variables must be properly sanitized",
+    "All scripts must include proper logging with configurable levels and debug functions",
+    "Background processes must be properly managed",
+    "All scripts must include proper error handling and exit codes",
+    "All variables must be properly quoted and validated"
+  ],
+  "optimization": {
+    "version": "1.0",
+    "optimized_at": "2025-06-18T19:19:47.753747",
+    "improvements": [
+      "fixed_file_references",
+      "extracted_ai_metadata",
+      "structured_cross_references",
+      "extracted_code_hints",
+      "structured_validation_rules"
+    ],
+    "literal_strings_cleaned": true,
+    "cleaned_at": "2025-06-18T19:30:00.000000"
+  }
+}

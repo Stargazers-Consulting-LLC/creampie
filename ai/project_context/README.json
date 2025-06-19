@@ -1,0 +1,224 @@
+{
+  "ai_metadata": {
+    "purpose": "",
+    "last_updated": "",
+    "template_version": "2.1",
+    "ai_tool_compatibility": "",
+    "ai_processing_level": "High",
+    "required_context": "Project architecture, development patterns, system integration",
+    "validation_required": "Yes",
+    "code_generation": "Supported",
+    "cross_references": [
+      "../guide_docs/Core%20Principles.json",
+      "../guide_docs/Feature Template.json"
+    ],
+    "maintenance": ""
+  },
+  "file_info": {
+    "file_path": "project_context/README.md",
+    "original_format": "markdown",
+    "converted_at": "2025-06-18T19:14:30.265865",
+    "file_size": 3759,
+    "line_count": 92,
+    "optimized_at": "2025-06-18T19:19:47.757980",
+    "optimization_version": "1.0"
+  },
+  "content": {
+    "sections": [
+      {
+        "level": 1,
+        "title": "Project Context",
+        "content": "> This folder contains project-specific context, architecture information, and development patterns. Use this for understanding the project structure, common patterns, and development workflow.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "AI Metadata",
+        "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, development patterns, system integration\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:**\n- `../guide_docs/Core%20Principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `../guide_docs/Feature Template.json.replace(\".json\", \".json\")` - Feature development patterns\n- `../features/summaries/` - Implementation details\n\n**Validation Rules:**\n- All architectural decisions must align with established patterns\n- Integration points must follow defined interfaces\n- Development workflow must be consistently applied\n- Patterns must be validated against current implementation\n\n**Keywords:** architecture, patterns, workflow, integration, system design, development process",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Purpose",
+        "content": "Project context provides:\n- **System architecture** understanding and component relationships\n- **Development patterns** and conventions used in the project\n- **Workflow processes** for feature development and deployment\n- **Historical context** for architectural decisions\n- **Integration patterns** between different parts of the system",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Organization",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Core Documentation",
+        "content": "- **[Architecture Overview.json](Architecture%20Overview.json.replace(\".json\", \".json\"))** - High-level system design and component relationships\n- **[Common Patterns.json](Common%20Patterns.json.replace(\".json\", \".json\"))** - Project-specific patterns and conventions\n- **[Development Workflow.json](Development%20Workflow.json.replace(\".json\", \".json\"))** - How features flow from idea to deployment",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Usage",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "For New Features",
+        "content": "1. **Start with Architecture Overview** - Understand how your feature fits into the system\n2. **Check Common Patterns** - Follow established conventions\n3. **Follow Development Workflow** - Use the established process",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "For Code Reviews",
+        "content": "1. **Reference Common Patterns** - Ensure code follows project conventions\n2. **Check Architecture Overview** - Verify integration points are correct\n3. **Consider Development Workflow** - Ensure process is being followed",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "For System Understanding",
+        "content": "1. **Read Architecture Overview** - Get the big picture\n2. **Study Common Patterns** - Understand implementation approaches\n3. **Review Development Workflow** - Understand the development process",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Key Concepts",
+        "content": "",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Architecture Principles",
+        "content": "- **Modular Design** - Clear separation of concerns\n- **API-First** - Well-defined interfaces between components\n- **Background Processing** - Asynchronous data processing\n- **Error Handling** - Graceful failure and recovery",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Development Patterns",
+        "content": "- **Feature Isolation** - Keep features self-contained\n- **Test-Driven** - Comprehensive testing at all levels\n- **Documentation-First** - Clear documentation for all components\n- **Incremental Development** - Small, focused changes",
+        "subsections": []
+      },
+      {
+        "level": 3,
+        "title": "Integration Patterns",
+        "content": "- **RESTful APIs** - Standard HTTP-based communication\n- **Background Tasks** - Asynchronous processing\n- **Database Migrations** - Version-controlled schema changes\n- **Frontend-Backend Separation** - Clear API boundaries",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Maintenance",
+        "content": "- **Update Architecture Overview** when system design changes\n- **Add new patterns** to Common Patterns as they emerge\n- **Refine Development Workflow** based on team feedback\n- **Keep documentation current** with actual implementation",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Related Documentation",
+        "content": "- **[Technical Summaries](../features/summaries/)** - Detailed module analysis\n- **[Implementation Plans](../features/plans/)** - Feature development plans\n- **[Style Guides](../guide_docs/)** - Language and domain-specific patterns",
+        "subsections": []
+      }
+    ],
+    "code_blocks": [],
+    "links": [
+      {
+        "type": "markdown",
+        "text": "Architecture Overview.md",
+        "url": "Architecture%20Overview.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Common Patterns.md",
+        "url": "Common%20Patterns.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Development Workflow.md",
+        "url": "Development%20Workflow.md"
+      },
+      {
+        "type": "markdown",
+        "text": "Technical Summaries",
+        "url": "../features/summaries/"
+      },
+      {
+        "type": "markdown",
+        "text": "Implementation Plans",
+        "url": "../features/plans/"
+      },
+      {
+        "type": "markdown",
+        "text": "Style Guides",
+        "url": "../guide_docs/"
+      },
+      {
+        "type": "code_reference",
+        "text": "../guide_docs/Core%20Principles.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../guide_docs/Feature Template.md"
+      },
+      {
+        "type": "code_reference",
+        "text": "../features/summaries/"
+      }
+    ],
+    "raw_content": "# Project Context\n\n> This folder contains project-specific context, architecture information, and development patterns. Use this for understanding the project structure, common patterns, and development workflow.\n\n## AI Metadata\n\n**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, development patterns, system integration\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:**\n- `../guide_docs/Core%20Principles.md` - Decision-making frameworks\n- `../guide_docs/Feature Template.md` - Feature development patterns\n- `../features/summaries/` - Implementation details\n\n**Validation Rules:**\n- All architectural decisions must align with established patterns\n- Integration points must follow defined interfaces\n- Development workflow must be consistently applied\n- Patterns must be validated against current implementation\n\n**Keywords:** architecture, patterns, workflow, integration, system design, development process\n\n## Purpose\n\nProject context provides:\n- **System architecture** understanding and component relationships\n- **Development patterns** and conventions used in the project\n- **Workflow processes** for feature development and deployment\n- **Historical context** for architectural decisions\n- **Integration patterns** between different parts of the system\n\n## Organization\n\n### Core Documentation\n- **[Architecture Overview.md](Architecture%20Overview.md)** - High-level system design and component relationships\n- **[Common Patterns.md](Common%20Patterns.md)** - Project-specific patterns and conventions\n- **[Development Workflow.md](Development%20Workflow.md)** - How features flow from idea to deployment\n\n## Usage\n\n### For New Features\n1. **Start with Architecture Overview** - Understand how your feature fits into the system\n2. **Check Common Patterns** - Follow established conventions\n3. **Follow Development Workflow** - Use the established process\n\n### For Code Reviews\n1. **Reference Common Patterns** - Ensure code follows project conventions\n2. **Check Architecture Overview** - Verify integration points are correct\n3. **Consider Development Workflow** - Ensure process is being followed\n\n### For System Understanding\n1. **Read Architecture Overview** - Get the big picture\n2. **Study Common Patterns** - Understand implementation approaches\n3. **Review Development Workflow** - Understand the development process\n\n## Key Concepts\n\n### Architecture Principles\n- **Modular Design** - Clear separation of concerns\n- **API-First** - Well-defined interfaces between components\n- **Background Processing** - Asynchronous data processing\n- **Error Handling** - Graceful failure and recovery\n\n### Development Patterns\n- **Feature Isolation** - Keep features self-contained\n- **Test-Driven** - Comprehensive testing at all levels\n- **Documentation-First** - Clear documentation for all components\n- **Incremental Development** - Small, focused changes\n\n### Integration Patterns\n- **RESTful APIs** - Standard HTTP-based communication\n- **Background Tasks** - Asynchronous processing\n- **Database Migrations** - Version-controlled schema changes\n- **Frontend-Backend Separation** - Clear API boundaries\n\n## Maintenance\n\n- **Update Architecture Overview** when system design changes\n- **Add new patterns** to Common Patterns as they emerge\n- **Refine Development Workflow** based on team feedback\n- **Keep documentation current** with actual implementation\n\n## Related Documentation\n\n- **[Technical Summaries](../features/summaries/)** - Detailed module analysis\n- **[Implementation Plans](../features/plans/)** - Feature development plans\n- **[Style Guides](../guide_docs/)** - Language and domain-specific patterns\n"
+  },
+  "cross_references": [
+    {
+      "title": "Architecture Overview.md",
+      "path": "Architecture%20Overview.json",
+      "type": "guide",
+      "relevance": "medium"
+    },
+    {
+      "title": "Common Patterns.md",
+      "path": "Common%20Patterns.json",
+      "type": "guide",
+      "relevance": "medium"
+    },
+    {
+      "title": "Development Workflow.md",
+      "path": "Development%20Workflow.json",
+      "type": "guide",
+      "relevance": "medium"
+    },
+    {
+      "title": "Technical Summaries",
+      "path": "../features/summaries/",
+      "type": "feature",
+      "relevance": "medium"
+    },
+    {
+      "title": "Implementation Plans",
+      "path": "../features/plans/",
+      "type": "feature",
+      "relevance": "medium"
+    },
+    {
+      "title": "Style Guides",
+      "path": "../guide_docs/",
+      "type": "guide",
+      "relevance": "high"
+    }
+  ],
+  "code_generation_hints": [],
+  "validation_rules": [
+    "Integration points must follow defined interfaces",
+    "Development workflow must be consistently applied",
+    "All architectural decisions must align with established patterns",
+    "Patterns must be validated against current implementation"
+  ],
+  "optimization": {
+    "version": "1.0",
+    "optimized_at": "2025-06-18T19:19:47.757983",
+    "improvements": [
+      "fixed_file_references",
+      "extracted_ai_metadata",
+      "structured_cross_references",
+      "extracted_code_hints",
+      "structured_validation_rules"
+    ],
+    "literal_strings_cleaned": true,
+    "cleaned_at": "2025-06-18T19:30:00.000000"
+  }
+}

@@ -10,6 +10,7 @@ source "$SCRIPT_DIR/common.sh"
 # Variable declarations
 TEST_LOG_DIR="test_logs"
 TEST_LOG_FILE="$TEST_LOG_DIR/pytest.log"
+AI_OUTPUT_DIR="ai/outputs/test_results"
 WITH_TIMESTAMP=false
 SHOW_HELP=false
 VERBOSE=false
@@ -207,6 +208,103 @@ run_tests_once() {
     fi
 }
 
+# Function to generate AI-consumable test report
+generate_ai_test_report() {
+    local test_status=$1
+    local duration=$2
+    local timestamp=$(date -Iseconds)
+
+    # Ensure AI output directory exists
+    mkdir -p "$AI_OUTPUT_DIR"
+
+    # Generate report filename
+    local report_file="$AI_OUTPUT_DIR/test-report-$(date +%Y%m%d_%H%M%S).json"
+
+    # Create JSON report
+    cat > "$report_file" << EOF
+{
+  "ai_metadata": {
+    "purpose": "Test execution results for AI consumption",
+    "template_version": "1.0",
+    "ai_processing_level": "Medium",
+    "required_context": "Test execution environment, pytest configuration",
+    "validation_required": "No",
+    "code_generation": "Not Supported",
+    "cross_references": []
+  },
+  "file_info": {
+    "file_path": "outputs/test_results/$(basename "$report_file")",
+    "original_format": "json",
+    "generated_at": "$timestamp",
+    "file_size": 0,
+    "line_count": 0
+  },
+  "content": {
+    "sections": [
+      {
+        "level": 1,
+        "title": "Test Execution Report",
+        "content": "Comprehensive test execution results and analysis for AI consumption.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Execution Summary",
+        "content": "**Test Status**: $test_status\n**Duration**: ${duration}s\n**Timestamp**: $timestamp\n**Test Target**: ${TEST_PATH:-"All tests"}\n**Test Function**: ${TEST_FUNCTION:-"All functions"}\n**Marker**: ${MARKER:-"None"}\n**Verbose**: $VERBOSE\n**Watch Mode**: $WATCH_MODE",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Test Configuration",
+        "content": "**Test Path**: ${TEST_PATH:-"All tests"}\n**Test Function**: ${TEST_FUNCTION:-"All functions"}\n**Marker**: ${MARKER:-"None"}\n**Verbose Mode**: $VERBOSE\n**Watch Mode**: $WATCH_MODE\n**Timestamp Logs**: $WITH_TIMESTAMP\n**No Log Mode**: $NO_LOG",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Log Files",
+        "content": "**Test Log**: $CURRENT_LOG_FILE\n**AI Report**: $report_file\n\nDetailed test output and error information can be found in the log files.",
+        "subsections": []
+      }
+    ],
+    "code_blocks": [],
+    "links": [],
+    "raw_content": "Test execution completed with status: $test_status. Duration: ${duration}s. Target: ${TEST_PATH:-"All tests"}. Function: ${TEST_FUNCTION:-"All functions"}. Marker: ${MARKER:-"None"}."
+  },
+  "cross_references": [
+    {
+      "title": "Test Logs",
+      "path": "../test_logs/",
+      "type": "logs",
+      "relevance": "high"
+    },
+    {
+      "title": "Pytest Configuration",
+      "path": "cream_api/pytest.ini",
+      "type": "config",
+      "relevance": "medium"
+    }
+  ],
+  "code_generation_hints": [],
+  "validation_rules": [],
+  "optimization": {
+    "version": "1.0",
+    "generated_at": "$timestamp",
+    "improvements": []
+  }
+}
+EOF
+
+    # Update file size and line count
+    local file_size=$(wc -c < "$report_file")
+    local line_count=$(wc -l < "$report_file")
+
+    # Update the JSON with actual values
+    sed -i "s/\"file_size\": 0/\"file_size\": $file_size/" "$report_file"
+    sed -i "s/\"line_count\": 0/\"line_count\": $line_count/" "$report_file"
+
+    print_status "Generated AI test report: $report_file"
+}
+
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -325,9 +423,18 @@ fi
 # Handle regular test execution
 if [ "$NO_LOG" = true ]; then
     # Run tests without logging
+    local start_time=$(date +%s)
     if run_tests_once; then
+        local end_time=$(date +%s)
+        local duration=$((end_time - start_time))
+        print_status "📄 AI report saved to: $AI_OUTPUT_DIR/"
+        generate_ai_test_report "success" "$duration"
         exit 0
     else
+        local end_time=$(date +%s)
+        local duration=$((end_time - start_time))
+        print_status "📄 AI report saved to: $AI_OUTPUT_DIR/"
+        generate_ai_test_report "failed" "$duration"
         exit 1
     fi
 fi
@@ -371,24 +478,40 @@ if [[ -n "$TEST_PATH" ]]; then
     fi
 fi
 
+# Change to cream_api directory and run pytest
+pushd cream_api > /dev/null
+
 # Run pytest with both display and logging
-# First run for display
+# First run for display (with colors)
 poetry run pytest "${PYTEST_ARGS[@]}" &
 DISPLAY_PID=$!
 
-# Second run for logging
-poetry run pytest "${PYTEST_ARGS[@]}" > "$CURRENT_LOG_FILE" 2>&1
+# Second run for logging (without colors)
+poetry run pytest "${PYTEST_ARGS[@]}" > "../$CURRENT_LOG_FILE" 2>&1
 LOG_STATUS=$?
 
-# Wait for display run to finish
-wait $DISPLAY_PID
+# Wait for display run to finish with timeout
+wait $DISPLAY_PID 2>/dev/null
 DISPLAY_STATUS=$?
+
+popd > /dev/null
+
+# Calculate duration
+start_time=$(date +%s)
+end_time=$(date +%s)
+duration=$((end_time - start_time))
 
 # Exit with the status from the display run
 if [ $DISPLAY_STATUS -eq 0 ]; then
     print_success "Tests completed successfully"
+    print_status "📄 Test log saved to: $CURRENT_LOG_FILE"
+    print_status "📄 AI report saved to: $AI_OUTPUT_DIR/"
+    generate_ai_test_report "success" "$duration"
     exit 0
 else
     print_error "Tests failed - check $CURRENT_LOG_FILE for details"
+    print_status "📄 Test log saved to: $CURRENT_LOG_FILE"
+    print_status "📄 AI report saved to: $AI_OUTPUT_DIR/"
+    generate_ai_test_report "failed" "$duration"
     exit 1
 fi

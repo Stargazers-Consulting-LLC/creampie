@@ -1,0 +1,151 @@
+{
+  "ai_documentation_config": {
+    "version": "3.0",
+    "last_updated": "2025-06-18",
+    "description": "AI-optimized JSON documentation configuration for the CreamPie project",
+    "documentation_format": "json",
+    "optimization_target": "ai_tool_consumption",
+    "maintenance_scripts": [
+      "scripts/health_check.py",
+      "scripts/update_documentation.py",
+      "scripts/test_paths.py",
+      "scripts/convert_to_json.py"
+    ]
+  },
+  "documentation_structure": {
+    "format": "json",
+    "optimization": "ai_tool_consumption",
+    "core_documents": [
+      "README.json",
+      "ai_quick_reference.json",
+      "search_index.json",
+      "ai_usage_guide.json"
+    ],
+    "guide_docs": {
+      "core": [
+        "Core Principles.json",
+        "Feature Template.json",
+        "Code Review Patterns.json",
+        "AI Tool Optimization Guide.json"
+      ],
+      "language_specific": [
+        "Language-Specific/Python Style Guide.json",
+        "Language-Specific/FastAPI Development Guide.json",
+        "Language-Specific/Python Testing Guide.json"
+      ],
+      "domain_specific": [
+        "Domain-Specific/Database Management Guide.json",
+        "Domain-Specific/Frontend Style Guide.json",
+        "Domain-Specific/Shell Style Guide.json",
+        "Domain-Specific/Web Scraping Patterns.json"
+      ]
+    },
+    "project_context": [
+      "Architecture Overview.json",
+      "Common Patterns.json",
+      "Development Workflow.json"
+    ],
+    "features": {
+      "plans": "features/plans/",
+      "summaries": "features/summaries/"
+    },
+    "outputs": {
+      "health_check": "outputs/health_check/",
+      "updates": "outputs/updates/",
+      "test_results": "outputs/test_results/",
+      "conversion_reports": "outputs/"
+    }
+  },
+  "ai_tool_settings": {
+    "json_optimization": {
+      "structured_data": true,
+      "direct_access": true,
+      "no_parsing_required": true,
+      "consistent_format": true
+    },
+    "search_optimization": {
+      "keywords_enabled": true,
+      "semantic_tags": true,
+      "cross_references": true,
+      "metadata_extraction": true
+    },
+    "code_generation": {
+      "file_paths": true,
+      "implementation_hints": true,
+      "pattern_examples": true,
+      "validation_rules": true
+    },
+    "context_awareness": {
+      "dependency_mapping": true,
+      "priority_systems": true,
+      "decision_frameworks": true,
+      "error_handling": true
+    }
+  },
+  "priority_system": {
+    "high_priority": [
+      "Core Principles.json",
+      "Python Style Guide.json",
+      "Architecture Overview.json"
+    ],
+    "medium_priority": [
+      "Feature Template.json",
+      "Development Workflow.json",
+      "Database Management Guide.json"
+    ],
+    "low_priority": [
+      "AI Tool Optimization Guide.json",
+      "Web Scraping Patterns.json"
+    ]
+  },
+  "decision_frameworks": {
+    "architecture_decisions": "Core Principles.json",
+    "coding_standards": "Python Style Guide.json",
+    "testing_approaches": "Python Testing Guide.json",
+    "api_design": "FastAPI Development Guide.json"
+  },
+  "documentation": {
+    "template_version": "3.0",
+    "format": "json",
+    "ai_metadata_required": true,
+    "cross_references_required": true,
+    "validation_rules_required": true,
+    "structured_content": true
+  },
+  "patterns": {
+    "error_handling": "consistent across all guides",
+    "code_organization": "modular and maintainable",
+    "testing": "comprehensive coverage",
+    "documentation": "JSON-optimized for AI consumption"
+  },
+  "templates": {
+    "feature_documentation": "Feature Template.json",
+    "code_review": "Code Review Patterns.json",
+    "ai_metadata": "standardized JSON format across all documents"
+  },
+  "scripts": {
+    "health_check": {
+      "purpose": "validate documentation quality and completeness",
+      "output": "outputs/health_check/healthcheck-result.md"
+    },
+    "update_documentation": {
+      "purpose": "maintain consistency and update metadata",
+      "output": "outputs/updates/update-results.md"
+    },
+    "test_paths": {
+      "purpose": "verify system structure and path resolution",
+      "output": "outputs/test_results/path-test-results.md"
+    },
+    "convert_to_json": {
+      "purpose": "convert markdown documentation to JSON format for AI consumption",
+      "output": "outputs/conversion_report.json"
+    }
+  },
+  "conversion": {
+    "source_format": "markdown",
+    "target_format": "json",
+    "optimization": "ai_tool_consumption",
+    "preserve_original": true,
+    "structured_output": true
+  }
+}

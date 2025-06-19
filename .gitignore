@@ -79,3 +79,6 @@ next-env.d.ts
 .cache/
 temp/
 tmp/
+
+# AI Output Reports
+ai/outputs/
