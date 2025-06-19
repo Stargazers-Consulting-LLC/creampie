@@ -17,17 +17,10 @@ DB_NAME="cream"
 APP_USER="creamapp"
 
 # Check if run as root
-if [[ $EUID -ne 0 ]]; then
-    print_error "❌ This script must be run as root (use sudo)."
-    exit 1
-fi
+check_root_privileges
 
 # Function to show usage
-show_usage() {
-    cat << EOF
-Usage: $0 <table>
-
-Grants SELECT, INSERT, UPDATE, and DELETE permissions on the specified table to the default PostgreSQL user.
+show_usage "$0" "Grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user." "$0 <table>
 
 Defaults:
   Database: $DB_NAME
@@ -37,9 +30,7 @@ Arguments:
   <table>      The table name (optionally schema-qualified, e.g., public.tracked_stock)
 
 Example:
-  sudo $0 public.tracked_stock
-EOF
-}
+  sudo $0 public.tracked_stock"
 
 # Validate arguments
 if [ $# -ne 1 ]; then

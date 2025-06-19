@@ -79,6 +79,7 @@ next-env.d.ts
 .cache/
 temp/
 tmp/
+downloaded_files/
 
 # AI Output Reports
 ai/outputs/
