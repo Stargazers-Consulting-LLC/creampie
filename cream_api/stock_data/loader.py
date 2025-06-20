@@ -1,16 +1,14 @@
 """Stock data loading functionality."""
 
 import logging
-import os
-import shutil
 from typing import Any
 
 import pandas as pd
+import psycopg.errors
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 from cream_api.stock_data.models import StockData
-from cream_api.stock_data.parser import StockDataParser
 
 logger = logging.getLogger(__name__)
 
@@ -99,11 +97,24 @@ class StockDataLoader:
         Args:
             stock_data_list: List of StockData objects to store
             symbol: Stock symbol
+
+        Raises:
+            psycopg.errors.InsufficientPrivilege: If database user lacks sequence permissions
+            Exception: For other database errors
         """
-        for stock_data in stock_data_list:
-            stock_data.symbol = symbol
-            self.session.add(stock_data)
-        await self.session.commit()
+        try:
+            for stock_data in stock_data_list:
+                stock_data.symbol = symbol
+                self.session.add(stock_data)
+            await self.session.commit()
+        except psycopg.errors.InsufficientPrivilege as e:
+            logger.error(f"Database permission error for symbol {symbol}: {e}")
+            logger.error("User lacks permission to access sequence stock_data_id_seq")
+            logger.error("Please grant USAGE privilege on the sequence or ensure proper database permissions")
+            raise
+        except Exception as e:
+            logger.error(f"Database error storing data for symbol {symbol}: {e}")
+            raise
 
     async def process_data(
         self,
@@ -118,28 +129,3 @@ class StockDataLoader:
         """
         stock_data_list = await self.transform_data(data)
         await self.store_data(symbol, stock_data_list)
-
-    async def process_raw_files(self) -> None:
-        """Process all HTML files in the raw responses directory."""
-        parser = StockDataParser(config=self.config)
-
-        for filename in os.listdir(self.config.raw_responses_dir):
-            if filename.endswith(".html"):
-                file_path = os.path.join(self.config.raw_responses_dir, filename)
-                try:
-                    symbol = filename.split("_")[0]
-                    data = parser.parse_html_file(file_path)
-                    await self.process_data(symbol, data)
-                    parsed_path = os.path.join(self.config.parsed_responses_dir, filename)
-                    shutil.move(file_path, parsed_path)
-
-                except Exception as e:
-                    logger.error(f"Error processing file {file_path}: {e!s}")
-                    # Move file to deadletter directory on failure
-                    deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
-                    try:
-                        shutil.move(file_path, deadletter_path)
-                        logger.info(f"Moved failed file to deadletter: {deadletter_path}")
-                    except Exception as move_error:
-                        logger.error(f"Failed to move file to deadletter: {move_error!s}")
-                    continue

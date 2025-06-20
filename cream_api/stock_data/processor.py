@@ -4,6 +4,8 @@ import logging
 import os
 import shutil
 
+import psycopg.errors
+
 from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.parser import StockDataParser
@@ -32,6 +34,12 @@ class FileProcessor:
     async def process_raw_files(self) -> None:
         """Process all HTML files in the raw responses directory.
 
+        This method orchestrates the complete file processing workflow:
+        1. Validates directory contents
+        2. Processes each HTML file
+        3. Moves successful files to parsed directory
+        4. Moves failed files to deadletter directory
+
         Raises:
             RuntimeError: If non-HTML files are found in raw_responses directory
         """
@@ -54,39 +62,43 @@ class FileProcessor:
         for filename in html_files:
             file_path = os.path.join(self.config.raw_responses_dir, filename)
             try:
-                await self._process_single_file(file_path)
+                # Extract symbol from filename
+                symbol = filename.split("_")[0]
+
+                # Parse HTML file
+                data = self.parser.parse_html_file(file_path)
+
+                # Process and store data
+                await self.loader.process_data(symbol, data)
+
+                # Move successful file to parsed directory
+                parsed_path = os.path.join(self.config.parsed_responses_dir, filename)
+                shutil.move(file_path, parsed_path)
+                logger.info(f"Successfully processed and moved file: {filename}")
+
+            except psycopg.errors.InsufficientPrivilege as e:
+                logger.error(f"Database permission error processing file {file_path}: {e}")
+                logger.error("User lacks permission to access sequence stock_data_id_seq")
+                logger.error("Please grant USAGE privilege on the sequence or ensure proper database permissions")
+                # Move failed file to deadletter directory
+                deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
+                try:
+                    shutil.move(file_path, deadletter_path)
+                    logger.info(f"Moved failed file to deadletter: {deadletter_path}")
+                except Exception as move_error:
+                    logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
             except Exception as e:
                 logger.error(f"Error processing file {file_path}: {e!s}")
-                if "Missing required fields" in str(e) or "Failed to parse HTML" in str(e):
-                    await self.remove_invalid_file(file_path)
-                else:
-                    try:
-                        dest_path = os.path.join(self.config.parsed_responses_dir, filename)
-                        shutil.move(file_path, dest_path)
-                    except Exception as move_error:
-                        logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
-                continue
+                # Move failed file to deadletter directory
+                deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
+                try:
+                    shutil.move(file_path, deadletter_path)
+                    logger.info(f"Moved failed file to deadletter: {deadletter_path}")
+                except Exception as move_error:
+                    logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
 
-    async def _process_single_file(self, file_path: str) -> None:
-        """Process a single HTML file.
-
-        Args:
-            file_path: Path to the HTML file to process
-
-        Raises:
-            Exception: If file processing fails
-        """
-        filename = os.path.basename(file_path)
-        symbol = filename.split("_")[0]
-
-        data = self.parser.parse_html_file(file_path)
-        await self.loader.process_data(symbol, data)
-
-        dest_path = os.path.join(self.config.parsed_responses_dir, filename)
-        shutil.move(file_path, dest_path)
-
-    async def process_file_with_error_handling(self, file_path: str) -> bool:
-        """Process a single file with error handling.
+    async def process_single_file(self, file_path: str) -> bool:
+        """Process a single HTML file with error handling.
 
         Args:
             file_path: Path to the HTML file to process
@@ -95,26 +107,56 @@ class FileProcessor:
             True if processing was successful, False otherwise
         """
         try:
-            await self._process_single_file(file_path)
+            filename = os.path.basename(file_path)
+            symbol = filename.split("_")[0]
+
+            # Parse HTML file
+            data = self.parser.parse_html_file(file_path)
+
+            # Process and store data
+            await self.loader.process_data(symbol, data)
+
+            # Move successful file to parsed directory
+            parsed_path = os.path.join(self.config.parsed_responses_dir, filename)
+            shutil.move(file_path, parsed_path)
+            logger.info(f"Successfully processed and moved file: {filename}")
             return True
+
+        except psycopg.errors.InsufficientPrivilege as e:
+            logger.error(f"Database permission error processing file {file_path}: {e}")
+            logger.error("User lacks permission to access sequence stock_data_id_seq")
+            logger.error("Please grant USAGE privilege on the sequence or ensure proper database permissions")
+            # Move failed file to deadletter directory
+            filename = os.path.basename(file_path)
+            deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
+            try:
+                shutil.move(file_path, deadletter_path)
+                logger.info(f"Moved failed file to deadletter: {deadletter_path}")
+            except Exception as move_error:
+                logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
+            return False
         except Exception as e:
             logger.error(f"Error processing file {file_path}: {e!s}")
+            # Move failed file to deadletter directory
+            filename = os.path.basename(file_path)
+            deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
             try:
-                filename = os.path.basename(file_path)
-                dest_path = os.path.join(self.config.parsed_responses_dir, filename)
-                shutil.move(file_path, dest_path)
+                shutil.move(file_path, deadletter_path)
+                logger.info(f"Moved failed file to deadletter: {deadletter_path}")
             except Exception as move_error:
                 logger.error(f"Failed to move failed file {file_path}: {move_error!s}")
             return False
 
-    async def remove_invalid_file(self, file_path: str) -> None:
-        """Remove an invalid file from the raw responses directory.
+    async def move_to_deadletter(self, file_path: str) -> None:
+        """Move a file to the deadletter directory.
 
         Args:
-            file_path: Path to the invalid file to remove
+            file_path: Path to the file to move
         """
         try:
-            os.remove(file_path)
-            logger.info(f"Removed invalid file: {file_path}")
+            filename = os.path.basename(file_path)
+            deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
+            shutil.move(file_path, deadletter_path)
+            logger.info(f"Moved file to deadletter: {deadletter_path}")
         except Exception as e:
-            logger.error(f"Failed to remove invalid file {file_path}: {e!s}")
+            logger.error(f"Failed to move file {file_path}: {e!s}")

@@ -164,24 +164,25 @@ async def test_process_raw_files(
     test_config: StockDataConfig,
     test_data_files: dict[str, str],
 ) -> None:
-    """Test processing raw HTML files.
+    """Test processing raw HTML files using FileProcessor.
 
     This test verifies that:
-    1. Raw HTML files are properly processed
+    1. FileProcessor correctly orchestrates the file processing workflow
     2. Data is correctly extracted and stored
-    3. Files are moved to the parsed directory
+    3. Files are moved to the appropriate directories
     4. Only test data files are processed
     """
+    from cream_api.stock_data.processor import FileProcessor
+
     # Verify test files exist
     assert test_data_files.get(TEST_SYMBOL) is not None
     assert os.path.exists(test_data_files[TEST_SYMBOL])
 
-    # Verify we're using test directories
-    assert loader.config.raw_responses_dir.startswith(test_config.raw_responses_dir)
-    assert loader.config.parsed_responses_dir.startswith(test_config.parsed_responses_dir)
+    # Create processor with test loader
+    processor = FileProcessor(loader=loader, config=test_config)
 
-    # Process files using the loader's method
-    await loader.process_raw_files()
+    # Process files using the processor's method
+    await processor.process_raw_files()
 
     # Verify files were moved to parsed directory
     parsed_dir = test_config.parsed_responses_dir
@@ -204,7 +205,7 @@ async def test_process_raw_files_error_handling(
     test_config: StockDataConfig,
     test_data_files: dict[str, str],
 ) -> None:
-    """Test error handling when processing raw files.
+    """Test error handling when processing raw files using FileProcessor.
 
     This test verifies that:
     1. Invalid files are moved to the deadletter directory
@@ -212,13 +213,18 @@ async def test_process_raw_files_error_handling(
     3. Valid files are still processed
     4. Only test data files are processed
     """
+    from cream_api.stock_data.processor import FileProcessor
+
     # Create an invalid file
     invalid_file_path = os.path.join(test_config.raw_responses_dir, "INVALID.html")
     with open(invalid_file_path, "w") as f:
         f.write("invalid content")
 
-    # Process files using the loader's method
-    await loader.process_raw_files()
+    # Create processor with test loader
+    processor = FileProcessor(loader=loader, config=test_config)
+
+    # Process files using the processor's method
+    await processor.process_raw_files()
 
     # Verify invalid file was moved to deadletter directory
     deadletter_file_path = os.path.join(test_config.deadletter_responses_dir, "INVALID.html")

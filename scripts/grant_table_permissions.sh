@@ -1,59 +1,116 @@
 #!/bin/bash
 
-# Exit on error
-set -e
+# =============================================================================
+# Script: grant_table_permissions.sh
+# Description: Grant necessary database permissions for the CreamPie application
+# Usage: sudo ./scripts/grant_table_permissions.sh
+# Author: CreamPie Development Team
+# Version: 2.0
+# Dependencies: PostgreSQL, psql, sudo access
+# Exit Codes: 0=Success, 1=Error
+# Environment Variables: DB_NAME, DB_USER, DB_HOST, DB_PORT
+# =============================================================================
 
 # Source common functions
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$SCRIPT_DIR/common.sh"
 
-# Header: Grant table permissions script
-# This script grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user.
-# Usage: sudo ./grant_table_permissions.sh <table>
-# Example: sudo ./grant_table_permissions.sh public.tracked_stock
+# Strict mode for error handling
+set -euo pipefail
 
-# Database and user constants
-DB_NAME="cream"
-APP_USER="creamapp"
+# Configuration
+DB_NAME=${DB_NAME:-"cream"}
+DB_USER=${DB_USER:-"creamapp"}
+DB_HOST=${DB_HOST:-"localhost"}
+DB_PORT=${DB_PORT:-"5432"}
 
-# Function to get usage text
-get_usage_text() {
-    cat << 'EOF'
-$0 <table>
+# Functions
+# =============================================================================
 
-Defaults:
-  Database: cream
-  User:     creamapp
+validate_environment() {
+    print_status "🔍 Validating environment..."
 
-Arguments:
-  <table>      The table name (optionally schema-qualified, e.g., public.tracked_stock)
+    # Check if psql is available
+    if ! command -v psql &> /dev/null; then
+        handle_error "psql command not found. Please install PostgreSQL client."
+    fi
 
-Example:
-  sudo $0 public.tracked_stock
-EOF
+    # Check if postgres user exists
+    if ! id "postgres" &> /dev/null; then
+        handle_error "postgres user not found. Please ensure PostgreSQL is properly installed."
+    fi
+
+    print_success "✅ Environment validation passed"
 }
 
-# Check if run as root
+grant_all_permissions() {
+    print_status "📋 Granting all permissions in a single database session..."
+
+    if ! sudo -u postgres psql -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" << 'EOF'
+-- Grant permissions on all application tables
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE stock_data TO creamapp;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE tracked_stock TO creamapp;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE app_users TO creamapp;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE sessions TO creamapp;
+
+-- Grant permissions on specific sequences
+GRANT USAGE ON SEQUENCE stock_data_id_seq TO creamapp;
+
+-- Grant permissions on all other sequences
+DO $$
+DECLARE
+    seq_record RECORD;
+BEGIN
+    FOR seq_record IN
+        SELECT sequence_name
+        FROM information_schema.sequences
+        WHERE sequence_schema = 'public'
+    LOOP
+        EXECUTE 'GRANT USAGE ON SEQUENCE ' || seq_record.sequence_name || ' TO creamapp';
+    END LOOP;
+END $$;
+
+-- Show granted permissions for verification
+\echo 'Permissions granted successfully!'
+\echo 'Tables with full permissions: stock_data, tracked_stock, app_users, sessions'
+\echo 'Sequences with USAGE permission: all public sequences'
+EOF
+    then
+        handle_error "Failed to grant database permissions"
+    fi
+}
+
+# Main Script
+# =============================================================================
+
+main() {
+    print_status "🚀 Starting database permission grant process..."
+    print_status "Database: $DB_NAME"
+    print_status "User: $DB_USER"
+    print_status "Host: $DB_HOST:$DB_PORT"
+    echo ""
+
+    # Validate environment
+    validate_environment
+
+    # Grant all permissions in a single database session
+    grant_all_permissions
+
+    echo ""
+    print_success "✅ Permissions granted successfully!"
+    print_success "The CreamPie application should now work without permission errors."
+    echo ""
+    print_status "📊 Granted permissions:"
+    print_status "  - SELECT, INSERT, UPDATE, DELETE on all tables"
+    print_status "  - USAGE on all sequences"
+    print_status "  - Tables: stock_data, tracked_stock, app_users, sessions"
+}
+
+# Validation
+# =============================================================================
+
+# Check if running as root
 check_root_privileges
 
-# Validate arguments
-if [ $# -eq 0 ]; then
-    print_error "❌ No arguments provided."
-    show_usage "$0" "Grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user." "$(get_usage_text)"
-    exit 1
-fi
-
-if [ $# -ne 1 ]; then
-    print_error "❌ Invalid number of arguments."
-    show_usage "$0" "Grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user." "$(get_usage_text)"
-    exit 1
-fi
-
-TABLE_NAME="$1"
-
-print_status "🔄 Granting permissions on table '$TABLE_NAME' in database '$DB_NAME' to user '$APP_USER'..."
-
-# Grant permissions using psql as the postgres user
-run_command "sudo -u postgres psql -d \"$DB_NAME\" -c \"GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE $TABLE_NAME TO $APP_USER;\""
-
-print_success "✅ Permissions granted to user '$APP_USER' on table '$TABLE_NAME' in database '$DB_NAME'."
+# Run main function
+main

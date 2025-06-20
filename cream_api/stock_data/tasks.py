@@ -6,6 +6,7 @@ import os
 import shutil
 from datetime import datetime
 
+import psycopg.errors
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from stargazer_utils.logging import get_logger_for
@@ -39,7 +40,6 @@ async def retrieve_historical_data_task(symbol: str, end_date: str | None = None
 
 async def process_raw_files_task() -> None:
     """Process raw HTML files and load data into database."""
-
     if not os.path.exists(config.raw_responses_dir):
         logger.info("Raw responses directory does not exist, skipping file processing")
         return
@@ -50,9 +50,39 @@ async def process_raw_files_task() -> None:
             processor = FileProcessor(loader=loader, config=config)
             await processor.process_raw_files()
             logger.info("Successfully completed file processing task")
+    except psycopg.errors.InsufficientPrivilege as e:
+        logger.error(f"Database permission error during file processing task: {e}")
+        logger.error("User lacks permission to access sequence stock_data_id_seq")
+        logger.error("Please grant USAGE privilege on the sequence or ensure proper database permissions")
+        raise
     except Exception as e:
         logger.error("Error during file processing task: %s", str(e))
         raise
+
+
+async def retry_deadletter_files_task() -> None:
+    """Move all files from the deadletter directory back to the raw directory every 24 hours."""
+    while True:
+        logger.info("retry_deadletter_files_task() heartbeat.")
+        try:
+            deadletter_dir = config.deadletter_responses_dir
+            raw_dir = config.raw_responses_dir
+            for filename in os.listdir(deadletter_dir):
+                src_path = os.path.join(deadletter_dir, filename)
+                dest_path = os.path.join(raw_dir, filename)
+                try:
+                    if os.path.exists(dest_path):
+                        logger.warning(f"File already exists in raw directory, skipping: {dest_path}")
+                    else:
+                        logger.info(f"Moving {src_path} back to raw directory.")
+                        shutil.move(src_path, dest_path)
+                except Exception as move_error:
+                    logger.critical(f"Failed to move {src_path} to raw: {move_error!s}")
+        except Exception as e:
+            logger.error(f"Error during deadletter retry: {e!s}")
+
+        logger.debug("Sleeping for %d seconds", DEADLETTER_RETRY_INTERVAL_SECONDS)
+        await asyncio.sleep(DEADLETTER_RETRY_INTERVAL_SECONDS)
 
 
 async def update_all_tracked_stocks(db: AsyncSession) -> None:
@@ -93,16 +123,12 @@ async def run_periodic_updates() -> None:
             logger.error("Error updating tracked stocks: %s", str(e))
             return
         else:
+            logger.debug("Sleeping for %d seconds", RETRIEVAL_INTERVAL_SECONDS)
             await asyncio.sleep(RETRIEVAL_INTERVAL_SECONDS)
 
 
 async def run_periodic_file_processing() -> None:
-    """Run periodic processing of raw HTML files every 10 minutes.
-
-    Note: If non-HTML files are found in the raw_responses directory,
-    this is treated as a critical application logic failure and logged
-    as such, but the periodic task continues running.
-    """
+    """Run periodic processing of raw HTML files every 10 minutes."""
     while True:
         logger.info("run_periodic_file_processing() heartbeat.")
         try:
@@ -110,33 +136,8 @@ async def run_periodic_file_processing() -> None:
             logger.info("Successfully completed file processing cycle")
         except RuntimeError as e:
             logger.critical("Critical application logic failure in file processing: %s", str(e))
-            logger.critical("Task stopping!")
-            return
         except Exception as e:
             logger.error("Error during periodic file processing: %s", str(e))
-
-        await asyncio.sleep(PROCESSING_INTERVAL_SECONDS)
-
-
-async def retry_deadletter_files_task() -> None:
-    """Move all files from the deadletter directory back to the raw directory every 24 hours."""
-    while True:
-        logger.info("retry_deadletter_files_task() heartbeat.")
-        try:
-            deadletter_dir = config.deadletter_responses_dir
-            raw_dir = config.raw_responses_dir
-            for filename in os.listdir(deadletter_dir):
-                src_path = os.path.join(deadletter_dir, filename)
-                dest_path = os.path.join(raw_dir, filename)
-                try:
-                    if os.path.exists(dest_path):
-                        logger.warning(f"File already exists in raw directory, skipping: {dest_path}")
-                    else:
-                        logger.info(f"Moving {src_path} back to raw directory.")
-                        shutil.move(src_path, dest_path)
-                except Exception as move_error:
-                    logger.critical(f"Failed to move {src_path} to raw: {move_error!s}")
-        except Exception as e:
-            logger.error(f"Error during deadletter retry: {e!s}")
-
-        await asyncio.sleep(DEADLETTER_RETRY_INTERVAL_SECONDS)
+        else:
+            logger.debug("Sleeping for %d seconds", PROCESSING_INTERVAL_SECONDS)
+            await asyncio.sleep(PROCESSING_INTERVAL_SECONDS)

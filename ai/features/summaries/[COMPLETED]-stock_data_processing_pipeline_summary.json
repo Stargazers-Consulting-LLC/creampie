@@ -1,9 +1,9 @@
 {
   "metadata": {
     "title": "Stock Data Processing Pipeline Summary",
-    "description": "",
-    "version": "2.1",
-    "last_updated": "2025-06-18",
+    "description": "Completed stock data processing pipeline with clear separation of concerns and deadletter queue system",
+    "version": "2.2",
+    "last_updated": "2025-06-20",
     "source": "features/summaries/completed_stock_data_processing_pipeline_summary.md",
     "cross_references": [
       "../project_context/architecture_overview.json",
@@ -31,8 +31,8 @@
     },
     "architecture": {
       "title": "Architecture",
-      "description": "",
-      "content": ""
+      "description": "**Clear Separation of Concerns Architecture**\n\nThe stock data module follows a clean architecture with well-defined component responsibilities:\n\n**Component Responsibilities:**\n- **StockDataLoader**: Data validation, transformation, and database storage ONLY\n- **FileProcessor**: File orchestration and workflow management ONLY\n- **StockDataParser**: HTML parsing and data extraction ONLY\n- **StockDataRetriever**: HTTP requests and file saving ONLY\n- **Background Tasks**: Task scheduling and coordination ONLY\n\n**Benefits:**\n- Single responsibility principle\n- No overlapping functionality\n- Clear dependencies and data flow\n- Easier testing and maintenance\n- Reduced coupling between components",
+      "content": "**Clear Separation of Concerns Architecture**\n\nThe stock data module follows a clean architecture with well-defined component responsibilities:\n\n**Component Responsibilities:**\n- **StockDataLoader**: Data validation, transformation, and database storage ONLY\n- **FileProcessor**: File orchestration and workflow management ONLY\n- **StockDataParser**: HTML parsing and data extraction ONLY\n- **StockDataRetriever**: HTTP requests and file saving ONLY\n- **Background Tasks**: Task scheduling and coordination ONLY\n\n**Benefits:**\n- Single responsibility principle\n- No overlapping functionality\n- Clear dependencies and data flow\n- Easier testing and maintenance\n- Reduced coupling between components"
     },
     "core_components": {
       "title": "Core Components",
@@ -61,18 +61,18 @@
     },
     "5_data_loading_cream_apistock_dataloaderpy": {
       "title": "5. **Data Loading (`cream_api/stock_data/loader.py`)**",
-      "description": "- **StockDataLoader**: Database operations and data transformation\n- **Key Features**:\n  - Async dat...",
-      "content": "- **StockDataLoader**: Database operations and data transformation\n- **Key Features**:\n  - Async database session management\n  - Data validation before storage\n  - Volume data cleaning and normalization\n  - Batch processing capabilities\n  - Error handling for invalid data\n\nThis will become the actual SQLAlchemy async session management with data transformation logic.\n\nDatabase operations must be efficient, data validation must prevent invalid data, error handling must be comprehensive."
+      "description": "- **StockDataLoader**: Data validation, transformation, and database storage ONLY\n- **Key Features**:\n  - Data validation and structure verification\n  - Raw data transformation into StockData objects\n  - Database storage operations\n  - Volume data cleaning and normalization\n  - No file processing responsibilities\n\nThis component focuses solely on data processing operations, with no file management responsibilities.",
+      "content": "- **StockDataLoader**: Data validation, transformation, and database storage ONLY\n- **Key Features**:\n  - Data validation and structure verification\n  - Raw data transformation into StockData objects\n  - Database storage operations\n  - Volume data cleaning and normalization\n  - No file processing responsibilities\n\nThis component focuses solely on data processing operations, with no file management responsibilities."
     },
     "6_file_processing_cream_apistock_dataprocessorpy": {
       "title": "6. **File Processing (`cream_api/stock_data/processor.py`)**",
-      "description": "- **FileProcessor**: Orchestrates the complete data pipeline\n- **Key Features**:\n  - Coordinates par...",
-      "content": "- **FileProcessor**: Orchestrates the complete data pipeline\n- **Key Features**:\n  - Coordinates parsing and loading operations\n  - File movement between raw and parsed directories\n  - Invalid file handling and cleanup\n  - Error recovery mechanisms\n\nThis will become the actual pipeline orchestration code with file management and error recovery.\n\nPipeline must be reliable, file management must be atomic, error recovery must be comprehensive."
+      "description": "- **FileProcessor**: File orchestration and management ONLY\n- **Key Features**:\n  - Orchestrates the complete file processing workflow\n  - File movement between raw, parsed, and deadletter directories\n  - Directory validation and error handling\n  - Coordinates parsing and loading operations\n  - Deadletter queue management for failed files\n\nThis component is the single source of truth for all file operations and workflow orchestration.",
+      "content": "- **FileProcessor**: File orchestration and management ONLY\n- **Key Features**:\n  - Orchestrates the complete file processing workflow\n  - File movement between raw, parsed, and deadletter directories\n  - Directory validation and error handling\n  - Coordinates parsing and loading operations\n  - Deadletter queue management for failed files\n\nThis component is the single source of truth for all file operations and workflow orchestration."
     },
     "7_background_tasks_cream_apistock_datataskspy": {
       "title": "7. **Background Tasks (`cream_api/stock_data/tasks.py`)**",
-      "description": "- **Async task management for automated operations**\n- **Key Features**:\n  - Periodic stock data upd...",
-      "content": "- **Async task management for automated operations**\n- **Key Features**:\n  - Periodic stock data updates\n  - Batch processing of tracked stocks\n  - Status tracking and error reporting\n  - Configurable update intervals\n\nThis will become the actual Celery task definitions with scheduling and error handling.\n\nTasks must be reliable, scheduling must be configurable, error reporting must be comprehensive."
+      "description": "- **Background task scheduling and orchestration ONLY**\n- **Key Features**:\n  - Periodic stock data updates (every 5 minutes)\n  - File processing task scheduling (every 10 minutes)\n  - Deadletter retry task (every 24 hours)\n  - Task coordination and error handling\n  - No direct file processing logic\n\nThis component focuses solely on task scheduling and coordination, delegating actual processing to other components.",
+      "content": "- **Background task scheduling and orchestration ONLY**\n- **Key Features**:\n  - Periodic stock data updates (every 5 minutes)\n  - File processing task scheduling (every 10 minutes)\n  - Deadletter retry task (every 24 hours)\n  - Task coordination and error handling\n  - No direct file processing logic\n\nThis component focuses solely on task scheduling and coordination, delegating actual processing to other components."
     },
     "8_api_endpoints_cream_apistock_dataapipy": {
       "title": "8. **API Endpoints (`cream_api/stock_data/api.py`)**",
@@ -96,8 +96,13 @@
     },
     "3_data_processing_workflow": {
       "title": "3. **Data Processing Workflow**",
-      "description": "```\nRaw HTML File → Parser → Validated Data → Loader → Database Storage → File Cleanup\n```\n\nThis wor...",
-      "content": "```\nRaw HTML File → Parser → Validated Data → Loader → Database Storage → File Cleanup\n```\n\nThis workflow will inform the pipeline orchestration and data transformation logic."
+      "description": "```\nRaw HTML File → FileProcessor → StockDataParser → StockDataLoader → Database Storage → File Cleanup\n```\n\nThis workflow shows the clear separation of concerns:\n- FileProcessor orchestrates the workflow\n- StockDataParser handles HTML parsing\n- StockDataLoader handles data validation and storage\n- FileProcessor manages file movement to parsed/deadletter directories",
+      "content": "```\nRaw HTML File → FileProcessor → StockDataParser → StockDataLoader → Database Storage → File Cleanup\n```\n\nThis workflow shows the clear separation of concerns:\n- FileProcessor orchestrates the workflow\n- StockDataParser handles HTML parsing\n- StockDataLoader handles data validation and storage\n- FileProcessor manages file movement to parsed/deadletter directories"
+    },
+    "4_deadletter_workflow": {
+      "title": "4. **Deadletter Queue Workflow**",
+      "description": "```\nFailed File → Deadletter Directory → 24h Retry Task → Raw Directory → Reprocessing\n```\n\nThis workflow ensures failed files are not lost:\n- Failed files are moved to deadletter directory\n- Background task retries failed files every 24 hours\n- Files are moved back to raw directory for reprocessing\n- Provides resilience against temporary parsing issues",
+      "content": "```\nFailed File → Deadletter Directory → 24h Retry Task → Raw Directory → Reprocessing\n```\n\nThis workflow ensures failed files are not lost:\n- Failed files are moved to deadletter directory\n- Background task retries failed files every 24 hours\n- Files are moved back to raw directory for reprocessing\n- Provides resilience against temporary parsing issues"
     },
     "key_features": {
       "title": "Key Features",
@@ -136,8 +141,8 @@
     },
     "file_management": {
       "title": "**File Management**",
-      "description": "- Raw responses directory: `cream_api/stock_data/files/raw_responses/`\n- Parsed responses directory: `cream_api/stock_data/files/parsed_responses/`\n- Automatic directory creation\n\nThese will become actual directory management and file handling code.",
-      "content": "- Raw responses directory: `cream_api/stock_data/files/raw_responses/`\n- Parsed responses directory: `cream_api/stock_data/files/parsed_responses/`\n- Automatic directory creation\n\nThese will become actual directory management and file handling code."
+      "description": "- Raw responses directory: `cream_api/stock_data/files/raw_responses/`\n- Parsed responses directory: `cream_api/stock_data/files/parsed_responses/`\n- Deadletter responses directory: `cream_api/stock_data/files/deadletter_responses/`\n- Automatic directory creation\n- Deadletter queue for failed file retry\n\nThese will become actual directory management and file handling code.",
+      "content": "- Raw responses directory: `cream_api/stock_data/files/raw_responses/`\n- Parsed responses directory: `cream_api/stock_data/files/parsed_responses/`\n- Deadletter responses directory: `cream_api/stock_data/files/deadletter_responses/`\n- Automatic directory creation\n- Deadletter queue for failed file retry\n\nThese will become actual directory management and file handling code."
     },
     "current_limitations": {
       "title": "Current Limitations",

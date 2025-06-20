@@ -1,9 +1,9 @@
 {
   "metadata": {
     "title": "architecture_overview",
-    "description": "",
-    "version": "2.1",
-    "last_updated": "2025-06-18",
+    "description": "System architecture with clear separation of concerns and deadletter queue system",
+    "version": "2.2",
+    "last_updated": "2025-06-20",
     "source": "project_context/architecture_overview.md",
     "cross_references": [
       "../guide_docs/core_principles.json",
@@ -61,8 +61,8 @@
     },
     "stock_data_pipeline": {
       "title": "Stock Data Pipeline",
-      "description": "```\nExternal Source → Retriever → Parser → Processor → Database\n     ↓              ↓         ↓     ...",
-      "content": "```\nExternal Source → Retriever → Parser → Processor → Database\n     ↓              ↓         ↓         ↓           ↓\n  HTML Files    Raw Data   Parsed    Processed   Stored\n                Storage    Data      Data        Data\n```\n\nThis data flow will inform all stock data processing implementation and error handling.\n\nAll stock data processing must follow this pipeline pattern with proper error handling at each stage."
+      "description": "```\nExternal Source → Retriever → Raw Files → FileProcessor → Parser → Loader → Database\n     ↓              ↓         ↓           ↓            ↓       ↓         ↓\n  HTML Files    HTTP Client  File Save   Orchestration HTML   Data     Stored\n                with Retry   to Raw      & Workflow    Parse  Storage  Data\n                                    ↓\n                              Deadletter Queue\n                              (Failed Files)\n```\n\nThis data flow shows the clear separation of concerns:\n- **Retriever**: HTTP requests and file saving only\n- **FileProcessor**: Workflow orchestration and file management only\n- **Parser**: HTML parsing only\n- **Loader**: Data validation and database storage only\n- **Deadletter Queue**: Failed file retry mechanism\n\nAll stock data processing must follow this pipeline pattern with proper error handling at each stage.",
+      "content": "```\nExternal Source → Retriever → Raw Files → FileProcessor → Parser → Loader → Database\n     ↓              ↓         ↓           ↓            ↓       ↓         ↓\n  HTML Files    HTTP Client  File Save   Orchestration HTML   Data     Stored\n                with Retry   to Raw      & Workflow    Parse  Storage  Data\n                                    ↓\n                              Deadletter Queue\n                              (Failed Files)\n```\n\nThis data flow shows the clear separation of concerns:\n- **Retriever**: HTTP requests and file saving only\n- **FileProcessor**: Workflow orchestration and file management only\n- **Parser**: HTML parsing only\n- **Loader**: Data validation and database storage only\n- **Deadletter Queue**: Failed file retry mechanism\n\nAll stock data processing must follow this pipeline pattern with proper error handling at each stage."
     },
     "user_authentication_flow": {
       "title": "User Authentication Flow",
@@ -76,8 +76,8 @@
     },
     "1_separation_of_concerns": {
       "title": "1. Separation of Concerns",
-      "description": "- **Data Retrieval**: `stock_data/retriever.py` - Handles external data fetching\n- **Data Parsing**:...",
-      "content": "- **Data Retrieval**: `stock_data/retriever.py` - Handles external data fetching\n- **Data Parsing**: `stock_data/parser.py` - Converts raw data to structured format\n- **Data Processing**: `stock_data/processor.py` - Business logic and data transformation\n- **Data Storage**: `stock_data/loader.py` - Database operations\n\nThis separation of concerns will inform all module design and responsibility assignment.\n\nAll modules must maintain clear separation of concerns and single responsibility principle."
+      "description": "- **Data Retrieval**: `stock_data/retriever.py` - HTTP requests and file saving only\n- **Data Parsing**: `stock_data/parser.py` - HTML parsing and data extraction only\n- **Data Processing**: `stock_data/loader.py` - Data validation, transformation, and database storage only\n- **File Orchestration**: `stock_data/processor.py` - Workflow management and file operations only\n- **Task Scheduling**: `stock_data/tasks.py` - Background task coordination only\n- **Deadletter Queue**: Failed file retry mechanism with 24-hour retry cycle\n\nThis separation of concerns ensures single responsibility principle and eliminates overlapping functionality.\n\nAll modules must maintain clear separation of concerns and single responsibility principle.",
+      "content": "- **Data Retrieval**: `stock_data/retriever.py` - HTTP requests and file saving only\n- **Data Parsing**: `stock_data/parser.py` - HTML parsing and data extraction only\n- **Data Processing**: `stock_data/loader.py` - Data validation, transformation, and database storage only\n- **File Orchestration**: `stock_data/processor.py` - Workflow management and file operations only\n- **Task Scheduling**: `stock_data/tasks.py` - Background task coordination only\n- **Deadletter Queue**: Failed file retry mechanism with 24-hour retry cycle\n\nThis separation of concerns ensures single responsibility principle and eliminates overlapping functionality.\n\nAll modules must maintain clear separation of concerns and single responsibility principle."
     },
     "2_configuration_management": {
       "title": "2. Configuration Management",

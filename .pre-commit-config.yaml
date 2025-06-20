@@ -50,6 +50,7 @@ repos:
           - aioresponses
           - pytest-asyncio
           - hypothesis
+          - psycopg
 
   - repo: git@github.com:pre-commit/mirrors-eslint.git
     rev: v9.29.0
@@ -88,5 +89,5 @@ repos:
         files: '\.(css|less|scss|ts|tsx|graphql|gql|json|js|jsx|md)$'
         pass_filenames: false
         fail_fast: false
-        stages: [pre-commit] 
+        stages: [pre-commit]
 

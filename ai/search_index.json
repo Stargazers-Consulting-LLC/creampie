@@ -1,9 +1,9 @@
 {
   "metadata": {
     "title": "AI Documentation Search Index",
-    "description": "",
-    "version": "2.1",
-    "last_updated": "2025-06-18",
+    "description": "Comprehensive search index including stock data processing patterns and deadletter queue system",
+    "version": "2.2",
+    "last_updated": "2025-06-20",
     "source": "search_index.md",
     "cross_references": []
   },
@@ -262,6 +262,11 @@
       "title": "📁 Folder Structure",
       "description": "```\nai/\n├── scripts/                    # Maintenance and validation scripts\n│   ├── ai_health_check.py...",
       "content": "```\nai/\n├── scripts/                    # Maintenance and validation scripts\n│   ├── ai_health_check.py        # Documentation health validation\n│   └── update_documentation.py # Metadata and consistency updates\n├── outputs/                    # Generated outputs\n│   ├── health_check/          # Health check results\n│   │   └── healthcheck-result.json\n│   └── updates/               # Updated configuration files\n├── guide_docs/                # Comprehensive documentation guides\n├── project_context/           # Project-specific context and patterns\n├── features/                  # Feature documentation and plans\n├── readme.json                  # Main documentation index\n├── ai_config.json             # AI configuration and settings\n├── search_index.json            # This comprehensive search index\n├── ai_quick_reference.json      # Quick reference for common patterns\n└── ai_usage_guide.json          # Guide for AI tool usage\n```"
+    },
+    "stock_data_processing": {
+      "title": "Stock Data Processing",
+      "description": "- **Processing pipeline**: `features/summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json.replace(\".json\", \".json\")`\n- **Separation of concerns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Deadletter queue**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **File processing**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Background tasks**: `project_context/common_patterns.json.replace(\".json\", \".json\")`",
+      "content": "- **Processing pipeline**: `features/summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json.replace(\".json\", \".json\")`\n- **Separation of concerns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Deadletter queue**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **File processing**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Background tasks**: `project_context/common_patterns.json.replace(\".json\", \".json\")`"
     }
   }
 }
