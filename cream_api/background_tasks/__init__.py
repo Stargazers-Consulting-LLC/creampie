@@ -13,7 +13,7 @@ from typing import Any
 from fastapi import BackgroundTasks
 from stargazer_utils.logging import get_logger_for
 
-from cream_api.stock_data.tasks import run_periodic_file_processing, run_periodic_updates
+from cream_api.stock_data.tasks import retry_deadletter_files_task, run_periodic_file_processing, run_periodic_updates
 
 logger: logging.Logger = get_logger_for(__name__)
 
@@ -34,10 +34,12 @@ async def start_background_tasks() -> None:
     The following tasks are started:
     - run_periodic_updates: Updates tracked stocks every 5 minutes
     - run_periodic_file_processing: Processes raw files every 10 minutes
+    - retry_deadletter_files_task: Processes deadletter files
     """
     tasks: Sequence[asyncio.Task] = [
         asyncio.create_task(run_periodic_updates()),
         asyncio.create_task(run_periodic_file_processing()),
+        asyncio.create_task(retry_deadletter_files_task()),
     ]
 
     logger.info("Started %d background tasks", len(tasks))

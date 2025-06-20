@@ -60,6 +60,7 @@ TEST_HTML_CONTENT = f"""<table>
 # Directory and file configuration
 TEST_RAW_RESPONSES_DIR = "test_raw_responses"
 TEST_PARSED_RESPONSES_DIR = "test_parsed_responses"
+TEST_DEADLETTER_RESPONSES_DIR = "test_deadletter_responses"
 TEST_HTML_FILENAME = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
 
 # Fixture configuration

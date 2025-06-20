@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+import shutil
 from datetime import datetime
 
 from sqlalchemy import select
@@ -20,6 +21,7 @@ logger: logging.Logger = get_logger_for(__name__)
 
 RETRIEVAL_INTERVAL_SECONDS = 5 * 60
 PROCESSING_INTERVAL_SECONDS = 10 * 60
+DEADLETTER_RETRY_INTERVAL_SECONDS = 24 * 60 * 60
 
 config = get_stock_data_config()
 
@@ -114,3 +116,27 @@ async def run_periodic_file_processing() -> None:
             logger.error("Error during periodic file processing: %s", str(e))
 
         await asyncio.sleep(PROCESSING_INTERVAL_SECONDS)
+
+
+async def retry_deadletter_files_task() -> None:
+    """Move all files from the deadletter directory back to the raw directory every 24 hours."""
+    while True:
+        logger.info("retry_deadletter_files_task() heartbeat.")
+        try:
+            deadletter_dir = config.deadletter_responses_dir
+            raw_dir = config.raw_responses_dir
+            for filename in os.listdir(deadletter_dir):
+                src_path = os.path.join(deadletter_dir, filename)
+                dest_path = os.path.join(raw_dir, filename)
+                try:
+                    if os.path.exists(dest_path):
+                        logger.warning(f"File already exists in raw directory, skipping: {dest_path}")
+                    else:
+                        logger.info(f"Moving {src_path} back to raw directory.")
+                        shutil.move(src_path, dest_path)
+                except Exception as move_error:
+                    logger.critical(f"Failed to move {src_path} to raw: {move_error!s}")
+        except Exception as e:
+            logger.error(f"Error during deadletter retry: {e!s}")
+
+        await asyncio.sleep(DEADLETTER_RETRY_INTERVAL_SECONDS)

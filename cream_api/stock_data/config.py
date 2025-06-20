@@ -19,6 +19,10 @@ class StockDataConfig(BaseModel):
         default=os.path.join(get_project_root(), "stock_data", "files", "parsed_responses"),
         description="Directory for storing parsed HTML responses",
     )
+    deadletter_responses_dir: str = Field(
+        default=os.path.join(get_project_root(), "stock_data", "files", "deadletter_responses"),
+        description="Directory for storing failed HTML responses",
+    )
 
     user_agent: str = Field(
         default=(
@@ -36,6 +40,7 @@ class StockDataConfig(BaseModel):
         super().__init__(**data)
         os.makedirs(self.raw_responses_dir, exist_ok=True)
         os.makedirs(self.parsed_responses_dir, exist_ok=True)
+        os.makedirs(self.deadletter_responses_dir, exist_ok=True)
 
 
 default_config = StockDataConfig()

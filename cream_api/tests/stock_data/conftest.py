@@ -12,6 +12,7 @@ from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.parser import StockDataParser
 from cream_api.tests.stock_data.test_constants import (
     TEST_DATE,
+    TEST_DEADLETTER_RESPONSES_DIR,
     TEST_FIXTURES_DIR,
     TEST_PARSED_RESPONSES_DIR,
     TEST_RAW_RESPONSES_DIR,
@@ -23,20 +24,22 @@ from cream_api.tests.stock_data.test_constants import (
 def test_dirs(tmp_path: str) -> dict[str, str]:
     """Create temporary test directories.
 
-    This fixture creates temporary directories for raw and parsed responses
+    This fixture creates temporary directories for raw, parsed, and deadletter responses
     that can be used across multiple test modules.
 
     Args:
         tmp_path: Pytest fixture providing a temporary directory
 
     Returns:
-        Dictionary containing paths to raw and parsed response directories
+        Dictionary containing paths to raw, parsed, and deadletter response directories
     """
     raw_dir = os.path.join(tmp_path, TEST_RAW_RESPONSES_DIR)
     parsed_dir = os.path.join(tmp_path, TEST_PARSED_RESPONSES_DIR)
+    deadletter_dir = os.path.join(tmp_path, TEST_DEADLETTER_RESPONSES_DIR)
     os.makedirs(raw_dir, exist_ok=True)
     os.makedirs(parsed_dir, exist_ok=True)
-    return {"raw": raw_dir, "parsed": parsed_dir}
+    os.makedirs(deadletter_dir, exist_ok=True)
+    return {"raw": raw_dir, "parsed": parsed_dir, "deadletter": deadletter_dir}
 
 
 @pytest.fixture
@@ -52,6 +55,7 @@ def test_config(test_dirs: dict[str, str]) -> StockDataConfig:
     return create_stock_data_config(
         raw_responses_dir=test_dirs["raw"],
         parsed_responses_dir=test_dirs["parsed"],
+        deadletter_responses_dir=test_dirs["deadletter"],
     )
 
 

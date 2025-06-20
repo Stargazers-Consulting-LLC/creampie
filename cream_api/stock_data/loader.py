@@ -130,9 +130,16 @@ class StockDataLoader:
                     symbol = filename.split("_")[0]
                     data = parser.parse_html_file(file_path)
                     await self.process_data(symbol, data)
-                    dest_path = os.path.join(self.config.parsed_responses_dir, filename)
-                    shutil.move(file_path, dest_path)
+                    parsed_path = os.path.join(self.config.parsed_responses_dir, filename)
+                    shutil.move(file_path, parsed_path)
 
                 except Exception as e:
                     logger.error(f"Error processing file {file_path}: {e!s}")
+                    # Move file to deadletter directory on failure
+                    deadletter_path = os.path.join(self.config.deadletter_responses_dir, filename)
+                    try:
+                        shutil.move(file_path, deadletter_path)
+                        logger.info(f"Moved failed file to deadletter: {deadletter_path}")
+                    except Exception as move_error:
+                        logger.error(f"Failed to move file to deadletter: {move_error!s}")
                     continue
