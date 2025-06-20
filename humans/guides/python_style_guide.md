@@ -9,6 +9,11 @@
 3. [Import Organization](#import-organization)
 4. [Type Hints](#type-hints)
 5. [Documentation](#documentation)
+   - [Module Docstrings](#module-docstrings)
+   - [Legal Notice Requirements](#legal-notice-requirements)
+   - [External Documentation Links](#external-documentation-links)
+   - [Function Docstrings](#function-docstrings)
+   - [Class Docstrings](#class-docstrings)
 6. [Error Handling](#error-handling)
 7. [Database Patterns](#database-patterns)
 8. [FastAPI Patterns](#fastapi-patterns)
@@ -118,7 +123,18 @@ def calc(items: list) -> float:
 Each module should follow this structure:
 
 ```python
-"""Module docstring explaining the module's purpose."""
+"""Module docstring explaining the module's purpose.
+
+References:
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 # Standard library imports
 import logging
@@ -266,16 +282,59 @@ class UserResponse(BaseModel):
 
 ### Module Docstrings
 
-```python
-"""FastAPI endpoints for stock data retrieval.
+All file and module level docstrings must include:
+1. A clear description of the module's purpose
+2. Links to relevant external documentation
+3. The required legal notice
 
-This module provides REST API endpoints for managing stock data,
-including tracking new stocks and retrieving historical data.
+```python
+"""Stock data processing module.
+
+This module provides functionality for processing and managing stock data,
+including data validation, storage, and retrieval operations.
+
+References:
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+    - [Python Type Hints](https://docs.python.org/3/library/typing.html)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
 """
 
 import logging
 from datetime import datetime
 ```
+
+### Legal Notice Requirements
+
+All Python files and modules must include the following legal notice in their docstring:
+
+```python
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+```
+
+This notice must be placed at the end of the module docstring, after any references section.
+
+### External Documentation Links
+
+Module docstrings should include relevant external documentation links to help developers understand the technologies and libraries being used. Common references include:
+
+- **[FastAPI](https://fastapi.tiangolo.com/)**
+- **[SQLAlchemy](https://docs.sqlalchemy.org/)**
+- **[Pydantic](https://docs.pydantic.dev/)**
+- **[Python Type Hints](https://docs.python.org/3/library/typing.html)**
+- **[Alembic](https://alembic.sqlalchemy.org/)**
+- **[Pytest](https://docs.pytest.org/)**
+- **[PostgreSQL](https://www.postgresql.org/docs/)**
+
+Include only the references that are actually used in the module.
 
 ### Function Docstrings
 
@@ -819,6 +878,8 @@ def get_stock_config(symbol: str) -> Optional[dict]:
 Before implementing Python code, ensure:
 - [ ] Type hints are used for all functions and variables
 - [ ] Docstrings are included for all modules, classes, and functions
+- [ ] Module-level docstrings include external documentation links
+- [ ] Module-level docstrings include the required legal notice
 - [ ] Error handling is implemented with specific exceptions
 - [ ] Tests are written for new functionality
 - [ ] Code follows PEP 8 style guidelines
@@ -828,7 +889,7 @@ Before implementing Python code, ensure:
 
 ### Code Review Standards
 - **Type Safety**: All code must have proper type hints
-- **Documentation**: All public APIs must be documented
+- **Documentation**: All public APIs must be documented with external links and legal notices
 - **Testing**: All new features must have corresponding tests
 - **Error Handling**: Proper exception handling must be implemented
 - **Security**: Input validation and authentication must be in place
@@ -843,6 +904,17 @@ Before implementing Python code, ensure:
 
 This module provides functionality for processing and managing stock data,
 including data validation, storage, and retrieval operations.
+
+References:
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+    - [Python Type Hints](https://docs.python.org/3/library/typing.html)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
 """
 
 import logging

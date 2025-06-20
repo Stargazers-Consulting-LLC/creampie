@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Python Style Guide",
     "description": "Comprehensive Python coding standards and best practices for the CreamPie project",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "last_updated": "2025-01-27",
     "source": "humans/guides/python_style_guide.md",
     "cross_references": [
@@ -83,7 +83,7 @@
       },
       "module_organization": {
         "structure": [
-          "Module docstring explaining the module's purpose",
+          "Module docstring explaining the module's purpose with external links and legal notice",
           "Standard library imports",
           "Third-party imports",
           "Local application imports",
@@ -93,7 +93,7 @@
           "Functions"
         ],
         "example": {
-          "docstring": "\"\"\"Module docstring explaining the module's purpose.\"\"\"",
+          "docstring": "\"\"\"Module docstring explaining the module's purpose.\n\nReferences:\n    - [FastAPI Documentation](https://fastapi.tiangolo.com/)\n    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)\n    - [Pydantic Documentation](https://docs.pydantic.dev/)\n\n### Legal\nSPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>\n\nSPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)\"\"\"",
           "imports": "# Standard library imports\nimport logging\nfrom datetime import datetime\nfrom typing import Annotated\n\n# Third-party imports\nfrom fastapi import APIRouter, Depends\nfrom pydantic import BaseModel\n\n# Local imports\nfrom cream_api.db import get_async_db\nfrom cream_api.settings import get_app_settings",
           "constants": "DEFAULT_TIMEOUT = 30",
           "variables": "logger = logging.getLogger(__name__)"
@@ -178,8 +178,32 @@
       "title": "Documentation",
       "description": "Docstring patterns and documentation standards",
       "module_docstrings": {
-        "pattern": "\"\"\"Brief description.\n\nExtended description if needed.\"\"\"",
-        "example": "\"\"\"FastAPI endpoints for stock data retrieval.\n\nThis module provides REST API endpoints for managing stock data,\nincluding tracking new stocks and retrieving historical data.\"\"\""
+        "requirements": [
+          "Clear description of the module's purpose",
+          "Links to relevant external documentation in markdown format",
+          "Required legal notice at the end"
+        ],
+        "pattern": "\"\"\"Brief description.\n\nExtended description if needed.\n\nReferences:\n    - [External Doc Name](https://external-doc-url.com/)\n\n### Legal\nSPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>\n\nSPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)\"\"\"",
+        "example": "\"\"\"FastAPI endpoints for stock data retrieval.\n\nThis module provides REST API endpoints for managing stock data,\nincluding tracking new stocks and retrieving historical data.\n\nReferences:\n    - [FastAPI Documentation](https://fastapi.tiangolo.com/)\n    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)\n    - [Pydantic Documentation](https://docs.pydantic.dev/)\n\n### Legal\nSPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>\n\nSPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)\"\"\""
+      },
+      "legal_notice_requirements": {
+        "format": "### Legal\nSPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>\n\nSPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)",
+        "placement": "Must be placed at the end of the module docstring, after any references section",
+        "requirement": "All Python files and modules must include this legal notice"
+      },
+      "external_documentation_links": {
+        "format": "References:\n    - [Documentation Name](https://documentation-url.com/)",
+        "requirement": "Module docstrings should include relevant external documentation links",
+        "common_references": {
+          "fastapi": "[FastAPI Documentation](https://fastapi.tiangolo.com/)",
+          "sqlalchemy": "[SQLAlchemy Documentation](https://docs.sqlalchemy.org/)",
+          "pydantic": "[Pydantic Documentation](https://docs.pydantic.dev/)",
+          "python_type_hints": "[Python Type Hints](https://docs.python.org/3/library/typing.html)",
+          "alembic": "[Alembic](https://alembic.sqlalchemy.org/)",
+          "pytest": "[Pytest](https://docs.pytest.org/)",
+          "postgresql": "[PostgreSQL](https://www.postgresql.org/docs/)"
+        },
+        "guideline": "Include only the references that are actually used in the module"
       },
       "function_docstrings": {
         "pattern": "\"\"\"Brief description.\n\nArgs:\n    param: Description\n\nReturns:\n    Description\n\nRaises:\n    ExceptionType: Description\"\"\"",
@@ -367,6 +391,8 @@
     "quality_checklist": [
       "Type hints are used for all functions and variables",
       "Docstrings are included for all modules, classes, and functions",
+      "Module-level docstrings include external documentation links",
+      "Module-level docstrings include the required legal notice",
       "Error handling is implemented with specific exceptions",
       "Tests are written for new functionality",
       "Code follows PEP 8 style guidelines",
@@ -376,7 +402,7 @@
     ],
     "code_review_standards": {
       "type_safety": "All code must have proper type hints",
-      "documentation": "All public APIs must be documented",
+      "documentation": "All public APIs must be documented with external links and legal notices",
       "testing": "All new features must have corresponding tests",
       "error_handling": "Proper exception handling must be implemented",
       "security": "Input validation and authentication must be in place",
@@ -386,6 +412,6 @@
   "complete_example": {
     "title": "Complete Module Example",
     "description": "A complete example showing all patterns in action",
-    "module": "\"\"\"Stock data processing module.\n\nThis module provides functionality for processing and managing stock data,\nincluding data validation, storage, and retrieval operations.\n\"\"\"\n\nimport logging\nfrom datetime import datetime\nfrom typing import Annotated, List, Optional\n\nfrom fastapi import APIRouter, Depends, HTTPException\nfrom pydantic import BaseModel, Field\nfrom sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom cream_api.db import get_async_db\nfrom cream_api.stock_data.models import StockData\nfrom cream_api.settings import get_app_settings\n\nlogger = logging.getLogger(__name__)\n\nrouter = APIRouter(prefix=\"/stock-data\", tags=[\"stock-data\"])\n\nclass StockDataCreate(BaseModel):\n    \"\"\"Model for creating stock data.\"\"\"\n    symbol: str = Field(..., min_length=1, max_length=10)\n    date: datetime\n    open: float = Field(..., gt=0)\n    high: float = Field(..., gt=0)\n    low: float = Field(..., gt=0)\n    close: float = Field(..., gt=0)\n    volume: int = Field(..., ge=0)\n\nclass StockDataResponse(BaseModel):\n    \"\"\"Model for stock data responses.\"\"\"\n    id: int\n    symbol: str\n    date: datetime\n    close: float\n    volume: int\n\n    class Config:\n        from_attributes = True\n\n@router.post(\"/\", response_model=StockDataResponse)\nasync def create_stock_data(\n    data: StockDataCreate,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> StockDataResponse:\n    \"\"\"Create new stock data entry.\n    \n    Args:\n        data: Stock data to create\n        db: Database session\n        \n    Returns:\n        StockDataResponse: Created stock data\n        \n    Raises:\n        HTTPException: If there's an error creating the data\n    \"\"\"\n    try:\n        logger.info(f\"Creating stock data for {data.symbol}\")\n        \n        stock_data = StockData(**data.dict())\n        db.add(stock_data)\n        await db.commit()\n        await db.refresh(stock_data)\n        \n        logger.info(f\"Successfully created stock data for {data.symbol}\")\n        return StockDataResponse.from_orm(stock_data)\n        \n    except Exception as e:\n        await db.rollback()\n        logger.error(f\"Error creating stock data for {data.symbol}: {e}\")\n        raise HTTPException(status_code=500, detail=\"Failed to create stock data\")\n\n@router.get(\"/{symbol}\", response_model=List[StockDataResponse])\nasync def get_stock_data(\n    symbol: str,\n    limit: int = 100,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> List[StockDataResponse]:\n    \"\"\"Get stock data for a symbol.\n    \n    Args:\n        symbol: Stock symbol to retrieve data for\n        limit: Maximum number of records to return\n        db: Database session\n        \n    Returns:\n        List[StockDataResponse]: List of stock data records\n    \"\"\"\n    logger.info(f\"Retrieving stock data for {symbol}\")\n    \n    stmt = (\n        select(StockData)\n        .where(StockData.symbol == symbol.upper())\n        .order_by(StockData.date.desc())\n        .limit(limit)\n    )\n    \n    result = await db.execute(stmt)\n    stock_data = result.scalars().all()\n    \n    logger.info(f\"Retrieved {len(stock_data)} records for {symbol}\")\n    return [StockDataResponse.from_orm(data) for data in stock_data]"
+    "module": "\"\"\"Stock data processing module.\n\nThis module provides functionality for processing and managing stock data,\nincluding data validation, storage, and retrieval operations.\n\nReferences:\n    - [FastAPI Documentation](https://fastapi.tiangolo.com/)\n    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)\n    - [Pydantic Documentation](https://docs.pydantic.dev/)\n    - [Python Type Hints](https://docs.python.org/3/library/typing.html)\n\n### Legal\nSPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>\n\nSPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)\"\"\"\n\nimport logging\nfrom datetime import datetime\nfrom typing import Annotated, List, Optional\n\nfrom fastapi import APIRouter, Depends, HTTPException\nfrom pydantic import BaseModel, Field\nfrom sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nfrom cream_api.db import get_async_db\nfrom cream_api.stock_data.models import StockData\nfrom cream_api.settings import get_app_settings\n\nlogger = logging.getLogger(__name__)\n\nrouter = APIRouter(prefix=\"/stock-data\", tags=[\"stock-data\"])\n\nclass StockDataCreate(BaseModel):\n    \"\"\"Model for creating stock data.\"\"\"\n    symbol: str = Field(..., min_length=1, max_length=10)\n    date: datetime\n    open: float = Field(..., gt=0)\n    high: float = Field(..., gt=0)\n    low: float = Field(..., gt=0)\n    close: float = Field(..., gt=0)\n    volume: int = Field(..., ge=0)\n\nclass StockDataResponse(BaseModel):\n    \"\"\"Model for stock data responses.\"\"\"\n    id: int\n    symbol: str\n    date: datetime\n    close: float\n    volume: int\n\n    class Config:\n        from_attributes = True\n\n@router.post(\"/\", response_model=StockDataResponse)\nasync def create_stock_data(\n    data: StockDataCreate,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> StockDataResponse:\n    \"\"\"Create new stock data entry.\n    \n    Args:\n        data: Stock data to create\n        db: Database session\n        \n    Returns:\n        StockDataResponse: Created stock data\n        \n    Raises:\n        HTTPException: If there's an error creating the data\n    \"\"\"\n    try:\n        logger.info(f\"Creating stock data for {data.symbol}\")\n        \n        stock_data = StockData(**data.dict())\n        db.add(stock_data)\n        await db.commit()\n        await db.refresh(stock_data)\n        \n        logger.info(f\"Successfully created stock data for {data.symbol}\")\n        return StockDataResponse.from_orm(stock_data)\n        \n    except Exception as e:\n        await db.rollback()\n        logger.error(f\"Error creating stock data for {data.symbol}: {e}\")\n        raise HTTPException(status_code=500, detail=\"Failed to create stock data\")\n\n@router.get(\"/{symbol}\", response_model=List[StockDataResponse])\nasync def get_stock_data(\n    symbol: str,\n    limit: int = 100,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> List[StockDataResponse]:\n    \"\"\"Get stock data for a symbol.\n    \n    Args:\n        symbol: Stock symbol to retrieve data for\n        limit: Maximum number of records to return\n        db: Database session\n        \n    Returns:\n        List[StockDataResponse]: List of stock data records\n    \"\"\"\n    logger.info(f\"Retrieving stock data for {symbol}\")\n    \n    stmt = (\n        select(StockData)\n        .where(StockData.symbol == symbol.upper())\n        .order_by(StockData.date.desc())\n        .limit(limit)\n    )\n    \n    result = await db.execute(stmt)\n    stock_data = result.scalars().all()\n    \n    logger.info(f\"Retrieved {len(stock_data)} records for {symbol}\")\n    return [StockDataResponse.from_orm(data) for data in stock_data]"
   }
 }
