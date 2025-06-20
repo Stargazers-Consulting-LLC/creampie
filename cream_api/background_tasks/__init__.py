@@ -1,4 +1,9 @@
-"""Background tasks for the cream_api package."""
+"""Background tasks for the cream_api package.
+
+This module provides functionality for managing background tasks in the FastAPI application,
+including starting periodic tasks during application startup and scheduling one-off tasks
+using FastAPI's background task manager.
+"""
 
 import asyncio
 import logging
@@ -12,7 +17,6 @@ from cream_api.stock_data.tasks import run_periodic_file_processing, run_periodi
 
 logger: logging.Logger = get_logger_for(__name__)
 
-
 BackgroundTaskFunc = Callable[..., Coroutine[Any, Any, None]]
 
 __all__ = ["schedule_background_task", "start_background_tasks"]
@@ -24,8 +28,12 @@ async def start_background_tasks() -> None:
     This function initializes and runs all background tasks concurrently.
     Tasks run indefinitely until an error occurs or the application shuts down.
 
-    Raises:
-        Exception: If any background task fails
+    Note: Tasks are started but not awaited, allowing them to run in the background
+    while the server continues to start up.
+
+    The following tasks are started:
+    - run_periodic_updates: Updates tracked stocks every 5 minutes
+    - run_periodic_file_processing: Processes raw files every 10 minutes
     """
     tasks: Sequence[asyncio.Task] = [
         asyncio.create_task(run_periodic_updates()),
@@ -33,12 +41,6 @@ async def start_background_tasks() -> None:
     ]
 
     logger.info("Started %d background tasks", len(tasks))
-
-    try:
-        await asyncio.gather(*tasks)
-    except Exception as e:
-        logger.error("Background task failed: %s", str(e))
-        raise
 
 
 def schedule_background_task(
@@ -48,9 +50,20 @@ def schedule_background_task(
 ) -> None:
     """Schedule a background task using FastAPI's background task manager.
 
+    This function adds a task to FastAPI's background task queue, which will be
+    executed after the response is sent to the client.
+
     Args:
-        background_tasks: FastAPI background tasks manager
+        background_tasks: FastAPI background tasks manager instance
         task_func: Async function to run in background
         **kwargs: Arguments to pass to the task function
+
+    Example:
+        schedule_background_task(
+            background_tasks,
+            process_stock_data,
+            symbol="AAPL",
+            date="2025-01-27"
+        )
     """
     background_tasks.add_task(task_func, **kwargs)
