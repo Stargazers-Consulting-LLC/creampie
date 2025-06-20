@@ -136,8 +136,8 @@
     },
     "file_management": {
       "title": "**File Management**",
-      "description": "- Raw responses directory: `cream_api/files/raw_responses/`\n- Parsed responses directory: `cream_api...",
-      "content": "- Raw responses directory: `cream_api/files/raw_responses/`\n- Parsed responses directory: `cream_api/files/parsed_responses/`\n- Automatic directory creation\n\nThese will become actual directory management and file handling code."
+      "description": "- Raw responses directory: `cream_api/stock_data/files/raw_responses/`\n- Parsed responses directory: `cream_api/stock_data/files/parsed_responses/`\n- Automatic directory creation\n\nThese will become actual directory management and file handling code.",
+      "content": "- Raw responses directory: `cream_api/stock_data/files/raw_responses/`\n- Parsed responses directory: `cream_api/stock_data/files/parsed_responses/`\n- Automatic directory creation\n\nThese will become actual directory management and file handling code."
     },
     "current_limitations": {
       "title": "Current Limitations",

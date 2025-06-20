@@ -12,11 +12,11 @@ class StockDataConfig(BaseModel):
     """Configuration for stock data operations."""
 
     raw_responses_dir: str = Field(
-        default=os.path.join(get_project_root(), "cream_api", "files", "raw_responses"),
+        default=os.path.join(get_project_root(), "stock_data", "files", "raw_responses"),
         description="Directory for storing raw HTML responses",
     )
     parsed_responses_dir: str = Field(
-        default=os.path.join(get_project_root(), "cream_api", "files", "parsed_responses"),
+        default=os.path.join(get_project_root(), "stock_data", "files", "parsed_responses"),
         description="Directory for storing parsed HTML responses",
     )
 
