@@ -16,26 +16,36 @@ source "$SCRIPT_DIR/common.sh"
 DB_NAME="cream"
 APP_USER="creamapp"
 
-# Check if run as root
-check_root_privileges
-
-# Function to show usage
-show_usage "$0" "Grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user." "$0 <table>
+# Function to get usage text
+get_usage_text() {
+    cat << 'EOF'
+$0 <table>
 
 Defaults:
-  Database: $DB_NAME
-  User:     $APP_USER
+  Database: cream
+  User:     creamapp
 
 Arguments:
   <table>      The table name (optionally schema-qualified, e.g., public.tracked_stock)
 
 Example:
-  sudo $0 public.tracked_stock"
+  sudo $0 public.tracked_stock
+EOF
+}
+
+# Check if run as root
+check_root_privileges
 
 # Validate arguments
+if [ $# -eq 0 ]; then
+    print_error "❌ No arguments provided."
+    show_usage "$0" "Grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user." "$(get_usage_text)"
+    exit 1
+fi
+
 if [ $# -ne 1 ]; then
     print_error "❌ Invalid number of arguments."
-    show_usage
+    show_usage "$0" "Grants SELECT, INSERT, UPDATE, and DELETE permissions on a given table to a specified PostgreSQL user." "$(get_usage_text)"
     exit 1
 fi
 
