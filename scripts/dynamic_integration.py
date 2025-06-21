@@ -107,7 +107,7 @@ class DynamicIntegration:
             "python_style_guide": "guide_docs/language_specific/python_style_guide.json",
             "fastapi_development_guide": "guide_docs/language_specific/fastapi_development_guide.json",
             "database_management_guide": "guide_docs/domain_specific/database_management_guide.json",
-            "shell_style_guide": "guide_docs/domain_specific/shell_style_guide.json"
+            "shell_style_guide": "guide_docs/domain_specific/shell_style_guide.json",
         }
 
         relative_path = guide_mapping.get(guide_name)
@@ -148,7 +148,7 @@ class DynamicIntegration:
                     return {
                         "section": section_name,
                         "content": section_data.get("content", ""),
-                        "description": section_data.get("description", "")
+                        "description": section_data.get("description", ""),
                     }
 
         return None
@@ -168,9 +168,8 @@ class DynamicIntegration:
                     validated_patterns[guide_name][pattern_name] = pattern_data
                     if self.verbose:
                         print(f"✅ Validated: {guide_name}.{pattern_name}")
-                else:
-                    if self.verbose:
-                        print(f"⚠️  Invalid pattern: {guide_name}.{pattern_name}")
+                elif self.verbose:
+                    print(f"⚠️  Invalid pattern: {guide_name}.{pattern_name}")
 
         return validated_patterns
 
@@ -202,11 +201,7 @@ class DynamicIntegration:
                 category = self._categorize_pattern(pattern_name)
                 if category not in pattern_categories:
                     pattern_categories[category] = []
-                pattern_categories[category].append({
-                    "guide": guide_name,
-                    "name": pattern_name,
-                    "data": pattern_data
-                })
+                pattern_categories[category].append({"guide": guide_name, "name": pattern_name, "data": pattern_data})
 
         # Resolve conflicts within each category
         for category, patterns in pattern_categories.items():
@@ -235,7 +230,7 @@ class DynamicIntegration:
             "database_patterns": "database_patterns",
             "fastapi_patterns": "api_patterns",
             "testing_patterns": "testing_patterns",
-            "security_patterns": "security_patterns"
+            "security_patterns": "security_patterns",
         }
 
         return category_mapping.get(pattern_name, "general_patterns")
@@ -277,7 +272,7 @@ class DynamicIntegration:
                         "description": f"Dynamically integrated patterns for {category}",
                         "content": self._format_pattern_content(pattern_data),
                         "source": "dynamic_integration",
-                        "last_updated": datetime.now().isoformat()
+                        "last_updated": datetime.now().isoformat(),
                     }
                     updated = True
                     self.changes_made.append(f"Added section: {section_name}")
@@ -319,7 +314,7 @@ class DynamicIntegration:
             "database_patterns": "database_patterns",
             "api_patterns": "api_patterns",
             "testing_patterns": "testing_patterns",
-            "security_patterns": "security_patterns"
+            "security_patterns": "security_patterns",
         }
 
         return section_mapping.get(category)
@@ -343,10 +338,10 @@ class DynamicIntegration:
 
     def _increment_version(self, version: str) -> str:
         """Increment version number."""
-        MIN_VERSION_PARTS = 2
+        min_version_parts = 2
         try:
             parts = version.split(".")
-            if len(parts) >= MIN_VERSION_PARTS:
+            if len(parts) >= min_version_parts:
                 major, minor = parts[0], parts[1]
                 new_minor = str(int(minor) + 1)
                 return f"{major}.{new_minor}"
@@ -363,18 +358,14 @@ class DynamicIntegration:
             "metadata": {
                 "timestamp": datetime.now().isoformat(),
                 "trigger": trigger,
-                "status": "completed" if not self.errors else "failed"
+                "status": "completed" if not self.errors else "failed",
             },
             "summary": {
                 "changes_made": len(self.changes_made),
                 "conflicts_resolved": len(self.conflicts_resolved),
-                "errors": len(self.errors)
+                "errors": len(self.errors),
             },
-            "details": {
-                "changes": self.changes_made,
-                "conflicts": self.conflicts_resolved,
-                "errors": self.errors
-            }
+            "details": {"changes": self.changes_made, "conflicts": self.conflicts_resolved, "errors": self.errors},
         }
 
         # Save report

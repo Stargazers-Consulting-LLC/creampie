@@ -3,7 +3,7 @@
 # =============================================================================
 # Script: grant_table_permissions.sh
 # Description: Grant necessary database permissions for the CreamPie application
-# Usage: sudo ./scripts/grant_table_permissions.sh
+# Usage: sudo ./scripts/db/grant_table_permissions.sh
 # Author: CreamPie Development Team
 # Version: 2.0
 # Dependencies: PostgreSQL, psql, sudo access
@@ -13,10 +13,10 @@
 
 # Source common functions
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$SCRIPT_DIR/common.sh"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$PROJECT_ROOT/scripts/common.sh"
 
 # Get project root directory
-PROJECT_ROOT="$(get_project_root)"
 AI_OUTPUT_DIR="$PROJECT_ROOT/ai/outputs/database_operations"
 
 # Strict mode for error handling

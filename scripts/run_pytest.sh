@@ -341,7 +341,6 @@ if poetry run pytest "${PYTEST_ARGS[@]}"; then
     end_time=$(date +%s)
     duration=$((end_time - start_time))
     print_success "Pytest completed successfully in ${duration}s"
-    print_status "📄 AI report saved to: $AI_OUTPUT_DIR/"
     ADDITIONAL_CONTENT="  \"test_details\": {\n    \"test_path\": \"${TEST_PATH:-"All tests"}\",\n    \"test_function\": \"${TEST_FUNCTION:-"All functions"}\",\n    \"marker\": \"${MARKER:-"None"}\",\n    \"verbose\": \"$VERBOSE\",\n    \"watch_mode\": \"$WATCH_MODE\"\n  },"
     generate_ai_report "pytest" "success" "$duration" "$AI_OUTPUT_DIR" "$ADDITIONAL_CONTENT"
     popd > /dev/null
@@ -350,7 +349,6 @@ else
     end_time=$(date +%s)
     duration=$((end_time - start_time))
     print_error "Pytest failed after ${duration}s"
-    print_status "📄 AI report saved to: $AI_OUTPUT_DIR/"
     ADDITIONAL_CONTENT="  \"test_details\": {\n    \"test_path\": \"${TEST_PATH:-"All tests"}\",\n    \"test_function\": \"${TEST_FUNCTION:-"All functions"}\",\n    \"marker\": \"${MARKER:-"None"}\",\n    \"verbose\": \"$VERBOSE\",\n    \"watch_mode\": \"$WATCH_MODE\"\n  },"
     generate_ai_report "pytest" "failed" "$duration" "$AI_OUTPUT_DIR" "$ADDITIONAL_CONTENT"
     popd > /dev/null

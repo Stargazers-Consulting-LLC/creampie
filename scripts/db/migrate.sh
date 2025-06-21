@@ -5,10 +5,10 @@ set -e
 
 # Source common functions
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$SCRIPT_DIR/common.sh"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$PROJECT_ROOT/scripts/common.sh"
 
 # Get the project root and API directory
-PROJECT_ROOT="$(get_project_root)"
 API_DIR="$PROJECT_ROOT/cream_api"
 AI_OUTPUT_DIR="ai/outputs/migration_results"
 
@@ -62,7 +62,7 @@ else
     print_error "❌ Failed to apply migrations"
     print_status "💡 Common solutions:"
     print_status "   - Check for data type conflicts (e.g., Integer to UUID)"
-    print_status "   - Verify table permissions: sudo ./scripts/grant_table_permissions.sh"
+    print_status "   - Verify table permissions: sudo ./scripts/db/grant_table_permissions.sh"
     print_status "   - Review migration file for syntax errors"
     handle_error "Failed to apply migrations"
 fi

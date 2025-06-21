@@ -77,8 +77,11 @@ def configure_logging(settings: Settings | None = None) -> None:
     # Set formatter based on debug mode
     if settings.debug_mode:
         # Debug format: module_name.thread_id.function_name.line_number.LEVEL-timestamp:\n        message
-        log_format = "%(name)s.%(thread)d.%(funcName)s.%(lineno)d.%(levelname)s-%(asctime)s:\n        %(message)s"
-        date_format = "%Y/%m/%d@%H:%M:%S.%f"  # Include microseconds for precise timing
+        log_format = (
+            "%(name)s.%(funcName)s.%(lineno)03d.%(levelname)s-%(asctime)s."
+            "%(msecs)03d|%(relativeCreated)08d:\n\t%(message)s"
+        )
+        date_format = "%Y/%m/%d@%H:%M:%S"  # Remove microseconds to avoid formatting issues
     else:
         # Standard format
         log_format = "%(asctime)s [%(levelname)-8s] %(name)s: %(message)s"
@@ -102,10 +105,7 @@ def configure_logging(settings: Settings | None = None) -> None:
         # Create rotating file handler
         max_bytes = settings.log_max_size_mb * 1024 * 1024  # Convert MB to bytes
         file_handler = logging.handlers.RotatingFileHandler(
-            settings.log_file,
-            maxBytes=max_bytes,
-            backupCount=settings.log_backup_count,
-            encoding='utf-8'
+            settings.log_file, maxBytes=max_bytes, backupCount=settings.log_backup_count, encoding="utf-8"
         )
         file_handler.setFormatter(formatter)
         file_handler.setLevel(numeric_level)

@@ -26,16 +26,11 @@ class PreCommitHook:
             "ai/guide_docs/language_specific/",
             "ai/guide_docs/domain_specific/",
             "ai/guide_docs/core_principles.json",
-            "ai/ai_config.json"
+            "ai/ai_config.json",
         ]
 
         # Files that should NOT trigger integration (to avoid loops)
-        self.exclude_patterns = [
-            "ai/outputs/",
-            "ai/features/",
-            "*.pyc",
-            "__pycache__"
-        ]
+        self.exclude_patterns = ["ai/outputs/", "ai/features/", "*.pyc", "__pycache__"]
 
     def run(self) -> bool:
         """Run the pre-commit hook."""
@@ -90,7 +85,8 @@ class PreCommitHook:
                 [sys.executable, health_check_script],
                 capture_output=True,
                 text=True,
-                cwd=self.project_root, check=False
+                cwd=self.project_root,
+                check=False,
             )
 
             # Print output
@@ -112,11 +108,12 @@ class PreCommitHook:
                 ["git", "diff", "--cached", "--name-only"],
                 capture_output=True,
                 text=True,
-                cwd=self.project_root, check=False
+                cwd=self.project_root,
+                check=False,
             )
 
             if result.returncode == 0:
-                files = result.stdout.strip().split('\n')
+                files = result.stdout.strip().split("\n")
                 return [f for f in files if f.strip()]
             else:
                 print(f"Warning: Could not get staged files: {result.stderr}")
@@ -167,7 +164,8 @@ class PreCommitHook:
                 [sys.executable, integration_script, "pre_commit_trigger"],
                 capture_output=True,
                 text=True,
-                cwd=self.project_root, check=False
+                cwd=self.project_root,
+                check=False,
             )
 
             # Print output

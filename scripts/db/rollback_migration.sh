@@ -5,10 +5,10 @@ set -e
 
 # Source common functions
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$SCRIPT_DIR/common.sh"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$PROJECT_ROOT/scripts/common.sh"
 
 # Get project root directory
-PROJECT_ROOT="$(get_project_root)"
 AI_OUTPUT_DIR="$PROJECT_ROOT/ai/outputs/migration_results"
 
 # Parse command line arguments

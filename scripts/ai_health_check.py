@@ -98,16 +98,7 @@ class AIDocumentationHealthCheck:
             "project_context/development_workflow.json",
         ]
 
-        for file_path in required_files:
-            full_path = os.path.join(self.ai_folder, file_path)
-            if os.path.exists(full_path):
-                self.success_count += 1
-                if self.verbose:
-                    print(f"✅ Found: {file_path}")
-            else:
-                self.issues.append(f"Missing required file: {file_path}")
-                if self.verbose:
-                    print(f"❌ Missing: {file_path} (checked at: {full_path})")
+        self._check_file_list(required_files, "required file", self.issues)
 
         # Check language-specific guides
         lang_guides = [
@@ -116,11 +107,7 @@ class AIDocumentationHealthCheck:
             "guide_docs/language_specific/python_testing_style_guide.json",
         ]
 
-        for guide in lang_guides:
-            if os.path.exists(os.path.join(self.ai_folder, guide)):
-                self.success_count += 1
-            else:
-                self.warnings.append(f"Missing language guide: {guide}")
+        self._check_file_list(lang_guides, "language guide", self.warnings)
 
         # Check domain_specific guides
         domain_guides = [
@@ -128,11 +115,20 @@ class AIDocumentationHealthCheck:
             "guide_docs/domain_specific/shell_style_guide.json",
         ]
 
-        for guide in domain_guides:
-            if os.path.exists(os.path.join(self.ai_folder, guide)):
+        self._check_file_list(domain_guides, "domain guide", self.warnings)
+
+    def _check_file_list(self, file_list, file_type, issue_list):
+        """Check a list of files and add issues to the specified list."""
+        for file_path in file_list:
+            full_path = os.path.join(self.ai_folder, file_path)
+            if os.path.exists(full_path):
                 self.success_count += 1
+                if self.verbose:
+                    print(f"✅ Found: {file_path}")
             else:
-                self.warnings.append(f"Missing domain guide: {guide}")
+                issue_list.append(f"Missing {file_type}: {file_path}")
+                if self.verbose:
+                    print(f"❌ Missing: {file_path} (checked at: {full_path})")
 
     def check_ai_metadata(self):
         """Check that all JSON files have proper AI metadata."""
