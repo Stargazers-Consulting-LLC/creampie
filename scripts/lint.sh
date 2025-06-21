@@ -73,8 +73,11 @@ if [ "$RUN_PYTHON" = true ]; then
     # Run autoflake on cream_api
     pushd "$PROJECT_ROOT/cream_api" > /dev/null
     print_status "Running autoflake..."
-    AUTOFLUKE_OUTPUT=$(poetry run autoflake -i -r --remove-all-unused-imports --recursive --remove-unused-variables --in-place --quiet --exclude=__init__.py . 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    AUTOFLUKE_OUTPUT=$(poetry run autoflake -i -r --remove-all-unused-imports --recursive --remove-unused-variables --in-place --quiet --exclude=__init__.py . 2>&1)
+    AUTOFLUKE_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $AUTOFLUKE_EXIT_CODE -eq 0 ]; then
         print_success "✅ Autoflake completed!"
         generate_linter_report "autoflake" "success" "$AUTOFLUKE_OUTPUT"
     else
@@ -87,8 +90,11 @@ if [ "$RUN_PYTHON" = true ]; then
     # Run ruff check on entire project
     pushd "$PROJECT_ROOT" > /dev/null
     print_status "Running ruff check..."
-    RUFF_CHECK_OUTPUT=$(poetry run ruff check --fix . 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    RUFF_CHECK_OUTPUT=$(poetry run ruff check --fix . 2>&1)
+    RUFF_CHECK_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $RUFF_CHECK_EXIT_CODE -eq 0 ]; then
         print_success "✅ Ruff check completed!"
         generate_linter_report "ruff_check" "success" "$RUFF_CHECK_OUTPUT"
     else
@@ -99,8 +105,11 @@ if [ "$RUN_PYTHON" = true ]; then
 
     # Run ruff format on entire project
     print_status "Running ruff format..."
-    RUFF_FORMAT_OUTPUT=$(poetry run ruff format . 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    RUFF_FORMAT_OUTPUT=$(poetry run ruff format . 2>&1)
+    RUFF_FORMAT_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $RUFF_FORMAT_EXIT_CODE -eq 0 ]; then
         print_success "✅ Ruff format completed!"
         generate_linter_report "ruff_format" "success" "$RUFF_FORMAT_OUTPUT"
     else
@@ -110,11 +119,14 @@ if [ "$RUN_PYTHON" = true ]; then
     fi
     popd > /dev/null
 
-    # Run mypy on cream_api
+    # Run mypy on entire project (same as pre-commit hook)
     pushd "$PROJECT_ROOT" > /dev/null
     print_status "Running mypy..."
-    MYPY_OUTPUT=$(poetry run mypy --config-file=pyproject.toml cream_api 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    MYPY_OUTPUT=$(poetry run mypy --config-file=pyproject.toml . 2>&1)
+    MYPY_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $MYPY_EXIT_CODE -eq 0 ]; then
         print_success "✅ MyPy checks completed!"
         generate_linter_report "mypy" "success" "$MYPY_OUTPUT"
     else
@@ -131,8 +143,11 @@ if [ "$RUN_JS" = true ]; then
 
     # Run eslint
     print_status "Running eslint..."
-    ESLINT_OUTPUT=$(yarn eslint --fix . 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    ESLINT_OUTPUT=$(yarn eslint --fix . 2>&1)
+    ESLINT_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $ESLINT_EXIT_CODE -eq 0 ]; then
         print_success "✅ ESLint completed!"
         generate_linter_report "eslint" "success" "$ESLINT_OUTPUT"
     else
@@ -143,8 +158,11 @@ if [ "$RUN_JS" = true ]; then
 
     # Run TypeScript compiler
     print_status "Running TypeScript compiler..."
-    TSC_OUTPUT=$(yarn tsc --noEmit 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    TSC_OUTPUT=$(yarn tsc --noEmit 2>&1)
+    TSC_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $TSC_EXIT_CODE -eq 0 ]; then
         print_success "✅ TypeScript compiler completed!"
         generate_linter_report "tsc" "success" "$TSC_OUTPUT"
     else
@@ -155,8 +173,11 @@ if [ "$RUN_JS" = true ]; then
 
     # Run prettier
     print_status "Running prettier..."
-    PRETTIER_OUTPUT=$(yarn prettier --write . --log-level=warn 2>&1 || true)
-    if [ $? -eq 0 ]; then
+    set +e  # Temporarily disable exit on error
+    PRETTIER_OUTPUT=$(yarn prettier --write . --log-level=warn 2>&1)
+    PRETTIER_EXIT_CODE=$?
+    set -e  # Re-enable exit on error
+    if [ $PRETTIER_EXIT_CODE -eq 0 ]; then
         print_success "✅ Prettier completed!"
         generate_linter_report "prettier" "success" "$PRETTIER_OUTPUT"
     else
@@ -172,7 +193,7 @@ fi
 OVERALL_STATUS=$([ "$PYTHON_STATUS" = "success" ] && [ "$JS_STATUS" = "success" ] && echo "success" || echo "failed")
 
 # Count reports generated
-PYTHON_REPORT_COUNT=$(ls "$AI_OUTPUT_DIR"/*_report.json 2>/dev/null | wc -l || echo "0")
+REPORT_COUNT=$(ls "$AI_OUTPUT_DIR"/*_report.json 2>/dev/null | wc -l || echo "0")
 
 ADDITIONAL_CONTENT="  \"lint_details\": {\n    \"python_status\": \"$PYTHON_STATUS\",\n    \"js_status\": \"$JS_STATUS\",\n    \"python_tools\": [\"autoflake\", \"ruff_check\", \"ruff_format\", \"mypy\"],\n    \"js_tools\": [\"eslint\", \"tsc\", \"prettier\"],\n    \"reports_generated\": $PYTHON_REPORT_COUNT,\n    \"report_directory\": \"$AI_OUTPUT_DIR\"\n  },"
 
@@ -182,7 +203,7 @@ generate_ai_report "lint" "$OVERALL_STATUS" "0" "$AI_OUTPUT_DIR" "$ADDITIONAL_CO
 print_status "📊 Linting Summary:"
 print_status "  Python Status: $PYTHON_STATUS"
 print_status "  JavaScript Status: $JS_STATUS"
-print_status "  Reports generated: $PYTHON_REPORT_COUNT"
+print_status "  Reports available: $REPORT_COUNT"
 print_status "  Report directory: $AI_OUTPUT_DIR"
 
 # Determine overall success

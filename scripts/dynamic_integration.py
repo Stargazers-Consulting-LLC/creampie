@@ -15,14 +15,14 @@ from typing import Any
 
 
 class DynamicIntegration:
-    def __init__(self, verbose=False):
+    def __init__(self, verbose: bool = False) -> None:
         self.script_dir = os.path.dirname(__file__)
         self.project_root = os.path.dirname(self.script_dir)
         self.ai_folder = os.path.join(self.project_root, "ai")
 
-        self.changes_made = []
-        self.conflicts_resolved = []
-        self.errors = []
+        self.changes_made: list[str] = []
+        self.conflicts_resolved: list[str] = []
+        self.errors: list[str] = []
         self.verbose = verbose
 
         # Load integration configuration
@@ -33,7 +33,8 @@ class DynamicIntegration:
         config_path = os.path.join(self.ai_folder, "ai_config.json")
         try:
             with open(config_path, encoding="utf-8") as f:
-                return json.load(f)
+                data: dict[str, Any] = json.load(f)
+                return data
         except Exception as e:
             print(f"Error loading config: {e}")
             return {}
@@ -44,7 +45,7 @@ class DynamicIntegration:
             print(f"🔄 Running Dynamic Integration (trigger: {trigger})...")
             print()
 
-        if not self.integration_rules.get("enabled", False):
+        if not self.integration_rules.get("dynamic_integration", {}).get("enabled", False):
             if self.verbose:
                 print("❌ Dynamic integration is disabled in config")
             return False
@@ -77,7 +78,7 @@ class DynamicIntegration:
         if self.verbose:
             print("📖 Extracting patterns from source guides...")
 
-        extracted_patterns = {}
+        extracted_patterns: dict[str, Any] = {}
         extraction_rules = self.integration_rules.get("pattern_extraction", {}).get("extraction_rules", {})
 
         for guide_name, rules in extraction_rules.items():
@@ -118,11 +119,12 @@ class DynamicIntegration:
     def _load_guide(self, guide_path: str) -> dict[str, Any]:
         """Load a guide file and return its content."""
         with open(guide_path, encoding="utf-8") as f:
-            return json.load(f)
+            data: dict[str, Any] = json.load(f)
+            return data
 
     def _extract_patterns_from_guide(self, guide_data: dict[str, Any], rules: dict[str, Any]) -> dict[str, Any]:
         """Extract specific patterns from a guide based on extraction rules."""
-        patterns = {}
+        patterns: dict[str, Any] = {}
         critical_patterns = rules.get("critical_patterns", [])
         sections = guide_data.get("sections", {})
 
@@ -138,7 +140,10 @@ class DynamicIntegration:
         """Find a specific pattern within guide sections."""
         # Direct section match
         if pattern_name in sections:
-            return sections[pattern_name]
+            section_data = sections[pattern_name]
+            if isinstance(section_data, dict):
+                return section_data
+            return None
 
         # Search within section content
         for section_name, section_data in sections.items():
@@ -158,7 +163,7 @@ class DynamicIntegration:
         if self.verbose:
             print("🔍 Validating extracted patterns...")
 
-        validated_patterns = {}
+        validated_patterns: dict[str, Any] = {}
 
         for guide_name, patterns in extracted_patterns.items():
             validated_patterns[guide_name] = {}
@@ -191,11 +196,11 @@ class DynamicIntegration:
         if self.verbose:
             print("⚖️  Resolving pattern conflicts...")
 
-        resolved_patterns = {}
-        conflicts = []
+        resolved_patterns: dict[str, Any] = {}
+        conflicts: list[str] = []
 
         # Group patterns by category
-        pattern_categories = {}
+        pattern_categories: dict[str, list[dict[str, Any]]] = {}
         for guide_name, patterns in validated_patterns.items():
             for pattern_name, pattern_data in patterns.items():
                 category = self._categorize_pattern(pattern_name)
@@ -243,10 +248,17 @@ class DynamicIntegration:
         for priority_guide in priority_order:
             for pattern in patterns:
                 if pattern["guide"] == priority_guide:
-                    return pattern["data"]
+                    pattern_data = pattern["data"]
+                    if isinstance(pattern_data, dict):
+                        return pattern_data
+                    return None
 
         # If no priority match, use the first one
-        return patterns[0]["data"] if patterns else None
+        if patterns:
+            pattern_data = patterns[0]["data"]
+            if isinstance(pattern_data, dict):
+                return pattern_data
+        return None
 
     def _update_core_principles(self, resolved_patterns: dict[str, Any]) -> bool:
         """Update core principles with resolved patterns."""
@@ -258,7 +270,7 @@ class DynamicIntegration:
         try:
             # Load current core principles
             with open(core_principles_path, encoding="utf-8") as f:
-                core_data = json.load(f)
+                core_data: dict[str, Any] = json.load(f)
 
             # Update sections with new patterns
             sections = core_data.get("sections", {})
@@ -326,8 +338,8 @@ class DynamicIntegration:
     def _format_pattern_content(self, pattern_data: Any) -> str:
         """Format pattern data into readable content."""
         if isinstance(pattern_data, dict):
-            content = pattern_data.get("content", "")
-            description = pattern_data.get("description", "")
+            content: str = pattern_data.get("content", "")
+            description: str = pattern_data.get("description", "")
             if description:
                 return f"{description}\n\n{content}"
             return content
@@ -343,13 +355,15 @@ class DynamicIntegration:
             parts = version.split(".")
             if len(parts) >= min_version_parts:
                 major, minor = parts[0], parts[1]
-                new_minor = str(int(minor) + 1)
-                return f"{major}.{new_minor}"
+                new_minor_int = int(minor) + 1
+                new_minor_str: str = str(new_minor_int)
+                result: str = f"{major}.{new_minor_str}"
+                return result
         except (ValueError, IndexError):
             pass
         return "1.1"
 
-    def _generate_integration_report(self, trigger: str):
+    def _generate_integration_report(self, trigger: str) -> None:
         """Generate a comprehensive integration report."""
         if self.verbose:
             print("📊 Generating integration report...")
@@ -387,7 +401,7 @@ class DynamicIntegration:
             print(f"   Errors: {len(self.errors)}")
 
 
-def main():
+def main() -> None:
     """Main entry point for the dynamic integration script."""
     trigger = sys.argv[1] if len(sys.argv) > 1 else "manual_request"
     verbose = "--verbose" in sys.argv or "-v" in sys.argv

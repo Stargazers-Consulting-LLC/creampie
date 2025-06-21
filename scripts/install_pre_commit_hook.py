@@ -11,7 +11,7 @@ import stat
 from pathlib import Path
 
 
-def install_pre_commit_hook():
+def install_pre_commit_hook() -> bool:
     """Install the pre-commit hook."""
     print("🔧 Installing pre-commit hook for dynamic integration...")
 
@@ -60,7 +60,7 @@ def install_pre_commit_hook():
         return False
 
 
-def uninstall_pre_commit_hook():
+def uninstall_pre_commit_hook() -> bool:
     """Uninstall the pre-commit hook."""
     print("🗑️  Uninstalling pre-commit hook...")
 
@@ -81,7 +81,7 @@ def uninstall_pre_commit_hook():
         return True
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     import sys
 

@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Python Style Guide",
     "description": "Comprehensive Python coding standards and best practices for the CreamPie project",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "last_updated": "2025-01-27",
     "source": "humans/guides/python_style_guide.md",
     "cross_references": [
@@ -10,6 +10,7 @@
       "cream_api/settings.py",
       "cream_api/stock_data/api.py",
       "cream_api/stock_data/models.py",
+      "cream_api/stock_data/schemas.py",
       "cream_api/tests/conftest.py",
       "pyproject.toml"
     ]
@@ -440,6 +441,87 @@
           "description": "Advanced path manipulation using os.path.commonpath()",
           "content": "**OS.PATH.COMMONPATH()**:\n- Function: os.path.commonpath(paths)\n- Purpose: Find common parent directory of multiple paths\n- Documentation: [Python os.path.commonpath()](https://docs.python.org/3/library/os.path.html#os.path.commonpath)\n\n**EXAMPLES**:\n```python\n# Find common parent directory of multiple paths\npaths = [\n    '/home/user/project/src/main.py',\n    '/home/user/project/src/utils.py',\n    '/home/user/project/tests/test_main.py'\n]\ncommon_parent = os.path.commonpath(paths)\n# Result: '/home/user/project'\n\n# Useful for determining project root from multiple file locations\nproject_files = [\n    os.path.abspath('src/main.py'),\n    os.path.abspath('tests/test_main.py'),\n    os.path.abspath('config/settings.py')\n]\nproject_root = os.path.commonpath(project_files)\n```\n\n**IMPORTANT NOTES**:\n- Raises ValueError if paths contain both absolute and relative pathnames\n- Raises ValueError if paths are on different drives\n- Raises ValueError if paths list is empty\n- Returns the longest common sub-path that is a valid path"
         }
+      }
+    },
+    "pydantic_schema": {
+      "title": "Pydantic Schema",
+      "description": "```python\nfrom pydantic import BaseModel, Field\nfrom datetime import datetime\nfrom typing import Opt...",
+      "content": "```python\nfrom pydantic import BaseModel, Field\nfrom datetime import datetime\nfrom typing import Optional\n\nclass StockDataResponse(BaseModel):\n    id: int\n    symbol: str = Field(..., description=\"Stock symbol\")\n    date: datetime\n    price: int = Field(..., description=\"Price in cents\")\n\n    class Config:\n        from_attributes = True\n```\n\nThis pattern will inform Pydantic schema definitions with proper field validation and descriptions.\n\nSchemas must include proper field types, descriptions, and configuration for ORM compatibility."
+    },
+    "pydantic_v2_migration": {
+      "title": "Pydantic v2 Migration Patterns",
+      "description": "Modern Pydantic v2 patterns to avoid deprecation warnings and ensure future compatibility",
+      "importance": "Always use Pydantic v2 patterns to avoid deprecation warnings and ensure future compatibility",
+      "configuration_patterns": {
+        "modern": {
+          "description": "Use ConfigDict instead of class Config",
+          "pattern": "from pydantic import BaseModel, ConfigDict\n\nclass StockDataResponse(BaseModel):\n    model_config = ConfigDict(from_attributes=True)\n    \n    id: int\n    symbol: str\n    # ... other fields",
+          "imports": "from pydantic import BaseModel, ConfigDict"
+        },
+        "deprecated": {
+          "description": "Avoid class Config pattern",
+          "pattern": "class StockDataResponse(BaseModel):\n    class Config:\n        from_attributes = True\n    \n    id: int\n    symbol: str\n    # ... other fields"
+        }
+      },
+      "serialization_patterns": {
+        "modern": {
+          "description": "Use @model_serializer instead of json_encoders",
+          "pattern": "from pydantic import BaseModel, ConfigDict, model_serializer\nfrom typing import Any\n\nclass StockDataResponse(BaseModel):\n    model_config = ConfigDict(from_attributes=True)\n    \n    id: int\n    symbol: str\n    date: datetime\n    \n    @model_serializer\n    def ser_model(self, info) -> dict[str, Any]:\n        \"\"\"Custom serializer to handle datetime fields.\"\"\"\n        data = self.model_dump()\n        if data.get('date'):\n            data['date'] = data['date'].isoformat()\n        return data",
+          "imports": "from pydantic import BaseModel, ConfigDict, model_serializer\nfrom typing import Any"
+        },
+        "deprecated": {
+          "description": "Avoid json_encoders pattern",
+          "pattern": "class StockDataResponse(BaseModel):\n    class Config:\n        from_attributes = True\n        json_encoders = {\n            datetime: lambda v: v.isoformat()\n        }"
+        }
+      },
+      "validation_patterns": {
+        "modern": {
+          "description": "Use model_validate instead of from_orm",
+          "orm_objects": "response = StockDataResponse.model_validate(orm_object)",
+          "dictionaries": "response = StockDataResponse.model_validate(data_dict)",
+          "imports": "from pydantic import BaseModel"
+        },
+        "deprecated": {
+          "description": "Avoid from_orm and parse_obj",
+          "orm_objects": "response = StockDataResponse.from_orm(orm_object)",
+          "dictionaries": "response = StockDataResponse.parse_obj(data_dict)"
+        }
+      },
+      "data_export_patterns": {
+        "modern": {
+          "description": "Use model_dump and model_dump_json",
+          "to_dict": "data_dict = model.model_dump()",
+          "to_json": "json_data = model.model_dump_json()"
+        },
+        "deprecated": {
+          "description": "Avoid dict() and json()",
+          "to_dict": "data_dict = model.dict()",
+          "to_json": "json_data = model.json()"
+        }
+      },
+      "field_validation_patterns": {
+        "modern": {
+          "description": "Use @field_validator instead of @validator",
+          "pattern": "from pydantic import BaseModel, Field, field_validator\n\nclass StockRequestCreate(BaseModel):\n    symbol: str = Field(..., min_length=1, max_length=10)\n    \n    @field_validator('symbol')\n    @classmethod\n    def validate_symbol_format(cls, v: str) -> str:\n        # Validation logic\n        return v.upper()",
+          "imports": "from pydantic import BaseModel, Field, field_validator"
+        },
+        "deprecated": {
+          "description": "Avoid @validator pattern",
+          "pattern": "from pydantic import BaseModel, Field, validator\n\nclass StockRequestCreate(BaseModel):\n    symbol: str = Field(..., min_length=1, max_length=10)\n    \n    @validator('symbol')\n    def validate_symbol_format(cls, v: str) -> str:\n        # Validation logic\n        return v.upper()"
+        }
+      },
+      "migration_checklist": [
+        "Replace class Config with model_config = ConfigDict()",
+        "Replace @validator with @field_validator",
+        "Replace from_orm() with model_validate()",
+        "Replace dict() with model_dump()",
+        "Replace json() with model_dump_json()",
+        "Replace json_encoders with @model_serializer",
+        "Update all imports to include new Pydantic v2 classes"
+      ],
+      "example_implementation": {
+        "description": "Complete modern Pydantic v2 schema example",
+        "pattern": "from pydantic import BaseModel, Field, ConfigDict, field_validator, model_serializer\nfrom datetime import datetime\nfrom typing import Any\nimport string\n\nclass StockRequestCreate(BaseModel):\n    \"\"\"Schema for creating a new stock tracking request.\"\"\"\n    \n    symbol: str = Field(\n        ...,\n        min_length=1,\n        max_length=10,\n        description=\"Stock symbol to track\"\n    )\n    \n    @field_validator('symbol')\n    @classmethod\n    def validate_symbol_format(cls, v: str) -> str:\n        \"\"\"Validate stock symbol format.\"\"\"\n        # Validation logic\n        return v.upper()\n\nclass StockRequestResponse(BaseModel):\n    \"\"\"Schema for stock tracking request responses.\"\"\"\n    \n    model_config = ConfigDict(from_attributes=True)\n    \n    id: str = Field(..., description=\"Unique identifier\")\n    symbol: str = Field(..., description=\"Stock symbol\")\n    is_active: bool = Field(..., description=\"Tracking status\")\n    created_at: datetime = Field(..., description=\"Creation timestamp\")\n    \n    @model_serializer\n    def ser_model(self, info) -> dict[str, Any]:\n        \"\"\"Custom serializer to handle datetime fields.\"\"\"\n        data = self.model_dump()\n        if data.get('created_at'):\n            data['created_at'] = data['created_at'].isoformat()\n        return data"
       }
     }
   },

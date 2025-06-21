@@ -593,8 +593,9 @@ async def get_current_user(
 ### Request/Response Models
 
 ```python
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict, model_serializer
 from datetime import datetime
+from typing import Any
 
 class StockDataCreate(BaseModel):
     """Model for creating stock data."""
@@ -608,15 +609,144 @@ class StockDataCreate(BaseModel):
 
 class StockDataResponse(BaseModel):
     """Model for stock data responses."""
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     symbol: str
     date: datetime
     close: float
     volume: int
 
+    @model_serializer
+    def ser_model(self, info) -> dict[str, Any]:
+        """Custom serializer to handle datetime fields."""
+        data = self.model_dump()
+        # Convert datetime fields to ISO format
+        if data.get('date'):
+            data['date'] = data['date'].isoformat()
+        return data
+```
+
+### Pydantic v2 Migration Patterns
+
+**Important**: Always use Pydantic v2 patterns to avoid deprecation warnings and ensure future compatibility.
+
+#### Configuration Patterns
+
+```python
+# ✅ Modern Pydantic v2 (Preferred)
+from pydantic import BaseModel, ConfigDict
+
+class StockDataResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    symbol: str
+    # ... other fields
+
+# ❌ Deprecated Pydantic v1 (Avoid)
+class StockDataResponse(BaseModel):
     class Config:
         from_attributes = True
+
+    id: int
+    symbol: str
+    # ... other fields
 ```
+
+#### Serialization Patterns
+
+```python
+# ✅ Modern Pydantic v2 (Preferred)
+from pydantic import BaseModel, ConfigDict, model_serializer
+from typing import Any
+
+class StockDataResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    symbol: str
+    date: datetime
+
+    @model_serializer
+    def ser_model(self, info) -> dict[str, Any]:
+        """Custom serializer to handle datetime fields."""
+        data = self.model_dump()
+        if data.get('date'):
+            data['date'] = data['date'].isoformat()
+        return data
+
+# ❌ Deprecated Pydantic v1 (Avoid)
+class StockDataResponse(BaseModel):
+    class Config:
+        from_attributes = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+```
+
+#### Model Validation Patterns
+
+```python
+# ✅ Modern Pydantic v2 (Preferred)
+# For ORM objects
+response = StockDataResponse.model_validate(orm_object)
+
+# For dictionaries
+response = StockDataResponse.model_validate(data_dict)
+
+# ❌ Deprecated Pydantic v1 (Avoid)
+response = StockDataResponse.from_orm(orm_object)
+response = StockDataResponse.parse_obj(data_dict)
+```
+
+#### Data Export Patterns
+
+```python
+# ✅ Modern Pydantic v2 (Preferred)
+data_dict = model.model_dump()
+json_data = model.model_dump_json()
+
+# ❌ Deprecated Pydantic v1 (Avoid)
+data_dict = model.dict()
+json_data = model.json()
+```
+
+#### Field Validation Patterns
+
+```python
+# ✅ Modern Pydantic v2 (Preferred)
+from pydantic import BaseModel, Field, field_validator
+
+class StockRequestCreate(BaseModel):
+    symbol: str = Field(..., min_length=1, max_length=10)
+
+    @field_validator('symbol')
+    @classmethod
+    def validate_symbol_format(cls, v: str) -> str:
+        # Validation logic
+        return v.upper()
+
+# ❌ Deprecated Pydantic v1 (Avoid)
+from pydantic import BaseModel, Field, validator
+
+class StockRequestCreate(BaseModel):
+    symbol: str = Field(..., min_length=1, max_length=10)
+
+    @validator('symbol')
+    def validate_symbol_format(cls, v: str) -> str:
+        # Validation logic
+        return v.upper()
+```
+
+**Migration Checklist:**
+- [ ] Replace `class Config` with `model_config = ConfigDict()`
+- [ ] Replace `@validator` with `@field_validator`
+- [ ] Replace `from_orm()` with `model_validate()`
+- [ ] Replace `dict()` with `model_dump()`
+- [ ] Replace `json()` with `model_dump_json()`
+- [ ] Replace `json_encoders` with `@model_serializer`
+- [ ] Update all imports to include new Pydantic v2 classes
 
 ## Testing
 
@@ -1086,7 +1216,7 @@ from datetime import datetime
 from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict, model_serializer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -1110,14 +1240,22 @@ class StockDataCreate(BaseModel):
 
 class StockDataResponse(BaseModel):
     """Model for stock data responses."""
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     symbol: str
     date: datetime
     close: float
     volume: int
 
-    class Config:
-        from_attributes = True
+    @model_serializer
+    def ser_model(self, info) -> dict[str, Any]:
+        """Custom serializer to handle datetime fields."""
+        data = self.model_dump()
+        # Convert datetime fields to ISO format
+        if data.get('date'):
+            data['date'] = data['date'].isoformat()
+        return data
 
 @router.post("/", response_model=StockDataResponse)
 async def create_stock_data(
@@ -1139,13 +1277,13 @@ async def create_stock_data(
     try:
         logger.info(f"Creating stock data for {data.symbol}")
 
-        stock_data = StockData(**data.dict())
+        stock_data = StockData(**data.model_dump())
         db.add(stock_data)
         await db.commit()
         await db.refresh(stock_data)
 
         logger.info(f"Successfully created stock data for {data.symbol}")
-        return StockDataResponse.from_orm(stock_data)
+        return StockDataResponse.model_validate(stock_data)
 
     except Exception as e:
         await db.rollback()
@@ -1181,7 +1319,7 @@ async def get_stock_data(
     stock_data = result.scalars().all()
 
     logger.info(f"Retrieved {len(stock_data)} records for {symbol}")
-    return [StockDataResponse.from_orm(data) for data in stock_data]
+    return [StockDataResponse.model_validate(data) for data in stock_data]
 ```
 
 This style guide provides a comprehensive foundation for writing reliable, maintainable Python code. Follow these patterns consistently to ensure your code is robust, secure, and easy to maintain.

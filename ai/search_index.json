@@ -115,8 +115,8 @@
     },
     "python": {
       "title": "Python",
-      "description": "- **Style guide**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n...",
-      "content": "- **Style guide**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`"
+      "description": "- **Style guide**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`",
+      "content": "- **Style guide**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Pydantic v2 migration**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`"
     },
     "fastapi": {
       "title": "FastAPI",
@@ -132,6 +132,11 @@
       "title": "SQLAlchemy/Database",
       "description": "- **Model patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \"....",
       "content": "- **Model patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Migrations**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Query patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Relationships**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Performance**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`"
+    },
+    "pydantic": {
+      "title": "Pydantic",
+      "description": "- **Schema patterns**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **V2 migration**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Validation**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Serialization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **FastAPI integration**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`",
+      "content": "- **Schema patterns**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **V2 migration**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Validation**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Serialization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **FastAPI integration**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`"
     },
     "web_scraping": {
       "title": "Web Scraping",

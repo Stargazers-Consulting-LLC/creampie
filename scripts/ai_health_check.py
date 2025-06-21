@@ -14,18 +14,18 @@ from datetime import datetime
 
 
 class AIDocumentationHealthCheck:
-    def __init__(self, verbose=False):
+    def __init__(self, verbose: bool = False) -> None:
         # Get the ai folder path (parent of scripts folder, then ai subfolder)
         self.script_dir = os.path.dirname(__file__)
         self.project_root = os.path.dirname(self.script_dir)
         self.ai_folder = os.path.join(self.project_root, "ai")
 
-        self.issues = []
-        self.warnings = []
+        self.issues: list[str] = []
+        self.warnings: list[str] = []
         self.success_count = 0
         self.verbose = verbose
 
-    def run_health_check(self):
+    def run_health_check(self) -> bool:
         """Run the complete health check and generate report."""
         if self.verbose:
             print("🔍 Running AI Documentation Health Check...")
@@ -72,7 +72,7 @@ class AIDocumentationHealthCheck:
 
         return len(self.issues) == 0
 
-    def check_folder_structure(self):
+    def check_folder_structure(self) -> None:
         """Check that all required folders and files exist."""
         if self.verbose:
             print("📁 Checking folder structure...")
@@ -117,7 +117,7 @@ class AIDocumentationHealthCheck:
 
         self._check_file_list(domain_guides, "domain guide", self.warnings)
 
-    def _check_file_list(self, file_list, file_type, issue_list):
+    def _check_file_list(self, file_list: list[str], file_type: str, issue_list: list[str]) -> None:
         """Check a list of files and add issues to the specified list."""
         for file_path in file_list:
             full_path = os.path.join(self.ai_folder, file_path)
@@ -130,7 +130,7 @@ class AIDocumentationHealthCheck:
                 if self.verbose:
                     print(f"❌ Missing: {file_path} (checked at: {full_path})")
 
-    def check_ai_metadata(self):
+    def check_ai_metadata(self) -> None:
         """Check that all JSON files have proper AI metadata."""
         if self.verbose:
             print("📋 Checking AI metadata...")
@@ -145,7 +145,7 @@ class AIDocumentationHealthCheck:
 
                     self._check_single_file_metadata(file_path)
 
-    def _check_single_file_metadata(self, file_path):
+    def _check_single_file_metadata(self, file_path: str) -> None:
         """Check AI metadata for a single file."""
         relative_path = os.path.relpath(file_path, self.ai_folder)
 
@@ -172,11 +172,11 @@ class AIDocumentationHealthCheck:
         except Exception as e:
             self.issues.append(f"Error reading {relative_path}: {e!s}")
 
-    def _check_ai_metadata_fields(self, data, relative_path):
+    def _check_ai_metadata_fields(self, data: dict, relative_path: str) -> None:
         """Check required AI metadata fields for old format - deprecated."""
         # This method is kept for backward compatibility but should not be used
 
-    def check_cross_references(self):
+    def check_cross_references(self) -> None:
         """Check that cross-references are valid and bidirectional."""
         if self.verbose:
             print("🔗 Checking cross-references...")
@@ -196,7 +196,7 @@ class AIDocumentationHealthCheck:
         for file_path in json_files:
             self._check_file_cross_references(file_path, file_paths)
 
-    def _check_file_cross_references(self, file_path, file_paths):
+    def _check_file_cross_references(self, file_path: str, file_paths: dict[str, str]) -> None:
         """Check cross-references for a single file."""
         try:
             with open(file_path, encoding="utf-8") as f:
@@ -215,7 +215,7 @@ class AIDocumentationHealthCheck:
         except Exception as e:
             self.issues.append(f"Error checking cross-references in {relative_path}: {e!s}")
 
-    def _check_structured_cross_references(self, data, relative_path, file_paths):
+    def _check_structured_cross_references(self, data: dict, relative_path: str, file_paths: dict[str, str]) -> None:
         """Check structured cross-references in a file."""
         cross_refs = data.get("cross_references", [])
         for ref in cross_refs:
@@ -233,7 +233,7 @@ class AIDocumentationHealthCheck:
                 if not self._file_exists_in_paths(ref_path, file_paths):
                     self.warnings.append(f"Cross-reference to non-existent file: {ref_path} in {relative_path}")
 
-    def _check_metadata_cross_references(self, data, relative_path, file_paths):
+    def _check_metadata_cross_references(self, data: dict, relative_path: str, file_paths: dict[str, str]) -> None:
         """Check cross-references in AI metadata."""
         ai_metadata = data.get("ai_metadata", {})
         metadata_refs = ai_metadata.get("cross_references", [])
@@ -245,7 +245,7 @@ class AIDocumentationHealthCheck:
             if not self._file_exists_in_paths(ref, file_paths):
                 self.warnings.append(f"AI metadata cross-reference to non-existent file: {ref} in {relative_path}")
 
-    def _file_exists_in_paths(self, ref_path, file_paths):
+    def _file_exists_in_paths(self, ref_path: str, file_paths: dict[str, str]) -> bool:
         """Check if a file exists in the file paths, trying multiple variations."""
         file_exists = False
 
@@ -283,7 +283,7 @@ class AIDocumentationHealthCheck:
 
         return file_exists
 
-    def _try_decoded_path(self, ref_path, file_paths):
+    def _try_decoded_path(self, ref_path: str, file_paths: dict[str, str]) -> bool:
         """Try URL-decoded path."""
         try:
             decoded_path = urllib.parse.unquote(ref_path)
@@ -291,7 +291,7 @@ class AIDocumentationHealthCheck:
         except Exception:
             return False
 
-    def _try_relative_path(self, ref_path, file_paths):
+    def _try_relative_path(self, ref_path: str, file_paths: dict[str, str]) -> bool:
         """Try relative path checks."""
         current_dir = os.path.dirname(ref_path)
         if current_dir:
@@ -305,7 +305,7 @@ class AIDocumentationHealthCheck:
 
         return False
 
-    def _try_basename_match(self, ref_path, file_paths):
+    def _try_basename_match(self, ref_path: str, file_paths: dict[str, str]) -> bool:
         """Try to find any file that matches the decoded name."""
         try:
             decoded_path = urllib.parse.unquote(ref_path)
@@ -317,7 +317,7 @@ class AIDocumentationHealthCheck:
 
         return False
 
-    def _should_ignore_reference(self, ref_path):
+    def _should_ignore_reference(self, ref_path: str) -> bool:
         """Check if a reference should be ignored (scripts, configs, etc.)."""
         # Ignore script files
         if ref_path.startswith("scripts/"):
@@ -337,14 +337,14 @@ class AIDocumentationHealthCheck:
 
         return False
 
-    def _is_example_placeholder(self, path):
+    def _is_example_placeholder(self, path: str) -> bool:
         """Check if a path is an example placeholder."""
         placeholder_patterns = ["path/to/", "example", "placeholder", "template"]
 
         path_lower = path.lower()
         return any(pattern in path_lower for pattern in placeholder_patterns)
 
-    def check_search_index(self):
+    def check_search_index(self) -> None:
         """Check that search index is comprehensive and accessible."""
         if self.verbose:
             print("🔍 Checking search index...")
@@ -377,7 +377,7 @@ class AIDocumentationHealthCheck:
         except Exception as e:
             self.issues.append(f"Error reading search index: {e!s}")
 
-    def check_quick_reference(self):
+    def check_quick_reference(self) -> None:
         """Check that quick reference is comprehensive and accessible."""
         if self.verbose:
             print("📖 Checking quick reference...")
@@ -410,7 +410,7 @@ class AIDocumentationHealthCheck:
         except Exception as e:
             self.issues.append(f"Error reading quick reference: {e!s}")
 
-    def check_ai_config(self):
+    def check_ai_config(self) -> None:
         """Check that AI configuration is valid and up-to-date."""
         if self.verbose:
             print("⚙️ Checking AI configuration...")
@@ -440,7 +440,7 @@ class AIDocumentationHealthCheck:
         except Exception as e:
             self.issues.append(f"Error reading AI configuration: {e!s}")
 
-    def check_template_consistency(self):
+    def check_template_consistency(self) -> None:
         """Check that all files follow consistent template structure."""
         if self.verbose:
             print("📋 Checking template consistency...")
@@ -484,7 +484,7 @@ class AIDocumentationHealthCheck:
                     except Exception as e:
                         self.issues.append(f"Error checking template consistency in {relative_path}: {e!s}")
 
-    def generate_report(self):
+    def generate_report(self) -> str:
         """Generate the health check report."""
         self.success_count + len(self.issues) + len(self.warnings)
 
@@ -516,7 +516,7 @@ class AIDocumentationHealthCheck:
 
         return report
 
-    def generate_json_result(self):
+    def generate_json_result(self) -> dict:
         """Generate the JSON result for the health check."""
         return {
             "ai_metadata": {
@@ -538,16 +538,18 @@ class AIDocumentationHealthCheck:
                 "summary": {
                     "successful_checks": self.success_count,
                     "issues_found": len(self.issues),
-                    "warnings_found": len(self.warnings),
-                    "overall_status": "pass" if len(self.issues) == 0 else "fail",
+                    "warnings": len(self.warnings),
+                    "overall_status": "healthy" if not self.issues else "needs_attention",
                 },
-                "details": {"issues": self.issues, "warnings": self.warnings},
-                "human_readable_report": self.generate_report(),
+                "details": {
+                    "issues": self.issues,
+                    "warnings": self.warnings,
+                },
             },
         }
 
 
-def main():
+def main() -> None:
     """Main health check function."""
     verbose = "--verbose" in sys.argv or "-v" in sys.argv
     health_check = AIDocumentationHealthCheck(verbose=verbose)
