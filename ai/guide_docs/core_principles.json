@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Core Development Principles",
     "description": "Fundamental decision-making frameworks with mandatory style guide compliance",
-    "version": "2.4",
+    "version": "3.1",
     "last_updated": "2025-01-27",
     "source": "guide_docs/core_principles.md",
     "cross_references": [
@@ -210,9 +210,19 @@
       "content": "**MANDATORY WORKFLOW FOR ALL PYTHON CODE:**\n\n1. **Pre-Generation Check**:\n   - Reference the style guide before generating any code\n   - Check existing codebase patterns for consistency\n   - Identify required patterns for the specific task\n\n2. **Generation Phase**:\n   - Apply all mandatory patterns during code generation\n   - Include proper module docstring with legal notice\n   - Use correct import organization\n   - Apply all type hints\n   - Follow error handling patterns\n   - Use appropriate file operations\n   - Set up proper logging\n   - Apply database patterns if applicable\n   - Apply FastAPI patterns if applicable\n   - Apply testing patterns if applicable\n   - Apply security patterns\n   - Use Pydantic v2 patterns\n\n3. **Post-Generation Validation**:\n   - Run through the Python quality checklist\n   - Verify all critical patterns are applied\n   - Check for any style guide violations\n   - Ensure consistency with existing codebase\n\n4. **Violation Reporting**:\n   - Report any violations with specific references to the style guide\n   - Provide specific line numbers and explanations\n   - Suggest specific fixes for violations\n   - Prioritize violations according to the priority system\n\n5. **Compliance Confirmation**:\n   - Confirm that all mandatory patterns are applied\n   - Verify that the code follows the style guide\n   - Ensure consistency with project patterns\n\n**AUTOMATIC ENFORCEMENT**: This workflow must be applied automatically for all Python code generation.\n\n**NO EXCEPTIONS**: Style guide compliance is mandatory and cannot be bypassed.\n\n**CONTINUOUS MONITORING**: Style guide compliance must be monitored continuously during all interactions."
     },
     "debugging_workflow": {
-      "title": "Debugging Workflow",
-      "description": "Mandatory workflow for debugging any issues, errors, or failures",
-      "content": "**MANDATORY DEBUGGING WORKFLOW - ALWAYS FOLLOW THIS ORDER:**\n\n1. **FIRST - Check AI Outputs Directory**:\n   - **ALWAYS** check `ai/outputs/` for relevant error reports first\n   - **ALWAYS** check `ai/outputs/test_results/` for test failure reports\n   - **ALWAYS** check `ai/outputs/lint_results/` for linting error reports\n   - **ALWAYS** check `ai/outputs/` for any other relevant output reports\n   - **NEVER** start debugging without reading the actual error reports\n   - **WARNING**: Reports older than 15 minutes may be stale - consider re-running tools if issues persist\n\n2. **SECOND - Read Actual Error Messages**:\n   - Read the specific error messages from the output files\n   - Identify exact line numbers and error types\n   - Understand the root cause before attempting fixes\n   - Don't guess or search randomly - use the reports that are already generated\n\n3. **THIRD - Fix Exact Issues Reported**:\n   - Address the specific line numbers and error types reported\n   - Start with the most critical errors first\n   - Follow the error trail systematically\n   - Don't waste time searching when reports are already available\n\n4. **FOURTH - Verify Fixes**:\n   - Re-run the relevant tools to verify fixes\n   - Check that the specific errors are resolved\n   - Ensure no new errors are introduced\n\n5. **FIFTH - Document Resolution**:\n   - Document what was fixed and why\n   - Update any relevant documentation\n   - Note any patterns that could prevent similar issues\n\n**CRITICAL RULES**:\n- **NEVER** start debugging without checking `ai/outputs/` first\n- **NEVER** run commands to debug when error reports are already available\n- **ALWAYS** read the actual error messages before attempting fixes\n- **ALWAYS** follow the established debugging workflow\n- **NEVER** skip the AI outputs directory check\n\n**AUTOMATIC ENFORCEMENT**: This debugging workflow must be applied automatically for all debugging activities.\n\n**NO EXCEPTIONS**: The AI outputs directory must be checked first in all debugging scenarios.\n\n**CONTINUOUS MONITORING**: This workflow must be followed consistently across all sessions."
+      "title": "Debugging Workflow (Core Principle)",
+      "description": "This is a fundamental rule that cannot be violated",
+      "principle": "ALWAYS check existing reports before debugging",
+      "mandatory_steps": [
+        "Check ai/outputs/lint_results/ for tool reports",
+        "Check ai/outputs/test_results/ for test failures",
+        "Check ai/outputs/ for any other reports",
+        "Read actual error messages from reports",
+        "Only then begin debugging based on concrete errors"
+      ],
+      "rationale": "Reports contain exact error details and line numbers. Guessing or searching randomly is inefficient and error-prone.",
+      "enforcement": "This principle is non-negotiable and applies to all debugging scenarios",
+      "consequences": "Violating this principle leads to wasted time, incorrect fixes, and user frustration"
     }
   },
   "implementation_guidelines": {

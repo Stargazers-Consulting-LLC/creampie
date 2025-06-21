@@ -10,13 +10,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from cream_api.stock_data.config import StockDataConfig, create_stock_data_config
 from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.parser import StockDataParser
-from cream_api.tests.stock_data.test_constants import (
+from cream_api.tests.stock_data.stock_data_test_constants import (
+    DEFAULT_TEST_SYMBOL,
     TEST_DATE,
     TEST_DEADLETTER_RESPONSES_DIR,
-    TEST_FIXTURES_DIR,
+    TEST_FIXTURE_PATH,
     TEST_PARSED_RESPONSES_DIR,
     TEST_RAW_RESPONSES_DIR,
-    TEST_SYMBOL,
 )
 
 
@@ -74,12 +74,12 @@ def test_data_files(test_dirs: dict[str, str]) -> dict[str, str]:
     """
     # Copy test files from fixtures to temporary directories
     fixture_files = {
-        TEST_SYMBOL: f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html",
+        DEFAULT_TEST_SYMBOL: f"{DEFAULT_TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html",
     }
 
     test_files = {}
     for symbol, filename in fixture_files.items():
-        source = os.path.join(TEST_FIXTURES_DIR, filename)
+        source = os.path.join(os.path.dirname(TEST_FIXTURE_PATH), filename)
         if os.path.exists(source):
             dest = os.path.join(test_dirs["raw"], filename)
             shutil.copy2(source, dest)

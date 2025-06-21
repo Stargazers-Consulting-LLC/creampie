@@ -1,4 +1,4 @@
-# Cursor Rules for CreamPie Project with AI Documentation System
+# Cursor Rules for CreamPie Project
 
 ## 🎯 Core Principles
 
@@ -250,6 +250,39 @@
 - Gather user feedback for improvements
 - Update patterns based on new insights
 - Expand coverage as needed
+
+## 🚨 CRITICAL: Debugging Workflow (MANDATORY)
+
+Before ANY debugging attempt, you MUST:
+
+1. **ALWAYS** check `ai/outputs/lint_results/` for existing tool reports
+2. **ALWAYS** check `ai/outputs/test_results/` for existing test failure reports
+3. **ALWAYS** check `ai/outputs/` for any other relevant reports
+4. **ALWAYS** read the actual error messages from these reports
+5. **ONLY THEN** begin debugging based on concrete error information
+
+**NEVER:**
+- Start debugging without checking `ai/outputs/` first
+- Ask to run tools when error reports already exist
+- Make assumptions about error causes
+- Guess at missing imports or constants
+
+**ENFORCEMENT:** This workflow is MANDATORY and non-negotiable. Violating this rule leads to wasted time and incorrect fixes.
+
+## Project-Specific Rules
+
+- Follow the Python style guide in `ai/guide_docs/language_specific/python_style_guide.json`
+- Use FastAPI patterns from `ai/guide_docs/language_specific/fastapi_development_guide.json`
+- Follow React patterns from `ai/guide_docs/language_specific/react_style_guide.json`
+- Reference database patterns from `ai/guide_docs/domain_specific/database_management_guide.json`
+
+## Code Quality Standards
+
+- Always include proper error handling
+- Add type hints for all functions
+- Write tests for new functionality
+- Follow established naming conventions
+- Document complex logic with clear comments
 
 ---
 

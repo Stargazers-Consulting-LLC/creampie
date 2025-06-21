@@ -2,7 +2,7 @@
   "metadata": {
     "title": "code_review_patterns",
     "description": "",
-    "version": "2.1",
+    "version": "3.1",
     "last_updated": "2025-06-18",
     "source": "guide_docs/code_review_patterns.md",
     "cross_references": [
@@ -149,8 +149,7 @@
     },
     "maintainability_issues": {
       "title": "Maintainability Issues",
-      "description": "```\n**Issue**: Duplicated logic across multiple functions\n**Impact**: Makes maintenance harder and i...",
-      "content": "```\n**Issue**: Duplicated logic across multiple functions\n**Impact**: Makes maintenance harder and increases bug risk\n**Solution**: Extract common logic into a shared function\n**Reasoning**: DRY principle reduces code duplication and maintenance burden\n```"
+      "description": "```\n**Issue**: Duplicated logic across multiple functions\n**Impact**: Makes maintenance harder and increases bug risk\n**Solution**: Extract common logic into a shared function\n**Reasoning**: DRY principle reduces code duplication and maintenance burden\n```"
     },
     "6_review_scope_management": {
       "title": "6. Review Scope Management",
@@ -159,17 +158,17 @@
     },
     "when_to_expand_scope": {
       "title": "When to Expand Scope",
-      "description": "- **Related issues**: If fixing one issue reveals related problems\n- **Pattern violations**: If the ...",
+      "description": "- **Related issues**: If fixing one issue reveals related problems\n- **Pattern violations**: If the issue suggests a broader pattern problem\n- **User requests**: If user asks for broader review\n- **Critical issues**: If the issue affects multiple areas",
       "content": "- **Related issues**: If fixing one issue reveals related problems\n- **Pattern violations**: If the issue suggests a broader pattern problem\n- **User requests**: If user asks for broader review\n- **Critical issues**: If the issue affects multiple areas"
     },
     "when_to_stay_focused": {
       "title": "When to Stay Focused",
-      "description": "- **User's explicit scope**: Respect user's stated boundaries\n- **Unrelated issues**: Don't suggest ...",
+      "description": "- **User's explicit scope**: Respect user's stated boundaries\n- **Unrelated issues**: Don't suggest changes outside current context\n- **Minor improvements**: Don't overwhelm with too many suggestions\n- **Future considerations**: Don't suggest premature optimizations",
       "content": "- **User's explicit scope**: Respect user's stated boundaries\n- **Unrelated issues**: Don't suggest changes outside current context\n- **Minor improvements**: Don't overwhelm with too many suggestions\n- **Future considerations**: Don't suggest premature optimizations"
     },
     "scope_communication": {
       "title": "Scope Communication",
-      "description": "- **Current focus**: \"Focusing on the error handling in this function\"\n- **Related issues**: \"This a...",
+      "description": "- **Current focus**: \"Focusing on the error handling in this function\"\n- **Related issues**: \"This also affects the similar function in X\"\n- **Broader implications**: \"This pattern appears in several other files\"\n- **Future considerations**: \"Consider applying this pattern elsewhere\"",
       "content": "- **Current focus**: \"Focusing on the error handling in this function\"\n- **Related issues**: \"This also affects the similar function in X\"\n- **Broader implications**: \"This pattern appears in several other files\"\n- **Future considerations**: \"Consider applying this pattern elsewhere\""
     },
     "7_follow_up_patterns": {
@@ -179,27 +178,27 @@
     },
     "checking_implementation": {
       "title": "Checking Implementation",
-      "description": "- **Verify changes**: Confirm that suggestions were implemented correctly\n- **Test integration**: En...",
+      "description": "- **Verify changes**: Confirm that suggestions were implemented correctly\n- **Test integration**: Ensure changes work with the rest of the codebase\n- **Validate assumptions**: Check that the reasoning still applies\n- **Provide feedback**: Acknowledge good implementations",
       "content": "- **Verify changes**: Confirm that suggestions were implemented correctly\n- **Test integration**: Ensure changes work with the rest of the codebase\n- **Validate assumptions**: Check that the reasoning still applies\n- **Provide feedback**: Acknowledge good implementations"
     },
     "iterative_improvement": {
       "title": "Iterative Improvement",
-      "description": "- **Build on progress**: Use previous improvements as foundation\n- **Incremental suggestions**: Don'...",
+      "description": "- **Build on progress**: Use previous improvements as foundation\n- **Incremental suggestions**: Don't suggest everything at once\n- **Learning opportunities**: Help user understand patterns for future use\n- **Confidence building**: Acknowledge improvements and progress",
       "content": "- **Build on progress**: Use previous improvements as foundation\n- **Incremental suggestions**: Don't suggest everything at once\n- **Learning opportunities**: Help user understand patterns for future use\n- **Confidence building**: Acknowledge improvements and progress"
     },
     "documentation_updates": {
       "title": "Documentation Updates",
-      "description": "- **Update guides**: If patterns evolve, update relevant guides\n- **Share learnings**: Document new ...",
+      "description": "- **Update guides**: If patterns evolve, update relevant guides\n- **Share learnings**: Document new patterns that work well\n- **Improve examples**: Update examples based on real usage\n- **Refine guidance**: Improve guidance based on user feedback",
       "content": "- **Update guides**: If patterns evolve, update relevant guides\n- **Share learnings**: Document new patterns that work well\n- **Improve examples**: Update examples based on real usage\n- **Refine guidance**: Improve guidance based on user feedback"
     },
     "code_quality_standards": {
       "title": "Code Quality Standards",
-      "description": "- **Readability**: Code should be self-documenting with clear variable and function names\n- **Consis...",
+      "description": "- **Readability**: Code should be self-documenting with clear variable and function names\n- **Consistency**: Follow established patterns and conventions throughout the codebase\n- **Maintainability**: Code should be easy to modify and extend without breaking existing functionality\n- **Performance**: Optimize for the specific use case while maintaining readability\n- **Security**: Follow security best practices and validate all inputs\n- **Testing**: Include comprehensive tests for all new functionality",
       "content": "- **Readability**: Code should be self-documenting with clear variable and function names\n- **Consistency**: Follow established patterns and conventions throughout the codebase\n- **Maintainability**: Code should be easy to modify and extend without breaking existing functionality\n- **Performance**: Optimize for the specific use case while maintaining readability\n- **Security**: Follow security best practices and validate all inputs\n- **Testing**: Include comprehensive tests for all new functionality"
     },
     "ai_script_review_criteria": {
       "title": "AI Script Review Criteria",
-      "description": "- **Linting Compliance**: All scripts must pass ruff, mypy, and other linting tools\n  - No E501 (lin...",
+      "description": "- **Linting Compliance**: All scripts must pass ruff, mypy, and other linting tools\n  - No E501 (line too long), B007 (unused variables), or PLR0911 (too many returns) errors\n  - Use underscore for unused loop variables (e.g., `for _ in range(1):`)\n  - Break complex functions into smaller, focused helper methods\n- **Report Generation**: Scripts should generate both human and machine-readable outputs\n  - Include Markdown reports with AI metadata and cross-references\n  - Provide JSON output for programmatic consumption\n  - Use consistent formatting and structure across all reports\n- **Error Handling**: Comprehensive error handling with detailed logging\n  - Collect errors in lists for batch reporting and analysis\n  - Provide both console output for immediate feedback and file output for persistence\n  - Include timestamps, error details, and resolution suggestions\n- **Performance**: Optimize for readability over performance in non-critical paths\n  - AI scripts are typically run infrequently, so maintainability is more important than speed\n  - Use clear, explicit logic even if it means multiple checks\n  - Prefer single return points for complex validation functions\n- **Maintainability**: Use helper methods to break down complex functions\n  - Extract complex logic into focused, well-named helper methods\n  - Use descriptive method names that clearly indicate their purpose\n  - Maintain clear separation of concerns between different functions\n- **Documentation**: Include AI metadata and cross-references in all generated content\n  - Use consistent AI metadata format across all generated reports\n  - Include bidirectional cross-references to related scripts and configuration\n  - Provide clear purpose, template version, and maintenance information\n\nThese criteria will inform AI script review and quality assurance throughout the project.\n\nAll AI scripts must meet these review criteria before being considered complete.",
       "content": "- **Linting Compliance**: All scripts must pass ruff, mypy, and other linting tools\n  - No E501 (line too long), B007 (unused variables), or PLR0911 (too many returns) errors\n  - Use underscore for unused loop variables (e.g., `for _ in range(1):`)\n  - Break complex functions into smaller, focused helper methods\n- **Report Generation**: Scripts should generate both human and machine-readable outputs\n  - Include Markdown reports with AI metadata and cross-references\n  - Provide JSON output for programmatic consumption\n  - Use consistent formatting and structure across all reports\n- **Error Handling**: Comprehensive error handling with detailed logging\n  - Collect errors in lists for batch reporting and analysis\n  - Provide both console output for immediate feedback and file output for persistence\n  - Include timestamps, error details, and resolution suggestions\n- **Performance**: Optimize for readability over performance in non-critical paths\n  - AI scripts are typically run infrequently, so maintainability is more important than speed\n  - Use clear, explicit logic even if it means multiple checks\n  - Prefer single return points for complex validation functions\n- **Maintainability**: Use helper methods to break down complex functions\n  - Extract complex logic into focused, well-named helper methods\n  - Use descriptive method names that clearly indicate their purpose\n  - Maintain clear separation of concerns between different functions\n- **Documentation**: Include AI metadata and cross-references in all generated content\n  - Use consistent AI metadata format across all generated reports\n  - Include bidirectional cross-references to related scripts and configuration\n  - Provide clear purpose, template version, and maintenance information\n\nThese criteria will inform AI script review and quality assurance throughout the project.\n\nAll AI scripts must meet these review criteria before being considered complete."
     },
     "review_process": {

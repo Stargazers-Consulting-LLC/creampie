@@ -2,7 +2,7 @@
   "metadata": {
     "title": "AI Tool Usage Guide",
     "description": "",
-    "version": "2.1",
+    "version": "3.1",
     "last_updated": "2025-06-18",
     "source": "ai_usage_guide.md",
     "cross_references": [
@@ -320,6 +320,51 @@
       "title": "Update Script",
       "description": "- **Location**: `scripts/update_documentation.py`\n- **Output**: `outputs/updates/ai_config.json`\n- *...",
       "content": "- **Location**: `scripts/update_documentation.py`\n- **Output**: `outputs/updates/ai_config.json`\n- **Purpose**: Maintains metadata consistency across all files"
+    },
+    "debugging_workflow": {
+      "title": "Mandatory Debugging Checklist",
+      "description": "CRITICAL: This checklist MUST be completed before any debugging attempts",
+      "mandatory_steps": [
+        {
+          "step": 1,
+          "action": "Check ai/outputs/lint_results/ for tool reports",
+          "required": true,
+          "files": ["mypy_report.json", "ruff_report.json", "eslint_report.json"],
+          "reason": "Reports contain exact error details and line numbers"
+        },
+        {
+          "step": 2,
+          "action": "Check ai/outputs/test_results/ for test failure reports",
+          "required": true,
+          "files": ["test_output.txt", "pytest-results.json"],
+          "reason": "Test output contains specific failure details and stack traces"
+        },
+        {
+          "step": 3,
+          "action": "Check ai/outputs/ for any other relevant reports",
+          "required": true,
+          "reason": "Other tools may have generated error reports"
+        },
+        {
+          "step": 4,
+          "action": "Read the actual error messages from reports",
+          "required": true,
+          "reason": "Never guess - use concrete error information"
+        },
+        {
+          "step": 5,
+          "action": "Only then begin debugging based on actual errors",
+          "required": true,
+          "reason": "Efficient debugging requires accurate information"
+        }
+      ],
+      "forbidden_actions": [
+        "Starting debugging without reading reports",
+        "Asking to run tools when reports already exist",
+        "Making assumptions about error causes",
+        "Guessing at missing imports or constants"
+      ],
+      "enforcement": "This checklist is MANDATORY and non-negotiable"
     }
   },
   "implementation_guidelines": {

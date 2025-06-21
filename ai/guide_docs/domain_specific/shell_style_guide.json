@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Script Structure",
     "description": "Comprehensive shell scripting standards and best practices for AI code generation, review, and validation.",
-    "version": "3.0",
+    "version": "3.1",
     "last_updated": "2025-06-18",
     "source": "guide_docs/domain_specific/shell_style_guide.json",
     "cross_references": [

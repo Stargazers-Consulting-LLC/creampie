@@ -15,7 +15,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.stock_data.models import StockData, TrackedStock
-from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL, TEST_VOLUME
+from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL, TEST_VOLUME
 
 
 @pytest.fixture

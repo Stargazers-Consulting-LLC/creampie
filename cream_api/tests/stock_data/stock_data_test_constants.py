@@ -2,17 +2,26 @@
 
 This module contains test-specific constants used across stock data tests,
 including test directories, sample data, and other test configuration.
+
+References:
+    - [Pytest Documentation](https://docs.pytest.org/)
+    - [Python Type Hints](https://docs.python.org/3/library/typing.html)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
 """
 
 import os
 from datetime import datetime
 
-# Test data constants
-TEST_SYMBOL = "TEST"
-TEST_DATE = datetime.strptime("2025-06-16", "%Y-%m-%d")  # Match fixture data first row
-TEST_RECORDS_COUNT = 1  # Number of records in test data
+# Core test data constants
+DEFAULT_TEST_SYMBOL = "AAPL"
+TEST_DATE = datetime.strptime("2025-06-16", "%Y-%m-%d")
+TEST_RECORDS_COUNT = 1
 
-# Price data - matching the first row in fixture (Jun 16, 2025)
+# Price data constants
 TEST_OPEN_PRICE = 197.30
 TEST_HIGH_PRICE = 198.69
 TEST_LOW_PRICE = 196.56
@@ -20,19 +29,16 @@ TEST_CLOSE_PRICE = 198.42
 TEST_ADJ_CLOSE_PRICE = 198.42
 TEST_VOLUME = 43_020_700
 
-# Test stock symbols for consistent testing
-TEST_STOCK_SYMBOLS = {
+# Stock symbol mappings
+TEST_STOCK_SYMBOLS: dict[str, str] = {
     "AAPL": "Apple Inc.",
     "TSLA": "Tesla Inc.",
     "GOOGL": "Alphabet Inc.",
     "MSFT": "Microsoft Corporation",
 }
 
-# Default test symbol for consistent testing
-DEFAULT_TEST_SYMBOL = "AAPL"
-
-# Test data dictionary
-TEST_STOCK_DATA = {
+# Test data structures
+TEST_STOCK_DATA: dict[str, list[dict[str, str]]] = {
     "prices": [
         {
             "date": TEST_DATE.strftime("%Y-%m-%d"),
@@ -46,7 +52,7 @@ TEST_STOCK_DATA = {
     ]
 }
 
-# HTML content
+# HTML test content
 TEST_HTML_CONTENT = f"""<table>
 <tr>
     <th>Date</th>
@@ -72,26 +78,29 @@ TEST_HTML_CONTENT = f"""<table>
 TEST_RAW_RESPONSES_DIR = "test_raw_responses"
 TEST_PARSED_RESPONSES_DIR = "test_parsed_responses"
 TEST_DEADLETTER_RESPONSES_DIR = "test_deadletter_responses"
-TEST_HTML_FILENAME = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
+TEST_HTML_FILENAME = f"{DEFAULT_TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
 
 # Fixture configuration
 TEST_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
-TEST_FIXTURE = f"{TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
+TEST_FIXTURE = f"{DEFAULT_TEST_SYMBOL}_{TEST_DATE.strftime('%Y-%m-%d')}.html"
 TEST_FIXTURE_PATH = os.path.join(TEST_FIXTURES_DIR, TEST_FIXTURE)
 
 # Server configuration
 TEST_HOST = "localhost"
 TEST_PORT = 8000
 TEST_BASE_URL = f"http://{TEST_HOST}:{TEST_PORT}"
-TEST_SERVER_BASE_URL = TEST_BASE_URL  # Alias for backward compatibility
+TEST_SERVER_BASE_URL = TEST_BASE_URL
 
 # Rate limiter configuration
-RATE_LIMITER_REQUESTS = 2  # Number of requests allowed per window
-RATE_LIMITER_WINDOW = 1.0  # Time window in seconds
-TIMING_TOLERANCE = 0.1  # Allow 100ms timing variation
+RATE_LIMITER_REQUESTS = 2
+RATE_LIMITER_WINDOW = 1.0
+TIMING_TOLERANCE = 0.1
 
-# Data validation constants
+# Validation constants
 REQUIRED_COLUMNS_COUNT = 7
 
-# Test pagination constants
+# Pagination constants
 DEFAULT_PAGE_SIZE = 10
+
+# Expected values for assertions
+EXPECTED_THREE_STOCKS = 3

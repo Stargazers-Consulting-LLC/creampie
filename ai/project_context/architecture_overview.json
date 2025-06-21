@@ -2,7 +2,7 @@
   "metadata": {
     "title": "architecture_overview",
     "description": "System architecture with clear separation of concerns and deadletter queue system",
-    "version": "2.2",
+    "version": "3.1",
     "last_updated": "2025-06-20",
     "source": "project_context/architecture_overview.md",
     "cross_references": [

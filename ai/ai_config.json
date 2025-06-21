@@ -437,5 +437,30 @@
     "preserve_original": true,
     "structured_output": true,
     "style_guide_compliance": true
+  },
+  "debugging_enforcement": {
+    "enabled": true,
+    "mandatory": true,
+    "script_path": "scripts/enforce_debug_workflow.py",
+    "acknowledgment_script": "scripts/acknowledge_reports.py",
+    "timeout_minutes": 5,
+    "description": "Enforces mandatory debugging workflow by blocking debugging without report acknowledgment",
+    "workflow": [
+      "Check for existing reports in ai/outputs/",
+      "Block debugging if reports exist without acknowledgment",
+      "Require explicit acknowledgment via acknowledge_reports.py",
+      "Allow debugging only after proper acknowledgment"
+    ]
+  },
+  "cursor_integration": {
+    "rules_file": ".cursorrules",
+    "workspace_config": ".cursor/workspace.json",
+    "vscode_settings": ".vscode/settings.json",
+    "enforcement": {
+      "debugging_workflow": "mandatory",
+      "style_guides": "mandatory",
+      "documentation": "mandatory"
+    },
+    "description": "Cursor-specific configuration for enforcing project rules and workflows"
   }
 }

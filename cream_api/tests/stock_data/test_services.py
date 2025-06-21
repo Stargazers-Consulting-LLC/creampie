@@ -21,7 +21,7 @@ from cream_api.stock_data.services import (
     get_tracked_stocks,
     process_stock_request,
 )
-from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL, TEST_STOCK_SYMBOLS
+from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL, TEST_STOCK_SYMBOLS
 
 # Test constants
 EXPECTED_THREE_STOCKS = 3

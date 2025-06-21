@@ -25,7 +25,7 @@ from cream_api.stock_data.schemas import (
     StockTrackingUpdate,
     TrackedStockListResponse,
 )
-from cream_api.tests.stock_data.test_constants import DEFAULT_PAGE_SIZE
+from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_PAGE_SIZE
 
 # Test constants
 EXPECTED_STOCK_COUNT = 2

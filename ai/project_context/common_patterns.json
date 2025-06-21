@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Common Development Patterns",
     "description": "Established patterns including separation of concerns and deadletter queue patterns",
-    "version": "2.2",
+    "version": "3.1",
     "last_updated": "2025-06-20",
     "source": "project_context/common_patterns.md",
     "cross_references": [

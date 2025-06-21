@@ -9,14 +9,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.models import StockData
-from cream_api.tests.stock_data.test_constants import (
+from cream_api.tests.stock_data.stock_data_test_constants import (
+    DEFAULT_TEST_SYMBOL,
     TEST_ADJ_CLOSE_PRICE,
     TEST_CLOSE_PRICE,
     TEST_HIGH_PRICE,
     TEST_LOW_PRICE,
     TEST_OPEN_PRICE,
     TEST_RECORDS_COUNT,
-    TEST_SYMBOL,
     TEST_VOLUME,
 )
 
@@ -128,7 +128,8 @@ async def test_store_data_success(data_loader: StockDataLoader, session: AsyncSe
         ]
     }
     stock_data_list = await data_loader.transform_data(sample_data)
-    await data_loader.store_data(TEST_SYMBOL, stock_data_list)
+    await data_loader.store_data(DEFAULT_TEST_SYMBOL, stock_data_list)
+    await data_loader.store_data(DEFAULT_TEST_SYMBOL, stock_data_list)
     result = await session.execute(text("SELECT * FROM stock_data"))
     stored_data = result.fetchall()
     assert len(stored_data) == TEST_RECORDS_COUNT
@@ -151,8 +152,8 @@ async def test_store_data_duplicate(data_loader: StockDataLoader, session: Async
         ]
     }
     stock_data_list = await data_loader.transform_data(sample_data)
-    await data_loader.store_data(TEST_SYMBOL, stock_data_list)
-    await data_loader.store_data(TEST_SYMBOL, stock_data_list)
+    await data_loader.store_data(DEFAULT_TEST_SYMBOL, stock_data_list)
+    await data_loader.store_data(DEFAULT_TEST_SYMBOL, stock_data_list)
     result = await session.execute(text("SELECT * FROM stock_data"))
     stored_data = result.fetchall()
     assert len(stored_data) == TEST_RECORDS_COUNT
@@ -174,7 +175,7 @@ async def test_process_data_end_to_end(data_loader: StockDataLoader, session: As
             }
         ]
     }
-    await data_loader.process_data(TEST_SYMBOL, sample_data)
+    await data_loader.process_data(DEFAULT_TEST_SYMBOL, sample_data)
     result = await session.execute(text("SELECT * FROM stock_data"))
     stored_data = result.fetchall()
     assert len(stored_data) == TEST_RECORDS_COUNT

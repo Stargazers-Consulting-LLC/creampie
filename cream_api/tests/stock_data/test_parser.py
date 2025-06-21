@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from cream_api.common.exceptions import StockRetrievalError
 from cream_api.stock_data.config import StockDataConfig
 from cream_api.stock_data.parser import StockDataParser
-from cream_api.tests.stock_data.test_constants import (
+from cream_api.tests.stock_data.stock_data_test_constants import (
     REQUIRED_COLUMNS_COUNT,
     TEST_ADJ_CLOSE_PRICE,
     TEST_CLOSE_PRICE,

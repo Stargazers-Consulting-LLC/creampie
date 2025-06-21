@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 from cream_api.common.exceptions import StockRetrievalError
 from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
-from cream_api.tests.stock_data.test_constants import REQUIRED_COLUMNS_COUNT
+from cream_api.tests.stock_data.stock_data_test_constants import REQUIRED_COLUMNS_COUNT
 
 # Required columns for data validation
 REQUIRED_COLUMNS: list[str] = [

@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Python Style Guide",
     "description": "Comprehensive Python coding standards and best practices for the CreamPie project",
-    "version": "1.2.0",
+    "version": "3.1",
     "last_updated": "2025-01-27",
     "source": "humans/guides/python_style_guide.md",
     "cross_references": [

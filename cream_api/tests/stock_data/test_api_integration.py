@@ -22,7 +22,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.main import app
-from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL
+from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL
 
 client = TestClient(app)
 

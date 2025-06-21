@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Database Management Style Guide (PostgreSQL Focus)",
     "description": "Best practices and standards for managing PostgreSQL databases in the CreamPie project",
-    "version": "1.0.0",
+    "version": "3.1",
     "last_updated": "2025-01-27",
     "source": "humans/guides/database_style_guide.md",
     "cross_references": [

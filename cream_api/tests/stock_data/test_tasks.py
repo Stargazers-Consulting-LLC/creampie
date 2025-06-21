@@ -28,7 +28,7 @@ from cream_api.stock_data.tasks import (
     retrieve_historical_data_task,
     update_all_tracked_stocks,
 )
-from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL
+from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL
 
 
 class TestRetrieveHistoricalDataTask:

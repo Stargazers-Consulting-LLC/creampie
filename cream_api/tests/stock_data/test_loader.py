@@ -22,7 +22,8 @@ from sqlalchemy import select
 from cream_api.stock_data.config import StockDataConfig
 from cream_api.stock_data.loader import StockDataLoader
 from cream_api.stock_data.models import StockData
-from cream_api.tests.stock_data.test_constants import (
+from cream_api.tests.stock_data.stock_data_test_constants import (
+    DEFAULT_TEST_SYMBOL,
     TEST_ADJ_CLOSE_PRICE,
     TEST_CLOSE_PRICE,
     TEST_DATE,
@@ -31,7 +32,6 @@ from cream_api.tests.stock_data.test_constants import (
     TEST_LOW_PRICE,
     TEST_OPEN_PRICE,
     TEST_STOCK_DATA,
-    TEST_SYMBOL,
     TEST_VOLUME,
 )
 
@@ -140,7 +140,7 @@ async def test_store_data(
     }
 
     # Store data
-    await loader.store_data(TEST_SYMBOL, await loader.transform_data(valid_data))
+    await loader.store_data(DEFAULT_TEST_SYMBOL, await loader.transform_data(valid_data))
 
     # Verify data was stored
     result = await loader.session.execute(select(StockData))
@@ -175,8 +175,8 @@ async def test_process_raw_files(
     from cream_api.stock_data.processor import FileProcessor
 
     # Verify test files exist
-    assert test_data_files.get(TEST_SYMBOL) is not None
-    assert os.path.exists(test_data_files[TEST_SYMBOL])
+    assert test_data_files.get(DEFAULT_TEST_SYMBOL) is not None
+    assert os.path.exists(test_data_files[DEFAULT_TEST_SYMBOL])
 
     # Create processor with test loader
     processor = FileProcessor(loader=loader, config=test_config)
@@ -196,7 +196,7 @@ async def test_process_raw_files(
 
     # Verify only test data was processed
     for data in stored_data:
-        assert data.symbol == TEST_SYMBOL
+        assert data.symbol == DEFAULT_TEST_SYMBOL
 
 
 @pytest.mark.asyncio
@@ -238,7 +238,7 @@ async def test_process_raw_files_error_handling(
     result = await loader.session.execute(select(StockData))
     stored_data = result.scalars().all()
     for data in stored_data:
-        assert data.symbol == TEST_SYMBOL
+        assert data.symbol == DEFAULT_TEST_SYMBOL
 
 
 @pytest.mark.asyncio

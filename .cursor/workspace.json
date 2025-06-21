@@ -1,0 +1,33 @@
+{
+  "name": "CreamPie Project",
+  "description": "AI-powered stock tracking application with enforced debugging workflow",
+  "rules": {
+    "debugging_workflow": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "Before any debugging, check ai/outputs/ for existing reports",
+      "steps": [
+        "Check ai/outputs/lint_results/ for tool reports",
+        "Check ai/outputs/test_results/ for test failures",
+        "Check ai/outputs/ for other reports",
+        "Read actual error messages",
+        "Only then begin debugging"
+      ],
+      "forbidden": [
+        "Starting debugging without checking reports",
+        "Asking to run tools when reports exist",
+        "Making assumptions about error causes"
+      ]
+    }
+  },
+  "ai_config": {
+    "documentation_path": "ai/",
+    "style_guides": [
+      "ai/guide_docs/language_specific/python_style_guide.json",
+      "ai/guide_docs/language_specific/react_style_guide.json"
+    ],
+    "patterns": [
+      "ai/project_context/common_patterns.json"
+    ]
+  }
+}

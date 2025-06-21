@@ -434,8 +434,8 @@ class AIDocumentationHealthCheck:
 
             # Check version
             version = config.get("ai_documentation_config", {}).get("version")
-            if version != "3.0":
-                self.warnings.append(f"Configuration version mismatch: expected 3.0, got {version}")
+            if version != "3.1":
+                self.warnings.append(f"Configuration version mismatch: expected 3.1, got {version}")
 
         except Exception as e:
             self.issues.append(f"Error reading AI configuration: {e!s}")
@@ -520,7 +520,7 @@ class AIDocumentationHealthCheck:
         """Generate the JSON result for the health check."""
         return {
             "ai_metadata": {
-                "template_version": "3.0",
+                "template_version": "3.1",
                 "ai_processing_level": "High",
                 "required_context": "AI documentation structure and standards",
                 "validation_required": True,

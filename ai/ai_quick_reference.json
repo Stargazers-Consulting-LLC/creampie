@@ -2,7 +2,7 @@
   "metadata": {
     "title": "AI Quick Reference",
     "description": "Quick reference for AI tool usage and documentation patterns",
-    "version": "2.1",
+    "version": "3.1",
     "last_updated": "2025-06-18",
     "source": "ai_quick_reference.md",
     "cross_references": [
@@ -241,6 +241,24 @@
       "title": "Educational Guidance",
       "description": "- \"Here's why we use this pattern: [explanation].\"\n- \"This follows our [principle] because [reasonin...",
       "content": "- \"Here's why we use this pattern: [explanation].\"\n- \"This follows our [principle] because [reasoning].\"\n- \"For future reference, you can find this pattern in [guide].\"\n\n---\n\n**Remember**: Always maintain context awareness, follow established patterns, and prioritize user success over perfect code."
+    },
+    "debugging_priority": {
+      "title": "🚨 CRITICAL: Debugging Workflow (MANDATORY)",
+      "description": "This workflow MUST be followed before any debugging attempts",
+      "first_step": "ALWAYS check ai/outputs/ for existing reports before debugging",
+      "checklist": [
+        "1. Check ai/outputs/lint_results/ for tool reports",
+        "2. Check ai/outputs/test_results/ for test failures",
+        "3. Check ai/outputs/ for any other reports",
+        "4. Read actual error messages from reports",
+        "5. Only then begin debugging based on concrete errors"
+      ],
+      "forbidden": [
+        "❌ Starting debugging without reading reports",
+        "❌ Asking to run tools when reports exist",
+        "❌ Making assumptions about error causes"
+      ],
+      "enforcement": "This is MANDATORY - no exceptions"
     }
   }
 }

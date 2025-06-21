@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Pattern Inheritance Template",
     "description": "Template for dynamically inheriting patterns from source guides into core principles",
-    "version": "1.0",
+    "version": "3.1",
     "last_updated": "2025-01-27",
     "source": "dynamic_integration_system",
     "cross_references": [

@@ -21,7 +21,7 @@ from cream_api.db import get_async_db
 from cream_api.stock_data.api import router
 from cream_api.stock_data.models import TrackedStock
 from cream_api.stock_data.schemas import PullStatus
-from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL
+from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL
 from cream_api.users.routes.auth import get_current_user_async
 
 

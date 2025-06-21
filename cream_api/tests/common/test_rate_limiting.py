@@ -11,7 +11,7 @@ from aioresponses import aioresponses
 from fastapi import status
 
 from cream_api.common.rate_limiter import RateLimiter
-from cream_api.tests.stock_data.test_constants import (
+from cream_api.tests.stock_data.stock_data_test_constants import (
     RATE_LIMITER_REQUESTS,
     RATE_LIMITER_WINDOW,
     TEST_SERVER_BASE_URL,

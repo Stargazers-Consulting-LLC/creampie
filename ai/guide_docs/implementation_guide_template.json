@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Implementation Guide Template",
     "description": "Template for creating detailed implementation guides with code examples and step-by-step instructions",
-    "version": "1.0",
+    "version": "3.1",
     "last_updated": "2025-06-18",
     "source": "guide_docs/implementation_guide_template.md",
     "cross_references": [
