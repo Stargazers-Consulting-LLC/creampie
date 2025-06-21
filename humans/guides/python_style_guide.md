@@ -436,6 +436,38 @@ def process_stock_data(symbol: str) -> None:
         raise
 ```
 
+### Error Message Cleaning
+
+For production systems, clean error messages to remove verbose details and reduce log noise:
+
+```python
+def clean_error_message(error_msg: str) -> str:
+    """Clean error message by removing verbose details."""
+    # Remove SQL parameter dumps
+    if "%(id_m" in error_msg:
+        parts = error_msg.split("%(id_m")
+        if len(parts) > 1:
+            error_msg = parts[0].strip()
+
+    return error_msg
+
+# Usage in exception handling
+try:
+    # Database operation
+    await db.execute(stmt)
+except Exception as e:
+    error_msg = clean_error_message(str(e))
+    logger.error(f"Database error: {error_msg}")
+    raise
+```
+
+**Error Message Cleaning Guidelines:**
+- Remove SQL parameter dumps that clutter logs
+- Keep background URLs and stack traces for debugging
+- Maintain essential error information for debugging
+- Use consistent error message format across the application
+- Consider log storage costs and readability
+
 ## Database Patterns
 
 ### SQLAlchemy Models
@@ -838,6 +870,43 @@ def get_stock_config(symbol: str) -> Optional[dict]:
     # Expensive operation
     pass
 ```
+
+### Batch Processing for Large Datasets
+
+When processing large datasets, use batch processing to optimize performance and avoid database limits:
+
+```python
+from itertools import batched
+
+async def process_large_dataset(data_list: list[dict]) -> None:
+    """Process large dataset in batches for optimal performance."""
+    # Process in batches to avoid PostgreSQL parameter limit (65,535 max)
+    batch_size = 1000  # 1000 records * 8 parameters = 8000 parameters per batch
+
+    for batch_num, batch in enumerate(batched(data_list, batch_size), 1):
+        try:
+            # Prepare batch data
+            batch_data = [{"field1": item["field1"], "field2": item["field2"]} for item in batch]
+
+            # Execute batch operation
+            stmt = pg_insert(Model).values(batch_data)
+            await session.execute(stmt)
+            await session.commit()
+
+            logger.info(f"Processed batch {batch_num}")
+        except Exception as e:
+            await session.rollback()
+            logger.error(f"Error in batch {batch_num}: {e}")
+            raise
+```
+
+**Batch Processing Guidelines:**
+- Use Python 3.12's `itertools.batched()` for efficient iteration
+- Keep batch sizes well under database parameter limits
+- Implement per-batch error handling and rollback
+- Monitor memory usage during batch processing
+- Consider parallel processing for independent batches
+- Use appropriate batch sizes based on data characteristics and system resources
 
 ## File Naming Conventions
 

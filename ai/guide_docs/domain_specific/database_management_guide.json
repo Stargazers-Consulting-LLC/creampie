@@ -241,6 +241,38 @@
         "factories": "Use factory_boy or similar for generating test data",
         "seeding": "Use seed scripts for consistent test data"
       }
+    },
+    "batch_processing": {
+      "title": "Batch Processing",
+      "description": "Guidelines for processing large datasets efficiently",
+      "batch_processing_rules": [
+        "Use batch processing for large datasets to avoid memory issues",
+        "Stay well under database parameter limits (PostgreSQL: 65,535 max)",
+        "Use Python 3.12's itertools.batched() for efficient iteration",
+        "Implement per-batch error handling and rollback",
+        "Monitor memory usage during batch processing",
+        "Consider parallel processing for independent batches",
+        "Use appropriate batch sizes based on data characteristics"
+      ],
+      "postgresql_batch_patterns": {
+        "basic_batch": "from itertools import batched\n\n# Process in batches to avoid PostgreSQL parameter limit\nbatch_size = 1000  # 1000 records * 8 parameters = 8000 parameters per batch\nfor batch_num, batch in enumerate(batched(data_list, batch_size), 1):\n    try:\n        # Prepare batch data\n        batch_data = [{\"field1\": item.field1, \"field2\": item.field2} for item in batch]\n        \n        # Execute batch operation\n        stmt = pg_insert(Model).values(batch_data)\n        await session.execute(stmt)\n        await session.commit()\n        \n        logger.info(f\"Processed batch {batch_num}\")\n    except Exception as e:\n        await session.rollback()\n        logger.error(f\"Error in batch {batch_num}: {e}\")\n        raise",
+        "upsert_batch": "from sqlalchemy.dialects.postgresql import insert as pg_insert\n\nstmt = pg_insert(Model).values(batch_data)\nstmt = stmt.on_conflict_do_update(\n    index_elements=[\"unique_field\"],\n    set_={\"field1\": stmt.excluded.field1}\n)\nawait session.execute(stmt)\nawait session.commit()",
+        "error_cleaning": "def clean_error_message(error_msg: str) -> str:\n    \"\"\"Clean error message by removing verbose details.\"\"\"\n    # Remove SQL parameter dumps\n    if \"%(id_m\" in error_msg:\n        parts = error_msg.split(\"%(id_m\")\n        if len(parts) > 1:\n            error_msg = parts[0].strip()\n    return error_msg\n\ntry:\n    await session.execute(stmt)\nexcept Exception as e:\n    error_msg = clean_error_message(str(e))\n    logger.error(f\"Database error: {error_msg}\")\n    raise"
+      },
+      "batch_size_guidelines": {
+        "small_datasets": "100-500 records per batch",
+        "medium_datasets": "500-1000 records per batch",
+        "large_datasets": "1000-2000 records per batch",
+        "very_large_datasets": "2000+ records per batch with memory monitoring"
+      },
+      "performance_considerations": [
+        "Monitor memory usage during batch processing",
+        "Use appropriate batch sizes for your data and system",
+        "Consider parallel processing for independent batches",
+        "Implement proper error handling and recovery",
+        "Use transactions for batch atomicity",
+        "Monitor database connection pool usage"
+      ]
     }
   },
   "example_patterns": {

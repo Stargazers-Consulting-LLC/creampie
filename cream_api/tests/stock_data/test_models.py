@@ -57,6 +57,7 @@ async def test_create_stock_data(async_test_db: AsyncSession, sample_stock_data:
     saved_data = result.scalar_one()
 
     # Verify all fields
+    assert isinstance(saved_data.id, uuid.UUID)
     assert saved_data.symbol == sample_stock_data["symbol"]
     assert saved_data.date == sample_stock_data["date"]
     assert saved_data.open == sample_stock_data["open"]

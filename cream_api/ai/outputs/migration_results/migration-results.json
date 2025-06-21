@@ -1,0 +1,51 @@
+{
+  "ai_metadata": {
+    "purpose": "migration results for AI consumption",
+    "template_version": "1.0",
+    "ai_processing_level": "Medium",
+    "required_context": "Script execution environment and configuration",
+    "validation_required": "No",
+    "code_generation": "Not Supported",
+    "cross_references": []
+  },
+  "file_info": {
+    "file_path": "outputs/outputs/migration-results.json",
+    "original_format": "json",
+    "generated_at": "2025-06-20T17:56:59-07:00",
+    "file_size": 1496,
+    "line_count": 51
+  },
+  "content": {
+    "sections": [
+      {
+        "level": 1,
+        "title": "Migration Report",
+        "content": "Comprehensive migration execution results and analysis for AI consumption.",
+        "subsections": []
+      },
+      {
+        "level": 2,
+        "title": "Execution Summary",
+        "content": "**Status**: success\n**Duration**: 0s\n**Timestamp**: 2025-06-20T17:56:59-07:00\n**Report Type**: migration",
+        "subsections": []
+      }
+    ],
+    "code_blocks": [],
+    "links": [],
+    "raw_content": "Migration execution completed with status: success. Duration: 0s."
+  },
+  "cross_references": [],
+  "migration_details": {
+    "migration_created": "yes",
+    "migration_status": "success",
+    "target_directory": "cream_api/",
+    "configuration": "alembic.ini"
+  },
+  "code_generation_hints": [],
+  "validation_rules": [],
+  "optimization": {
+    "version": "1.0",
+    "generated_at": "2025-06-20T17:56:59-07:00",
+    "improvements": []
+  }
+}

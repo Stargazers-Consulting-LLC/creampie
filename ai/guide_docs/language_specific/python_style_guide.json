@@ -237,7 +237,18 @@
           "debug": "logger.debug(f\"Processing data for {symbol}\")",
           "error": "logger.error(f\"Error processing stock data for {symbol}: {e}\")"
         },
-        "example": "def process_stock_data(symbol: str) -> None:\n    \"\"\"Process stock data with comprehensive logging.\"\"\"\n    logger.info(f\"Starting to process stock data for {symbol}\")\n    \n    try:\n        # Process data\n        logger.debug(f\"Processing data for {symbol}\")\n        # ... processing logic\n        logger.info(f\"Successfully processed stock data for {symbol}\")\n    except Exception as e:\n        logger.error(f\"Error processing stock data for {symbol}: {e}\")\n        raise"
+        "example": "def process_stock_data(symbol: str) -> None:\n    \"\"\"Process stock data with comprehensive logging.\"\"\"\n    logger.info(f\"Starting to process stock data for {symbol}\")\n    \n    try:\n        # Process data\n        logger.debug(f\"Processing data for {symbol}\")\n        # ... processing logic\n        logger.info(f\"Successfully processed stock data for {symbol}\")\n    except Exception as e:\n        logger.error(f\"Error processing stock data for {symbol}: {e}\")\n        raise",
+        "error_message_cleaning": {
+          "pattern": "def clean_error_message(error_msg: str) -> str:\n    \"\"\"Clean error message by removing verbose details.\"\"\"\n    # Remove SQL parameter dumps\n    if \"%(id_m\" in error_msg:\n        parts = error_msg.split(\"%(id_m\")\n        if len(parts) > 1:\n            error_msg = parts[0].strip()\n    return error_msg",
+          "usage": "try:\n    # Database operation\n    await db.execute(stmt)\nexcept Exception as e:\n    error_msg = clean_error_message(str(e))\n    logger.error(f\"Database error: {error_msg}\")\n    raise",
+          "guidelines": [
+            "Remove SQL parameter dumps that clutter logs",
+            "Keep background URLs and stack traces for debugging",
+            "Maintain essential error information for debugging",
+            "Use consistent error message format across the application",
+            "Consider log storage costs and readability"
+          ]
+        }
       }
     },
     "database_patterns": {
@@ -347,6 +358,18 @@
       "caching": {
         "lru_cache": "@lru_cache(maxsize=128)\ndef get_stock_config(symbol: str) -> Optional[dict]:\n    \"\"\"Get stock configuration with caching.\"\"\"\n    # Expensive operation\n    pass",
         "imports": "from functools import lru_cache\nfrom typing import Optional"
+      },
+      "batch_processing": {
+        "pattern": "from itertools import batched\n\nasync def process_large_dataset(data_list: list[dict]) -> None:\n    \"\"\"Process large dataset in batches for optimal performance.\"\"\"\n    # Process in batches to avoid PostgreSQL parameter limit (65,535 max)\n    batch_size = 1000  # 1000 records * 8 parameters = 8000 parameters per batch\n    \n    for batch_num, batch in enumerate(batched(data_list, batch_size), 1):\n        try:\n            # Prepare batch data\n            batch_data = [{\"field1\": item[\"field1\"], \"field2\": item[\"field2\"]} for item in batch]\n            \n            # Execute batch operation\n            stmt = pg_insert(Model).values(batch_data)\n            await session.execute(stmt)\n            await session.commit()\n            \n            logger.info(f\"Processed batch {batch_num}\")\n        except Exception as e:\n            await session.rollback()\n            logger.error(f\"Error in batch {batch_num}: {e}\")\n            raise",
+        "guidelines": [
+          "Use Python 3.12's itertools.batched() for efficient iteration",
+          "Keep batch sizes well under database parameter limits",
+          "Implement per-batch error handling and rollback",
+          "Monitor memory usage during batch processing",
+          "Consider parallel processing for independent batches",
+          "Use appropriate batch sizes based on data characteristics and system resources"
+        ],
+        "imports": "from itertools import batched\nfrom sqlalchemy.dialects.postgresql import insert as pg_insert"
       }
     },
     "file_naming_conventions": {

@@ -125,6 +125,35 @@ CREATE TABLE orders (
 );
 ```
 
+### Batch Processing for Large Datasets
+When inserting large datasets, use batch processing to avoid PostgreSQL's parameter limit (65,535 parameters maximum):
+
+```python
+from itertools import batched
+
+# Process in batches to avoid PostgreSQL parameter limit
+batch_size = 1000  # 1000 records * 8 parameters = 8000 parameters per batch
+for batch_num, batch in enumerate(batched(data_list, batch_size), 1):
+    # Prepare batch data
+    batch_data = [{"field1": item.field1, "field2": item.field2} for item in batch]
+
+    # Execute batch insert with ON CONFLICT
+    stmt = pg_insert(Model).values(batch_data)
+    stmt = stmt.on_conflict_do_update(
+        index_elements=["unique_field"],
+        set_={"field1": stmt.excluded.field1}
+    )
+    await session.execute(stmt)
+    await session.commit()
+```
+
+**Batch Processing Guidelines:**
+- Use batch sizes that keep parameters well under the 65,535 limit
+- Recommended: 1000 records per batch (8000 parameters for 8-field records)
+- Use Python 3.12's `itertools.batched()` for efficient iteration
+- Implement per-batch error handling and rollback
+- Monitor batch processing performance and adjust batch size as needed
+
 ### Alembic Migration Example
 ```python
 # 20250127_add_user_status_column.py

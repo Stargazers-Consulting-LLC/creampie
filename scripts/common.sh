@@ -87,8 +87,8 @@ generate_ai_report() {
     # Ensure AI output directory exists
     mkdir -p "$ai_output_dir"
 
-    # Generate report filename
-    local report_file="$ai_output_dir/${report_type}-report-$(date +%Y%m%d_%H%M%S).json"
+    # Generate deterministic report filename (no timestamp)
+    local report_file="$ai_output_dir/${report_type}-results.json"
 
     # Create JSON report
     cat > "$report_file" << EOF
@@ -141,8 +141,8 @@ EOF
 
     # Add additional content if provided
     if [[ -n "$additional_content" ]]; then
-        # Insert additional content before the closing brace
-        sed -i "s/  \"cross_references\": \[\],/  \"cross_references\": \[\],\n$additional_content/" "$report_file"
+        # Insert additional content before the closing brace using a different delimiter
+        sed -i "s|  \"cross_references\": \[\],|  \"cross_references\": \[\],\n$additional_content|" "$report_file"
     fi
 
     # Update file size and line count

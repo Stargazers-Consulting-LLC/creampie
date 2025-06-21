@@ -11,11 +11,11 @@ from cream_api.settings import get_app_settings
 settings = get_app_settings()
 
 # Create SQLAlchemy engine
-engine = create_engine(settings.get_connection_string())
+engine = create_engine(settings.get_connection_string(), echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create async engine and session factory
-async_engine = create_async_engine(settings.get_connection_string())
+async_engine = create_async_engine(settings.get_connection_string(), echo=False)
 AsyncSessionLocal = async_sessionmaker(async_engine, expire_on_commit=False)
 
 

@@ -247,8 +247,7 @@ class PytestRunner:
         }
 
         # Save report
-        safe_timestamp = timestamp.replace(":", "-")
-        report_file = os.path.join(self.ai_output_dir, f"pytest-results-{safe_timestamp}.json")
+        report_file = os.path.join(self.ai_output_dir, "pytest-results.json")
         with open(report_file, "w", encoding="utf-8") as file:
             json.dump(report, file, indent=2, ensure_ascii=False)
 

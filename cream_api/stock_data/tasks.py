@@ -51,12 +51,18 @@ async def process_raw_files_task() -> None:
             await processor.process_raw_files()
             logger.info("Successfully completed file processing task")
     except psycopg.errors.InsufficientPrivilege as e:
-        logger.error(f"Database permission error during file processing task: {e}")
-        logger.error("User lacks permission to access sequence stock_data_id_seq")
-        logger.error("Please grant USAGE privilege on the sequence or ensure proper database permissions")
+        logger.error(f"Database permission error in file processing task: {type(e).__name__}")
         raise
     except Exception as e:
-        logger.error("Error during file processing task: %s", str(e))
+        # Extract only the essential error information
+        error_type = type(e).__name__
+        error_msg = str(e)
+
+        # Remove the massive parameter dump from the error message
+        if "[parameters:" in error_msg:
+            error_msg = error_msg.split("[parameters:")[0].strip()
+
+        logger.error(f"Error during file processing task: {error_type}: {error_msg}")
         raise
 
 
@@ -79,7 +85,15 @@ async def retry_deadletter_files_task() -> None:
                 except Exception as move_error:
                     logger.critical(f"Failed to move {src_path} to raw: {move_error!s}")
         except Exception as e:
-            logger.error(f"Error during deadletter retry: {e!s}")
+            # Extract only the essential error information
+            error_type = type(e).__name__
+            error_msg = str(e)
+
+            # Remove the massive parameter dump from the error message
+            if "[parameters:" in error_msg:
+                error_msg = error_msg.split("[parameters:")[0].strip()
+
+            logger.error(f"Error during deadletter retry: {error_type}: {error_msg}")
 
         logger.debug("Sleeping for %d seconds", DEADLETTER_RETRY_INTERVAL_SECONDS)
         await asyncio.sleep(DEADLETTER_RETRY_INTERVAL_SECONDS)
@@ -104,7 +118,11 @@ async def update_all_tracked_stocks(db: AsyncSession) -> None:
                 stock.last_pull_status = "success"
             except Exception as e:
                 stock.last_pull_status = "failure"
-                stock.error_message = str(e)
+                # Clean error message for storage
+                error_msg = str(e)
+                if "[parameters:" in error_msg:
+                    error_msg = error_msg.split("[parameters:")[0].strip()
+                stock.error_message = error_msg
             await db.commit()
     except Exception:
         await db.rollback()
@@ -120,7 +138,15 @@ async def run_periodic_updates() -> None:
                 await update_all_tracked_stocks(session)
                 logger.info("Successfully updated all tracked stocks")
         except Exception as e:
-            logger.error("Error updating tracked stocks: %s", str(e))
+            # Extract only the essential error information
+            error_type = type(e).__name__
+            error_msg = str(e)
+
+            # Remove the massive parameter dump from the error message
+            if "[parameters:" in error_msg:
+                error_msg = error_msg.split("[parameters:")[0].strip()
+
+            logger.error(f"Error updating tracked stocks: {error_type}: {error_msg}")
             return
         else:
             logger.debug("Sleeping for %d seconds", RETRIEVAL_INTERVAL_SECONDS)
@@ -137,7 +163,15 @@ async def run_periodic_file_processing() -> None:
         except RuntimeError as e:
             logger.critical("Critical application logic failure in file processing: %s", str(e))
         except Exception as e:
-            logger.error("Error during periodic file processing: %s", str(e))
+            # Extract only the essential error information
+            error_type = type(e).__name__
+            error_msg = str(e)
+
+            # Remove the massive parameter dump from the error message
+            if "[parameters:" in error_msg:
+                error_msg = error_msg.split("[parameters:")[0].strip()
+
+            logger.error(f"Error during periodic file processing: {error_type}: {error_msg}")
         else:
             logger.debug("Sleeping for %d seconds", PROCESSING_INTERVAL_SECONDS)
             await asyncio.sleep(PROCESSING_INTERVAL_SECONDS)
