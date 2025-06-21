@@ -398,6 +398,49 @@
         "examples": ["settings.py", "config.py", "alembic.ini"],
         "rule": "Be consistent within each project"
       }
+    },
+    "file_operations": {
+      "title": "File Operations",
+      "description": "Guidelines for file and path handling operations",
+      "path_handling": {
+        "rule": "Use os.path functions exclusively, NOT pathlib",
+        "preferred_functions": [
+          "os.path.join()",
+          "os.path.dirname()",
+          "os.path.basename()",
+          "os.path.exists()",
+          "os.path.isfile()",
+          "os.path.isdir()",
+          "os.makedirs()",
+          "os.path.abspath()",
+          "os.path.commonpath()"
+        ],
+        "avoid": [
+          "pathlib.Path",
+          "Path()",
+          "pathlib.joinpath()",
+          "pathlib.mkdir()"
+        ],
+        "examples": {
+          "good": [
+            "os.path.join(dir_path, filename)",
+            "os.path.dirname(file_path)",
+            "os.makedirs(dir_path, exist_ok=True)",
+            "if os.path.exists(file_path):"
+          ],
+          "bad": [
+            "Path(dir_path) / filename",
+            "pathlib.Path(file_path).parent",
+            "Path(dir_path).mkdir(exist_ok=True)",
+            "if Path(file_path).exists():"
+          ]
+        },
+        "advanced_path_operations": {
+          "title": "Advanced Path Operations",
+          "description": "Advanced path manipulation using os.path.commonpath()",
+          "content": "**OS.PATH.COMMONPATH()**:\n- Function: os.path.commonpath(paths)\n- Purpose: Find common parent directory of multiple paths\n- Documentation: [Python os.path.commonpath()](https://docs.python.org/3/library/os.path.html#os.path.commonpath)\n\n**EXAMPLES**:\n```python\n# Find common parent directory of multiple paths\npaths = [\n    '/home/user/project/src/main.py',\n    '/home/user/project/src/utils.py',\n    '/home/user/project/tests/test_main.py'\n]\ncommon_parent = os.path.commonpath(paths)\n# Result: '/home/user/project'\n\n# Useful for determining project root from multiple file locations\nproject_files = [\n    os.path.abspath('src/main.py'),\n    os.path.abspath('tests/test_main.py'),\n    os.path.abspath('config/settings.py')\n]\nproject_root = os.path.commonpath(project_files)\n```\n\n**IMPORTANT NOTES**:\n- Raises ValueError if paths contain both absolute and relative pathnames\n- Raises ValueError if paths are on different drives\n- Raises ValueError if paths list is empty\n- Returns the longest common sub-path that is a valid path"
+        }
+      }
     }
   },
   "implementation_guidelines": {

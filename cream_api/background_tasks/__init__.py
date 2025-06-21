@@ -11,11 +11,10 @@ from collections.abc import Callable, Coroutine, Sequence
 from typing import Any
 
 from fastapi import BackgroundTasks
-from stargazer_utils.logging import get_logger_for
 
 from cream_api.stock_data.tasks import retry_deadletter_files_task, run_periodic_file_processing, run_periodic_updates
 
-logger: logging.Logger = get_logger_for(__name__)
+logger = logging.getLogger(__name__)
 
 BackgroundTaskFunc = Callable[..., Coroutine[Any, Any, None]]
 

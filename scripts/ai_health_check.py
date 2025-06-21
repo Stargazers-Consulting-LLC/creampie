@@ -14,7 +14,7 @@ from datetime import datetime
 
 
 class AIDocumentationHealthCheck:
-    def __init__(self):
+    def __init__(self, verbose=False):
         # Get the ai folder path (parent of scripts folder, then ai subfolder)
         self.script_dir = os.path.dirname(__file__)
         self.project_root = os.path.dirname(self.script_dir)
@@ -23,11 +23,13 @@ class AIDocumentationHealthCheck:
         self.issues = []
         self.warnings = []
         self.success_count = 0
+        self.verbose = verbose
 
     def run_health_check(self):
         """Run the complete health check and generate report."""
-        print("🔍 Running AI Documentation Health Check...")
-        print()
+        if self.verbose:
+            print("🔍 Running AI Documentation Health Check...")
+            print()
 
         # Run all checks
         self.check_folder_structure()
@@ -41,8 +43,9 @@ class AIDocumentationHealthCheck:
         # Generate report
         report = self.generate_report()
 
-        # Print to console
-        print(report)
+        # Only print report if verbose or if there are issues
+        if self.verbose or self.issues or self.warnings:
+            print(report)
 
         # Write JSON result file
         result_file = os.path.join(self.ai_folder, "outputs", "health_check", "healthcheck-result.json")
@@ -59,21 +62,25 @@ class AIDocumentationHealthCheck:
             f.flush()  # Force flush to disk
             os.fsync(f.fileno())  # Force sync to ensure file is written
 
-        # Get file stats using os.path
-        stat_info = os.stat(result_file)
-        print(f"\n📄 Health check results saved to: {result_file}")
-        print(f"📄 File size: {stat_info.st_size} bytes")
-        print(f"📄 File modified: {datetime.fromtimestamp(stat_info.st_mtime)}")
+        # Only show file info if verbose
+        if self.verbose:
+            # Get file stats using os.path
+            stat_info = os.stat(result_file)
+            print(f"\n📄 Health check results saved to: {result_file}")
+            print(f"📄 File size: {stat_info.st_size} bytes")
+            print(f"📄 File modified: {datetime.fromtimestamp(stat_info.st_mtime)}")
 
         return len(self.issues) == 0
 
     def check_folder_structure(self):
         """Check that all required folders and files exist."""
-        print("📁 Checking folder structure...")
+        if self.verbose:
+            print("📁 Checking folder structure...")
 
         # Debug: Print the paths being checked
-        print(f"🔍 AI folder path: {self.ai_folder}")
-        print(f"🔍 Current working directory: {os.getcwd()}")
+        if self.verbose:
+            print(f"🔍 AI folder path: {self.ai_folder}")
+            print(f"🔍 Current working directory: {os.getcwd()}")
 
         required_files = [
             "readme.json",
@@ -95,10 +102,12 @@ class AIDocumentationHealthCheck:
             full_path = os.path.join(self.ai_folder, file_path)
             if os.path.exists(full_path):
                 self.success_count += 1
-                print(f"✅ Found: {file_path}")
+                if self.verbose:
+                    print(f"✅ Found: {file_path}")
             else:
                 self.issues.append(f"Missing required file: {file_path}")
-                print(f"❌ Missing: {file_path} (checked at: {full_path})")
+                if self.verbose:
+                    print(f"❌ Missing: {file_path} (checked at: {full_path})")
 
         # Check language-specific guides
         lang_guides = [
@@ -127,7 +136,8 @@ class AIDocumentationHealthCheck:
 
     def check_ai_metadata(self):
         """Check that all JSON files have proper AI metadata."""
-        print("📋 Checking AI metadata...")
+        if self.verbose:
+            print("📋 Checking AI metadata...")
 
         for root, _, files in os.walk(self.ai_folder):
             for file in files:
@@ -172,7 +182,8 @@ class AIDocumentationHealthCheck:
 
     def check_cross_references(self):
         """Check that cross-references are valid and bidirectional."""
-        print("🔗 Checking cross-references...")
+        if self.verbose:
+            print("🔗 Checking cross-references...")
 
         # Get all JSON files
         json_files = []
@@ -339,7 +350,8 @@ class AIDocumentationHealthCheck:
 
     def check_search_index(self):
         """Check that search index is comprehensive and accessible."""
-        print("🔍 Checking search index...")
+        if self.verbose:
+            print("🔍 Checking search index...")
 
         search_index_path = os.path.join(self.ai_folder, "search_index.json")
         if not os.path.exists(search_index_path):
@@ -371,7 +383,8 @@ class AIDocumentationHealthCheck:
 
     def check_quick_reference(self):
         """Check that quick reference is comprehensive and accessible."""
-        print("📖 Checking quick reference...")
+        if self.verbose:
+            print("📖 Checking quick reference...")
 
         quick_ref_path = os.path.join(self.ai_folder, "ai_quick_reference.json")
         if not os.path.exists(quick_ref_path):
@@ -403,7 +416,8 @@ class AIDocumentationHealthCheck:
 
     def check_ai_config(self):
         """Check that AI configuration is valid and up-to-date."""
-        print("⚙️ Checking AI configuration...")
+        if self.verbose:
+            print("⚙️ Checking AI configuration...")
 
         config_path = os.path.join(self.ai_folder, "ai_config.json")
         if not os.path.exists(config_path):
@@ -432,7 +446,8 @@ class AIDocumentationHealthCheck:
 
     def check_template_consistency(self):
         """Check that all files follow consistent template structure."""
-        print("📋 Checking template consistency...")
+        if self.verbose:
+            print("📋 Checking template consistency...")
 
         for root, _, files in os.walk(self.ai_folder):
             for file in files:
@@ -538,14 +553,22 @@ class AIDocumentationHealthCheck:
 
 def main():
     """Main health check function."""
-    health_check = AIDocumentationHealthCheck()
+    verbose = "--verbose" in sys.argv or "-v" in sys.argv
+    health_check = AIDocumentationHealthCheck(verbose=verbose)
     success = health_check.run_health_check()
 
+    # Only show success/failure messages if verbose or if there are issues
+    has_issues = len(health_check.issues) > 0 or len(health_check.warnings) > 0
+
+    if verbose or has_issues:
+        if success:
+            print("\n✅ Health check completed successfully!")
+        else:
+            print("\n❌ Health check found issues that need attention.")
+
     if success:
-        print("\n✅ Health check completed successfully!")
         sys.exit(0)
     else:
-        print("\n❌ Health check found issues that need attention.")
         sys.exit(1)
 
 

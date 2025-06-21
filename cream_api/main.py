@@ -12,49 +12,19 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from stargazer_utils.logging import get_logger_for
 
 from cream_api.background_tasks import start_background_tasks
-from cream_api.settings import get_app_settings
+from cream_api.settings import configure_logging, get_app_settings
 from cream_api.stock_data.api import router as stock_data_router
 from cream_api.stock_data.config import get_stock_data_config
 from cream_api.users.routes.auth import router as auth_router
 
-logger: logging.Logger = get_logger_for(__name__)
-
 settings = get_app_settings()
 
+# Configure logging using settings
+configure_logging(settings)
 
-def configure_logging() -> None:
-    """Configure application-wide logging settings."""
-    # Check if SQLAlchemy debug logging is enabled via environment variable
-    sqlalchemy_debug = os.getenv("SQLALCHEMY_DEBUG", "false").lower() == "true"
-
-    if sqlalchemy_debug:
-        logger.info("SQLAlchemy debug logging enabled")
-        # Keep SQLAlchemy logging at INFO level for debugging
-        logging.getLogger("sqlalchemy").setLevel(logging.INFO)
-        logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
-    else:
-        # Configure SQLAlchemy logging to reduce verbosity - set at root level
-        logging.getLogger("sqlalchemy").setLevel(logging.WARNING)
-        logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
-        logging.getLogger("sqlalchemy.pool").setLevel(logging.WARNING)
-        logging.getLogger("sqlalchemy.dialects").setLevel(logging.WARNING)
-        logging.getLogger("sqlalchemy.orm").setLevel(logging.WARNING)
-        logging.getLogger("sqlalchemy.sql").setLevel(logging.WARNING)
-        logging.getLogger("sqlalchemy.engine.base.Engine").setLevel(logging.WARNING)
-
-    # Also configure psycopg logging
-    logging.getLogger("psycopg").setLevel(logging.WARNING)
-
-    # Configure any other verbose loggers
-    logging.getLogger("urllib3").setLevel(logging.WARNING)
-    logging.getLogger("requests").setLevel(logging.WARNING)
-
-
-# Configure logging at module level
-configure_logging()
+logger = logging.getLogger(__name__)
 
 # Create required directories
 logger.info("Creating directories...")
@@ -80,9 +50,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
     # Startup
     logger.info("Starting up application...")
-
-    # Ensure logging is configured for background tasks
-    configure_logging()
 
     if settings.enable_background_tasks:
         await start_background_tasks()

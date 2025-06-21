@@ -9,7 +9,6 @@ from datetime import datetime
 import psycopg.errors
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from stargazer_utils.logging import get_logger_for
 
 from cream_api.db import AsyncSessionLocal
 from cream_api.stock_data.config import get_stock_data_config
@@ -18,7 +17,7 @@ from cream_api.stock_data.models import TrackedStock
 from cream_api.stock_data.processor import FileProcessor
 from cream_api.stock_data.retriever import StockDataRetriever
 
-logger: logging.Logger = get_logger_for(__name__)
+logger = logging.getLogger(__name__)
 
 RETRIEVAL_INTERVAL_SECONDS = 5 * 60
 PROCESSING_INTERVAL_SECONDS = 10 * 60
@@ -51,7 +50,7 @@ async def process_raw_files_task() -> None:
             await processor.process_raw_files()
             logger.info("Successfully completed file processing task")
     except psycopg.errors.InsufficientPrivilege as e:
-        logger.error(f"Database permission error in file processing task: {type(e).__name__}")
+        logger.error("Database permission error in file processing task: %s", type(e).__name__)
         raise
     except Exception as e:
         # Extract only the essential error information
@@ -62,7 +61,7 @@ async def process_raw_files_task() -> None:
         if "[parameters:" in error_msg:
             error_msg = error_msg.split("[parameters:")[0].strip()
 
-        logger.error(f"Error during file processing task: {error_type}: {error_msg}")
+        logger.error("Error during file processing task: %s: %s", error_type, error_msg)
         raise
 
 
@@ -78,12 +77,12 @@ async def retry_deadletter_files_task() -> None:
                 dest_path = os.path.join(raw_dir, filename)
                 try:
                     if os.path.exists(dest_path):
-                        logger.warning(f"File already exists in raw directory, skipping: {dest_path}")
+                        logger.warning("File already exists in raw directory, skipping: %s", dest_path)
                     else:
-                        logger.info(f"Moving {src_path} back to raw directory.")
+                        logger.info("Moving %s back to raw directory.", src_path)
                         shutil.move(src_path, dest_path)
                 except Exception as move_error:
-                    logger.critical(f"Failed to move {src_path} to raw: {move_error!s}")
+                    logger.critical("Failed to move %s to raw: %s", src_path, move_error)
         except Exception as e:
             # Extract only the essential error information
             error_type = type(e).__name__
@@ -93,7 +92,7 @@ async def retry_deadletter_files_task() -> None:
             if "[parameters:" in error_msg:
                 error_msg = error_msg.split("[parameters:")[0].strip()
 
-            logger.error(f"Error during deadletter retry: {error_type}: {error_msg}")
+            logger.error("Error in deadletter retry: %s: %s", error_type, error_msg)
 
         logger.debug("Sleeping for %d seconds", DEADLETTER_RETRY_INTERVAL_SECONDS)
         await asyncio.sleep(DEADLETTER_RETRY_INTERVAL_SECONDS)
@@ -146,7 +145,7 @@ async def run_periodic_updates() -> None:
             if "[parameters:" in error_msg:
                 error_msg = error_msg.split("[parameters:")[0].strip()
 
-            logger.error(f"Error updating tracked stocks: {error_type}: {error_msg}")
+            logger.error("Error updating tracked stocks: %s: %s", error_type, error_msg)
             return
         else:
             logger.debug("Sleeping for %d seconds", RETRIEVAL_INTERVAL_SECONDS)
@@ -171,7 +170,7 @@ async def run_periodic_file_processing() -> None:
             if "[parameters:" in error_msg:
                 error_msg = error_msg.split("[parameters:")[0].strip()
 
-            logger.error(f"Error during periodic file processing: {error_type}: {error_msg}")
+            logger.error("Error during periodic file processing: %s: %s", error_type, error_msg)
         else:
             logger.debug("Sleeping for %d seconds", PROCESSING_INTERVAL_SECONDS)
             await asyncio.sleep(PROCESSING_INTERVAL_SECONDS)

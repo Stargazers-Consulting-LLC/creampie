@@ -21,7 +21,8 @@
 10. [Configuration Management](#configuration-management)
 11. [Security Best Practices](#security-best-practices)
 12. [Performance Considerations](#performance-considerations)
-13. [File Naming Conventions](#file-naming-conventions)
+13. [File Operations](#file-operations)
+14. [File Naming Conventions](#file-naming-conventions)
 
 ## Code Style and Formatting
 
@@ -907,6 +908,100 @@ async def process_large_dataset(data_list: list[dict]) -> None:
 - Monitor memory usage during batch processing
 - Consider parallel processing for independent batches
 - Use appropriate batch sizes based on data characteristics and system resources
+
+## File Operations
+
+### Path Handling
+
+**Use `os.path` functions exclusively, NOT `pathlib`**
+
+#### Preferred Functions
+- `os.path.join()` - for path construction
+- `os.path.dirname()` - for getting directory name
+- `os.path.basename()` - for getting filename
+- `os.path.exists()` - for checking if path exists
+- `os.path.isfile()` - for checking if path is a file
+- `os.path.isdir()` - for checking if path is a directory
+- `os.makedirs()` - for creating directories
+- `os.path.abspath()` - for getting absolute paths
+- `os.path.commonpath()` - for finding common parent directory of multiple paths
+
+#### Avoid
+- `pathlib.Path`
+- `Path()`
+- `pathlib.joinpath()`
+- `pathlib.mkdir()`
+- **Chained `dirname()` calls** (e.g., `os.path.dirname(os.path.dirname())`)
+
+#### Path Navigation Best Practices
+
+**Use `os.path.abspath()` and string manipulation for multi-level path navigation**
+
+```python
+# Good: Use os.path.abspath for clear path navigation
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+scripts_dir = os.path.join(project_root, 'scripts')
+config_path = os.path.join(project_root, 'config', 'settings.json')
+
+# Bad: Chained dirname calls are error-prone and hard to read
+project_root = os.path.dirname(os.path.dirname(__file__))
+scripts_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config')
+```
+
+#### Advanced Path Operations
+
+**Use `os.path.commonpath()` for finding common parent directories**
+
+The [os.path.commonpath()](https://docs.python.org/3/library/os.path.html#os.path.commonpath) function returns the longest common sub-path of multiple pathnames. This is useful for finding the common parent directory of multiple files or directories.
+
+```python
+# Find common parent directory of multiple paths
+paths = [
+    '/home/user/project/src/main.py',
+    '/home/user/project/src/utils.py',
+    '/home/user/project/tests/test_main.py'
+]
+common_parent = os.path.commonpath(paths)
+# Result: '/home/user/project'
+
+# Useful for determining project root from multiple file locations
+project_files = [
+    os.path.abspath('src/main.py'),
+    os.path.abspath('tests/test_main.py'),
+    os.path.abspath('config/settings.py')
+]
+project_root = os.path.commonpath(project_files)
+```
+
+**Note**: `os.path.commonpath()` raises `ValueError` if paths contain both absolute and relative pathnames, if paths are on different drives, or if the paths list is empty.
+
+#### Guidelines
+- Use `os.path.abspath()` to get absolute paths from relative ones
+- Use `os.path.join()` for path construction
+- Define path constants at module level for clarity
+- **Avoid chaining multiple `dirname()` calls** - it's error-prone and hard to read
+- Use string manipulation with `'..'` for going up directories
+
+#### Examples
+
+```python
+# Good examples
+os.path.join(dir_path, filename)
+os.path.dirname(file_path)
+os.makedirs(dir_path, exist_ok=True)
+if os.path.exists(file_path):
+    pass
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+# Bad examples
+Path(dir_path) / filename
+pathlib.Path(file_path).parent
+Path(dir_path).mkdir(exist_ok=True)
+if Path(file_path).exists():
+    pass
+project_root = os.path.dirname(os.path.dirname(__file__))  # Chained dirname calls
+```
 
 ## File Naming Conventions
 

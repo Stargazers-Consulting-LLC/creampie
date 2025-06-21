@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "title": "Pattern Inheritance Template",
+    "description": "Template for dynamically inheriting patterns from source guides into core principles",
+    "version": "1.0",
+    "last_updated": "2025-01-27",
+    "source": "dynamic_integration_system",
+    "cross_references": [
+      "core_principles.json",
+      "language_specific/python_style_guide.json",
+      "language_specific/fastapi_development_guide.json",
+      "domain_specific/database_management_guide.json"
+    ]
+  },
+  "sections": {
+    "inheritance_rules": {
+      "title": "Inheritance Rules",
+      "description": "Rules for dynamically inheriting patterns from source guides",
+      "content": "**PATTERN CATEGORIES:**\n\n**documentation_patterns**:\n- Source guides: python_style_guide\n- Priority: critical\n- Validation: must_include_legal_notice, must_include_external_links, must_follow_docstring_format\n\n**code_organization**:\n- Source guides: python_style_guide\n- Priority: high\n- Validation: must_include_import_order, must_include_file_structure, must_include_naming_conventions\n\n**type_hints**:\n- Source guides: python_style_guide\n- Priority: critical\n- Validation: must_include_function_patterns, must_include_variable_patterns, must_include_fastapi_patterns\n\n**error_handling**:\n- Source guides: python_style_guide, fastapi_development_guide\n- Priority: high\n- Conflict resolution: priority_based\n- Validation: must_include_exception_patterns, must_include_logging_patterns, must_include_rollback_patterns\n\n**file_operations**:\n- Source guides: python_style_guide\n- Priority: critical\n- Validation: must_use_os_path_only, must_include_examples, must_include_forbidden_patterns\n\n**logging_patterns**:\n- Source guides: python_style_guide\n- Priority: high\n- Validation: must_include_setup_pattern, must_include_context_patterns, must_include_level_patterns\n\n**database_patterns**:\n- Source guides: python_style_guide, database_management_guide\n- Priority: high\n- Conflict resolution: merge_complementary\n- Validation: must_include_model_patterns, must_include_query_patterns, must_include_async_patterns\n\n**api_patterns**:\n- Source guides: python_style_guide, fastapi_development_guide\n- Priority: high\n- Conflict resolution: priority_based\n- Validation: must_include_router_patterns, must_include_dependency_patterns, must_include_model_patterns\n\n**testing_patterns**:\n- Source guides: python_style_guide\n- Priority: medium\n- Validation: must_include_fixture_patterns, must_include_async_patterns, must_include_mocking_patterns\n\n**security_patterns**:\n- Source guides: python_style_guide, fastapi_development_guide\n- Priority: critical\n- Conflict resolution: strictest_rule\n- Validation: must_include_validation_patterns, must_include_authentication_patterns, must_include_safe_query_patterns"
+    },
+    "conflict_resolution_strategies": {
+      "title": "Conflict Resolution Strategies",
+      "description": "Strategies for resolving conflicts between patterns from different guides",
+      "content": "**PRIORITY_BASED**:\n- Description: Use patterns from highest priority guide\n- Priority order: python_style_guide > fastapi_development_guide > database_management_guide > shell_style_guide\n\n**MERGE_COMPLEMENTARY**:\n- Description: Merge complementary patterns from multiple guides\n- Merge rules: combine_unique_patterns, preserve_all_validation_rules, maintain_priority_order\n\n**STRICTEST_RULE**:\n- Description: Use the most restrictive/secure pattern\n- Selection criteria: highest_security_level, most_comprehensive_validation, strictest_error_handling"
+    },
+    "validation_framework": {
+      "title": "Validation Framework",
+      "description": "Framework for validating inherited patterns",
+      "content": "**REQUIRED_FIELDS**:\n- title\n- description\n- content\n- source\n- last_updated\n\n**CONTENT_VALIDATION**:\n- non_empty_content\n- proper_formatting\n- consistent_style\n\n**CROSS_REFERENCE_VALIDATION**:\n- valid_source_guides\n- consistent_terminology\n- no_circular_references"
+    },
+    "integration_workflow": {
+      "title": "Integration Workflow",
+      "description": "Workflow for integrating patterns into core principles",
+      "content": "**TRIGGER_CONDITIONS**:\n- Automatic: source_guide_updated, new_pattern_detected, health_check_failure\n- Manual: user_request, scheduled_sync, version_update\n\n**PROCESSING_STEPS**:\n1. load_source_guides\n2. extract_patterns\n3. validate_patterns\n4. resolve_conflicts\n5. update_core_principles\n6. generate_report\n\n**QUALITY_CHECKS**:\n- pattern_completeness\n- consistency_validation\n- cross_reference_integrity\n- format_compatibility"
+    },
+    "output_formats": {
+      "title": "Output Formats",
+      "description": "Formats for integration outputs and reports",
+      "content": "**CORE_PRINCIPLES_UPDATE**:\n- Format: json\n- Structure: sections\n- Metadata update: true\n- Version increment: true\n\n**INTEGRATION_REPORT**:\n- Format: json\n- Location: outputs/dynamic_integration/\n- Content: timestamp, trigger, changes_made, conflicts_resolved, errors\n\n**CONFLICT_RESOLUTION_LOG**:\n- Format: json\n- Content: conflict_description, resolution_strategy, selected_pattern, reasoning"
+    },
+    "monitoring_and_maintenance": {
+      "title": "Monitoring and Maintenance",
+      "description": "Monitoring and maintenance tasks for the integration system",
+      "content": "**HEALTH_INDICATORS**:\n- pattern_coverage\n- conflict_frequency\n- integration_success_rate\n- validation_pass_rate\n\n**MAINTENANCE_TASKS**:\n- update_extraction_rules\n- refine_conflict_resolution\n- optimize_validation_rules\n- cleanup_obsolete_patterns\n\n**PERFORMANCE_METRICS**:\n- integration_duration\n- pattern_extraction_success_rate\n- conflict_resolution_efficiency\n- update_frequency"
+    }
+  }
+}

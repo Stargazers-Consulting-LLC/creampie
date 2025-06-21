@@ -7,12 +7,11 @@ from datetime import datetime
 
 import aiohttp
 from fastapi import status
-from stargazer_utils.logging import get_logger_for
 
 from cream_api.common.exceptions import StockRetrievalError
 from cream_api.stock_data.config import StockDataConfig, get_stock_data_config
 
-logger: logging.Logger = get_logger_for(__name__)
+logger = logging.getLogger(__name__)
 
 BASE_URL = "https://finance.yahoo.com"
 MAX_HEADER_SIZE = 2**32

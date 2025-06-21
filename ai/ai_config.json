@@ -1,15 +1,16 @@
 {
   "ai_documentation_config": {
     "version": "3.0",
-    "last_updated": "2025-06-18",
-    "description": "AI-optimized JSON documentation configuration for the CreamPie project",
+    "last_updated": "2025-01-27",
+    "description": "AI-optimized JSON documentation configuration for the CreamPie project with dynamic integration",
     "documentation_format": "json",
     "optimization_target": "ai_tool_consumption",
     "maintenance_scripts": [
       "scripts/ai_health_check.py",
       "scripts/update_documentation.py",
       "scripts/test_paths.py",
-      "scripts/convert_to_json.py"
+      "scripts/convert_to_json.py",
+      "scripts/dynamic_integration.py"
     ]
   },
   "documentation_structure": {
@@ -53,7 +54,103 @@
       "health_check": "outputs/health_check/",
       "updates": "outputs/updates/",
       "test_results": "outputs/test_results/",
-      "conversion_reports": "outputs/"
+      "conversion_reports": "outputs/",
+      "dynamic_integration": "outputs/dynamic_integration/"
+    }
+  },
+  "dynamic_integration": {
+    "enabled": true,
+    "integration_rules": {
+      "core_principles_inheritance": {
+        "source_guides": [
+          "guide_docs/language_specific/python_style_guide.json",
+          "guide_docs/language_specific/fastapi_development_guide.json",
+          "guide_docs/domain_specific/database_management_guide.json",
+          "guide_docs/domain_specific/shell_style_guide.json"
+        ],
+        "target_sections": [
+          "mandatory_python_patterns",
+          "python_quality_checklist",
+          "python_pattern_examples"
+        ],
+        "integration_method": "pattern_extraction",
+        "priority": "critical"
+      },
+      "automatic_pattern_sync": {
+        "enabled": true,
+        "sync_frequency": "on_demand",
+        "pattern_categories": [
+          "error_handling",
+          "security_patterns",
+          "performance_patterns",
+          "code_organization",
+          "testing_patterns"
+        ],
+        "exclusion_patterns": [
+          "deprecated_patterns",
+          "experimental_patterns",
+          "context_specific_patterns"
+        ]
+      }
+    },
+    "pattern_extraction": {
+      "extraction_rules": {
+        "python_style_guide": {
+          "critical_patterns": [
+            "module_documentation",
+            "import_organization",
+            "type_hints",
+            "error_handling",
+            "file_operations",
+            "logging_setup",
+            "database_patterns",
+            "fastapi_patterns",
+            "testing_patterns",
+            "security_patterns"
+          ],
+          "extraction_method": "section_content",
+          "validation_required": true
+        },
+        "fastapi_development_guide": {
+          "critical_patterns": [
+            "router_organization",
+            "dependency_injection",
+            "request_response_models",
+            "authentication_authorization"
+          ],
+          "extraction_method": "section_content",
+          "validation_required": true
+        },
+        "database_management_guide": {
+          "critical_patterns": [
+            "sqlalchemy_models",
+            "database_operations",
+            "database_configuration",
+            "migration_patterns"
+          ],
+          "extraction_method": "section_content",
+          "validation_required": true
+        }
+      }
+    },
+    "integration_workflow": {
+      "trigger_conditions": [
+        "guide_update",
+        "new_pattern_detection",
+        "manual_sync_request",
+        "health_check_failure"
+      ],
+      "validation_steps": [
+        "pattern_consistency_check",
+        "cross_reference_validation",
+        "priority_conflict_resolution",
+        "format_compatibility_check"
+      ],
+      "output_formats": [
+        "core_principles_update",
+        "integration_report",
+        "conflict_resolution_log"
+      ]
     }
   },
   "ai_tool_settings": {
@@ -80,6 +177,12 @@
       "priority_systems": true,
       "decision_frameworks": true,
       "error_handling": true
+    },
+    "dynamic_integration": {
+      "pattern_inheritance": true,
+      "automatic_sync": true,
+      "conflict_resolution": true,
+      "validation_automation": true
     },
     "content_exclusions": {
       "methodology_terms": [
@@ -154,23 +257,26 @@
     "api_design": "fastapi_development_guide.json"
   },
   "documentation": {
-    "template_version": "3.0",
+    "template_version": "3.1",
     "format": "json",
     "ai_metadata_required": true,
     "cross_references_required": true,
     "validation_rules_required": true,
-    "structured_content": true
+    "structured_content": true,
+    "dynamic_integration_enabled": true
   },
   "patterns": {
     "error_handling": "consistent across all guides",
     "code_organization": "modular and maintainable",
     "testing": "comprehensive coverage",
-    "documentation": "JSON-optimized for AI consumption"
+    "documentation": "JSON-optimized for AI consumption",
+    "dynamic_integration": "automatic pattern synchronization"
   },
   "templates": {
     "feature_documentation": "feature_template.json",
     "code_review": "code_review_patterns.json",
-    "ai_metadata": "standardized JSON format across all documents"
+    "ai_metadata": "standardized JSON format across all documents",
+    "dynamic_integration": "pattern_inheritance_template.json"
   },
   "scripts": {
     "health_check": {
@@ -188,6 +294,15 @@
     "convert_to_json": {
       "purpose": "convert markdown documentation to JSON format for AI consumption",
       "output": "outputs/conversion_report.json"
+    },
+    "dynamic_integration": {
+      "purpose": "automatically sync patterns from source guides to core principles",
+      "output": "outputs/dynamic_integration/integration-report.json",
+      "triggers": [
+        "guide_update",
+        "manual_request",
+        "health_check_failure"
+      ]
     }
   },
   "conversion": {
