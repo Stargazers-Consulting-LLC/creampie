@@ -100,8 +100,8 @@
     },
     "feature_development": {
       "title": "Feature Development",
-      "description": "- **Feature planning**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Implementat...",
-      "content": "- **Feature planning**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Implementation guides**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Technical summaries**: `features/summaries/`\n- **Active plans**: `features/plans/`\n- **Completed features**: `features/summaries/`"
+      "description": "- **Feature planning**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Implementation guides**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Technical summaries**: `features/summaries/`\n- **Active plans**: `features/plans/`\n- **Completed features**: `features/summaries/`",
+      "content": "- **Feature planning**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Implementation guides**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Technical summaries**: `features/summaries/`\n- **Active plans**: `features/plans/`\n- **Completed features**: `features/summaries/`\n- **JWT Authentication**: `features/plans/JWT-001-implement-jwt-authentication.json.replace(\".json\", \".json\")`\n- **JWT Authentication (Human)**: `humans/plans/jwt_authentication_implementation_plan.md`\n- **Stock Tracking**: `features/plans/[IN-PROGRESS]-Stock Tracking Request Plan.json.replace(\".json\", \".json\")`"
     },
     "documentation": {
       "title": "Documentation",

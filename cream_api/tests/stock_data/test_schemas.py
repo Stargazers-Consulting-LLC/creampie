@@ -1,12 +1,11 @@
 """Tests for stock data schemas.
 
-This module provides comprehensive test coverage for the stock data schemas,
-including validation rules, edge cases, and integration scenarios.
+This module contains tests for the Pydantic schemas used in the stock data module.
+It follows the testing best practices outlined in the Backend Style Guide.
 
 References:
-    - [Pytest Documentation](https://docs.pytest.org/)
-    - [Pydantic Documentation](https://docs.pydantic.dev/)
-    - [Python Testing](https://docs.python.org/3/library/unittest.html)
+    - [Pydantic Testing](https://docs.pydantic.dev/latest/usage/testing/)
+    - [FastAPI Testing](https://fastapi.tiangolo.com/tutorial/testing/)
 
 ### Legal
 SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
@@ -26,10 +25,10 @@ from cream_api.stock_data.schemas import (
     StockTrackingUpdate,
     TrackedStockListResponse,
 )
+from cream_api.tests.stock_data.test_constants import DEFAULT_PAGE_SIZE
 
 # Test constants
 EXPECTED_STOCK_COUNT = 2
-DEFAULT_PAGE_SIZE = 10
 
 
 class TestStockRequestCreate:

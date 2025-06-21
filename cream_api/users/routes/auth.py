@@ -8,9 +8,11 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
-from cream_api.db import get_db
+from cream_api.db import get_async_db, get_db
 from cream_api.users.models.app_user import AppUser
 
 # Router configuration
@@ -67,7 +69,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict) -> str:
     """Create JWT access token."""
-    # TODO: Implement proper JWT token creation
+    # TODO: Implement proper JWT token creation with expiration and signing
     return "dummy_token"
 
 
@@ -82,6 +84,25 @@ async def get_current_user(
     )
 
     user = db.query(AppUser).filter(AppUser.password_reset_token == token).first()
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+async def get_current_user_async(
+    token: Annotated[str, Depends(oauth2_scheme)], db: Annotated[AsyncSession, Depends(get_async_db)]
+) -> AppUser:
+    """Validates session token and returns associated user (async version)."""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    stmt = select(AppUser).where(AppUser.password_reset_token == token)
+    result = await db.execute(stmt)
+    user = result.scalar_one_or_none()
+
     if user is None:
         raise credentials_exception
     return user

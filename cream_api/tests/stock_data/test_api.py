@@ -20,6 +20,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from cream_api.db import get_async_db
 from cream_api.stock_data.api import router
 from cream_api.stock_data.models import TrackedStock
+from cream_api.stock_data.schemas import PullStatus
+from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL
 
 
 @pytest.fixture
@@ -76,20 +78,20 @@ async def test_track_stock_new(async_test_db: AsyncSession, async_client: TestCl
         async_client: Test client for making requests
     """
     # Make the request
-    response = async_client.post("/stock-data/track", json={"symbol": "AAPL"})
+    response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert data["status"] == "tracking"
-    assert data["message"] == "Stock AAPL is now being tracked"
-    assert data["symbol"] == "AAPL"
+    assert data["message"] == f"Stock {DEFAULT_TEST_SYMBOL} is now being tracked"
+    assert data["symbol"] == DEFAULT_TEST_SYMBOL
 
     # Verify database state
-    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == "AAPL"))
+    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == DEFAULT_TEST_SYMBOL))
     tracked_stock = result.scalar_one()
-    assert tracked_stock.symbol == "AAPL"
-    assert tracked_stock.last_pull_status == "pending"
+    assert tracked_stock.symbol == DEFAULT_TEST_SYMBOL
+    assert tracked_stock.last_pull_status == PullStatus.PENDING
     assert tracked_stock.is_active is True
 
 
@@ -109,28 +111,28 @@ async def test_track_stock_existing(async_test_db: AsyncSession, async_client: T
     """
     # Create an existing tracked stock
     existing_stock = TrackedStock(
-        symbol="AAPL",
-        last_pull_status="success",
+        symbol=DEFAULT_TEST_SYMBOL,
+        last_pull_status=PullStatus.SUCCESS,
         is_active=True,
     )
     async_test_db.add(existing_stock)
     await async_test_db.commit()
 
     # Make the request
-    response = async_client.post("/stock-data/track", json={"symbol": "AAPL"})
+    response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
     # Verify response
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert data["status"] == "tracking"
-    assert data["message"] == "Stock AAPL is now being tracked"
-    assert data["symbol"] == "AAPL"
+    assert data["message"] == f"Stock {DEFAULT_TEST_SYMBOL} is now being tracked"
+    assert data["symbol"] == DEFAULT_TEST_SYMBOL
 
     # Verify database state
-    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == "AAPL"))
+    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == DEFAULT_TEST_SYMBOL))
     tracked_stock = result.scalar_one()
-    assert tracked_stock.symbol == "AAPL"
-    assert tracked_stock.last_pull_status == "success"  # Should not change
+    assert tracked_stock.symbol == DEFAULT_TEST_SYMBOL
+    assert tracked_stock.last_pull_status == PullStatus.SUCCESS  # Should not change
     assert tracked_stock.is_active is True
 
 
@@ -175,7 +177,7 @@ async def test_track_stock_database_error(async_test_db: AsyncSession, async_cli
 
     with patch.object(async_test_db, "commit", side_effect=mock_commit):
         # Make the request
-        response = async_client.post("/stock-data/track", json={"symbol": "AAPL"})
+        response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
         # Verify response
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -202,11 +204,11 @@ async def test_track_stock_background_task_error(async_test_db: AsyncSession, as
         async_client: Test client for making requests
     """
 
-    response = async_client.post("/stock-data/track", json={"symbol": "AAPL"})
+    response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
     # Verify response
     assert response.status_code == status.HTTP_200_OK  # Task errors shouldn't affect the response
     data = response.json()
     assert data["status"] == "tracking"
-    assert data["message"] == "Stock AAPL is now being tracked"
-    assert data["symbol"] == "AAPL"
+    assert data["message"] == f"Stock {DEFAULT_TEST_SYMBOL} is now being tracked"
+    assert data["symbol"] == DEFAULT_TEST_SYMBOL

@@ -20,6 +20,17 @@ TEST_CLOSE_PRICE = 198.42
 TEST_ADJ_CLOSE_PRICE = 198.42
 TEST_VOLUME = 43_020_700
 
+# Test stock symbols for consistent testing
+TEST_STOCK_SYMBOLS = {
+    "AAPL": "Apple Inc.",
+    "TSLA": "Tesla Inc.",
+    "GOOGL": "Alphabet Inc.",
+    "MSFT": "Microsoft Corporation",
+}
+
+# Default test symbol for consistent testing
+DEFAULT_TEST_SYMBOL = "AAPL"
+
 # Test data dictionary
 TEST_STOCK_DATA = {
     "prices": [
@@ -81,3 +92,6 @@ TIMING_TOLERANCE = 0.1  # Allow 100ms timing variation
 
 # Data validation constants
 REQUIRED_COLUMNS_COUNT = 7
+
+# Test pagination constants
+DEFAULT_PAGE_SIZE = 10

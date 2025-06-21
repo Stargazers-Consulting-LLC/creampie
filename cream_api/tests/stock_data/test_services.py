@@ -18,6 +18,7 @@ from cream_api.stock_data.services import (
     get_tracked_stocks,
     process_stock_request,
 )
+from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL, TEST_STOCK_SYMBOLS
 
 # Test constants
 EXPECTED_THREE_STOCKS = 3
@@ -30,12 +31,12 @@ class TestProcessStockRequest:
     @pytest.mark.asyncio
     async def test_process_stock_request_new_symbol_success(self, async_test_db: AsyncSession) -> None:
         """Test successful processing of a new stock symbol."""
-        result = await process_stock_request("AAPL", "user123", async_test_db)
-        stmt = select(TrackedStock).where(TrackedStock.symbol == "AAPL")
+        result = await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", async_test_db)
+        stmt = select(TrackedStock).where(TrackedStock.symbol == DEFAULT_TEST_SYMBOL)
         db_result = await async_test_db.execute(stmt)
         saved_stock = db_result.scalar_one()
 
-        assert result.symbol == "AAPL"
+        assert result.symbol == DEFAULT_TEST_SYMBOL
         assert result.is_active is True
         assert result.last_pull_status == PullStatus.PENDING
         assert result.error_message is None
@@ -46,7 +47,7 @@ class TestProcessStockRequest:
         """Test processing when symbol is already actively tracked."""
         # Arrange
         existing_stock = TrackedStock(
-            symbol="TSLA",
+            symbol=DEFAULT_TEST_SYMBOL,
             last_pull_date=datetime.now(UTC),
             last_pull_status=PullStatus.SUCCESS,
             is_active=True,
@@ -55,10 +56,10 @@ class TestProcessStockRequest:
         await async_test_db.commit()
 
         # Act
-        result = await process_stock_request("TSLA", "user123", async_test_db)
+        result = await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", async_test_db)
 
         # Assert
-        assert result.symbol == "TSLA"
+        assert result.symbol == DEFAULT_TEST_SYMBOL
         assert result.is_active is True
         assert result.last_pull_status == PullStatus.SUCCESS  # Should remain unchanged
         assert result.id == existing_stock.id
@@ -66,9 +67,13 @@ class TestProcessStockRequest:
     @pytest.mark.asyncio
     async def test_process_stock_request_disabled_symbol_remains_disabled(self, async_test_db: AsyncSession) -> None:
         """Test that disabled stock symbols remain disabled."""
+        # Use a different symbol for this test
+        test_symbol = "TSLA"
+        assert test_symbol in TEST_STOCK_SYMBOLS
+
         # Arrange
         disabled_stock = TrackedStock(
-            symbol="MSFT",
+            symbol=test_symbol,
             last_pull_date=datetime.now(UTC),
             last_pull_status=PullStatus.FAILED,
             is_active=False,
@@ -78,10 +83,10 @@ class TestProcessStockRequest:
         await async_test_db.commit()
 
         # Act
-        result = await process_stock_request("MSFT", "user123", async_test_db)
+        result = await process_stock_request(test_symbol, "user123", async_test_db)
 
         # Assert
-        assert result.symbol == "MSFT"
+        assert result.symbol == test_symbol
         assert result.is_active is False  # Should remain disabled
         assert result.last_pull_status == PullStatus.FAILED  # Should remain unchanged
         assert result.error_message == "Previous error"  # Should remain unchanged
@@ -125,20 +130,24 @@ class TestProcessStockRequest:
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_normalized_to_uppercase(self, async_test_db: AsyncSession) -> None:
         """Test that symbol is normalized to uppercase."""
+        lowercase_symbol = DEFAULT_TEST_SYMBOL.lower()
+
         # Act
-        result = await process_stock_request("aapl", "user123", async_test_db)
+        result = await process_stock_request(lowercase_symbol, "user123", async_test_db)
 
         # Assert
-        assert result.symbol == "AAPL"
+        assert result.symbol == DEFAULT_TEST_SYMBOL
 
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_trimmed(self, async_test_db: AsyncSession) -> None:
         """Test that symbol is trimmed of whitespace."""
+        padded_symbol = f"  {DEFAULT_TEST_SYMBOL}  "
+
         # Act
-        result = await process_stock_request("  AAPL  ", "user123", async_test_db)
+        result = await process_stock_request(padded_symbol, "user123", async_test_db)
 
         # Assert
-        assert result.symbol == "AAPL"
+        assert result.symbol == DEFAULT_TEST_SYMBOL
 
 
 class TestGetTrackedStocks:
@@ -156,11 +165,14 @@ class TestGetTrackedStocks:
     @pytest.mark.asyncio
     async def test_get_tracked_stocks_with_stocks(self, async_test_db: AsyncSession) -> None:
         """Test getting tracked stocks when multiple exist."""
+        # Use specific symbols from constants
+        symbols = ["AAPL", "TSLA", "MSFT"]
+
         # Arrange
         stocks = [
-            TrackedStock(symbol="AAPL", is_active=True),
-            TrackedStock(symbol="TSLA", is_active=False),
-            TrackedStock(symbol="MSFT", is_active=True),
+            TrackedStock(symbol=symbols[0], is_active=True),
+            TrackedStock(symbol=symbols[1], is_active=False),
+            TrackedStock(symbol=symbols[2], is_active=True),
         ]
         for stock in stocks:
             async_test_db.add(stock)
@@ -171,8 +183,9 @@ class TestGetTrackedStocks:
 
         # Assert
         assert len(result) == EXPECTED_THREE_STOCKS
-        symbols = [stock.symbol for stock in result]
-        assert symbols == ["AAPL", "MSFT", "TSLA"]  # Should be ordered by symbol
+        result_symbols = [stock.symbol for stock in result]
+        expected_symbols = sorted(symbols)  # Should be ordered by symbol
+        assert result_symbols == expected_symbols
 
 
 class TestDeactivateStockTracking:
@@ -183,7 +196,7 @@ class TestDeactivateStockTracking:
         """Test successful deactivation of stock tracking."""
         # Arrange
         active_stock = TrackedStock(
-            symbol="AAPL",
+            symbol=DEFAULT_TEST_SYMBOL,
             is_active=True,
             last_pull_status=PullStatus.SUCCESS,
         )
@@ -191,33 +204,39 @@ class TestDeactivateStockTracking:
         await async_test_db.commit()
 
         # Act
-        result = await deactivate_stock_tracking("AAPL", async_test_db)
+        result = await deactivate_stock_tracking(DEFAULT_TEST_SYMBOL, async_test_db)
 
         # Assert
-        assert result.symbol == "AAPL"
+        assert result.symbol == DEFAULT_TEST_SYMBOL
         assert result.is_active is False
         assert result.last_pull_status == PullStatus.DISABLED
         assert result.error_message == "Tracking deactivated by admin"
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_already_deactivated(self, async_test_db: AsyncSession) -> None:
-        """Test deactivating already deactivated stock."""
+        """Test deactivating an already deactivated stock."""
+        # Use a different symbol for this test
+        test_symbol = "TSLA"
+        assert test_symbol in TEST_STOCK_SYMBOLS
+
         # Arrange
         inactive_stock = TrackedStock(
-            symbol="TSLA",
+            symbol=test_symbol,
             is_active=False,
             last_pull_status=PullStatus.DISABLED,
+            error_message="Already deactivated",
         )
         async_test_db.add(inactive_stock)
         await async_test_db.commit()
 
         # Act
-        result = await deactivate_stock_tracking("TSLA", async_test_db)
+        result = await deactivate_stock_tracking(test_symbol, async_test_db)
 
         # Assert
-        assert result.symbol == "TSLA"
-        assert result.is_active is False
-        assert result.last_pull_status == PullStatus.DISABLED
+        assert result.symbol == test_symbol
+        assert result.is_active is False  # Should remain deactivated
+        assert result.last_pull_status == PullStatus.DISABLED  # Should remain unchanged
+        assert result.error_message == "Already deactivated"  # Should remain unchanged
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_stock_not_found(self, async_test_db: AsyncSession) -> None:
@@ -236,16 +255,18 @@ class TestDeactivateStockTracking:
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_symbol_normalized(self, async_test_db: AsyncSession) -> None:
         """Test that symbol is normalized during deactivation."""
+        lowercase_symbol = DEFAULT_TEST_SYMBOL.lower()
+
         # Arrange
-        active_stock = TrackedStock(symbol="AAPL", is_active=True)
+        active_stock = TrackedStock(symbol=DEFAULT_TEST_SYMBOL, is_active=True)
         async_test_db.add(active_stock)
         await async_test_db.commit()
 
         # Act
-        result = await deactivate_stock_tracking("aapl", async_test_db)
+        result = await deactivate_stock_tracking(lowercase_symbol, async_test_db)
 
         # Assert
-        assert result.symbol == "AAPL"
+        assert result.symbol == DEFAULT_TEST_SYMBOL  # Should be normalized to uppercase
         assert result.is_active is False
 
 

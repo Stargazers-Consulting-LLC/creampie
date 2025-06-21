@@ -202,6 +202,11 @@
       "description": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches\n6. **Check style guide compliance** - Ensure code follows project standards",
       "content": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches\n6. **Check style guide compliance** - Ensure code follows project standards"
     },
+    "when_linting_testing_fails": {
+      "title": "When Linting/Testing Fails",
+      "description": "**CRITICAL**: Always check output reports first before debugging:\n1. **ALWAYS check output reports first** - Look in `ai/outputs/` for specific error reports\n2. **Read the actual error messages** - Don't guess or search randomly\n3. **Fix the exact issues reported** - Address specific line numbers and error types\n4. **Don't waste time searching** - Use the reports that are already generated\n5. **Follow the error trail** - Start with the most critical errors first",
+      "content": "**CRITICAL**: Before attempting to debug any linting, testing, or build failures:\n\n**FIRST**: Check `ai/outputs/lint_results/` for mypy, ruff, and other tool reports\n**FIRST**: Check `ai/outputs/test_results/` for test failure reports\n**FIRST**: Check `ai/outputs/` for any other relevant output reports\n**NEVER**: Start debugging without reading the actual error reports\n**WARNING**: Reports older than 15 minutes may be stale - consider re-running tools if issues persist\n\nThis prevents inefficient debugging approaches and ensures you address the exact issues reported."
+    },
     "_style_guide_compliance": {
       "title": "📋 Style Guide Compliance",
       "description": "",

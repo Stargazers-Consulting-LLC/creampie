@@ -6,6 +6,7 @@ asynchronous usage patterns.
 """
 
 import asyncio
+import logging
 from collections import defaultdict, deque
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
@@ -14,13 +15,17 @@ from typing import Any
 
 from aiohttp import ClientResponse, ClientSession
 
+logger = logging.getLogger(__name__)
+
 
 class RateLimiter:
     """Rate limiter for HTTP requests.
 
-    This class implements a token bucket algorithm to rate limit HTTP requests to specific
-    domains. It maintains a sliding window of requests and ensures that the number of
-    requests does not exceed the specified limit within the time window.
+    This class implements a sliding window rate limiting algorithm to rate limit HTTP
+    requests to specific domains. It maintains a sliding window of requests and ensures
+    that the number of requests does not exceed the specified limit within the time window.
+
+    The rate limiter is async-safe and can be used concurrently by multiple async tasks.
 
     Example:
         ```python
@@ -30,6 +35,18 @@ class RateLimiter:
 
             async with limiter.get("https://api.example.com", "api.example.com") as response:
                 data = await response.json()
+        ```
+
+    Example with error handling:
+        ```python
+        try:
+            async with limiter.get(url, domain) as response:
+                if response.status == 200:
+                    data = await response.json()
+                else:
+                    logger.warning(f"Request failed with status {response.status}")
+        except Exception as e:
+            logger.error(f"Rate-limited request failed: {e}")
         ```
     """
 
@@ -58,6 +75,8 @@ class RateLimiter:
         self.time_window: float = float(time_window)
         self.requests: defaultdict[str, deque[datetime]] = defaultdict(deque)
         self._session: ClientSession | None = session
+        # Async lock to protect access to the requests dictionary
+        self._lock = asyncio.Lock()
 
     @property
     def session(self) -> ClientSession:
@@ -81,6 +100,75 @@ class RateLimiter:
         """
         self._session = session
 
+    def _get_oldest_request_for(self, domain: str) -> datetime | None:
+        """Get the oldest request timestamp for a domain.
+
+        Args:
+            domain: Domain to check
+
+        Returns:
+            The oldest request timestamp, or None if no requests exist
+        """
+        return self.requests[domain][0] if self.requests[domain] else None
+
+    def _remove_expired_requests(self, domain: str, now: datetime) -> None:
+        """Remove expired requests for a domain based on the current time."""
+        initial_count = len(self.requests[domain])
+        while True:
+            oldest_request = self._get_oldest_request_for(domain)
+            if oldest_request is None or now - oldest_request < timedelta(seconds=self.time_window):
+                break
+            self.requests[domain].popleft()
+
+        # Prune empty domains to prevent memory bloat
+        if not self.requests[domain]:
+            del self.requests[domain]
+            if initial_count > 0:
+                logger.debug(f"Pruned empty domain: {domain}")
+
+    def _cleanup_all_expired_domains(self, now: datetime) -> None:
+        """Clean up all expired domains to prevent memory bloat."""
+        domains_to_remove = []
+        for domain in list(self.requests.keys()):
+            self._remove_expired_requests(domain, now)
+            # Check if domain was pruned
+            if domain not in self.requests:
+                domains_to_remove.append(domain)
+
+        # Log cleanup summary
+        if domains_to_remove:
+            logger.debug(f"Cleaned up {len(domains_to_remove)} expired domains: {domains_to_remove}")
+
+    def get_metrics(self, domain: str) -> dict[str, Any]:
+        """Get current metrics for a domain.
+
+        Args:
+            domain: Domain to get metrics for
+
+        Returns:
+            Dictionary containing current metrics
+        """
+        now = datetime.now()
+        current_requests = len(self.requests.get(domain, deque()))
+
+        metrics = {
+            "domain": domain,
+            "current_requests": current_requests,
+            "max_requests": self.max_requests,
+            "time_window": self.time_window,
+            "available_slots": max(0, self.max_requests - current_requests),
+            "utilization_percent": (current_requests / self.max_requests) * 100 if self.max_requests > 0 else 0,
+        }
+
+        if current_requests > 0:
+            oldest_request = self._get_oldest_request_for(domain)
+            if oldest_request is not None:
+                time_since_oldest = (now - oldest_request).total_seconds()
+                metrics["time_since_oldest_request"] = time_since_oldest
+                metrics["oldest_request_expires_in"] = max(0, self.time_window - time_since_oldest)
+
+        return metrics
+
     async def acquire(self, domain: str) -> None:
         """Acquire permission to make a request.
 
@@ -92,23 +180,35 @@ class RateLimiter:
         """
         now = datetime.now()
 
-        # Remove expired requests from the front of the deque
-        while self.requests[domain] and now - self.requests[domain][0] >= timedelta(seconds=self.time_window):
-            self.requests[domain].popleft()
+        # Use async lock to protect access to the shared requests dictionary
+        async with self._lock:
+            # Clean up all expired domains first
+            self._cleanup_all_expired_domains(now)
 
-        # If rate limit is exceeded, wait until the oldest request expires
-        if len(self.requests[domain]) >= self.max_requests:
-            oldest_request = self.requests[domain][0]
-            wait_time = (oldest_request + timedelta(seconds=self.time_window) - now).total_seconds()
-            if wait_time > 0:
-                await asyncio.sleep(wait_time)
-            # Clean up again after waiting
-            now = datetime.now()
-            while self.requests[domain] and now - self.requests[domain][0] >= timedelta(seconds=self.time_window):
-                self.requests[domain].popleft()
+            # Then handle the specific domain
+            self._remove_expired_requests(domain, now)
 
-        # Add current request
-        self.requests[domain].append(now)
+            # Calculate wait time if rate limit is exceeded
+            wait_time = 0.0
+            if len(self.requests[domain]) >= self.max_requests:
+                oldest_request = self._get_oldest_request_for(domain)
+                if oldest_request is not None:
+                    wait_time = max(0.0, (oldest_request + timedelta(seconds=self.time_window) - now).total_seconds())
+                    logger.info(f"Rate limit exceeded for {domain}, waiting {wait_time:.2f}s")
+
+            # Add current request
+            self.requests[domain].append(now)
+
+            current_count = len(self.requests[domain])
+            logger.debug(f"Request added for {domain}, current count: {current_count}/{self.max_requests}")
+
+        # Sleep outside the lock to avoid blocking other tasks
+        if wait_time > 0:
+            await asyncio.sleep(wait_time)
+            # Re-acquire lock to clean up expired requests after waiting
+            async with self._lock:
+                now = datetime.now()
+                self._cleanup_all_expired_domains(now)
 
     async def request(self, method: str, url: str, domain: str, **kwargs: Any) -> ClientResponse:
         """Make a rate-limited HTTP request.

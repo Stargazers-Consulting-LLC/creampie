@@ -20,8 +20,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, field_validator
 
-# Constants
-MAX_STOCK_SYMBOL_LENGTH = 10
+from cream_api.stock_data.constants import MAX_STOCK_SYMBOL_LENGTH
 
 
 class PullStatus(str, Enum):

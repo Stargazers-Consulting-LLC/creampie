@@ -15,20 +15,21 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.stock_data.models import StockData, TrackedStock
+from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL, TEST_VOLUME
 
 
 @pytest.fixture
 def sample_stock_data() -> dict:
     """Create sample stock data for testing."""
     return {
-        "symbol": "AAPL",
+        "symbol": DEFAULT_TEST_SYMBOL,
         "date": datetime(2024, 1, 1, tzinfo=UTC),
         "open": 150.0,
         "high": 155.0,
         "low": 148.0,
         "close": 153.0,
         "adj_close": 153.0,
-        "volume": 1000000,
+        "volume": TEST_VOLUME,
     }
 
 
@@ -36,7 +37,7 @@ def sample_stock_data() -> dict:
 def sample_tracked_stock() -> dict:
     """Create sample tracked stock data for testing."""
     return {
-        "symbol": "AAPL",
+        "symbol": DEFAULT_TEST_SYMBOL,
         "last_pull_date": datetime(2024, 1, 1, tzinfo=UTC),
         "last_pull_status": "success",
         "error_message": None,
@@ -53,7 +54,7 @@ async def test_create_stock_data(async_test_db: AsyncSession, sample_stock_data:
     await async_test_db.commit()
 
     # Query the record
-    result = await async_test_db.execute(select(StockData).where(StockData.symbol == "AAPL"))
+    result = await async_test_db.execute(select(StockData).where(StockData.symbol == sample_stock_data["symbol"]))
     saved_data = result.scalar_one()
 
     # Verify all fields
@@ -94,7 +95,9 @@ async def test_create_tracked_stock(async_test_db: AsyncSession, sample_tracked_
     await async_test_db.commit()
 
     # Query the record
-    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == "AAPL"))
+    result = await async_test_db.execute(
+        select(TrackedStock).where(TrackedStock.symbol == sample_tracked_stock["symbol"])
+    )
     saved_data = result.scalar_one()
 
     # Verify all fields
@@ -127,12 +130,12 @@ async def test_tracked_stock_unique_constraint(async_test_db: AsyncSession, samp
 async def test_tracked_stock_default_values(async_test_db: AsyncSession) -> None:
     """Test that TrackedStock default values are set correctly."""
     # Create record with minimal data
-    tracked_stock = TrackedStock(symbol="AAPL")
+    tracked_stock = TrackedStock(symbol=DEFAULT_TEST_SYMBOL)
     async_test_db.add(tracked_stock)
     await async_test_db.commit()
 
     # Query the record
-    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == "AAPL"))
+    result = await async_test_db.execute(select(TrackedStock).where(TrackedStock.symbol == DEFAULT_TEST_SYMBOL))
     saved_data = result.scalar_one()
 
     # Verify default values
@@ -145,7 +148,7 @@ async def test_tracked_stock_default_values(async_test_db: AsyncSession) -> None
 async def test_stock_data_nullable_fields(async_test_db: AsyncSession) -> None:
     """Test that required fields cannot be null in StockData."""
     # Try to create record with missing required fields
-    stock_data = StockData(symbol="AAPL")  # Missing other required fields
+    stock_data = StockData(symbol=DEFAULT_TEST_SYMBOL)  # Missing other required fields
     async_test_db.add(stock_data)
 
     # Should raise IntegrityError

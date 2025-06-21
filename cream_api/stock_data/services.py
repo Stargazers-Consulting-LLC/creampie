@@ -27,13 +27,11 @@ from cream_api.common.exceptions import (
     StockDataError,
     StockNotFoundError,
 )
+from cream_api.stock_data.constants import MAX_STOCK_SYMBOL_LENGTH
 from cream_api.stock_data.models import TrackedStock
 from cream_api.stock_data.schemas import PullStatus
 
 logger: logging.Logger = get_logger_for(__name__)
-
-# Constants
-MAX_STOCK_SYMBOL_LENGTH = 10
 
 
 async def process_stock_request(symbol: str, user_id: str, db: AsyncSession) -> TrackedStock:
