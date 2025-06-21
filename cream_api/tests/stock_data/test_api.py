@@ -22,6 +22,7 @@ from cream_api.stock_data.api import router
 from cream_api.stock_data.models import TrackedStock
 from cream_api.stock_data.schemas import PullStatus
 from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL
+from cream_api.users.routes.auth import get_current_user_async
 
 
 @pytest.fixture
@@ -45,7 +46,13 @@ def app(async_test_db: AsyncSession) -> FastAPI:
     async def override_get_async_db() -> AsyncGenerator[AsyncSession, None]:
         yield async_test_db
 
+    # Override the authentication dependency
+    async def override_get_current_user_async() -> dict[str, str]:
+        # Return a mock user that would pass authentication
+        return {"id": "user123", "email": "user@example.com"}
+
     app.dependency_overrides[get_async_db] = override_get_async_db
+    app.dependency_overrides[get_current_user_async] = override_get_current_user_async
     app.include_router(router)
     return app
 
@@ -212,3 +219,107 @@ async def test_track_stock_background_task_error(async_test_db: AsyncSession, as
     assert data["status"] == "tracking"
     assert data["message"] == f"Stock {DEFAULT_TEST_SYMBOL} is now being tracked"
     assert data["symbol"] == DEFAULT_TEST_SYMBOL
+
+
+@pytest.mark.asyncio
+async def test_list_tracked_stocks_admin_required(async_test_db: AsyncSession, async_client: TestClient) -> None:
+    """Test that list tracked stocks endpoint requires admin access.
+
+    This test verifies that:
+    1. The endpoint rejects non-admin users
+    2. The response indicates admin access is required
+    3. The endpoint is properly disabled until user roles are implemented
+
+    Args:
+        async_test_db: Async database session for testing
+        async_client: Test client for making requests
+    """
+    # Make the request
+    response = async_client.get("/stock-data/track")
+
+    # Verify response
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    data = response.json()
+    assert "detail" in data
+    assert "Admin access required" in data["detail"]
+
+
+@pytest.mark.asyncio
+async def test_deactivate_tracking_admin_required(async_test_db: AsyncSession, async_client: TestClient) -> None:
+    """Test that deactivate tracking endpoint requires admin access.
+
+    This test verifies that:
+    1. The endpoint rejects non-admin users
+    2. The response indicates admin access is required
+    3. The endpoint is properly disabled until user roles are implemented
+
+    Args:
+        async_test_db: Async database session for testing
+        async_client: Test client for making requests
+    """
+    # Make the request
+    response = async_client.delete(f"/stock-data/tracked/{DEFAULT_TEST_SYMBOL}")
+
+    # Verify response
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    data = response.json()
+    assert "detail" in data
+    assert "Admin access required" in data["detail"]
+
+
+@pytest.mark.asyncio
+async def test_track_stock_invalid_symbol_error_handling(async_test_db: AsyncSession, async_client: TestClient) -> None:
+    """Test handling of InvalidStockSymbolError in track stock endpoint.
+
+    This test verifies that:
+    1. InvalidStockSymbolError is properly caught
+    2. The response indicates bad request
+    3. The error message is included in the response
+
+    Args:
+        async_test_db: Async database session for testing
+        async_client: Test client for making requests
+    """
+    # Mock the service to raise InvalidStockSymbolError
+    with patch("cream_api.stock_data.api.process_stock_request") as mock_service:
+        from cream_api.common.exceptions import InvalidStockSymbolError
+
+        mock_service.side_effect = InvalidStockSymbolError("INVALID", "Symbol must start with a letter")
+
+        # Make the request
+        response = async_client.post("/stock-data/track", json={"symbol": "INVALID"})
+
+        # Verify response
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        data = response.json()
+        assert "detail" in data
+        assert "Symbol must start with a letter" in data["detail"]
+
+
+@pytest.mark.asyncio
+async def test_track_stock_stock_data_error_handling(async_test_db: AsyncSession, async_client: TestClient) -> None:
+    """Test handling of StockDataError in track stock endpoint.
+
+    This test verifies that:
+    1. StockDataError is properly caught
+    2. The response indicates server error
+    3. The error message is included in the response
+
+    Args:
+        async_test_db: Async database session for testing
+        async_client: Test client for making requests
+    """
+    # Mock the service to raise StockDataError
+    with patch("cream_api.stock_data.api.process_stock_request") as mock_service:
+        from cream_api.common.exceptions import StockDataError
+
+        mock_service.side_effect = StockDataError("Failed to process stock tracking request")
+
+        # Make the request
+        response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
+
+        # Verify response
+        assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+        data = response.json()
+        assert "detail" in data
+        assert "Failed to process stock tracking request" in data["detail"]

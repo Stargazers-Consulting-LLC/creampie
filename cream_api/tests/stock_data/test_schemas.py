@@ -165,6 +165,97 @@ class TestStockRequestCreate:
         assert len(error.errors()) == 1
         assert "uppercase letters (A-Z) and digits (0-9)" in str(error.errors()[0]["msg"])
 
+    def test_symbol_length_exactly_one_character(self) -> None:
+        """Test that single character symbols are rejected (minimum is 2)."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="A")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "must be 2-10 characters long" in str(error.errors()[0]["msg"])
+
+    def test_symbol_length_exactly_max_length(self) -> None:
+        """Test that symbols at exactly maximum length are accepted."""
+        data = {"symbol": "ABCDEFGHIJ"}  # 10 characters
+        request = StockRequestCreate(**data)
+        assert request.symbol == "ABCDEFGHIJ"
+
+    def test_symbol_length_one_over_max_rejected(self) -> None:
+        """Test that symbols one character over maximum length are rejected."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="ABCDEFGHIJK")  # 11 characters
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        # Field validation happens before custom validation, so we get the field error
+        assert "String should have at most 10 characters" in str(error.errors()[0]["msg"])
+
+    def test_symbol_with_lowercase_letters_converted(self) -> None:
+        """Test that symbols with lowercase letters are converted to uppercase."""
+        data = {"symbol": "aBcDeF"}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "ABCDEF"
+
+    def test_symbol_with_mixed_case_and_digits(self) -> None:
+        """Test that symbols with mixed case and digits are properly converted."""
+        data = {"symbol": "aB1cD2eF"}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AB1CD2EF"
+
+    def test_symbol_with_only_digits_rejected(self) -> None:
+        """Test that symbols with only digits are rejected (must start with letter)."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="12345")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "must start with a letter" in str(error.errors()[0]["msg"])
+
+    def test_symbol_with_leading_whitespace_rejected(self) -> None:
+        """Test that symbols with leading whitespace are rejected."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol=" AAPL")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "whitespace" in str(error.errors()[0]["msg"])
+
+    def test_symbol_with_trailing_whitespace_rejected(self) -> None:
+        """Test that symbols with trailing whitespace are rejected."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="AAPL ")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "whitespace" in str(error.errors()[0]["msg"])
+
+    def test_symbol_with_newline_rejected(self) -> None:
+        """Test that symbols with newline characters are rejected."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="AAPL\n")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "whitespace" in str(error.errors()[0]["msg"])
+
+    def test_symbol_with_tab_rejected(self) -> None:
+        """Test that symbols with tab characters are rejected."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="AAPL\t")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "whitespace" in str(error.errors()[0]["msg"])
+
+    def test_symbol_with_multiple_whitespace_characters_rejected(self) -> None:
+        """Test that symbols with multiple whitespace characters are rejected."""
+        with pytest.raises(ValidationError) as exc_info:
+            StockRequestCreate(symbol="AAPL \n\t")
+
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert "whitespace" in str(error.errors()[0]["msg"])
+
 
 class TestStockRequestResponse:
     """Test cases for StockRequestResponse schema."""

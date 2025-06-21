@@ -188,7 +188,7 @@ run_tests_once() {
     fi
 
     # Run pytest
-    if poetry run pytest "${pytest_args[@]}"; then
+    if poetry run coverage run -m pytest "${pytest_args[@]}"; then
         local end_time=$(date +%s)
         local duration=$((end_time - start_time))
         print_success "Pytest completed successfully in ${duration}s"
@@ -340,15 +340,21 @@ pushd cream_api > /dev/null
 TEMP_OUTPUT_FILE=$(mktemp)
 
 # Run pytest with live output and capture to file
-if poetry run pytest "${PYTEST_ARGS[@]}" 2>&1 | tee "$TEMP_OUTPUT_FILE"; then
+if poetry run coverage run -m pytest "${PYTEST_ARGS[@]}" 2>&1 | tee "$TEMP_OUTPUT_FILE"; then
     end_time=$(date +%s)
     duration=$((end_time - start_time))
     print_success "Pytest completed successfully in ${duration}s"
 
+    # Generate coverage report
+    print_status "Generating coverage report..."
+    COVERAGE_OUTPUT_FILE="$AI_OUTPUT_DIR/coverage_report.txt"
+    poetry run coverage report --show-missing > "$COVERAGE_OUTPUT_FILE" 2>&1
+    print_success "Coverage report generated: $COVERAGE_OUTPUT_FILE"
+
     # Capture test output for AI report - write to separate file to avoid escaping issues
     TEST_OUTPUT_FILE="$AI_OUTPUT_DIR/test_output.txt"
     cat "$TEMP_OUTPUT_FILE" > "$TEST_OUTPUT_FILE"
-    ADDITIONAL_CONTENT="  \"test_details\": {\n    \"test_path\": \"${TEST_PATH:-"All tests"}\",\n    \"test_function\": \"${TEST_FUNCTION:-"All functions"}\",\n    \"marker\": \"${MARKER:-"None"}\",\n    \"verbose\": \"$VERBOSE\",\n    \"watch_mode\": \"$WATCH_MODE\"\n  },\n  \"test_output_file\": \"$(basename "$TEST_OUTPUT_FILE")\","
+    ADDITIONAL_CONTENT="  \"test_details\": {\n    \"test_path\": \"${TEST_PATH:-"All tests"}\",\n    \"test_function\": \"${TEST_FUNCTION:-"All functions"}\",\n    \"marker\": \"${MARKER:-"None"}\",\n    \"verbose\": \"$VERBOSE\",\n    \"watch_mode\": \"$WATCH_MODE\"\n  },\n  \"test_output_file\": \"$(basename "$TEST_OUTPUT_FILE")\",\n  \"coverage_report_file\": \"$(basename "$COVERAGE_OUTPUT_FILE")\","
 
     generate_ai_report "pytest" "success" "$duration" "$AI_OUTPUT_DIR" "$ADDITIONAL_CONTENT"
 

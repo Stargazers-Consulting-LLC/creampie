@@ -83,3 +83,6 @@ downloaded_files/
 
 # AI Output Reports
 ai/outputs/
+
+# Logs
+cream_api/logs/

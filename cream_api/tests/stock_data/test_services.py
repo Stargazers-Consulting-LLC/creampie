@@ -1,13 +1,16 @@
 """Unit tests for stock data business logic services."""
 
 from datetime import UTC, datetime
+from unittest.mock import AsyncMock
 
 import pytest
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.common.exceptions import (
     InvalidStockSymbolError,
+    StockDataError,
     StockNotFoundError,
 )
 from cream_api.stock_data.models import TrackedStock
@@ -23,6 +26,16 @@ from cream_api.tests.stock_data.test_constants import DEFAULT_TEST_SYMBOL, TEST_
 # Test constants
 EXPECTED_THREE_STOCKS = 3
 EXPECTED_TWO_ACTIVE_STOCKS = 2
+
+
+class DummyResultNone:
+    def scalar_one_or_none(self) -> None:
+        return None
+
+
+class DummyResultStock:
+    def scalar_one_or_none(self) -> TrackedStock:
+        return TrackedStock(symbol=DEFAULT_TEST_SYMBOL, is_active=True)
 
 
 class TestProcessStockRequest:
@@ -149,6 +162,34 @@ class TestProcessStockRequest:
         # Assert
         assert result.symbol == DEFAULT_TEST_SYMBOL
 
+    @pytest.mark.asyncio
+    async def test_process_stock_request_database_error_handling(self, async_test_db: AsyncSession) -> None:
+        """Test handling of database errors during stock request processing."""
+        # Arrange - Mock the database session to raise an error
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+        mock_db.rollback = AsyncMock()
+
+        # Act & Assert
+        with pytest.raises(StockDataError, match="Failed to process stock tracking request"):
+            await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", mock_db)
+
+        # Verify rollback was called
+        mock_db.rollback.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_process_stock_request_commit_error_handling(self, async_test_db: AsyncSession) -> None:
+        """Test handling of commit errors during stock request processing."""
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.return_value = DummyResultNone()
+        mock_db.commit.side_effect = SQLAlchemyError("Commit failed")
+        mock_db.rollback = AsyncMock()
+
+        with pytest.raises(StockDataError, match="Failed to process stock tracking request"):
+            await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", mock_db)
+
+        mock_db.rollback.assert_awaited_once()
+
 
 class TestGetTrackedStocks:
     """Test cases for get_tracked_stocks function."""
@@ -186,6 +227,17 @@ class TestGetTrackedStocks:
         result_symbols = [stock.symbol for stock in result]
         expected_symbols = sorted(symbols)  # Should be ordered by symbol
         assert result_symbols == expected_symbols
+
+    @pytest.mark.asyncio
+    async def test_get_tracked_stocks_database_error_handling(self, async_test_db: AsyncSession) -> None:
+        """Test handling of database errors when retrieving tracked stocks."""
+        # Arrange - Mock the database session to raise an error
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+
+        # Act & Assert
+        with pytest.raises(StockDataError, match="Failed to retrieve tracked stocks"):
+            await get_tracked_stocks(mock_db)
 
 
 class TestDeactivateStockTracking:
@@ -269,6 +321,34 @@ class TestDeactivateStockTracking:
         assert result.symbol == DEFAULT_TEST_SYMBOL  # Should be normalized to uppercase
         assert result.is_active is False
 
+    @pytest.mark.asyncio
+    async def test_deactivate_stock_tracking_database_error_handling(self, async_test_db: AsyncSession) -> None:
+        """Test handling of database errors during deactivation."""
+        # Arrange - Mock the database session to raise an error
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+        mock_db.rollback = AsyncMock()
+
+        # Act & Assert
+        with pytest.raises(StockDataError, match="Failed to deactivate stock tracking"):
+            await deactivate_stock_tracking(DEFAULT_TEST_SYMBOL, mock_db)
+
+        # Verify rollback was called
+        mock_db.rollback.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_deactivate_stock_tracking_commit_error_handling(self, async_test_db: AsyncSession) -> None:
+        """Test handling of commit errors during deactivation."""
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.return_value = DummyResultStock()
+        mock_db.commit.side_effect = SQLAlchemyError("Commit failed")
+        mock_db.rollback = AsyncMock()
+
+        with pytest.raises(StockDataError, match="Failed to deactivate stock tracking"):
+            await deactivate_stock_tracking(DEFAULT_TEST_SYMBOL, mock_db)
+
+        mock_db.rollback.assert_awaited_once()
+
 
 class TestGetActiveTrackedStocks:
     """Test cases for get_active_tracked_stocks function."""
@@ -303,3 +383,14 @@ class TestGetActiveTrackedStocks:
         assert len(result) == EXPECTED_TWO_ACTIVE_STOCKS
         symbols = [stock.symbol for stock in result]
         assert symbols == ["AAPL", "MSFT"]  # Should be ordered by symbol
+
+    @pytest.mark.asyncio
+    async def test_get_active_tracked_stocks_database_error_handling(self, async_test_db: AsyncSession) -> None:
+        """Test handling of database errors when retrieving active tracked stocks."""
+        # Arrange - Mock the database session to raise an error
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+
+        # Act & Assert
+        with pytest.raises(StockDataError, match="Failed to retrieve active tracked stocks"):
+            await get_active_tracked_stocks(mock_db)

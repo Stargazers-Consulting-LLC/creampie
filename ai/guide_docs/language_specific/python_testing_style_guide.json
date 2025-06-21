@@ -142,7 +142,7 @@
       "title": "Coverage and Quality Metrics",
       "description": "Guidelines for test coverage and quality",
       "rules": [
-        "Aim for high test coverage (80%+ for critical code)",
+        "Aim for high test coverage (80% minimum for critical code)",
         "Use coverage tools to identify untested code",
         "Focus on critical business logic coverage",
         "Use mutation testing to verify test quality"
@@ -170,6 +170,11 @@
         "Ignoring test failures or flaky tests",
         "Writing tests that are hard to understand"
       ]
+    },
+    "debugging_workflow": {
+      "title": "Debugging Workflow",
+      "description": "Mandatory workflow for debugging test failures and issues",
+      "content": "**MANDATORY TEST DEBUGGING WORKFLOW - ALWAYS FOLLOW THIS ORDER:**\n\n1. **FIRST - Check AI Outputs Directory**:\n   - **ALWAYS** check `ai/outputs/test_results/` for test failure reports first\n   - **ALWAYS** check `ai/outputs/` for any other relevant output reports\n   - **NEVER** start debugging without reading the actual error reports\n   - **WARNING**: Reports older than 15 minutes may be stale - consider re-running tests if issues persist\n\n2. **Read the Actual Error Messages**:\n   - Don't guess or search randomly\n   - Fix the exact issues reported\n   - Address specific line numbers and error types\n   - Follow the error trail starting with the most critical errors first\n\n3. **Don't Waste Time Searching**:\n   - Use the reports that are already generated\n   - Don't run commands without checking existing reports\n   - Focus on the specific errors identified in the output files\n\n**CRITICAL**: Before attempting to debug any test failures:\n- **FIRST**: Check `ai/outputs/test_results/` for pytest failure reports\n- **FIRST**: Check `ai/outputs/` for any other relevant output reports\n- **NEVER**: Start debugging without reading the actual error reports\n- **WARNING**: Reports older than 15 minutes may be stale - consider re-running tools if issues persist\n\n**AUTOMATIC ENFORCEMENT**: This debugging workflow must be applied automatically for all test debugging activities.\n\n**NO EXCEPTIONS**: The AI outputs directory must be checked first in all test debugging scenarios.\n\n**CONTINUOUS MONITORING**: This workflow must be followed consistently across all testing sessions."
     }
   },
   "example_patterns": {
