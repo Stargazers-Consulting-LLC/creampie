@@ -208,7 +208,7 @@
       },
       "function_docstrings": {
         "pattern": "\"\"\"Brief description.\n\nArgs:\n    param: Description\n\nReturns:\n    Description\n\nRaises:\n    ExceptionType: Description\"\"\"",
-        "example": "\"\"\"Start tracking a new stock symbol.\n\nArgs:\n    request: TrackStockRequest containing the symbol to track\n    background_tasks: FastAPI background tasks manager\n    db: Database session\n\nReturns:\n    dict: Response indicating the stock is now being tracked\n\nRaises:\n    HTTPException: If there's an error starting tracking\"\"\""
+        "example": "\"\"\"Start tracking a new stock symbol.\n\nArgs:\n    request: StockRequestCreate containing the symbol to track\n    background_tasks: FastAPI background tasks manager\n    db: Database session\n\nReturns:\n    dict: Response indicating the stock is now being tracked\n\nRaises:\n    HTTPException: If there's an error starting tracking\"\"\""
       },
       "class_docstrings": {
         "pattern": "\"\"\"Brief description.\n\nExtended description if needed.\"\"\"",
@@ -287,8 +287,8 @@
       "description": "FastAPI-specific patterns and best practices",
       "router_organization": {
         "setup": "from fastapi import APIRouter, Depends, HTTPException\nfrom pydantic import BaseModel, Field\n\nrouter = APIRouter(prefix=\"/stock-data\", tags=[\"stock-data\"])",
-        "request_model": "class TrackStockRequest(BaseModel):\n    \"\"\"Request model for tracking a new stock.\"\"\"\n    symbol: str = Field(..., min_length=1, description=\"Stock symbol to track\")",
-        "endpoint_pattern": "@router.post(\"/track\")\nasync def track_stock(\n    request: TrackStockRequest,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> dict:\n    \"\"\"Start tracking a new stock symbol.\"\"\"\n    pass"
+        "request_model": "class StockRequestCreate(BaseModel):\n    \"\"\"Request model for tracking a new stock.\"\"\"\n    symbol: str = Field(..., min_length=1, description=\"Stock symbol to track\")",
+        "endpoint_pattern": "@router.post(\"/track\")\nasync def track_stock(\n    request: StockRequestCreate,\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n) -> dict:\n    \"\"\"Start tracking a new stock symbol.\"\"\"\n    pass"
       },
       "dependency_injection": {
         "pattern": "async def get_current_user(\n    db: Annotated[AsyncSession, Depends(get_async_db)],\n    settings: Annotated[Settings, Depends(get_app_settings)]\n) -> User:\n    \"\"\"Get current authenticated user.\"\"\"\n    pass",

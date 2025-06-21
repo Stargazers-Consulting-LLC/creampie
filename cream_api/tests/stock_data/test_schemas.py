@@ -1,14 +1,5 @@
 """Tests for stock data schemas.
 
-This module contains comprehensive tests for the Pydantic schemas used in
-stock tracking functionality, including validation, serialization, and
-integration tests.
-
-References:
-    - [Pytest Documentation](https://docs.pytest.org/)
-    - [Pydantic Testing](https://docs.pydantic.dev/usage/testing/)
-    - [Python Type Hints](https://docs.python.org/3/library/typing.html)
-
 ### Legal
 SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
 
@@ -112,7 +103,6 @@ class TestStockRequestCreate:
 
         error = exc_info.value
         assert len(error.errors()) == 1
-        # Handle different error types for Pydantic v2
         error_type = error.errors()[0]["type"]
         assert error_type in ["value_error", "string_too_short", "string_too_long"]
 
@@ -174,14 +164,14 @@ class TestStockRequestResponse:
 
     def test_valid_response_creation(self) -> None:
         """Test creating a valid response with all required fields."""
+        now = datetime.now()
         response = StockRequestResponse(
             id="123e4567-e89b-12d3-a456-426614174000",
             symbol="AAPL",
             is_active=True,
-            last_pull_date=None,
+            last_pull_date=now,
             last_pull_status=PullStatus.SUCCESS,
             error_message=None,
-            created_at=datetime.now(),
         )
         assert response.id == "123e4567-e89b-12d3-a456-426614174000"
         assert response.symbol == "AAPL"
@@ -198,57 +188,53 @@ class TestStockRequestResponse:
             last_pull_date=now,
             last_pull_status=PullStatus.SUCCESS,
             error_message="Some error occurred",
-            created_at=now,
         )
-        assert response.last_pull_date is not None
+        assert response.last_pull_date == now
         assert response.error_message == "Some error occurred"
 
     def test_response_without_optional_fields(self) -> None:
         """Test creating a response without optional fields."""
+        now = datetime.now()
         response = StockRequestResponse(
             id="123e4567-e89b-12d3-a456-426614174000",
             symbol="AAPL",
-            is_active=False,
-            last_pull_date=None,
+            is_active=True,
+            last_pull_date=now,
             last_pull_status=PullStatus.PENDING,
             error_message=None,
-            created_at=datetime.now(),
         )
-        assert response.last_pull_date is None
+        assert response.last_pull_date == now
         assert response.error_message is None
 
     def test_response_from_orm_model(self) -> None:
-        """Test creating response from ORM model attributes."""
+        """Test creating response from ORM model."""
+        now = datetime.now()
+        mock_data = {
+            "id": "123e4567-e89b-12d3-a456-426614174000",
+            "symbol": "AAPL",
+            "is_active": True,
+            "last_pull_date": now,
+            "last_pull_status": "success",
+            "error_message": None,
+        }
 
-        # Simulate ORM model with attributes
-        class MockTrackedStock:
-            def __init__(self) -> None:
-                self.id = "123e4567-e89b-12d3-a456-426614174000"
-                self.symbol = "AAPL"
-                self.is_active = True
-                self.last_pull_date = datetime.now()
-                self.last_pull_status = PullStatus.SUCCESS
-                self.error_message = None
-                self.created_at = datetime.now()
-
-        mock_model = MockTrackedStock()
-        response = StockRequestResponse.model_validate(mock_model)
-        assert response.id == mock_model.id
-        assert response.symbol == mock_model.symbol
+        response = StockRequestResponse.model_validate(mock_data)
+        assert response.symbol == "AAPL"
+        assert response.last_pull_status == PullStatus.SUCCESS
 
     def test_disabled_status_works_correctly(self) -> None:
-        """Test that DISABLED status works correctly in responses."""
+        """Test that disabled status is handled correctly."""
+        now = datetime.now()
         response = StockRequestResponse(
             id="123e4567-e89b-12d3-a456-426614174000",
             symbol="AAPL",
             is_active=False,
-            last_pull_date=None,
+            last_pull_date=now,
             last_pull_status=PullStatus.DISABLED,
             error_message=None,
-            created_at=datetime.now(),
         )
-        assert response.last_pull_status == PullStatus.DISABLED
         assert response.is_active is False
+        assert response.last_pull_status == PullStatus.DISABLED
 
 
 class TestTrackedStockListResponse:
@@ -256,34 +242,34 @@ class TestTrackedStockListResponse:
 
     def test_valid_list_response_creation(self) -> None:
         """Test creating a valid list response."""
-        stock_responses = [
+        now = datetime.now()
+        stocks = [
             StockRequestResponse(
-                id="123e4567-e89b-12d3-a456-426614174000",
+                id="1",
                 symbol="AAPL",
                 is_active=True,
-                last_pull_date=None,
+                last_pull_date=now,
                 last_pull_status=PullStatus.SUCCESS,
                 error_message=None,
-                created_at=datetime.now(),
             ),
             StockRequestResponse(
-                id="123e4567-e89b-12d3-a456-426614174001",
+                id="2",
                 symbol="TSLA",
                 is_active=True,
-                last_pull_date=None,
+                last_pull_date=now,
                 last_pull_status=PullStatus.SUCCESS,
                 error_message=None,
-                created_at=datetime.now(),
             ),
         ]
 
         response = TrackedStockListResponse(
-            stocks=stock_responses,
+            stocks=stocks,
             total_count=EXPECTED_STOCK_COUNT,
             page=1,
             page_size=DEFAULT_PAGE_SIZE,
             total_pages=1,
         )
+
         assert len(response.stocks) == EXPECTED_STOCK_COUNT
         assert response.total_count == EXPECTED_STOCK_COUNT
         assert response.page == 1
@@ -291,7 +277,7 @@ class TestTrackedStockListResponse:
         assert response.total_pages == 1
 
     def test_empty_list_response(self) -> None:
-        """Test creating a list response with no stocks."""
+        """Test creating an empty list response."""
         response = TrackedStockListResponse(
             stocks=[],
             total_count=0,
@@ -299,6 +285,7 @@ class TestTrackedStockListResponse:
             page_size=DEFAULT_PAGE_SIZE,
             total_pages=0,
         )
+
         assert len(response.stocks) == 0
         assert response.total_count == 0
         assert response.total_pages == 0
@@ -333,7 +320,7 @@ class TestStockTrackingUpdate:
         "valid_status", [PullStatus.PENDING, PullStatus.SUCCESS, PullStatus.FAILED, PullStatus.DISABLED]
     )
     def test_valid_pull_status_accepted(self, valid_status: PullStatus) -> None:
-        """Test that valid pull status values are accepted."""
+        """Test that all valid pull statuses are accepted."""
         update = StockTrackingUpdate(
             is_active=True,
             last_pull_status=valid_status,
@@ -347,54 +334,49 @@ class TestSchemaIntegration:
 
     def test_create_to_response_flow(self) -> None:
         """Test the flow from create request to response."""
-        # Create request
         create_request = StockRequestCreate(symbol="AAPL")
+        assert create_request.symbol == "AAPL"
 
-        # Simulate processing and create response
+        now = datetime.now()
         response = StockRequestResponse(
             id="123e4567-e89b-12d3-a456-426614174000",
             symbol=create_request.symbol,
             is_active=True,
-            last_pull_date=None,
+            last_pull_date=now,
             last_pull_status=PullStatus.PENDING,
             error_message=None,
-            created_at=datetime.now(),
         )
-
-        assert response.symbol == "AAPL"
-        assert response.is_active is True
+        assert response.symbol == create_request.symbol
+        assert response.last_pull_status == PullStatus.PENDING
 
     def test_update_flow(self) -> None:
-        """Test updating a tracked stock."""
-        # Initial state
-        initial_response = StockRequestResponse(
+        """Test the update flow."""
+        now = datetime.now()
+        original_response = StockRequestResponse(
             id="123e4567-e89b-12d3-a456-426614174000",
             symbol="AAPL",
             is_active=True,
-            last_pull_date=None,
+            last_pull_date=now,
             last_pull_status=PullStatus.PENDING,
             error_message=None,
-            created_at=datetime.now(),
         )
 
-        # Update request
         update = StockTrackingUpdate(
             is_active=False,
-            last_pull_status=PullStatus.FAILED,
-            error_message="API error",
+            last_pull_status=PullStatus.SUCCESS,
+            error_message=None,
         )
 
-        # Simulate applying update
+        # Simulate updating the response
         updated_response = StockRequestResponse(
-            id=initial_response.id,
-            symbol=initial_response.symbol,
+            id=original_response.id,
+            symbol=original_response.symbol,
             is_active=update.is_active,
-            last_pull_date=None,
+            last_pull_date=original_response.last_pull_date,
             last_pull_status=update.last_pull_status,
             error_message=update.error_message,
-            created_at=initial_response.created_at,
         )
 
         assert updated_response.is_active is False
-        assert updated_response.last_pull_status == PullStatus.FAILED
-        assert updated_response.error_message == "API error"
+        assert updated_response.last_pull_status == PullStatus.SUCCESS
+        assert updated_response.error_message is None

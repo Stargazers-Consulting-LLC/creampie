@@ -1,10 +1,17 @@
 {
   "ai_documentation_config": {
-    "version": "3.0",
+    "version": "3.1",
     "last_updated": "2025-01-27",
-    "description": "AI-optimized JSON documentation configuration for the CreamPie project with dynamic integration",
+    "description": "AI-optimized JSON documentation configuration for the CreamPie project with dynamic integration and mandatory style guide compliance",
     "documentation_format": "json",
     "optimization_target": "ai_tool_consumption",
+    "style_guide_compliance": {
+      "mandatory": true,
+      "primary_guide": "humans/guides/python_style_guide.md",
+      "ai_guide": "ai/guide_docs/language_specific/python_style_guide.json",
+      "validation_required": true,
+      "auto_check": true
+    },
     "maintenance_scripts": [
       "scripts/ai_health_check.py",
       "scripts/update_documentation.py",
@@ -30,15 +37,14 @@
         "ai_tool_optimization_guide.json"
       ],
       "language_specific": [
-        "Language-Specific/python_style_guide.json",
-        "Language-Specific/fastapi_development_guide.json",
-        "Language-Specific/python_testing_guide.json"
+        "language_specific/python_style_guide.json",
+        "language_specific/fastapi_development_guide.json",
+        "language_specific/python_testing_style_guide.json",
+        "language_specific/react_style_guide.json"
       ],
       "domain_specific": [
         "domain_specific/database_management_guide.json",
-        "domain_specific/frontend_style_guide.json",
-        "domain_specific/shell_style_guide.json",
-        "domain_specific/web_scraping_patterns.json"
+        "domain_specific/shell_style_guide.json"
       ]
     },
     "project_context": [
@@ -60,6 +66,13 @@
   },
   "dynamic_integration": {
     "enabled": true,
+    "style_guide_integration": {
+      "mandatory": true,
+      "source_guide": "humans/guides/python_style_guide.md",
+      "ai_guide": "ai/guide_docs/language_specific/python_style_guide.json",
+      "auto_sync": true,
+      "validation_required": true
+    },
     "integration_rules": {
       "core_principles_inheritance": {
         "source_guides": [
@@ -74,6 +87,23 @@
           "python_pattern_examples"
         ],
         "integration_method": "pattern_extraction",
+        "priority": "critical"
+      },
+      "style_guide_compliance": {
+        "mandatory_patterns": [
+          "module_documentation",
+          "import_organization",
+          "type_hints",
+          "error_handling",
+          "file_operations",
+          "logging_setup",
+          "database_patterns",
+          "fastapi_patterns",
+          "testing_patterns",
+          "security_patterns"
+        ],
+        "validation_required": true,
+        "auto_check": true,
         "priority": "critical"
       },
       "automatic_pattern_sync": {
@@ -106,10 +136,12 @@
             "database_patterns",
             "fastapi_patterns",
             "testing_patterns",
-            "security_patterns"
+            "security_patterns",
+            "pydantic_v2_migration"
           ],
           "extraction_method": "section_content",
-          "validation_required": true
+          "validation_required": true,
+          "mandatory_compliance": true
         },
         "fastapi_development_guide": {
           "critical_patterns": [
@@ -138,18 +170,21 @@
         "guide_update",
         "new_pattern_detection",
         "manual_sync_request",
-        "health_check_failure"
+        "health_check_failure",
+        "style_guide_violation"
       ],
       "validation_steps": [
         "pattern_consistency_check",
         "cross_reference_validation",
         "priority_conflict_resolution",
-        "format_compatibility_check"
+        "format_compatibility_check",
+        "style_guide_compliance_check"
       ],
       "output_formats": [
         "core_principles_update",
         "integration_report",
-        "conflict_resolution_log"
+        "conflict_resolution_log",
+        "style_guide_compliance_report"
       ]
     }
   },
@@ -170,19 +205,31 @@
       "file_paths": true,
       "implementation_hints": true,
       "pattern_examples": true,
-      "validation_rules": true
+      "validation_rules": true,
+      "style_guide_compliance": {
+        "mandatory": true,
+        "auto_check": true,
+        "validation_required": true,
+        "quality_checklist": true
+      }
     },
     "context_awareness": {
       "dependency_mapping": true,
       "priority_systems": true,
       "decision_frameworks": true,
-      "error_handling": true
+      "error_handling": true,
+      "style_guide_awareness": {
+        "mandatory": true,
+        "auto_reference": true,
+        "violation_detection": true
+      }
     },
     "dynamic_integration": {
       "pattern_inheritance": true,
       "automatic_sync": true,
       "conflict_resolution": true,
-      "validation_automation": true
+      "validation_automation": true,
+      "style_guide_sync": true
     },
     "content_exclusions": {
       "methodology_terms": [
@@ -235,26 +282,59 @@
     }
   },
   "priority_system": {
-    "high_priority": [
-      "core_principles.json",
+    "critical_priority": [
       "python_style_guide.json",
-      "architecture_overview.json"
+      "core_principles.json"
+    ],
+    "high_priority": [
+      "architecture_overview.json",
+      "fastapi_development_guide.json",
+      "database_management_guide.json"
     ],
     "medium_priority": [
       "feature_template.json",
       "development_workflow.json",
-      "database_management_guide.json"
+      "python_testing_style_guide.json"
     ],
     "low_priority": [
       "ai_tool_optimization_guide.json",
-      "web_scraping_patterns.json"
+      "shell_style_guide.json"
     ]
   },
   "decision_frameworks": {
     "architecture_decisions": "core_principles.json",
     "coding_standards": "python_style_guide.json",
-    "testing_approaches": "python_testing_guide.json",
-    "api_design": "fastapi_development_guide.json"
+    "testing_approaches": "python_testing_style_guide.json",
+    "api_design": "fastapi_development_guide.json",
+    "style_guide_compliance": "python_style_guide.json"
+  },
+  "style_guide_compliance": {
+    "mandatory": true,
+    "primary_source": "humans/guides/python_style_guide.md",
+    "ai_reference": "ai/guide_docs/language_specific/python_style_guide.json",
+    "auto_validation": true,
+    "quality_checklist": true,
+    "violation_detection": true,
+    "priority_levels": {
+      "critical": [
+        "module_documentation",
+        "legal_notice",
+        "import_organization",
+        "type_hints",
+        "pydantic_v2_migration"
+      ],
+      "high": [
+        "error_handling",
+        "code_organization",
+        "testing_patterns",
+        "security_patterns"
+      ],
+      "medium": [
+        "performance_patterns",
+        "logging_patterns",
+        "file_operations"
+      ]
+    }
   },
   "documentation": {
     "template_version": "3.1",
@@ -263,29 +343,34 @@
     "cross_references_required": true,
     "validation_rules_required": true,
     "structured_content": true,
-    "dynamic_integration_enabled": true
+    "dynamic_integration_enabled": true,
+    "style_guide_compliance_required": true
   },
   "patterns": {
     "error_handling": "consistent across all guides",
     "code_organization": "modular and maintainable",
     "testing": "comprehensive coverage",
     "documentation": "JSON-optimized for AI consumption",
-    "dynamic_integration": "automatic pattern synchronization"
+    "dynamic_integration": "automatic pattern synchronization",
+    "style_guide_compliance": "mandatory and automatic"
   },
   "templates": {
     "feature_documentation": "feature_template.json",
     "code_review": "code_review_patterns.json",
     "ai_metadata": "standardized JSON format across all documents",
-    "dynamic_integration": "pattern_inheritance_template.json"
+    "dynamic_integration": "pattern_inheritance_template.json",
+    "style_guide_compliance": "mandatory validation template"
   },
   "scripts": {
     "health_check": {
       "purpose": "validate documentation quality and completeness",
-      "output": "outputs/health_check/healthcheck-result.json"
+      "output": "outputs/health_check/healthcheck-result.json",
+      "style_guide_check": true
     },
     "update_documentation": {
       "purpose": "maintain consistency and update metadata",
-      "output": "outputs/updates/update-results.md"
+      "output": "outputs/updates/update-results.md",
+      "style_guide_sync": true
     },
     "test_paths": {
       "purpose": "verify system structure and path resolution",
@@ -301,8 +386,10 @@
       "triggers": [
         "guide_update",
         "manual_request",
-        "health_check_failure"
-      ]
+        "health_check_failure",
+        "style_guide_violation"
+      ],
+      "style_guide_compliance": true
     }
   },
   "conversion": {
@@ -310,6 +397,7 @@
     "target_format": "json",
     "optimization": "ai_tool_consumption",
     "preserve_original": true,
-    "structured_output": true
+    "structured_output": true,
+    "style_guide_compliance": true
   }
 }

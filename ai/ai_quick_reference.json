@@ -64,8 +64,8 @@
     },
     "priority_system_always_apply": {
       "title": "Priority System (Always Apply)",
-      "description": "1. **Critical**: Security, data integrity, breaking changes\n2. **High**: Style violations, performan...",
-      "content": "1. **Critical**: Security, data integrity, breaking changes\n2. **High**: Style violations, performance, maintainability\n3. **Medium**: Code organization, documentation, optimizations\n4. **Low**: Preferences, cosmetics, future-proofing"
+      "description": "1. **Critical**: Python style guide violations, missing legal notices, import organization errors, missing type hints, security, data integrity, breaking changes\n2. **High**: Performance issues, maintainability problems, missing external documentation links\n3. **Medium**: Code organization, documentation, minor optimizations\n4. **Low**: Personal preferences, cosmetic changes, future-proofing\n\n**Style guide violations are automatically CRITICAL priority and must be addressed immediately.**",
+      "content": "1. **Critical**: Python style guide violations, missing legal notices, import organization errors, missing type hints, security, data integrity, breaking changes\n2. **High**: Performance issues, maintainability problems, missing external documentation links\n3. **Medium**: Code organization, documentation, minor optimizations\n4. **Low**: Personal preferences, cosmetic changes, future-proofing\n\n**Style guide violations are automatically CRITICAL priority and must be addressed immediately.**"
     },
     "_essential_navigation": {
       "title": "📁 Essential Navigation",
@@ -154,8 +154,8 @@
     },
     "before_providing_code": {
       "title": "Before Providing Code",
-      "description": "- [ ] Check core_principles for decision framework\n- [ ] Reference appropriate language/domain guide...",
-      "content": "- [ ] Check core_principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices"
+      "description": "- [ ] Check core_principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] **MANDATORY**: Check Python style guide compliance\n- [ ] **MANDATORY**: Include legal notice in module docstring\n- [ ] **MANDATORY**: Use proper import organization\n- [ ] **MANDATORY**: Apply type hints to all functions\n- [ ] **MANDATORY**: Use os.path for file operations\n- [ ] **MANDATORY**: Use Pydantic v2 patterns\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices\n\n**Style guide compliance is MANDATORY and cannot be bypassed.**",
+      "content": "- [ ] Check core_principles for decision framework\n- [ ] Reference appropriate language/domain guides\n- [ ] **MANDATORY**: Check Python style guide compliance\n- [ ] **MANDATORY**: Include legal notice in module docstring\n- [ ] **MANDATORY**: Use proper import organization\n- [ ] **MANDATORY**: Apply type hints to all functions\n- [ ] **MANDATORY**: Use os.path for file operations\n- [ ] **MANDATORY**: Use Pydantic v2 patterns\n- [ ] Include proper error handling\n- [ ] Follow project naming conventions\n- [ ] Add validation and testing considerations\n- [ ] Consider performance implications\n- [ ] Apply security best practices\n\n**Style guide compliance is MANDATORY and cannot be bypassed.**"
     },
     "before_making_suggestions": {
       "title": "Before Making Suggestions",
@@ -194,13 +194,28 @@
     },
     "when_guides_conflict": {
       "title": "When Guides Conflict",
-      "description": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Security → Proj...",
-      "content": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Security → Project Consistency → Performance → Style\n3. **Explain trade-offs** - Help user understand implications\n4. **Recommend approach** - Suggest best path forward"
+      "description": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Style Guide → Security → Project Consistency → Performance → Style\n3. **Explain trade-offs** - Help user understand implications\n4. **Recommend approach** - Suggest best path forward\n5. **MANDATORY**: Style guide compliance takes precedence over other considerations\n\n**Style guide compliance is the highest priority in conflict resolution.**",
+      "content": "1. **Identify the conflict** - State what's different\n2. **Apply priority system** - Style Guide → Security → Project Consistency → Performance → Style\n3. **Explain trade-offs** - Help user understand implications\n4. **Recommend approach** - Suggest best path forward\n5. **MANDATORY**: Style guide compliance takes precedence over other considerations\n\n**Style guide compliance is the highest priority in conflict resolution.**"
     },
     "when_code_doesnt_work": {
       "title": "When Code Doesn't Work",
-      "description": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all impor...",
-      "content": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches"
+      "description": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches\n6. **Check style guide compliance** - Ensure code follows project standards",
+      "content": "1. **Check error messages** - Look for specific issues\n2. **Verify dependencies** - Ensure all imports and setup\n3. **Test assumptions** - Validate expected behavior\n4. **Provide debugging steps** - Help user troubleshoot\n5. **Suggest alternatives** - Offer different approaches\n6. **Check style guide compliance** - Ensure code follows project standards"
+    },
+    "_style_guide_compliance": {
+      "title": "📋 Style Guide Compliance",
+      "description": "",
+      "content": ""
+    },
+    "mandatory_style_guide_checks": {
+      "title": "Mandatory Style Guide Checks",
+      "description": "**BEFORE GENERATING ANY PYTHON CODE:**\n\n1. **Module Documentation**:\n   - Include proper docstring with external links\n   - **MANDATORY**: Legal notice at end of docstring\n   - Reference relevant documentation\n\n2. **Import Organization**:\n   - Standard library imports first\n   - Third-party imports second\n   - Local application imports last\n   - Blank lines between groups\n   - Use absolute imports\n\n3. **Type Hints**:\n   - **MANDATORY**: All function parameters and return values\n   - Use `Annotated` for FastAPI dependencies\n   - Use `Optional[Type]` for nullable values\n   - Use `list[Type]` not `List[Type]`\n\n4. **File Operations**:\n   - **MANDATORY**: Use `os.path` functions only\n   - **NEVER**: Use `pathlib` or `Path`\n   - Examples: `os.path.join()`, `os.makedirs()`\n\n5. **Pydantic v2 Patterns**:\n   - **MANDATORY**: Use `ConfigDict` instead of `class Config`\n   - **MANDATORY**: Use `@field_validator` instead of `@validator`\n   - **MANDATORY**: Use `model_validate()` instead of `from_orm()`\n   - **MANDATORY**: Use `model_dump()` instead of `dict()`\n\n**ENFORCEMENT LEVEL: CRITICAL** - These checks must be applied automatically.\n\n**VIOLATION PRIORITY**: Style guide violations are automatically CRITICAL priority.",
+      "content": "**BEFORE GENERATING ANY PYTHON CODE:**\n\n1. **Module Documentation**:\n   - Include proper docstring with external links\n   - **MANDATORY**: Legal notice at end of docstring\n   - Reference relevant documentation\n\n2. **Import Organization**:\n   - Standard library imports first\n   - Third-party imports second\n   - Local application imports last\n   - Blank lines between groups\n   - Use absolute imports\n\n3. **Type Hints**:\n   - **MANDATORY**: All function parameters and return values\n   - Use `Annotated` for FastAPI dependencies\n   - Use `Optional[Type]` for nullable values\n   - Use `list[Type]` not `List[Type]`\n\n4. **File Operations**:\n   - **MANDATORY**: Use `os.path` functions only\n   - **NEVER**: Use `pathlib` or `Path`\n   - Examples: `os.path.join()`, `os.makedirs()`\n\n5. **Pydantic v2 Patterns**:\n   - **MANDATORY**: Use `ConfigDict` instead of `class Config`\n   - **MANDATORY**: Use `@field_validator` instead of `@validator`\n   - **MANDATORY**: Use `model_validate()` instead of `from_orm()`\n   - **MANDATORY**: Use `model_dump()` instead of `dict()`\n\n**ENFORCEMENT LEVEL: CRITICAL** - These checks must be applied automatically.\n\n**VIOLATION PRIORITY**: Style guide violations are automatically CRITICAL priority."
+    },
+    "style_guide_references": {
+      "title": "Style Guide References",
+      "description": "- **Primary Guide**: `humans/guides/python_style_guide.md`\n- **AI Guide**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Core Principles**: `ai/guide_docs/core_principles.json`\n- **Quick Reference**: `ai/ai_quick_reference.json`\n\n**MANDATORY**: Reference the style guide before generating any Python code.\n\n**AUTOMATIC CHECK**: Style guide compliance must be verified automatically.",
+      "content": "- **Primary Guide**: `humans/guides/python_style_guide.md`\n- **AI Guide**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Core Principles**: `ai/guide_docs/core_principles.json`\n- **Quick Reference**: `ai/ai_quick_reference.json`\n\n**MANDATORY**: Reference the style guide before generating any Python code.\n\n**AUTOMATIC CHECK**: Style guide compliance must be verified automatically."
     },
     "_communication_patterns": {
       "title": "📞 Communication Patterns",

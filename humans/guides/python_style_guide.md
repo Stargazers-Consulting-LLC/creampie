@@ -281,6 +281,39 @@ class UserResponse(BaseModel):
 
 ## Documentation
 
+### Docstrings vs. Comments
+
+- **Docstrings** (`""" ... """`):
+  - Used for modules, classes, and functions.
+  - Should be **verbose** and describe **WHAT** the code does, its purpose, usage, and any relevant details.
+  - Example:
+    ```python
+    def calculate_total(items: list[Item]) -> float:
+        """
+        Calculate the total price for a list of items, including tax.
+
+        Args:
+            items: List of Item objects.
+
+        Returns:
+            The total price as a float.
+        """
+        ...
+    ```
+
+- **Comments** (`# ...`):
+  - Used within code to clarify **WHY** something is implemented a certain way, especially if it’s not obvious.
+  - Should only explain rationale, intent, or non-obvious decisions.
+  - Example:
+    ```python
+    # Use a set for O(1) lookups (performance critical)
+    seen_ids = set()
+    ```
+
+**Rule of thumb:**
+- Use docstrings for documentation and explanation of WHAT the code does.
+- Use comments only for explaining WHY the code is written a certain way.
+
 ### Module Docstrings
 
 All file and module level docstrings must include:
@@ -565,7 +598,7 @@ class TrackStockRequest(BaseModel):
 
 @router.post("/track")
 async def track_stock(
-    request: TrackStockRequest,
+    request: StockRequestCreate,
     db: Annotated[AsyncSession, Depends(get_async_db)],
 ) -> dict:
     """Start tracking a new stock symbol."""

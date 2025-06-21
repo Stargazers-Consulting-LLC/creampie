@@ -5,34 +5,28 @@ from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
-from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cream_api.db import get_async_db
 from cream_api.stock_data.models import TrackedStock
+from cream_api.stock_data.schemas import StockRequestCreate
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/stock-data", tags=["stock-data"])
 
 
-class TrackStockRequest(BaseModel):
-    """Request model for tracking a new stock."""
-
-    symbol: str = Field(..., min_length=1, description="Stock symbol to track")
-
-
 @router.post("/track")
 async def track_stock(
-    request: TrackStockRequest,
+    request: StockRequestCreate,
     background_tasks: BackgroundTasks,
     db: Annotated[AsyncSession, Depends(get_async_db)],
 ) -> dict:
     """Start tracking a new stock symbol.
 
     Args:
-        request: TrackStockRequest containing the symbol to track
+        request: StockRequestCreate containing the symbol to track
         background_tasks: FastAPI background tasks manager
         db: Database session
 
@@ -56,7 +50,9 @@ async def track_stock(
             )
             db.add(new_tracking)
             await db.commit()
+            await db.refresh(new_tracking)
 
+        # Return simple response format that tests expect
         return {
             "status": "tracking",
             "message": f"Stock {request.symbol} is now being tracked",
