@@ -1,28 +1,32 @@
 {
   "metadata": {
-    "title": "architecture_overview",
-    "description": "System architecture with clear separation of concerns and deadletter queue system",
-    "version": "3.1",
-    "last_updated": "2025-06-20",
-    "source": "project_context/architecture_overview.md",
+    "title": "System Architecture Overview",
+    "description": "Comprehensive overview of the CreamPie system architecture",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "System architecture and design patterns",
     "cross_references": [
-      "../guide_docs/core_principles.json",
-      "../guide_docs/Language-Specific/fastapi_development_guide.json",
-      "../guide_docs/Language-Specific/python_style_guide.json",
-      "common_patterns.json",
-      "../features/summaries/completed_stock_data_processing_pipeline_summary.json"
+      "ai/ai_rules.json",
+      "ai/project_context/common_patterns.json"
     ]
+  },
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "System architecture, microservices, API design, database design",
+    "validation_required": true,
+    "code_generation": "Supported",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/project_context/common_patterns.json"
+    ],
+    "maintenance": "System architecture documentation"
   },
   "sections": {
     "architecture_overview": {
       "title": "architecture_overview",
       "description": "> This document provides a comprehensive overview of the system architecture. Use this for understan...",
       "content": "> This document provides a comprehensive overview of the system architecture. Use this for understanding the overall system design, component relationships, and architectural decisions."
-    },
-    "ai_metadata": {
-      "title": "AI Metadata",
-      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** System architecture, m...",
-      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** System architecture, microservices, API design, database design\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../guide_docs/core_principles.json.replace(\".json\", \".json\")` - Decision-making frameworks\n- `../guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")` - API implementation patterns\n- `../guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")` - Python implementation patterns\n- `common_patterns.json.replace(\".json\", \".json\")` - Project-specific patterns\n- `../features/summaries/completed_stock_data_processing_pipeline_summary.json.replace(\".json\", \".json\")` - Stock data implementation\n\n**Validation Rules:**\n- All architectural decisions must align with established patterns\n- Component relationships must be clearly defined\n- Data flow must be traceable and documented\n- Technology choices must be justified and consistent\n- Integration points must be well-defined"
     },
     "overview": {
       "title": "Overview",

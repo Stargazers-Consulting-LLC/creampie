@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Stock Data Processing Pipeline Summary",
     "description": "Completed stock data processing pipeline with clear separation of concerns, deadletter queue system, and PostgreSQL batch processing",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-06-20",
     "source": "features/summaries/completed_stock_data_processing_pipeline_summary.md",
     "cross_references": [
@@ -10,7 +10,7 @@
       "../project_context/common_patterns.json",
       "../project_context/development_workflow.json",
       "../guide_docs/core_principles.json",
-      "../plans/in_progress_stock_tracking_request_plan.json"
+      "../plans/[IN-PROGRESS]-Stock Tracking Request Plan.json"
     ]
   },
   "sections": {

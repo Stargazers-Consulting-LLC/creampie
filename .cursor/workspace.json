@@ -1,27 +1,24 @@
 {
   "name": "CreamPie Project",
-  "description": "AI-powered stock tracking application with enforced debugging workflow",
+  "description": "AI-powered stock tracking application with unified AI rules",
+  "primary_rules_file": "ai/ai_rules.json",
   "rules": {
     "debugging_workflow": {
       "enabled": true,
       "mandatory": true,
       "description": "Before any debugging, check ai/outputs/ for existing reports",
-      "steps": [
-        "Check ai/outputs/lint_results/ for tool reports",
-        "Check ai/outputs/test_results/ for test failures",
-        "Check ai/outputs/ for other reports",
-        "Read actual error messages",
-        "Only then begin debugging"
-      ],
-      "forbidden": [
-        "Starting debugging without checking reports",
-        "Asking to run tools when reports exist",
-        "Making assumptions about error causes"
-      ]
+      "reference": "ai/ai_rules.json#mandatory_workflows.debugging_workflow"
+    },
+    "style_guide_compliance": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "Python style guide compliance is mandatory",
+      "reference": "ai/ai_rules.json#mandatory_workflows.style_guide_compliance"
     }
   },
   "ai_config": {
     "documentation_path": "ai/",
+    "ai_rules": "ai/ai_rules.json",
     "style_guides": [
       "ai/guide_docs/language_specific/python_style_guide.json",
       "ai/guide_docs/language_specific/react_style_guide.json"
@@ -29,5 +26,12 @@
     "patterns": [
       "ai/project_context/common_patterns.json"
     ]
-  }
+  },
+  "context_inclusions": [
+    "ai/ai_rules.json",
+    "ai/guide_docs",
+    "ai/outputs",
+    "ai/search_index.json",
+    "ai/ai_config.json"
+  ]
 }

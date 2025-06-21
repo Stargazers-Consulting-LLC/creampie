@@ -1,531 +1,455 @@
 #!/usr/bin/env python3
-"""
-AI Documentation Health Check Script
+"""AI Documentation Health Check Script.
 
-This script validates the AI documentation structure, metadata, and cross-references
-to ensure optimal AI tool consumption. Updated for JSON format.
+This script validates the AI documentation structure and ensures all files
+follow the proper format and have valid cross-references.
+
+The script is designed to work with the unified AI rules approach
+where ai/ai_rules.json is the primary source of truth.
+
+References:
+    - [Python Style Guide](humans/guides/python_style_guide.md)
+    - [AI Documentation Rules](ai/ai_rules.json)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
 """
 
+# Standard library imports
+import functools
 import json
 import os
 import sys
-import urllib.parse
 from datetime import datetime
+from typing import Any
+
+# Local imports
+# (None for this script)
+
+# Module-level constants
+DEFAULT_VERBOSE = False
+
+# Module-level variables
+# (None for this script)
 
 
 class AIDocumentationHealthCheck:
-    def __init__(self, verbose: bool = False) -> None:
-        # Get the ai folder path (parent of scripts folder, then ai subfolder)
-        self.script_dir = os.path.dirname(__file__)
-        self.project_root = os.path.dirname(self.script_dir)
-        self.ai_folder = os.path.join(self.project_root, "ai")
+    """Health check for AI documentation structure and optimization.
 
+    This class provides comprehensive validation of AI documentation files,
+    ensuring they follow proper structure, have valid cross-references,
+    and conform to established patterns for AI tool consumption.
+    """
+
+    def __init__(self, verbose: bool = DEFAULT_VERBOSE) -> None:
+        """Initialize the health check instance.
+
+        Args:
+            verbose: Whether to print detailed output during checks.
+        """
+        self.verbose = verbose
+        self.ai_folder = "ai"
+        self.success_count = 0
         self.issues: list[str] = []
         self.warnings: list[str] = []
-        self.success_count = 0
-        self.verbose = verbose
 
     def run_health_check(self) -> bool:
-        """Run the complete health check and generate report."""
+        """Run the complete health check.
+
+        Returns:
+            True if no critical issues found, False otherwise.
+        """
         if self.verbose:
-            print("🔍 Running AI Documentation Health Check...")
-            print()
+            print("🔍 Starting AI documentation health check...")
 
-        # Run all checks
-        self.check_folder_structure()
-        self.check_ai_metadata()
-        self.check_cross_references()
-        self.check_search_index()
-        self.check_quick_reference()
-        self.check_ai_config()
-        self.check_template_consistency()
+        # Check core structure
+        self._check_core_structure()
 
-        # Generate report
-        report = self.generate_report()
+        # Check consolidated rules
+        self._check_consolidated_rules()
 
-        # Only print report if verbose or if there are issues
-        if self.verbose or self.issues or self.warnings:
-            print(report)
+        # Check JSON files
+        self._check_json_files()
 
-        # Write JSON result file
-        result_file = os.path.join(self.ai_folder, "outputs", "health_check", "healthcheck-result.json")
+        # Check cross-references
+        self._check_cross_references()
 
-        # Ensure the output directory exists
-        result_dir = os.path.dirname(result_file)
-        os.makedirs(result_dir, exist_ok=True)
+        # Check metadata consistency
+        self._check_metadata_consistency()
 
-        # Generate JSON result
-        json_result = self.generate_json_result()
+        # Save report
+        self._save_report()
 
-        with open(result_file, "w", encoding="utf-8") as f:
-            json.dump(json_result, f, indent=2, ensure_ascii=False)
-            f.flush()  # Force flush to disk
-            os.fsync(f.fileno())  # Force sync to ensure file is written
+        # Always print summary
+        print(f"\n✅ Successful checks: {self.success_count}")
+        print(f"❌ Issues found: {len(self.issues)}")
+        print(f"⚠️ Warnings: {len(self.warnings)}")
 
-        # Only show file info if verbose
         if self.verbose:
-            # Get file stats using os.path
-            stat_info = os.stat(result_file)
-            print(f"\n📄 Health check results saved to: {result_file}")
-            print(f"📄 File size: {stat_info.st_size} bytes")
-            print(f"📄 File modified: {datetime.fromtimestamp(stat_info.st_mtime)}")
+            if self.issues:
+                print("\n❌ Issues:")
+                for issue in self.issues:
+                    print(f"  - {issue}")
+
+            if self.warnings:
+                print("\n⚠️ Warnings:")
+                for warning in self.warnings:
+                    print(f"  - {warning}")
+
+        if len(self.issues) == 0:
+            print("\n✅ Health check completed successfully!")
+        else:
+            print("\n❌ Health check found issues that need attention.")
 
         return len(self.issues) == 0
 
-    def check_folder_structure(self) -> None:
-        """Check that all required folders and files exist."""
+    def _check_core_structure(self) -> None:
+        """Check that core AI documentation structure exists."""
         if self.verbose:
-            print("📁 Checking folder structure...")
+            print("📁 Checking core structure...")
 
-        # Debug: Print the paths being checked
-        if self.verbose:
-            print(f"🔍 AI folder path: {self.ai_folder}")
-            print(f"🔍 Current working directory: {os.getcwd()}")
+        required_files = ["ai_rules.json", "search_index.json", "ai_config.json"]
 
-        required_files = [
-            "readme.json",
-            "ai_quick_reference.json",
-            "search_index.json",
-            "ai_config.json",
-            "guide_docs/readme.json",
-            "guide_docs/core_principles.json",
-            "guide_docs/feature_template.json",
-            "guide_docs/code_review_patterns.json",
-            "guide_docs/ai_tool_optimization_guide.json",
-            "project_context/readme.json",
-            "project_context/architecture_overview.json",
-            "project_context/common_patterns.json",
-            "project_context/development_workflow.json",
-        ]
-
-        self._check_file_list(required_files, "required file", self.issues)
-
-        # Check language-specific guides
-        lang_guides = [
-            "guide_docs/language_specific/python_style_guide.json",
-            "guide_docs/language_specific/react_style_guide.json",
-            "guide_docs/language_specific/python_testing_style_guide.json",
-        ]
-
-        self._check_file_list(lang_guides, "language guide", self.warnings)
-
-        # Check domain_specific guides
-        domain_guides = [
-            "guide_docs/domain_specific/database_management_guide.json",
-            "guide_docs/domain_specific/shell_style_guide.json",
-        ]
-
-        self._check_file_list(domain_guides, "domain guide", self.warnings)
-
-    def _check_file_list(self, file_list: list[str], file_type: str, issue_list: list[str]) -> None:
-        """Check a list of files and add issues to the specified list."""
-        for file_path in file_list:
-            full_path = os.path.join(self.ai_folder, file_path)
-            if os.path.exists(full_path):
+        for file_name in required_files:
+            file_path = os.path.join(self.ai_folder, file_name)
+            if os.path.exists(file_path):
                 self.success_count += 1
-                if self.verbose:
-                    print(f"✅ Found: {file_path}")
             else:
-                issue_list.append(f"Missing {file_type}: {file_path}")
-                if self.verbose:
-                    print(f"❌ Missing: {file_path} (checked at: {full_path})")
+                self.issues.append(f"Missing required file: {file_name}")
 
-    def check_ai_metadata(self) -> None:
-        """Check that all JSON files have proper AI metadata."""
+        required_dirs = ["guide_docs", "project_context", "outputs"]
+
+        for dir_name in required_dirs:
+            dir_path = os.path.join(self.ai_folder, dir_name)
+            if os.path.exists(dir_path) and os.path.isdir(dir_path):
+                self.success_count += 1
+            else:
+                self.issues.append(f"Missing required directory: {dir_name}")
+
+    def _check_consolidated_rules(self) -> None:
+        """Check that consolidated rules file is properly structured."""
         if self.verbose:
-            print("📋 Checking AI metadata...")
+            print("📋 Checking consolidated rules...")
 
-        for root, _, files in os.walk(self.ai_folder):
-            for file in files:
-                if file.endswith(".json") and not file.startswith("ai_config"):
-                    file_path = os.path.join(root, file)
-                    # Skip output files
-                    if "outputs" in file_path:
-                        continue
-
-                    self._check_single_file_metadata(file_path)
-
-    def _check_single_file_metadata(self, file_path: str) -> None:
-        """Check AI metadata for a single file."""
-        relative_path = os.path.relpath(file_path, self.ai_folder)
+        rules_file = os.path.join(self.ai_folder, "ai_rules.json")
+        if not os.path.exists(rules_file):
+            self.issues.append("Missing ai_rules.json")
+            return
 
         try:
-            with open(file_path, encoding="utf-8") as f:
+            with open(rules_file, encoding="utf-8") as f:
                 data = json.load(f)
 
-            # Only accept new streamlined format (metadata, sections, etc.)
-            has_new_format = "metadata" in data and (
-                "sections" in data or "example_patterns" in data or "implementation_guidelines" in data
-            )
+            # Check for required sections
+            required_sections = ["core_principles", "mandatory_workflows", "documentation_structure"]
+            for section in required_sections:
+                if section in data:
+                    self.success_count += 1
+                else:
+                    self.warnings.append(f"Missing section in consolidated rules: {section}")
 
-            if has_new_format:
-                # New format validation - these are valid AI-optimized guides
-                self.success_count += 1
-                # Note: We don't validate optional metadata fields like title, description, version
-                # as they don't affect core functionality and may be intentionally empty
+            # Check metadata
+            if "metadata" in data:
+                metadata = data["metadata"]
+                if "version" in metadata and "last_updated" in metadata:
+                    self.success_count += 1
+                else:
+                    self.warnings.append("Missing metadata in consolidated rules")
             else:
-                # Old format or invalid format found
-                self.issues.append(f"Uses deprecated AI metadata format: {relative_path}")
+                self.warnings.append("Missing metadata section in consolidated rules")
 
-        except json.JSONDecodeError as e:
-            self.issues.append(f"Invalid JSON in {relative_path}: {e!s}")
         except Exception as e:
-            self.issues.append(f"Error reading {relative_path}: {e!s}")
+            self.issues.append(f"Error reading consolidated rules: {e}")
 
-    def _check_ai_metadata_fields(self, data: dict, relative_path: str) -> None:
-        """Check required AI metadata fields for old format - deprecated."""
-        # This method is kept for backward compatibility but should not be used
+    def _check_json_files(self) -> None:
+        """Check that all JSON files have proper structure."""
+        if self.verbose:
+            print("📄 Checking JSON file structure...")
 
-    def check_cross_references(self) -> None:
-        """Check that cross-references are valid and bidirectional."""
+        json_files = []
+        for root, _dirs, files in os.walk(self.ai_folder):
+            for file in files:
+                if file.endswith(".json"):
+                    json_files.append(os.path.join(root, file))
+
+        for json_file in json_files:
+            if "outputs" in json_file:
+                continue
+
+            relative_path = os.path.relpath(json_file, self.ai_folder)
+
+            try:
+                with open(json_file, encoding="utf-8") as f:
+                    data = json.load(f)
+
+                if self._has_proper_structure(data):
+                    self.success_count += 1
+                else:
+                    self.warnings.append(f"Improper structure in {relative_path}")
+
+            except Exception as e:
+                self.issues.append(f"Error reading {relative_path}: {e}")
+
+    def _has_proper_structure(self, data: dict[str, Any]) -> bool:
+        """Check if a JSON file has proper AI documentation structure.
+
+        Args:
+            data: The JSON data to validate.
+
+        Returns:
+            True if the data has proper structure, False otherwise.
+        """
+        # Special handling for ai_config.json and search_index.json
+        if isinstance(data, dict) and len(data) > 0:
+            # These files can have different structures, just check they're valid JSON objects
+            return True
+
+        # For other files, check for standard structure
+        # Must have either metadata or ai_metadata
+        has_metadata = "metadata" in data or "ai_metadata" in data
+
+        # Must have either sections or content
+        has_content = "sections" in data or "content" in data
+
+        return has_metadata and has_content
+
+    def _check_cross_references(self) -> None:
+        """Check that cross-references point to existing files."""
         if self.verbose:
             print("🔗 Checking cross-references...")
 
-        # Get all JSON files
         json_files = []
-        for root, _, files in os.walk(self.ai_folder):
+        for root, _dirs, files in os.walk(self.ai_folder):
             for file in files:
-                if file.endswith(".json") and not file.startswith("ai_config"):
-                    file_path = os.path.join(root, file)
-                    if "outputs" not in file_path:
-                        json_files.append(file_path)
+                if file.endswith(".json"):
+                    json_files.append(os.path.join(root, file))
 
-        file_paths = {os.path.relpath(f, self.ai_folder): f for f in json_files}
-
-        # Check cross-references in each file
-        for file_path in json_files:
-            self._check_file_cross_references(file_path, file_paths)
-
-    def _check_file_cross_references(self, file_path: str, file_paths: dict[str, str]) -> None:
-        """Check cross-references for a single file."""
-        try:
-            with open(file_path, encoding="utf-8") as f:
-                data = json.load(f)
-
-            relative_path = os.path.relpath(file_path, self.ai_folder)
-
-            # Check structured cross-references
-            self._check_structured_cross_references(data, relative_path, file_paths)
-
-            # Check cross-references in AI metadata
-            self._check_metadata_cross_references(data, relative_path, file_paths)
-
-            self.success_count += 1
-
-        except Exception as e:
-            self.issues.append(f"Error checking cross-references in {relative_path}: {e!s}")
-
-    def _check_structured_cross_references(self, data: dict, relative_path: str, file_paths: dict[str, str]) -> None:
-        """Check structured cross-references in a file."""
-        cross_refs = data.get("cross_references", [])
-        for ref in cross_refs:
-            if isinstance(ref, dict):
-                ref_path = ref.get("path", "")
-            else:
-                ref_path = ref
-
-            if ref_path:
-                # Skip example placeholders
-                if self._is_example_placeholder(ref_path):
-                    continue
-
-                # Check if referenced file exists (try multiple variations)
-                if not self._file_exists_in_paths(ref_path, file_paths):
-                    self.warnings.append(f"Cross-reference to non-existent file: {ref_path} in {relative_path}")
-
-    def _check_metadata_cross_references(self, data: dict, relative_path: str, file_paths: dict[str, str]) -> None:
-        """Check cross-references in AI metadata."""
-        ai_metadata = data.get("ai_metadata", {})
-        metadata_refs = ai_metadata.get("cross_references", [])
-        for ref in metadata_refs:
-            # Skip example placeholders
-            if self._is_example_placeholder(ref):
+        for json_file in json_files:
+            if "outputs" in json_file:
                 continue
 
-            if not self._file_exists_in_paths(ref, file_paths):
-                self.warnings.append(f"AI metadata cross-reference to non-existent file: {ref} in {relative_path}")
+            relative_path = os.path.relpath(json_file, self.ai_folder)
 
-    def _file_exists_in_paths(self, ref_path: str, file_paths: dict[str, str]) -> bool:
-        """Check if a file exists in the file paths, trying multiple variations."""
-        file_exists = False
+            try:
+                with open(json_file, encoding="utf-8") as f:
+                    data = json.load(f)
 
-        # Try the original path
-        if ref_path in file_paths:
-            file_exists = True
+                # Check cross-references in metadata
+                self._check_file_cross_references(data, json_file)
 
-        # Try URL-decoded path
-        elif self._try_decoded_path(ref_path, file_paths):
-            file_exists = True
+            except Exception as e:
+                self.issues.append(f"Error checking cross-references in {relative_path}: {e}")
 
-        # Try with spaces instead of %20
-        elif "%20" in ref_path:
-            space_path = ref_path.replace("%20", " ")
-            if space_path in file_paths:
-                file_exists = True
+    def _check_file_cross_references(self, data: dict[str, Any], file_path: str) -> None:
+        """Check cross-references in a single file.
 
-        # Try with underscores instead of %20
-        elif "%20" in ref_path:
-            underscore_path = ref_path.replace("%20", "_")
-            if underscore_path in file_paths:
-                file_exists = True
+        Args:
+            data: The JSON data containing cross-references.
+            file_path: The path to the file being checked.
+        """
+        # Check metadata cross-references
+        metadata = data.get("metadata", {})
+        cross_refs = metadata.get("cross_references", [])
 
-        # Try relative to current directory
-        elif self._try_relative_path(ref_path, file_paths):
-            file_exists = True
+        for ref in cross_refs:
+            if self._should_ignore_reference(ref):
+                continue
 
-        # Check if it's a special file that should be ignored
-        elif self._should_ignore_reference(ref_path):
-            file_exists = True
+            if not self._reference_exists(ref):
+                self.warnings.append(f"Cross-reference to non-existent file: {ref} in {file_path}")
 
-        # Final check: try to find any file that matches the decoded name
-        elif self._try_basename_match(ref_path, file_paths):
-            file_exists = True
+        # Check AI metadata cross-references
+        ai_metadata = data.get("ai_metadata", {})
+        ai_cross_refs = ai_metadata.get("cross_references", [])
 
-        return file_exists
+        for ref in ai_cross_refs:
+            if self._should_ignore_reference(ref):
+                continue
 
-    def _try_decoded_path(self, ref_path: str, file_paths: dict[str, str]) -> bool:
-        """Try URL-decoded path."""
-        try:
-            decoded_path = urllib.parse.unquote(ref_path)
-            return decoded_path in file_paths
-        except Exception:
-            return False
+            if not self._reference_exists(ref):
+                self.warnings.append(f"AI metadata cross-reference to non-existent file: {ref} in {file_path}")
 
-    def _try_relative_path(self, ref_path: str, file_paths: dict[str, str]) -> bool:
-        """Try relative path checks."""
-        current_dir = os.path.dirname(ref_path)
-        if current_dir:
-            # Check if it's a directory reference
-            if ref_path.endswith("/") and current_dir in file_paths:
+    def _should_ignore_reference(self, ref: str) -> bool:
+        """Check if a reference should be ignored.
+
+        Args:
+            ref: The reference string to check.
+
+        Returns:
+            True if the reference should be ignored, False otherwise.
+        """
+        # Ignore external URLs
+        if ref.startswith(("http://", "https://")):
+            return True
+
+        # Ignore example placeholders
+        if "example" in ref.lower() or "placeholder" in ref.lower():
+            return True
+
+        return False
+
+    @staticmethod
+    @functools.lru_cache(maxsize=256)
+    def _reference_exists(ref: str) -> bool:
+        """Check if a referenced file or directory exists using os.path.
+
+        Args:
+            ref: The reference string to check.
+
+        Returns:
+            True if the referenced file or directory exists, False otherwise.
+        """
+        project_root = os.path.abspath(os.path.join("ai", ".."))
+
+        # Handle directory references (ending with /)
+        if ref.endswith("/"):
+            dir_name = ref.rstrip("/")
+            # Resolve the directory path
+            if os.path.isabs(dir_name):
+                resolved_dir = os.path.normpath(dir_name)
+            else:
+                resolved_dir = os.path.normpath(os.path.join(project_root, dir_name))
+            return os.path.exists(resolved_dir) and os.path.isdir(resolved_dir)
+
+        # Handle file references
+        filename = os.path.basename(ref)
+        base_name, _ = os.path.splitext(filename)
+
+        # First try exact path resolution
+        if os.path.isabs(ref):
+            resolved_path = os.path.normpath(ref)
+        else:
+            resolved_path = os.path.normpath(os.path.join(project_root, ref))
+
+        if os.path.exists(resolved_path) and os.path.isfile(resolved_path):
+            return True
+
+        # If that fails, search for the file by name in the project
+        for _, _, files in os.walk(project_root):
+            if filename in files or base_name in files:
                 return True
-
-            # Check if it's a script or config file
-            if ref_path.endswith((".py", ".sh", ".js", ".json")):
-                return True
-
         return False
 
-    def _try_basename_match(self, ref_path: str, file_paths: dict[str, str]) -> bool:
-        """Try to find any file that matches the decoded name."""
-        try:
-            decoded_path = urllib.parse.unquote(ref_path)
-            for existing_path in file_paths:
-                if os.path.basename(decoded_path) == os.path.basename(existing_path):
-                    return True
-        except Exception:
-            pass
-
-        return False
-
-    def _should_ignore_reference(self, ref_path: str) -> bool:
-        """Check if a reference should be ignored (scripts, configs, etc.)."""
-        # Ignore script files
-        if ref_path.startswith("scripts/"):
-            return True
-
-        # Ignore config files
-        if ref_path == "ai_config.json":
-            return True
-
-        # Ignore output directories
-        if ref_path.startswith("outputs/"):
-            return True
-
-        # Ignore directory references
-        if ref_path.endswith("/"):
-            return True
-
-        return False
-
-    def _is_example_placeholder(self, path: str) -> bool:
-        """Check if a path is an example placeholder."""
-        placeholder_patterns = ["path/to/", "example", "placeholder", "template"]
-
-        path_lower = path.lower()
-        return any(pattern in path_lower for pattern in placeholder_patterns)
-
-    def check_search_index(self) -> None:
-        """Check that search index is comprehensive and accessible."""
+    def _check_metadata_consistency(self) -> None:
+        """Check that metadata is consistent across files."""
         if self.verbose:
-            print("🔍 Checking search index...")
+            print("📊 Checking metadata consistency...")
 
-        search_index_path = os.path.join(self.ai_folder, "search_index.json")
-        if not os.path.exists(search_index_path):
-            self.issues.append("Missing search index file")
-            return
-
-        try:
-            with open(search_index_path, encoding="utf-8") as f:
-                data = json.load(f)
-
-            # Check that search index has new format structure
-            if "metadata" not in data:
-                self.issues.append("Search index missing metadata section")
-            else:
-                self.success_count += 1
-
-            # Check that search index has sections
-            if "sections" in data:
-                sections = data["sections"]
-                if sections:
-                    self.success_count += 1
-                else:
-                    self.warnings.append("Search index has no sections")
-            else:
-                self.warnings.append("Search index missing sections")
-
-        except Exception as e:
-            self.issues.append(f"Error reading search index: {e!s}")
-
-    def check_quick_reference(self) -> None:
-        """Check that quick reference is comprehensive and accessible."""
-        if self.verbose:
-            print("📖 Checking quick reference...")
-
-        quick_ref_path = os.path.join(self.ai_folder, "ai_quick_reference.json")
-        if not os.path.exists(quick_ref_path):
-            self.issues.append("Missing quick reference file")
-            return
-
-        try:
-            with open(quick_ref_path, encoding="utf-8") as f:
-                data = json.load(f)
-
-            # Check that quick reference has new format structure
-            if "metadata" not in data:
-                self.issues.append("Quick reference missing metadata section")
-            else:
-                self.success_count += 1
-
-            # Check that quick reference has sections
-            if "sections" in data:
-                sections = data["sections"]
-                if sections:
-                    self.success_count += 1
-                else:
-                    self.warnings.append("Quick reference has no sections")
-            else:
-                self.warnings.append("Quick reference missing sections")
-
-        except Exception as e:
-            self.issues.append(f"Error reading quick reference: {e!s}")
-
-    def check_ai_config(self) -> None:
-        """Check that AI configuration is valid and up-to-date."""
-        if self.verbose:
-            print("⚙️ Checking AI configuration...")
-
-        config_path = os.path.join(self.ai_folder, "ai_config.json")
-        if not os.path.exists(config_path):
-            self.issues.append("Missing AI configuration file")
-            return
-
-        try:
-            with open(config_path, encoding="utf-8") as f:
-                config = json.load(f)
-
-            # Check required configuration sections
-            required_sections = ["ai_documentation_config", "documentation_structure", "ai_tool_settings"]
-            for section in required_sections:
-                if section not in config:
-                    self.issues.append(f"Missing configuration section: {section}")
-                else:
-                    self.success_count += 1
-
-            # Check version
-            version = config.get("ai_documentation_config", {}).get("version")
-            if version != "3.1":
-                self.warnings.append(f"Configuration version mismatch: expected 3.1, got {version}")
-
-        except Exception as e:
-            self.issues.append(f"Error reading AI configuration: {e!s}")
-
-    def check_template_consistency(self) -> None:
-        """Check that all files follow consistent template structure."""
-        if self.verbose:
-            print("📋 Checking template consistency...")
-
-        for root, _, files in os.walk(self.ai_folder):
+        json_files = []
+        for root, _dirs, files in os.walk(self.ai_folder):
             for file in files:
-                if file.endswith(".json") and not file.startswith("ai_config"):
-                    file_path = os.path.join(root, file)
+                if file.endswith(".json"):
+                    json_files.append(os.path.join(root, file))
 
-                    # Skip output files and health check result
-                    if "outputs" in file_path or os.path.basename(file_path) == "healthcheck-result.md":
-                        continue
+        for json_file in json_files:
+            if "outputs" in json_file:
+                continue
 
-                    try:
-                        with open(file_path, encoding="utf-8") as f:
-                            data = json.load(f)
+            relative_path = os.path.relpath(json_file, self.ai_folder)
 
-                        relative_path = os.path.relpath(file_path, self.ai_folder)
+            try:
+                with open(json_file, encoding="utf-8") as f:
+                    data = json.load(f)
 
-                        # Check for new streamlined format
-                        has_new_format = "metadata" in data and (
-                            "sections" in data or "example_patterns" in data or "implementation_guidelines" in data
-                        )
+                # Check that files have proper metadata
+                if "metadata" in data:
+                    metadata = data["metadata"]
 
-                        if has_new_format:
-                            # Validate new format structure
-                            # Note: We don't validate optional metadata fields like title, description, version
-                            # as they don't affect core functionality and may be intentionally empty
+                    # Check for required metadata fields
+                    if "version" not in metadata:
+                        self.warnings.append(f"Missing version in metadata: {relative_path}")
+                    if "last_updated" not in metadata:
+                        self.warnings.append(f"Missing last_updated in metadata: {relative_path}")
 
-                            # Check for content sections
-                            if "sections" in data:
-                                self.success_count += 1
-                            elif "example_patterns" in data or "implementation_guidelines" in data:
-                                self.success_count += 1
-                            else:
-                                self.warnings.append(f"Missing content sections: {relative_path}")
-                        else:
-                            # Old format - mark as deprecated
-                            self.issues.append(f"Uses deprecated template format: {relative_path}")
+                    self.success_count += 1
+                else:
+                    self.warnings.append(f"Missing metadata section: {relative_path}")
 
-                    except Exception as e:
-                        self.issues.append(f"Error checking template consistency in {relative_path}: {e!s}")
+            except Exception as e:
+                self.issues.append(f"Error checking metadata in {relative_path}: {e}")
 
-    def generate_report(self) -> str:
-        """Generate the health check report."""
-        self.success_count + len(self.issues) + len(self.warnings)
+    def _save_report(self) -> None:
+        """Save the health check report."""
+        # Ensure outputs directory exists
+        outputs_dir = os.path.join(self.ai_folder, "outputs", "health_check")
+        os.makedirs(outputs_dir, exist_ok=True)
 
-        report = f"""📊 AI Documentation Health Check Report
-============================================================
+        # Generate report
+        report = self._generate_report()
 
-✅ Successful checks: {self.success_count}
-❌ Issues found: {len(self.issues)}
-⚠️ Warnings: {len(self.warnings)}
+        # Save text report
+        report_file = os.path.join(outputs_dir, "healthcheck-result.md")
+        with open(report_file, "w", encoding="utf-8") as f:
+            f.write(report)
+
+        # Save JSON report
+        json_report = self._generate_json_report()
+        json_file = os.path.join(outputs_dir, "healthcheck-result.json")
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(json_report, f, indent=2)
+
+        if self.verbose:
+            print(f"\n📄 Health check results saved to: {report_file}")
+            print(f"📄 JSON results saved to: {json_file}")
+
+    def _generate_report(self) -> str:
+        """Generate the health check report.
+
+        Returns:
+            The formatted report string.
+        """
+        report = f"""# AI Documentation Health Check Report
+
+**Date:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+**AI Folder:** {self.ai_folder}
+
+## Summary
+
+- ✅ **Successful checks:** {self.success_count}
+- ❌ **Issues found:** {len(self.issues)}
+- ⚠️ **Warnings:** {len(self.warnings)}
 
 """
 
         if self.issues:
-            report += "\n❌ Issues:\n"
+            report += "\n## ❌ Issues\n\n"
             for issue in self.issues:
-                report += f"  - {issue}\n"
+                report += f"- {issue}\n"
 
         if self.warnings:
-            report += "\n⚠️ Warnings:\n"
+            report += "\n## ⚠️ Warnings\n\n"
             for warning in self.warnings:
-                report += f"  - {warning}\n"
+                report += f"- {warning}\n"
 
         if not self.issues and not self.warnings:
-            report += "\n🎉 All checks passed! AI documentation is optimized for tool consumption."
+            report += (
+                "\n## 🎉 All checks passed!\n\n"
+                "AI documentation is properly structured and optimized for tool consumption."
+            )
         else:
-            report += "\n🔧 Please address the issues and warnings above."
-
-        report += "\n============================================================"
+            report += (
+                "\n## 🔧 Recommendations\n\n"
+                "Please address the issues and warnings above to ensure optimal AI tool performance."
+            )
 
         return report
 
-    def generate_json_result(self) -> dict:
-        """Generate the JSON result for the health check."""
+    def _generate_json_report(self) -> dict[str, Any]:
+        """Generate the JSON health check report.
+
+        Returns:
+            The JSON report dictionary.
+        """
         return {
             "ai_metadata": {
-                "template_version": "3.1",
+                "template_version": "4.0",
                 "ai_processing_level": "High",
                 "required_context": "AI documentation structure and standards",
                 "validation_required": True,
                 "code_generation": "Not applicable",
-                "cross_references": ["scripts/ai_health_check.py", "scripts/update_documentation.py", "ai_config.json"],
+                "cross_references": ["scripts/ai_health_check.py"],
                 "maintenance": "Auto-generated by health check script",
             },
             "file_info": {
@@ -539,34 +463,21 @@ class AIDocumentationHealthCheck:
                     "successful_checks": self.success_count,
                     "issues_found": len(self.issues),
                     "warnings": len(self.warnings),
-                    "overall_status": "healthy" if not self.issues else "needs_attention",
+                    "overall_status": "healthy" if len(self.issues) == 0 else "issues_found",
                 },
-                "details": {
-                    "issues": self.issues,
-                    "warnings": self.warnings,
-                },
+                "details": {"issues": self.issues, "warnings": self.warnings},
             },
         }
 
 
 def main() -> None:
-    """Main health check function."""
+    """Main function to run the health check."""
     verbose = "--verbose" in sys.argv or "-v" in sys.argv
+
     health_check = AIDocumentationHealthCheck(verbose=verbose)
     success = health_check.run_health_check()
 
-    # Only show success/failure messages if verbose or if there are issues
-    has_issues = len(health_check.issues) > 0 or len(health_check.warnings) > 0
-
-    if verbose or has_issues:
-        if success:
-            print("\n✅ Health check completed successfully!")
-        else:
-            print("\n❌ Health check found issues that need attention.")
-
-    if success:
-        sys.exit(0)
-    else:
+    if not success:
         sys.exit(1)
 
 

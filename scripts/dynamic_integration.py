@@ -1,21 +1,50 @@
 #!/usr/bin/env python3
-"""
-Dynamic Integration Script for AI Documentation
+"""Dynamic Integration Script for AI Documentation.
 
 This script automatically extracts patterns from source guides and integrates them
 into core principles without requiring manual string updates. It maintains
 consistency across the documentation system.
+
+References:
+    - [Python Style Guide](humans/guides/python_style_guide.md)
+    - [AI Documentation Rules](ai/ai_rules.json)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
 """
 
+# Standard library imports
 import json
 import os
 import sys
 from datetime import datetime
 from typing import Any
 
+# Local imports
+# (None for this module)
+
+# Module-level constants
+DEFAULT_VERBOSE = False
+
+# Module-level variables
+# (None for this module)
+
 
 class DynamicIntegration:
-    def __init__(self, verbose: bool = False) -> None:
+    """Dynamic integration system for AI documentation patterns.
+
+    This class provides automated pattern extraction and integration capabilities
+    for maintaining consistency across the AI documentation system.
+    """
+
+    def __init__(self, verbose: bool = DEFAULT_VERBOSE) -> None:
+        """Initialize the dynamic integration system.
+
+        Args:
+            verbose: Whether to print detailed output during integration.
+        """
         self.script_dir = os.path.dirname(__file__)
         self.project_root = os.path.dirname(self.script_dir)
         self.ai_folder = os.path.join(self.project_root, "ai")
@@ -29,7 +58,11 @@ class DynamicIntegration:
         self.integration_rules = self._load_config()
 
     def _load_config(self) -> dict[str, Any]:
-        """Load the AI configuration file."""
+        """Load the AI configuration file.
+
+        Returns:
+            The configuration data dictionary.
+        """
         config_path = os.path.join(self.ai_folder, "ai_config.json")
         try:
             with open(config_path, encoding="utf-8") as f:
@@ -40,7 +73,14 @@ class DynamicIntegration:
             return {}
 
     def run_integration(self, trigger: str = "manual_request") -> bool:
-        """Run the complete dynamic integration process."""
+        """Run the complete dynamic integration process.
+
+        Args:
+            trigger: The trigger that initiated the integration.
+
+        Returns:
+            True if integration was successful, False otherwise.
+        """
         if self.verbose:
             print(f"🔄 Running Dynamic Integration (trigger: {trigger})...")
             print()
@@ -74,7 +114,11 @@ class DynamicIntegration:
             return False
 
     def _extract_patterns_from_guides(self) -> dict[str, Any]:
-        """Extract patterns from source guides based on integration rules."""
+        """Extract patterns from source guides based on integration rules.
+
+        Returns:
+            Dictionary of extracted patterns organized by guide name.
+        """
         if self.verbose:
             print("📖 Extracting patterns from source guides...")
 
@@ -103,7 +147,14 @@ class DynamicIntegration:
         return extracted_patterns
 
     def _get_guide_path(self, guide_name: str) -> str | None:
-        """Get the file path for a guide based on its name."""
+        """Get the file path for a guide based on its name.
+
+        Args:
+            guide_name: Name of the guide to locate.
+
+        Returns:
+            Full path to the guide file, or None if not found.
+        """
         guide_mapping = {
             "python_style_guide": "guide_docs/language_specific/python_style_guide.json",
             "fastapi_development_guide": "guide_docs/language_specific/fastapi_development_guide.json",
@@ -117,13 +168,28 @@ class DynamicIntegration:
         return None
 
     def _load_guide(self, guide_path: str) -> dict[str, Any]:
-        """Load a guide file and return its content."""
+        """Load a guide file and return its content.
+
+        Args:
+            guide_path: Path to the guide file.
+
+        Returns:
+            The guide data dictionary.
+        """
         with open(guide_path, encoding="utf-8") as f:
             data: dict[str, Any] = json.load(f)
             return data
 
     def _extract_patterns_from_guide(self, guide_data: dict[str, Any], rules: dict[str, Any]) -> dict[str, Any]:
-        """Extract specific patterns from a guide based on extraction rules."""
+        """Extract specific patterns from a guide based on extraction rules.
+
+        Args:
+            guide_data: The guide data to extract patterns from.
+            rules: The extraction rules to apply.
+
+        Returns:
+            Dictionary of extracted patterns.
+        """
         patterns: dict[str, Any] = {}
         critical_patterns = rules.get("critical_patterns", [])
         sections = guide_data.get("sections", {})
@@ -137,7 +203,15 @@ class DynamicIntegration:
         return patterns
 
     def _find_pattern_in_sections(self, sections: dict[str, Any], pattern_name: str) -> dict[str, Any] | None:
-        """Find a specific pattern within guide sections."""
+        """Find a specific pattern within guide sections.
+
+        Args:
+            sections: The sections to search in.
+            pattern_name: Name of the pattern to find.
+
+        Returns:
+            The pattern data if found, None otherwise.
+        """
         # Direct section match
         if pattern_name in sections:
             section_data = sections[pattern_name]
@@ -159,7 +233,14 @@ class DynamicIntegration:
         return None
 
     def _validate_patterns(self, extracted_patterns: dict[str, Any]) -> dict[str, Any]:
-        """Validate extracted patterns for consistency and completeness."""
+        """Validate extracted patterns for consistency and completeness.
+
+        Args:
+            extracted_patterns: The patterns to validate.
+
+        Returns:
+            Dictionary of validated patterns.
+        """
         if self.verbose:
             print("🔍 Validating extracted patterns...")
 
@@ -179,7 +260,15 @@ class DynamicIntegration:
         return validated_patterns
 
     def _validate_single_pattern(self, pattern_name: str, pattern_data: Any) -> bool:
-        """Validate a single pattern."""
+        """Validate a single pattern.
+
+        Args:
+            pattern_name: Name of the pattern being validated.
+            pattern_data: The pattern data to validate.
+
+        Returns:
+            True if the pattern is valid, False otherwise.
+        """
         if not pattern_data:
             return False
 
@@ -192,7 +281,14 @@ class DynamicIntegration:
         return False
 
     def _resolve_conflicts(self, validated_patterns: dict[str, Any]) -> dict[str, Any]:
-        """Resolve conflicts between patterns from different guides."""
+        """Resolve conflicts between patterns from different guides.
+
+        Args:
+            validated_patterns: The validated patterns to resolve conflicts for.
+
+        Returns:
+            Dictionary of resolved patterns.
+        """
         if self.verbose:
             print("⚖️  Resolving pattern conflicts...")
 

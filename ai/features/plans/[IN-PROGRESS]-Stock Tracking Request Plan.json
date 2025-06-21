@@ -2,14 +2,14 @@
   "metadata": {
     "title": "Stock Tracking Request Plan",
     "description": "",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-06-18",
     "source": "features/plans/in_progress_stock_tracking_request_plan.md",
     "cross_references": [
       "../project_context/architecture_overview.json",
       "../project_context/common_patterns.json",
       "../project_context/development_workflow.json",
-      "../summaries/stock_data_module_summary.json",
+      "../summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json",
       "../guide_docs/core_principles.json"
     ]
   },

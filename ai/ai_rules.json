@@ -1,0 +1,690 @@
+{
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "AI documentation structure and standards",
+    "validation_required": true,
+    "code_generation": "Supported",
+    "search_optimization": "Enhanced",
+    "cross_references": [
+      "ai/ai_config.json",
+      ".cursorrules",
+      ".cursor/workspace.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "Primary AI rules for CreamPie project"
+  },
+  "metadata": {
+    "title": "AI Rules for CreamPie Project",
+    "description": "Primary configuration for all AI tools and assistants working on the CreamPie project",
+    "version": "1.2",
+    "last_updated": "2025-06-21",
+    "source_files": [
+      ".cursorrules",
+      ".cursor/workspace.json",
+      ".mdc",
+      "ai/ai_config.json"
+    ],
+    "purpose": "Primary source of truth for AI rules and patterns",
+    "removed_files": [
+      "ai/ai_usage_guide.json - Content consolidated, file removed",
+      "ai/ai_quick_reference.json - Removed, no longer needed for unified approach"
+    ],
+    "minimized_files": [
+      "ai/ai_config.json - Reduced from 467 lines to minimal script-required configuration"
+    ],
+    "critical_rules_added": [
+      "test_assumption_rule - NEVER assume tests pass just because a script executes",
+      "style_guide_compliance - CRITICAL priority for all Python code",
+      "helper_script_json_output - MANDATORY JSON output for all helper scripts"
+    ],
+    "major_version_bump": "4.0 - Reflects unified rules, style guide enforcement, and enhanced mandatory workflows"
+  },
+  "core_principles": {
+    "priority_system": {
+      "critical": [
+        "Security vulnerabilities",
+        "Data integrity issues",
+        "Breaking changes",
+        "Python style guide violations",
+        "Missing legal notices",
+        "Import organization errors",
+        "Missing type hints"
+      ],
+      "high": [
+        "Style violations",
+        "Performance issues",
+        "Maintainability problems",
+        "Missing external documentation links"
+      ],
+      "medium": [
+        "Code organization",
+        "Documentation",
+        "Minor optimizations"
+      ],
+      "low": [
+        "Personal preferences",
+        "Cosmetic changes",
+        "Future-proofing"
+      ]
+    },
+    "decision_frameworks": {
+      "refactor_vs_new_code": {
+        "refactor": [
+          "Existing code with issues",
+          "Style violations",
+          "Minor bugs",
+          "Improvements"
+        ],
+        "new_code": [
+          "Feature doesn't exist",
+          "Major architectural changes",
+          "Explicit request"
+        ]
+      },
+      "strict_vs_flexible": {
+        "strict": [
+          "Security",
+          "Data integrity",
+          "Critical business logic",
+          "Project patterns",
+          "Style guide compliance"
+        ],
+        "flexible": [
+          "Style preferences",
+          "Minor optimizations",
+          "Personal habits"
+        ]
+      },
+      "context_awareness": [
+        "File context",
+        "Task context",
+        "Project context",
+        "User experience level"
+      ]
+    }
+  },
+  "mandatory_workflows": {
+    "debugging_workflow": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "Before ANY debugging attempt, you MUST check existing reports",
+      "steps": [
+        "ALWAYS check ai/outputs/lint_results/ for tool reports",
+        "ALWAYS check ai/outputs/test_results/ for test failure reports",
+        "ALWAYS check ai/outputs/ for other relevant reports",
+        "ALWAYS read actual error messages from these reports",
+        "ONLY THEN begin debugging based on concrete error information"
+      ],
+      "forbidden": [
+        "Starting debugging without checking ai/outputs/ first",
+        "Asking to run tools when error reports already exist",
+        "Making assumptions about error causes",
+        "Guessing at missing imports or constants"
+      ],
+      "enforcement": "MANDATORY and non-negotiable. Violating leads to wasted time and incorrect fixes."
+    },
+    "test_assumption_rule": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "NEVER assume tests pass just because a script executes",
+      "rule": "Cursor should NEVER assume that tests pass because a script executes. Always check actual test results and error reports.",
+      "steps": [
+        "ALWAYS check ai/outputs/test_results/ for actual test results",
+        "ALWAYS read test failure reports and error messages",
+        "NEVER assume success based on script execution alone",
+        "ALWAYS verify test outcomes through actual result files"
+      ],
+      "forbidden": [
+        "Assuming tests pass because a script ran without errors",
+        "Ignoring test result files in ai/outputs/test_results/",
+        "Making assumptions about test success without checking reports",
+        "Proceeding as if tests passed without verification"
+      ],
+      "enforcement": "CRITICAL - This rule prevents false assumptions and wasted debugging time.",
+      "priority": "highest"
+    },
+    "style_guide_compliance": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "Style guide violations are CRITICAL priority and must be fixed immediately",
+      "rule": "Python style guide violations are treated as CRITICAL priority. All code must conform to the style guide before any other work proceeds.",
+      "steps": [
+        "ALWAYS check humans/guides/python_style_guide.md for requirements",
+        "ALWAYS include legal notice in module docstring",
+        "ALWAYS use proper import organization (stdlib, third-party, local)",
+        "ALWAYS apply type hints to all functions",
+        "ALWAYS use proper docstrings with Args/Returns sections",
+        "ALWAYS use os.path for file operations",
+        "ALWAYS use Pydantic v2 patterns"
+      ],
+      "forbidden": [
+        "Creating code without proper module docstring and legal notice",
+        "Using incorrect import organization",
+        "Missing type hints on functions",
+        "Incomplete or missing docstrings",
+        "Using pathlib for file operations when os.path is required",
+        "Using deprecated Pydantic v1 patterns"
+      ],
+      "enforcement": "CRITICAL - Style guide violations block all other work until resolved.",
+      "priority": "highest",
+      "validation": "Use scripts/ai_health_check.py to validate compliance"
+    },
+    "helper_script_json_output": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "ALL helper scripts MUST generate JSON output for AI tooling",
+      "rule": "Every script that humans invoke must generate both human-readable (terminal) and machine-readable (JSON) outputs.",
+      "steps": [
+        "Generate JSON output in ai/outputs/ with proper categorization",
+        "Include structured metadata, results, and status information",
+        "Provide both human-readable (terminal) and machine-readable (JSON) outputs",
+        "Follow established JSON schema patterns",
+        "Use scripts/ai_output_helper.py as reference implementation"
+      ],
+      "forbidden": [
+        "Creating scripts that only output to terminal",
+        "Ignoring the need for machine-readable output",
+        "Skipping proper error handling and status reporting",
+        "Using inconsistent output formats"
+      ],
+      "enforcement": "MANDATORY - This ensures all scripts are AI-friendly and provide structured data for analysis.",
+      "priority": "high"
+    }
+  },
+  "documentation_structure": {
+    "core_documents": {
+      "ai_config": "ai/ai_config.json",
+      "search_index": "ai/search_index.json"
+    },
+    "guide_docs": {
+      "core": [
+        "ai/guide_docs/core_principles.json",
+        "ai/guide_docs/feature_template.json",
+        "ai/guide_docs/implementation_guide_template.json",
+        "ai/guide_docs/code_review_patterns.json",
+        "ai/guide_docs/ai_tool_optimization_guide.json"
+      ],
+      "language_specific": [
+        "ai/guide_docs/language_specific/python_style_guide.json",
+        "ai/guide_docs/language_specific/python_testing_style_guide.json",
+        "ai/guide_docs/language_specific/react_style_guide.json"
+      ],
+      "domain_specific": [
+        "ai/guide_docs/domain_specific/database_management_guide.json",
+        "ai/guide_docs/domain_specific/shell_style_guide.json"
+      ]
+    },
+    "project_context": [
+      "ai/project_context/architecture_overview.json",
+      "ai/project_context/common_patterns.json",
+      "ai/project_context/development_workflow.json"
+    ],
+    "features": {
+      "plans": "ai/features/plans/",
+      "summaries": "ai/features/summaries/"
+    }
+  },
+  "technology_guidelines": {
+    "python_development": {
+      "style_guide": "ai/guide_docs/language_specific/python_style_guide.json",
+      "testing": "ai/guide_docs/language_specific/python_testing_style_guide.json",
+      "patterns": [
+        "FastAPI with Pydantic",
+        "SQLAlchemy",
+        "Celery",
+        "Alembic"
+      ]
+    },
+    "frontend_development": {
+      "style_guide": "ai/guide_docs/language_specific/react_style_guide.json",
+      "patterns": [
+        "React with TypeScript",
+        "Tailwind CSS",
+        "React Router",
+        "Axios"
+      ]
+    },
+    "database_operations": {
+      "management_guide": "ai/guide_docs/domain_specific/database_management_guide.json",
+      "patterns": [
+        "Async SQLAlchemy",
+        "Migration strategies",
+        "Relationship management"
+      ]
+    },
+    "shell_scripts": {
+      "style_guide": "ai/guide_docs/domain_specific/shell_style_guide.json",
+      "patterns": [
+        "Automation",
+        "Error handling",
+        "Logging"
+      ]
+    }
+  },
+  "architecture_patterns": {
+    "backend": {
+      "fastapi": [
+        "Use Pydantic models",
+        "Dependency injection",
+        "Async/await patterns"
+      ],
+      "database": [
+        "SQLAlchemy ORM with async sessions",
+        "Proper indexing",
+        "Migration management"
+      ],
+      "background_tasks": [
+        "Celery for long-running operations"
+      ],
+      "error_handling": [
+        "Consistent try/except patterns",
+        "Proper logging"
+      ]
+    },
+    "frontend": {
+      "components": [
+        "Function components with hooks",
+        "TypeScript interfaces"
+      ],
+      "state_management": [
+        "React Context for shared state",
+        "Local state for component-specific"
+      ],
+      "styling": [
+        "Tailwind CSS with utility-first approach"
+      ],
+      "testing": [
+        "Jest + React Testing Library"
+      ]
+    },
+    "code_organization": {
+      "modular_structure": "Clear separation of concerns",
+      "file_naming": [
+        "PascalCase for components",
+        "camelCase for utilities",
+        "kebab-case for files"
+      ],
+      "imports": "Organized imports with clear dependencies",
+      "documentation": "JSON-optimized for AI consumption"
+    }
+  },
+  "quality_standards": {
+    "before_providing_code": [
+      "Check core principles for decision framework",
+      "Reference appropriate language/domain guides",
+      "MANDATORY: Check Python style guide compliance",
+      "MANDATORY: Include legal notice in module docstring",
+      "MANDATORY: Use proper import organization",
+      "MANDATORY: Apply type hints to all functions",
+      "MANDATORY: Use os.path for file operations",
+      "MANDATORY: Use Pydantic v2 patterns",
+      "Include proper error handling",
+      "Follow project naming conventions",
+      "Add validation and testing considerations",
+      "Consider performance implications",
+      "Apply security best practices"
+    ],
+    "before_making_suggestions": [
+      "Understand user's current context",
+      "Identify appropriate priority level",
+      "Reference existing patterns",
+      "Explain reasoning clearly",
+      "Provide actionable guidance",
+      "Consider user's experience level"
+    ],
+    "helper_script_standards": [
+      "MANDATORY: All helper scripts MUST generate JSON output for AI tooling",
+      "MANDATORY: JSON output must be in ai/outputs/ with proper categorization",
+      "MANDATORY: Include structured metadata and status information",
+      "MANDATORY: Provide both human-readable and machine-readable outputs",
+      "MANDATORY: Follow established JSON schema patterns",
+      "MANDATORY: Use scripts/ai_health_check.py as reference implementation"
+    ]
+  },
+  "emergency_patterns": {
+    "when_user_is_stuck": [
+      "Acknowledge the issue - Show understanding",
+      "Ask clarifying questions - Get more context",
+      "Provide step-by-step guidance - Break down the problem",
+      "Reference relevant documentation - Point to specific guides",
+      "Offer alternatives - Suggest different approaches"
+    ],
+    "when_guides_conflict": [
+      "Identify the conflict - State what's different",
+      "Apply priority system - Style Guide → Security → Project Consistency → Performance → Style",
+      "Explain trade-offs - Help user understand implications",
+      "Recommend approach - Suggest best path forward",
+      "MANDATORY: Style guide compliance takes precedence"
+    ],
+    "when_code_doesnt_work": [
+      "Check error messages - Look for specific issues",
+      "Verify dependencies - Ensure all imports and setup",
+      "Test assumptions - Validate expected behavior",
+      "Provide debugging steps - Help user troubleshoot",
+      "Suggest alternatives - Offer different approaches"
+    ],
+    "when_system_is_down": [
+      "Assess severity - Is it blocking development or just a warning?",
+      "Check basic connectivity - Database, services, dependencies",
+      "Look for recent changes - What might have caused this?",
+      "Provide immediate workarounds - Alternative approaches if possible",
+      "Escalate if needed - Point to appropriate resources or people"
+    ],
+    "when_data_is_corrupted": [
+      "Stop further operations - Prevent additional damage",
+      "Assess scope - How much data is affected?",
+      "Check backups - Are there recent backups available?",
+      "Provide recovery steps - Clear instructions for restoration",
+      "Document the incident - For future prevention"
+    ]
+  },
+  "communication_patterns": {
+    "positive_feedback": [
+      "Great approach! This follows our established patterns.",
+      "Excellent use of error handling here.",
+      "This is exactly the right pattern for this situation."
+    ],
+    "constructive_criticism": [
+      "Consider using [pattern] for better [benefit].",
+      "This could be improved by [specific suggestion].",
+      "Let's follow our established pattern for [aspect]."
+    ],
+    "educational_guidance": [
+      "Here's why we use this pattern: [explanation].",
+      "This follows our [principle] because [reasoning].",
+      "For future reference, you can find this pattern in [guide]."
+    ]
+  },
+  "tool_usage_guidelines": {
+    "file_operations": {
+      "read_file": "Read file contents with line ranges",
+      "edit_file": "Make precise edits to files",
+      "delete_file": "Remove files safely",
+      "file_search": "Find files by fuzzy matching",
+      "list_dir": "Explore directory structure"
+    },
+    "code_analysis": {
+      "codebase_search": "Semantic search for code patterns",
+      "grep_search": "Exact text/regex pattern matching"
+    },
+    "execution": {
+      "run_terminal_cmd": "Execute shell commands",
+      "background_tasks": "Set is_background: true for long-running tasks"
+    },
+    "best_practices": [
+      "Use semantic search for understanding patterns",
+      "Use grep for exact matches",
+      "Read files before editing",
+      "Validate file paths exist"
+    ]
+  },
+  "documentation_standards": {
+    "json_format_requirements": [
+      "All AI documentation uses JSON for optimization",
+      "Include metadata: version, last_updated, source file",
+      "Use cross-references with relative paths",
+      "Follow validation rules for quality"
+    ],
+    "content_guidelines": {
+      "plans": "Focus on WHAT/WHY, avoid detailed code snippets",
+      "implementation_guides": "Include step-by-step instructions and code examples",
+      "style_guides": "Provide specific patterns and best practices",
+      "technical_summaries": "Document existing implementations and patterns"
+    },
+    "ai_optimization": [
+      "Use structured data with consistent format",
+      "Include keywords and semantic tags",
+      "Provide code generation hints",
+      "Maintain context awareness throughout"
+    ]
+  },
+  "context_awareness": {
+    "user_experience_levels": {
+      "beginner": [
+        "Focus on basic patterns and step-by-step guidance"
+      ],
+      "intermediate": [
+        "Provide advanced patterns and optimization tips"
+      ],
+      "advanced": [
+        "Focus on architecture decisions and complex integrations"
+      ]
+    },
+    "project_context": [
+      "File context - What file they're working in and its purpose",
+      "Task context - What they're trying to accomplish",
+      "Project context - Overall architecture and constraints",
+      "Error context - What problems they're encountering"
+    ],
+    "adaptive_responses": [
+      "Adjust detail level based on user experience",
+      "Provide multiple approaches when appropriate",
+      "Explain trade-offs and decisions",
+      "Focus on solutions rather than just problems"
+    ]
+  },
+  "maintenance_and_updates": {
+    "documentation_health": [
+      "Use scripts/ai_health_check.py for validation",
+      "Maintain cross-references across all documentation",
+      "Update metadata and version information",
+      "Ensure search index accuracy"
+    ],
+    "continuous_improvement": [
+      "Monitor usage patterns and effectiveness",
+      "Gather user feedback for improvements",
+      "Update patterns based on new insights",
+      "Expand coverage as needed"
+    ],
+    "helper_script_requirements": {
+      "mandatory_json_output": [
+        "ALL helper scripts MUST generate JSON output for AI tooling",
+        "JSON output should be in ai/outputs/ directory with descriptive names",
+        "Include structured data with metadata, results, and status information",
+        "Follow consistent JSON schema for similar types of scripts",
+        "Provide both human-readable (terminal) and machine-readable (JSON) outputs"
+      ],
+      "json_output_structure": {
+        "ai_metadata": "Template version, processing level, and context information",
+        "file_info": "Purpose, last_updated, format, and optimization target",
+        "content": "Actual results, summary statistics, and detailed information",
+        "status": "Success/failure indicators and error details if applicable"
+      },
+      "script_categories": {
+        "health_checks": "ai/outputs/health_check/ - Validation and quality reports",
+        "database_operations": "ai/outputs/database/ - Migration and schema reports",
+        "testing_results": "ai/outputs/test_results/ - Test execution and coverage reports",
+        "deployment_logs": "ai/outputs/deployment/ - Build and deployment status",
+        "analysis_reports": "ai/outputs/analysis/ - Code analysis and optimization reports"
+      },
+      "implementation_guidelines": [
+        "Use scripts/ai_health_check.py as reference implementation",
+        "Include proper error handling and status reporting",
+        "Generate both .md and .json outputs for comprehensive coverage",
+        "Use descriptive file names that indicate content and timestamp",
+        "Ensure JSON output is valid and follows established schema",
+        "Use scripts/json_output_helper.py for consistent JSON output generation"
+      ],
+      "helper_scripts": {
+        "description": "All helper scripts must generate JSON output for AI tooling",
+        "rule": "ALL helper scripts MUST generate JSON output in ai/outputs/ with proper categorization",
+        "reference": "scripts/ai_report_helper.py",
+        "examples": [
+          "Use AIReportHelper class for consistent output",
+          "Generate both JSON and human-readable reports",
+          "Include proper metadata and error handling"
+        ]
+      }
+    }
+  },
+  "quick_reference": {
+    "by_task_type": {
+      "api_development": [
+        "FastAPI Guide + Database Guide + Testing Guide"
+      ],
+      "frontend": [
+        "React Style Guide + API integration patterns"
+      ],
+      "database": [
+        "Database Guide + Migration patterns"
+      ],
+      "automation": [
+        "Shell Guide + Background task patterns"
+      ]
+    },
+    "by_problem_type": {
+      "performance": "Core principles → Performance section",
+      "security": "Core principles → Security section",
+      "testing": "Python testing guide",
+      "error_handling": "Core principles → Error handling section"
+    },
+    "by_technology": {
+      "python": "ai/guide_docs/language_specific/python_style_guide.json",
+      "react": "ai/guide_docs/language_specific/react_style_guide.json",
+      "database": "ai/guide_docs/domain_specific/database_management_guide.json"
+    }
+  },
+  "cursor_specific": {
+    "workspace_config": {
+      "name": "CreamPie Project",
+      "description": "AI-powered stock tracking application with enforced debugging workflow",
+      "documentation_path": "ai/",
+      "style_guides": [
+        "ai/guide_docs/language_specific/python_style_guide.json",
+        "ai/guide_docs/language_specific/react_style_guide.json"
+      ],
+      "patterns": [
+        "ai/project_context/common_patterns.json"
+      ]
+    },
+    "context_inclusions": [
+      "ai/guide_docs",
+      "ai/outputs",
+      "ai/search_index.json",
+      "ai/ai_config.json",
+      "pyproject.toml",
+      "poetry.lock",
+      "pytest.ini",
+      ".gitignore",
+      "README.md",
+      "cream_api/",
+      "cream_ui/",
+      "scripts/",
+      "dev.md",
+      "FEATURE_TEMPLATE.md",
+      "cream.md"
+    ]
+  },
+  "migration_notes": {
+    "original_files": {
+      ".cursorrules": "Main Cursor rules (290 lines) - consolidated into this file",
+      ".cursor/workspace.json": "Cursor workspace configuration - integrated into cursor_specific section",
+      ".mdc": "Cursor context file - integrated into cursor_specific.context_inclusions",
+      "ai/ai_config.json": "AI documentation configuration - integrated into documentation_structure",
+      "ai/ai_quick_reference.json": "Quick reference patterns - integrated into quick_reference section",
+      "ai/ai_usage_guide.json": "AI tool usage guide - integrated throughout this file"
+    },
+    "removal_strategy": {
+      "phase_1_safe_to_remove": [
+        "ai/ai_quick_reference.json - All content consolidated, no unique value",
+        "ai/ai_usage_guide.json - All content consolidated, no unique value"
+      ],
+      "phase_2_keep_for_now": [
+        "ai/ai_config.json - Minimized to script-required configuration only",
+        ".cursorrules - Simplified but still needed for immediate critical rules",
+        ".cursor/workspace.json - Updated but still needed for Cursor configuration",
+        ".mdc - Still needed for Cursor context inclusions"
+      ],
+      "phase_3_future_consideration": [
+        "ai/ai_config.json - May be removable if scripts are updated to use consolidated rules",
+        ".cursorrules - May be removable if Cursor supports direct JSON references"
+      ]
+    },
+    "benefits": [
+      "Single source of truth for all AI rules",
+      "Eliminates duplication and conflicts",
+      "Easier maintenance and updates",
+      "Clearer organization and structure",
+      "Better cross-referencing between related rules"
+    ],
+    "usage_instructions": [
+      "Reference this file as the primary AI rules source",
+      "Update this file when adding new rules or patterns",
+      "Use the original files only for historical reference",
+      "Consider deprecating original files after migration period"
+    ]
+  },
+  "sections": {
+    "core_principles": {
+      "title": "Core Principles",
+      "description": "Fundamental principles and decision frameworks for AI tools",
+      "content": "Priority system, decision frameworks, and context awareness guidelines"
+    },
+    "mandatory_workflows": {
+      "title": "Mandatory Workflows",
+      "description": "Critical workflows that must be followed",
+      "content": "Debugging workflow and style guide compliance requirements"
+    },
+    "documentation_structure": {
+      "title": "Documentation Structure",
+      "description": "Organization of AI documentation and guides",
+      "content": "File organization, guide structure, and navigation patterns"
+    },
+    "technology_guidelines": {
+      "title": "Technology Guidelines",
+      "description": "Language and domain-specific development guidelines",
+      "content": "Python, FastAPI, React, database, and shell development patterns"
+    },
+    "architecture_patterns": {
+      "title": "Architecture Patterns",
+      "description": "Backend, frontend, and code organization patterns",
+      "content": "FastAPI, React, database, and code organization best practices"
+    },
+    "quality_standards": {
+      "title": "Quality Standards",
+      "description": "Standards for code quality and AI tool behavior",
+      "content": "Before providing code, making suggestions, and quality checklists"
+    },
+    "emergency_patterns": {
+      "title": "Emergency Patterns",
+      "description": "How to handle problematic situations",
+      "content": "When user is stuck, guides conflict, code doesn't work, etc."
+    },
+    "communication_patterns": {
+      "title": "Communication Patterns",
+      "description": "How to communicate with users effectively",
+      "content": "Positive feedback, constructive criticism, and educational guidance"
+    },
+    "tool_usage_guidelines": {
+      "title": "Tool Usage Guidelines",
+      "description": "How to use AI tools effectively",
+      "content": "File operations, code analysis, execution, and best practices"
+    },
+    "documentation_standards": {
+      "title": "Documentation Standards",
+      "description": "Standards for AI documentation",
+      "content": "JSON format requirements, content guidelines, and AI optimization"
+    },
+    "context_awareness": {
+      "title": "Context Awareness",
+      "description": "How to maintain context awareness",
+      "content": "User experience levels, project context, and adaptive responses"
+    },
+    "maintenance_and_updates": {
+      "title": "Maintenance and Updates",
+      "description": "How to maintain and update the AI rules system",
+      "content": "Documentation health, continuous improvement, and validation"
+    },
+    "quick_reference": {
+      "title": "Quick Reference",
+      "description": "Quick access to common patterns and references",
+      "content": "By task type, problem type, technology, and common patterns"
+    },
+    "cursor_specific": {
+      "title": "Cursor Specific",
+      "description": "Cursor-specific configuration and rules",
+      "content": "Workspace configuration, context inclusions, and Cursor integration"
+    }
+  }
+}

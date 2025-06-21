@@ -2,7 +2,7 @@
   "metadata": {
     "title": "Python Testing Style Guide",
     "description": "Comprehensive testing standards and best practices for Python code in the CreamPie project",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-01-27",
     "source": "humans/guides/python_testing_style_guide.md",
     "cross_references": [

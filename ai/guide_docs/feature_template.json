@@ -1,15 +1,26 @@
 {
-  "metadata": {
-    "title": "Feature Template",
-    "description": "Template for creating feature plans and documentation",
-    "version": "3.1",
-    "last_updated": "2025-06-18",
-    "source": "guide_docs/feature_template.md",
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "Project architecture, existing patterns, technical summaries",
+    "validation_required": true,
+    "code_generation": "Supported",
     "cross_references": [
-      "../project_context/architecture_overview.json",
-      "../project_context/common_patterns.json",
-      "../project_context/development_workflow.json",
-      "core_principles.json"
+      "ai/ai_rules.json",
+      "ai/guide_docs/implementation_guide_template.json",
+      "ai/project_context/architecture_overview.json"
+    ],
+    "maintenance": "Feature planning template for AI development"
+  },
+  "metadata": {
+    "title": "Feature Development Template",
+    "description": "Template for planning and implementing new features",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "Feature planning and development guidance",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/guide_docs/implementation_guide_template.json"
     ]
   },
   "sections": {
@@ -17,11 +28,6 @@
       "title": "Feature Template",
       "description": "> Template for creating comprehensive feature plans. Use this for understanding the planned implementation and requirements.",
       "content": "> Template for creating comprehensive feature plans. Use this for understanding the planned implementation and requirements."
-    },
-    "ai_metadata": {
-      "title": "AI Metadata",
-      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, ...",
-      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** Project architecture, existing patterns, technical summaries\n**Validation Required:** Yes\n**Code Generation:** Supported\n\n**Dependencies:**\n- `../project_context/architecture_overview.json` - System architecture\n- `../project_context/common_patterns.json` - Project patterns\n- `../project_context/development_workflow.json` - Development process\n- `core_principles.json` - Decision frameworks\n\n**Validation Rules:**\n- All placeholders must be replaced with specific content\n- File paths must reference actual codebase structure\n- Requirements must be measurable and testable\n- Implementation plan must reference existing patterns\n- Success criteria must be quantifiable\n- Plans must focus on WHAT and WHY, not HOW\n- Avoid detailed code snippets in plans"
     },
     "overview": {
       "title": "Overview",

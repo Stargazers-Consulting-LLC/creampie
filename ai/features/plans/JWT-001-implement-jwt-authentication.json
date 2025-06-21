@@ -2,7 +2,7 @@
   "metadata": {
     "title": "JWT-001: Implement JWT Authentication",
     "description": "Feature plan for implementing proper JWT-based authentication system",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-06-21",
     "source": "ai/features/plans/JWT-001-implement-jwt-authentication.json",
     "cross_references": [

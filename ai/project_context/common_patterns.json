@@ -2,15 +2,14 @@
   "metadata": {
     "title": "Common Development Patterns",
     "description": "Established patterns including separation of concerns and deadletter queue patterns",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-06-20",
     "source": "project_context/common_patterns.md",
     "cross_references": [
-      "../guide_docs/core_principles.json",
+      "../guide_docs/language_specific/python_style_guide.json",
+      "../guide_docs/domain_specific/database_management_guide.json",
       "architecture_overview.json",
-      "development_workflow.json",
-      "../guide_docs/Language-Specific/python_style_guide.json",
-      "../guide_docs/Language-Specific/fastapi_development_guide.json"
+      "development_workflow.json"
     ]
   },
   "sections": {

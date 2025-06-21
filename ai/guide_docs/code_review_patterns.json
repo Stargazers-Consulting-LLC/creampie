@@ -2,13 +2,13 @@
   "metadata": {
     "title": "code_review_patterns",
     "description": "",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-06-18",
     "source": "guide_docs/code_review_patterns.md",
     "cross_references": [
       "core_principles.json",
       "../project_context/common_patterns.json",
-      "Language-Specific/python_style_guide.json"
+      "language_specific/python_style_guide.json"
     ]
   },
   "sections": {

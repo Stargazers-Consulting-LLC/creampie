@@ -2,12 +2,12 @@
   "metadata": {
     "title": "development_workflow",
     "description": "",
-    "version": "3.1",
+    "version": "4.0",
     "last_updated": "2025-06-18",
     "source": "project_context/development_workflow.md",
     "cross_references": [
       "../guide_docs/core_principles.json",
-      "../guide_docs/Language-Specific/python_testing_guide.json",
+      "../guide_docs/language_specific/python_testing_style_guide.json",
       "../guide_docs/domain_specific/database_management_guide.json",
       "architecture_overview.json",
       "common_patterns.json"

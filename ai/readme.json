@@ -1,19 +1,25 @@
 {
-  "metadata": {
-    "title": "AI Documentation System",
-    "description": "Main documentation hub for AI tools working with this project. Provides comprehensive guidance, patterns, and tools for effective AI-assisted development.",
-    "version": "3.1",
-    "last_updated": "2025-06-18",
-    "source": "README.md",
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "AI documentation structure and navigation",
+    "validation_required": true,
+    "code_generation": "Not applicable",
     "cross_references": [
-      "ai_quick_reference.json",
-      "search_index.json",
-      "ai_config.json",
-      "guide_docs/",
-      "project_context/",
-      "features/",
-      "scripts/ai_health_check.py",
-      "scripts/update_documentation.py"
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "AI documentation overview"
+  },
+  "metadata": {
+    "title": "AI Documentation Overview",
+    "description": "Overview of the AI documentation system and structure",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "AI documentation system overview",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/search_index.json"
     ]
   },
   "sections": {

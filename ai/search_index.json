@@ -1,277 +1,224 @@
 {
   "metadata": {
     "title": "AI Documentation Search Index",
-    "description": "Comprehensive search index including stock data processing patterns and deadletter queue system",
-    "version": "3.1",
-    "last_updated": "2025-06-20",
-    "source": "search_index.md",
-    "cross_references": []
+    "description": "Comprehensive navigation guide for AI documentation structure",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "AI documentation navigation and discovery",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/ai_config.json"
+    ]
   },
-  "sections": {
-    "ai_documentation_search_index": {
-      "title": "AI Documentation Search Index",
-      "description": "> This comprehensive search index provides quick navigation to all AI documentation resources. Use t...",
-      "content": "> This comprehensive search index provides quick navigation to all AI documentation resources. Use this for efficient discovery of relevant patterns, guides, and implementation details."
-    },
-    "ai_metadata": {
-      "title": "AI Metadata",
-      "description": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** All AI documentation s...",
-      "content": "**Template Version:** 2.1\n**AI Processing Level:** High\n**Required Context:** All AI documentation structure\n**Validation Required:** Yes\n**Code Generation:** Not Supported\n**Search Optimization:** Enhanced\n\n**Dependencies:** All documentation in the AI folder structure\n**Keywords:** search, index, navigation, discovery, quick reference, documentation mapping\n\n**Validation Rules:**\n- All entries must point to valid documentation\n- Keywords must be relevant and searchable\n- Categories must be logical and consistent\n- Cross-references must be accurate"
-    },
-    "quick_search_categories": {
-      "title": "Quick Search Categories",
-      "description": "",
-      "content": ""
-    },
-    "_development_tasks": {
-      "title": "🔧 Development Tasks",
-      "description": "",
-      "content": ""
-    },
-    "api_development": {
-      "title": "API Development",
-      "description": "- **FastAPI endpoints**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json...",
-      "content": "- **FastAPI endpoints**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Database models**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Authentication**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Testing APIs**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`"
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "AI documentation navigation and structure",
+    "validation_required": true,
+    "code_generation": "Not applicable",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/ai_config.json"
+    ],
+    "maintenance": "Auto-generated search index for AI documentation"
+  },
+  "quick_navigation": {
+    "primary_reference": "ai/ai_rules.json",
+    "configuration": "ai/ai_config.json",
+    "overview": "ai/readme.json"
+  },
+  "development_areas": {
+    "backend_development": {
+      "title": "Backend Development",
+      "description": "Python, FastAPI, database, and API development",
+      "content": "- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Testing**: `ai/guide_docs/language_specific/python_testing_style_guide.json`\n- **Database**: `ai/guide_docs/domain_specific/database_management_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
     },
     "frontend_development": {
       "title": "Frontend Development",
-      "description": "- **React components**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".jso...",
-      "content": "- **React components**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **TypeScript patterns**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **UI/UX patterns**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **State management**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **API integration**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`"
+      "description": "React, TypeScript, and UI development",
+      "content": "- **React style**: `ai/guide_docs/language_specific/react_style_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
     },
-    "database_operations": {
-      "title": "Database Operations",
-      "description": "- **Schema design**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".j...",
-      "content": "- **Schema design**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Migrations**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Query optimization**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Data modeling**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **ORM patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`"
-    },
-    "automation__scripts": {
+    "automation_scripts": {
       "title": "Automation & Scripts",
-      "description": "- **Shell scripts**: `guide_docs/domain_specific/shell_style_guide.json.replace(\".json\", \".json\")`\n-...",
-      "content": "- **Shell scripts**: `guide_docs/domain_specific/shell_style_guide.json.replace(\".json\", \".json\")`\n- **Background tasks**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`\n- **CI/CD**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Deployment**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Monitoring**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
+      "description": "Shell scripts, automation, and background tasks",
+      "content": "- **Shell style**: `ai/guide_docs/domain_specific/shell_style_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
     },
-    "_architecture__design": {
-      "title": "🏗️ Architecture & Design",
-      "description": "",
-      "content": ""
+    "architecture_design": {
+      "title": "Architecture & Design",
+      "description": "System architecture, patterns, and design decisions",
+      "content": "- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Development workflow**: `ai/project_context/development_workflow.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`"
     },
-    "system_architecture": {
-      "title": "System Architecture",
-      "description": "- **Overall design**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Com...",
-      "content": "- **Overall design**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Component relationships**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Data flow**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Integration patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Scalability**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`"
+    "testing_quality": {
+      "title": "Testing & Quality",
+      "description": "Testing strategies, code quality, and quality assurance",
+      "content": "- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **AI optimization**: `ai/guide_docs/ai_tool_optimization_guide.json`"
     },
-    "design_patterns": {
-      "title": "Design Patterns",
-      "description": "- **Common patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Best pra...",
-      "content": "- **Common patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Performance**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
-    },
-    "decision_making": {
-      "title": "Decision Making",
-      "description": "- **Core principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Priority syst...",
-      "content": "- **Core principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Priority systems**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Trade-offs**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Architecture decisions**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Technology choices**: `project_context/common_patterns.json.replace(\".json\", \".json\")`"
-    },
-    "_testing__quality": {
-      "title": "🧪 Testing & Quality",
-      "description": "",
-      "content": ""
-    },
-    "testing_strategies": {
-      "title": "Testing Strategies",
-      "description": "- **Unit testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\"...",
-      "content": "- **Unit testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Integration testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **API testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Frontend testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Test organization**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`"
-    },
-    "code_quality": {
-      "title": "Code Quality",
-      "description": "- **Style guides**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`...",
-      "content": "- **Style guides**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Code review**: `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")`\n- **Refactoring**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Documentation**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
-    },
-    "quality_assurance": {
-      "title": "Quality Assurance",
-      "description": "- **Validation rules**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **E...",
-      "content": "- **Validation rules**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Performance**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Security**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Maintainability**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
-    },
-    "_project_management": {
-      "title": "📋 Project Management",
-      "description": "",
-      "content": ""
-    },
-    "development_workflow": {
-      "title": "development_workflow",
-      "description": "- **Git workflow**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Branch...",
-      "content": "- **Git workflow**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Branching strategy**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Code review process**: `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")`\n- **Deployment process**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Release management**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
-    },
-    "feature_development": {
-      "title": "Feature Development",
-      "description": "- **Feature planning**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Implementation guides**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Technical summaries**: `features/summaries/`\n- **Active plans**: `features/plans/`\n- **Completed features**: `features/summaries/`",
-      "content": "- **Feature planning**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Implementation guides**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Technical summaries**: `features/summaries/`\n- **Active plans**: `features/plans/`\n- **Completed features**: `features/summaries/`\n- **JWT Authentication**: `features/plans/JWT-001-implement-jwt-authentication.json.replace(\".json\", \".json\")`\n- **JWT Authentication (Human)**: `humans/plans/jwt_authentication_implementation_plan.md`\n- **Stock Tracking**: `features/plans/[IN-PROGRESS]-Stock Tracking Request Plan.json.replace(\".json\", \".json\")`"
-    },
-    "documentation": {
-      "title": "Documentation",
-      "description": "- **Documentation standards**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")...",
-      "content": "- **Documentation standards**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **AI optimization**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **Cross-references**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **Metadata standards**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **Search optimization**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`"
-    },
-    "technology_specific_search": {
-      "title": "Technology-Specific Search",
-      "description": "",
-      "content": ""
-    },
+    "project_management": {
+      "title": "Project Management",
+      "description": "Development workflow, feature development, and documentation",
+      "content": "- **Development workflow**: `ai/project_context/development_workflow.json`\n- **Feature template**: `ai/guide_docs/feature_template.json`\n- **Implementation guide**: `ai/guide_docs/implementation_guide_template.json`\n- **Pattern inheritance**: `ai/guide_docs/pattern_inheritance_template.json`"
+    }
+  },
+  "technology_specific": {
     "python": {
-      "title": "Python",
-      "description": "- **Style guide**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`",
-      "content": "- **Style guide**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Pydantic v2 migration**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`"
+      "title": "Python Development",
+      "description": "Python style guide, testing, and best practices",
+      "content": "- **Style guide**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
     },
-    "fastapi": {
-      "title": "FastAPI",
-      "description": "- **API development**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\",...",
-      "content": "- **API development**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Endpoint patterns**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Request/response**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Authentication**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`"
-    },
-    "reacttypescript": {
+    "react_typescript": {
       "title": "React/TypeScript",
-      "description": "- **Component patterns**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".j...",
-      "content": "- **Component patterns**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **State management**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **TypeScript patterns**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Styling**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Testing**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`"
+      "description": "React components, TypeScript patterns, and frontend development",
+      "content": "- **React style**: `ai/guide_docs/language_specific/react_style_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
     },
-    "sqlalchemydatabase": {
-      "title": "SQLAlchemy/Database",
-      "description": "- **Model patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \"....",
-      "content": "- **Model patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Migrations**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Query patterns**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Relationships**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Performance**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`"
+    "database": {
+      "title": "Database Operations",
+      "description": "SQLAlchemy, migrations, and database management",
+      "content": "- **Database guide**: `ai/guide_docs/domain_specific/database_management_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
     },
-    "pydantic": {
-      "title": "Pydantic",
-      "description": "- **Schema patterns**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **V2 migration**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Validation**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Serialization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **FastAPI integration**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`",
-      "content": "- **Schema patterns**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **V2 migration**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Validation**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Serialization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **FastAPI integration**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`"
-    },
-    "web_scraping": {
-      "title": "Web Scraping",
-      "description": "- **Scraping patterns**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".j...",
-      "content": "- **Scraping patterns**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`\n- **Background tasks**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`\n- **Rate limiting**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`\n- **Data processing**: `guide_docs/domain_specific/web_scraping_patterns.json.replace(\".json\", \".json\")`"
-    },
-    "problem_specific_search": {
-      "title": "Problem-Specific Search",
-      "description": "",
-      "content": ""
-    },
+    "shell_scripts": {
+      "title": "Shell Scripts",
+      "description": "Bash scripting, automation, and shell operations",
+      "content": "- **Shell guide**: `ai/guide_docs/domain_specific/shell_style_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`"
+    }
+  },
+  "problem_solving": {
     "common_issues": {
       "title": "Common Issues",
-      "description": "",
-      "content": ""
+      "description": "Frequently encountered problems and solutions",
+      "content": "- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`\n- **AI optimization**: `ai/guide_docs/ai_tool_optimization_guide.json`"
     },
     "performance_problems": {
       "title": "Performance Problems",
-      "description": "- **Performance principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Databa...",
-      "content": "- **Performance principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Database optimization**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **API optimization**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Frontend optimization**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Monitoring**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
+      "description": "Performance optimization and tuning",
+      "content": "- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Database guide**: `ai/guide_docs/domain_specific/database_management_guide.json`\n- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`"
     },
     "error_handling": {
       "title": "Error Handling",
-      "description": "- **Error patterns**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **API errors**: ...",
-      "content": "- **Error patterns**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **API errors**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Database errors**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Frontend errors**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Debugging**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
+      "description": "Error patterns, debugging, and troubleshooting",
+      "content": "- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Database guide**: `ai/guide_docs/domain_specific/database_management_guide.json`"
     },
     "security_issues": {
       "title": "Security Issues",
-      "description": "- **Security principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Authentic...",
-      "content": "- **Security principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Authentication**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Authorization**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Input validation**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Data protection**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
+      "description": "Security principles, authentication, and data protection",
+      "content": "- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Database guide**: `ai/guide_docs/domain_specific/database_management_guide.json`\n- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`"
     },
     "integration_problems": {
       "title": "Integration Problems",
-      "description": "- **API integration**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\",...",
-      "content": "- **API integration**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Database integration**: `guide_docs/domain_specific/database_management_guide.json.replace(\".json\", \".json\")`\n- **Frontend integration**: `guide_docs/domain_specific/frontend_style_guide.json.replace(\".json\", \".json\")`\n- **Third-party services**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Deployment issues**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
-    },
-    "development_challenges": {
-      "title": "Development Challenges",
-      "description": "",
-      "content": ""
-    },
+      "description": "API integration, database integration, and deployment",
+      "content": "- **Database guide**: `ai/guide_docs/domain_specific/database_management_guide.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Development workflow**: `ai/project_context/development_workflow.json`"
+    }
+  },
+  "development_challenges": {
     "new_feature_development": {
       "title": "New Feature Development",
-      "description": "- **Feature template**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Architectur...",
-      "content": "- **Feature template**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Architecture planning**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Implementation patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Testing strategy**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Documentation**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`"
+      "description": "Planning, implementing, and documenting new features",
+      "content": "- **Feature template**: `ai/guide_docs/feature_template.json`\n- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`"
     },
     "code_review": {
       "title": "Code Review",
-      "description": "- **Review patterns**: `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")`\n- **Style gu...",
-      "content": "- **Review patterns**: `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")`\n- **Style guidelines**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Quality standards**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Best practices**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Conflict resolution**: `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")`"
+      "description": "Review patterns, style guidelines, and quality standards",
+      "content": "- **Code review**: `ai/guide_docs/code_review_patterns.json`\n- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`"
     },
     "refactoring": {
       "title": "Refactoring",
-      "description": "- **Refactoring principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Code o...",
-      "content": "- **Refactoring principles**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Code organization**: `guide_docs/Language-Specific/python_style_guide.json.replace(\".json\", \".json\")`\n- **Pattern application**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Testing during refactor**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Documentation updates**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`"
-    },
-    "context_specific_search": {
-      "title": "Context-Specific Search",
-      "description": "",
-      "content": ""
-    },
-    "by_experience_level": {
-      "title": "By Experience Level",
-      "description": "",
-      "content": ""
-    },
+      "description": "Code organization, pattern application, and documentation updates",
+      "content": "- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`"
+    }
+  },
+  "experience_levels": {
     "beginner": {
       "title": "Beginner",
-      "description": "- **Getting started**: `readme.json.replace(\".json\", \".json\")`\n- **Basic patterns**: `guide_docs/cor...",
-      "content": "- **Getting started**: `readme.json.replace(\".json\", \".json\")`\n- **Basic patterns**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Simple examples**: `features/summaries/`\n- **Step-by-step guides**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Common patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`"
+      "description": "Getting started, basic patterns, and simple examples",
+      "content": "- **Main hub**: `ai/readme.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Feature template**: `ai/guide_docs/feature_template.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`"
     },
     "intermediate": {
       "title": "Intermediate",
-      "description": "- **Advanced patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Archit...",
-      "content": "- **Advanced patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Architecture decisions**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Performance optimization**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Integration patterns**: `guide_docs/Language-Specific/fastapi_development_guide.json.replace(\".json\", \".json\")`\n- **Testing strategies**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`"
+      "description": "Advanced patterns, architecture decisions, and optimization",
+      "content": "- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`"
     },
     "advanced": {
       "title": "Advanced",
-      "description": "- **System architecture**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- ...",
-      "content": "- **System architecture**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Complex patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Performance tuning**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Security patterns**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Scalability**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`"
-    },
-    "by_project_phase": {
-      "title": "By Project Phase",
-      "description": "",
-      "content": ""
-    },
+      "description": "System architecture, complex patterns, and scalability",
+      "content": "- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Development workflow**: `ai/project_context/development_workflow.json`"
+    }
+  },
+  "project_phases": {
     "planning": {
       "title": "Planning",
-      "description": "- **Feature template**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Architectur...",
-      "content": "- **Feature template**: `guide_docs/feature_template.json.replace(\".json\", \".json\")`\n- **Architecture overview**: `project_context/architecture_overview.json.replace(\".json\", \".json\")`\n- **Common patterns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Technical summaries**: `features/summaries/`\n- **Development workflow**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
+      "description": "Feature planning, architecture overview, and technical summaries",
+      "content": "- **Feature template**: `ai/guide_docs/feature_template.json`\n- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Development workflow**: `ai/project_context/development_workflow.json`"
     },
-    "development": {
-      "title": "Development",
-      "description": "- **Language guides**: `guide_docs/Language-Specific/`\n- **Domain guides**: `guide_docs/domain_speci...",
-      "content": "- **Language guides**: `guide_docs/Language-Specific/`\n- **Domain guides**: `guide_docs/domain_specific/`\n- **Code review patterns**: `guide_docs/code_review_patterns.json.replace(\".json\", \".json\")`\n- **Testing guides**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Error handling**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
-    },
-    "testing": {
-      "title": "Testing",
-      "description": "- **Testing strategies**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \"...",
-      "content": "- **Testing strategies**: `guide_docs/Language-Specific/python_testing_guide.json.replace(\".json\", \".json\")`\n- **Quality standards**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Validation rules**: `guide_docs/ai_tool_optimization_guide.json.replace(\".json\", \".json\")`\n- **Performance testing**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`\n- **Security testing**: `guide_docs/core_principles.json.replace(\".json\", \".json\")`"
+    "implementation": {
+      "title": "Implementation",
+      "description": "Code implementation, testing, and quality assurance",
+      "content": "- **Python style**: `ai/guide_docs/language_specific/python_style_guide.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`\n- **Code review**: `ai/guide_docs/code_review_patterns.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`"
     },
     "deployment": {
       "title": "Deployment",
-      "description": "- **Development workflow**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- ...",
-      "content": "- **Development workflow**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Deployment process**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **CI/CD**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Monitoring**: `project_context/development_workflow.json.replace(\".json\", \".json\")`\n- **Maintenance**: `project_context/development_workflow.json.replace(\".json\", \".json\")`"
-    },
-    "search_tips_for_ai_assistants": {
-      "title": "Search Tips for AI Assistants",
-      "description": "",
-      "content": ""
-    },
-    "quick_navigation": {
-      "title": "Quick Navigation",
-      "description": "1. **Start with category**: Identify the general category of your query\n2. **Use technology filters*...",
-      "content": "1. **Start with category**: Identify the general category of your query\n2. **Use technology filters**: If working with specific technology, use tech-specific search\n3. **Check problem patterns**: For issues, use problem-specific search\n4. **Consider context**: Use context-specific search based on user's experience level\n5. **Follow cross-references**: Use related documents for comprehensive understanding"
-    },
-    "advanced_search": {
-      "title": "Advanced Search",
-      "description": "1. **Combine categories**: Use multiple search categories for complex queries\n2. **Check dependencie...",
-      "content": "1. **Combine categories**: Use multiple search categories for complex queries\n2. **Check dependencies**: Always verify document dependencies are available\n3. **Validate context**: Ensure search results match user's current context\n4. **Update knowledge**: Check for newer versions of referenced documents\n5. **Provide alternatives**: Offer multiple relevant documents when appropriate"
-    },
-    "search_optimization": {
-      "title": "Search Optimization",
-      "description": "1. **Use specific terms**: Prefer specific technology or concept names\n2. **Include context**: Consi...",
-      "content": "1. **Use specific terms**: Prefer specific technology or concept names\n2. **Include context**: Consider user's current task and experience level\n3. **Check metadata**: Verify document metadata for relevance and currency\n4. **Follow links**: Use cross-references to discover related content\n5. **Validate results**: Ensure search results are actually helpful for the user's needs\n\n---\n\n**Search Index Maintenance**: This index should be updated when:\n- New documentation is added\n- Existing documentation is significantly changed\n- New categories or patterns emerge\n- User feedback indicates search improvements needed\n- Technology stack or patterns evolve"
-    },
-    "_folder_structure": {
-      "title": "📁 Folder Structure",
-      "description": "```\nai/\n├── scripts/                    # Maintenance and validation scripts\n│   ├── ai_health_check.py...",
-      "content": "```\nai/\n├── scripts/                    # Maintenance and validation scripts\n│   ├── ai_health_check.py        # Documentation health validation\n│   └── update_documentation.py # Metadata and consistency updates\n├── outputs/                    # Generated outputs\n│   ├── health_check/          # Health check results\n│   │   └── healthcheck-result.json\n│   └── updates/               # Updated configuration files\n├── guide_docs/                # Comprehensive documentation guides\n├── project_context/           # Project-specific context and patterns\n├── features/                  # Feature documentation and plans\n├── readme.json                  # Main documentation index\n├── ai_config.json             # AI configuration and settings\n├── search_index.json            # This comprehensive search index\n├── ai_quick_reference.json      # Quick reference for common patterns\n└── ai_usage_guide.json          # Guide for AI tool usage\n```"
-    },
-    "stock_data_processing": {
-      "title": "Stock Data Processing",
-      "description": "- **Processing pipeline**: `features/summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json.replace(\".json\", \".json\")`\n- **Separation of concerns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Deadletter queue**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **File processing**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Background tasks**: `project_context/common_patterns.json.replace(\".json\", \".json\")`",
-      "content": "- **Processing pipeline**: `features/summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json.replace(\".json\", \".json\")`\n- **Separation of concerns**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Deadletter queue**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **File processing**: `project_context/common_patterns.json.replace(\".json\", \".json\")`\n- **Background tasks**: `project_context/common_patterns.json.replace(\".json\", \".json\")`"
+      "description": "Deployment process, monitoring, and maintenance",
+      "content": "- **Development workflow**: `ai/project_context/development_workflow.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Shell guide**: `ai/guide_docs/domain_specific/shell_style_guide.json`"
     }
+  },
+  "active_features": {
+    "current_plans": {
+      "title": "Current Plans",
+      "description": "Active implementation plans and ongoing work",
+      "content": "- **Stock Tracking**: `ai/features/plans/[IN-PROGRESS]-Stock Tracking Request Plan.json`\n- **JWT Authentication**: `ai/features/plans/JWT-001-implement-jwt-authentication.json`"
+    },
+    "completed_features": {
+      "title": "Completed Features",
+      "description": "Documentation of completed modules and features",
+      "content": "- **Stock Data Pipeline**: `ai/features/summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json`"
+    }
+  },
+  "maintenance_tools": {
+    "health_check": {
+      "title": "Health Check",
+      "description": "Documentation validation and quality assurance",
+      "content": "- **Health check script**: `scripts/ai_health_check.py`\n- **Outputs**: `ai/outputs/health_check/`"
+    },
+    "ai_optimization": {
+      "title": "AI Optimization",
+      "description": "AI tool optimization and consumption patterns",
+      "content": "- **AI optimization guide**: `ai/guide_docs/ai_tool_optimization_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`"
+    },
+    "helper_scripts": {
+      "ai_report_helper": {
+        "path": "scripts/ai_report_helper.py",
+        "description": "AI report helper class for generating structured JSON output from scripts",
+        "category": "development_tools",
+        "tags": ["json", "ai", "reports", "helper"]
+      }
+    }
+  },
+  "search_strategies": {
+    "by_task": {
+      "api_development": "Backend Development → Python style + Database guide + Testing guide",
+      "frontend_development": "Frontend Development → React style + Core principles",
+      "database_work": "Database Operations → Database guide + Core principles",
+      "automation": "Automation & Scripts → Shell guide + Core principles",
+      "testing": "Testing & Quality → Testing guide + Code review",
+      "architecture": "Architecture & Design → Architecture + Common patterns + Core principles"
+    },
+    "by_problem": {
+      "performance": "Performance Problems → Core principles + Database guide",
+      "security": "Security Issues → Core principles + Database guide",
+      "errors": "Error Handling → Core principles + Python style",
+      "integration": "Integration Problems → Database guide + Common patterns",
+      "quality": "Code Review → Code review + Python style + Core principles"
+    },
+    "by_technology": {
+      "python": "Python Development → Python style + Testing guide",
+      "react": "React/TypeScript → React style + Core principles",
+      "database": "Database Operations → Database guide + Core principles",
+      "shell": "Shell Scripts → Shell guide + Core principles"
+    }
+  },
+  "navigation_tips": {
+    "getting_started": "Start with ai/readme.json for overview, then ai/ai_rules.json for comprehensive rules",
+    "quick_reference": "Use ai/ai_rules.json for quick access to all patterns and rules",
+    "deep_dive": "Follow cross-references in each guide for comprehensive understanding",
+    "problem_solving": "Use search strategies to find relevant guides for specific problems",
+    "maintenance": "Use scripts/ai_health_check.py to validate documentation quality"
   }
 }

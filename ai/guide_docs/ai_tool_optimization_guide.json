@@ -1,11 +1,26 @@
 {
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "AI documentation structure and optimization",
+    "validation_required": true,
+    "code_generation": "Supported",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "AI tool optimization guidelines"
+  },
   "metadata": {
-    "title": "ai_tool_optimization_guide",
-    "description": "",
-    "version": "3.1",
-    "last_updated": "2025-06-18",
-    "source": "guide_docs/ai_tool_optimization_guide.md",
-    "cross_references": []
+    "title": "AI Tool Optimization Guide",
+    "description": "Guidelines for optimizing AI documentation for tool consumption",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "AI documentation optimization and tool consumption",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ]
   },
   "sections": {
     "ai_tool_optimization_guide": {

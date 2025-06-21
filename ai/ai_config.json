@@ -1,230 +1,50 @@
 {
-  "ai_documentation_config": {
-    "version": "3.1",
-    "last_updated": "2025-01-27",
-    "description": "AI-optimized JSON documentation configuration for the CreamPie project with dynamic integration and mandatory style guide compliance",
-    "documentation_format": "json",
-    "optimization_target": "ai_tool_consumption",
-    "style_guide_compliance": {
-      "mandatory": true,
-      "primary_guide": "humans/guides/python_style_guide.md",
-      "ai_guide": "ai/guide_docs/language_specific/python_style_guide.json",
-      "validation_required": true,
-      "auto_check": true
-    },
-    "maintenance_scripts": [
-      "scripts/ai_health_check.py",
-      "scripts/update_documentation.py",
-      "scripts/test_paths.py",
-      "scripts/convert_to_json.py",
-      "scripts/dynamic_integration.py"
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "AI configuration and settings",
+    "validation_required": true,
+    "code_generation": "Not applicable",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "Minimal configuration for script compatibility"
+  },
+  "metadata": {
+    "title": "AI Configuration",
+    "description": "Minimal configuration required for AI scripts and tools",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "Script compatibility and minimal AI configuration",
+    "cross_references": [
+      "ai/ai_rules.json",
+      "ai/search_index.json",
+      "scripts/ai_health_check.py"
     ]
   },
-  "ai_workflow_preferences": {
-    "mandatory_output_checks": {
-      "enabled": true,
-      "priority": "critical",
-      "check_before_commands": true,
-      "output_folders": [
-        "ai/outputs/test_results",
-        "ai/outputs/lint_results",
-        "ai/outputs/health_check",
-        "ai/outputs/migration_results",
-        "ai/outputs/dynamic_integration",
-        "ai/outputs/database_operations"
-      ],
-      "file_patterns": [
-        "*.json",
-        "*.txt",
-        "*.md"
-      ],
-      "behavior": {
-        "always_check_first": true,
-        "skip_command_if_results_exist": false,
-        "reference_existing_results": true,
-        "update_results_after_commands": true
-      }
-    },
-    "command_execution": {
-      "pre_execution_checks": [
-        "check_ai_outputs_for_existing_results",
-        "validate_command_necessity",
-        "reference_previous_outputs"
-      ],
-      "post_execution_actions": [
-        "save_results_to_ai_outputs",
-        "update_metadata",
-        "cross_reference_with_existing"
-      ]
-    }
+  "ai_documentation_config": {
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "description": "Minimal AI configuration for script compatibility",
+    "documentation_format": "json",
+    "ai_rules": "ai/ai_rules.json",
+    "search_index": "ai/search_index.json",
+    "guide_docs": "ai/guide_docs/",
+    "project_context": "ai/project_context/",
+    "features": "ai/features/",
+    "outputs": "ai/outputs/"
   },
   "documentation_structure": {
-    "format": "json",
-    "optimization": "ai_tool_consumption",
-    "core_documents": [
-      "readme.json",
-      "ai_quick_reference.json",
-      "search_index.json",
-      "ai_usage_guide.json"
-    ],
-    "guide_docs": {
-      "core": [
-        "core_principles.json",
-        "feature_template.json",
-        "code_review_patterns.json",
-        "ai_tool_optimization_guide.json"
-      ],
-      "language_specific": [
-        "language_specific/python_style_guide.json",
-        "language_specific/fastapi_development_guide.json",
-        "language_specific/python_testing_style_guide.json",
-        "language_specific/react_style_guide.json"
-      ],
-      "domain_specific": [
-        "domain_specific/database_management_guide.json",
-        "domain_specific/shell_style_guide.json"
-      ]
-    },
-    "project_context": [
-      "architecture_overview.json",
-      "common_patterns.json",
-      "development_workflow.json"
-    ],
-    "features": {
-      "plans": "features/plans/",
-      "summaries": "features/summaries/"
-    },
-    "outputs": {
-      "health_check": "outputs/health_check/",
-      "updates": "outputs/updates/",
-      "test_results": "outputs/test_results/",
-      "conversion_reports": "outputs/",
-      "dynamic_integration": "outputs/dynamic_integration/"
-    }
-  },
-  "dynamic_integration": {
-    "enabled": true,
-    "style_guide_integration": {
-      "mandatory": true,
-      "source_guide": "humans/guides/python_style_guide.md",
-      "ai_guide": "ai/guide_docs/language_specific/python_style_guide.json",
-      "auto_sync": true,
-      "validation_required": true
-    },
-    "integration_rules": {
-      "core_principles_inheritance": {
-        "source_guides": [
-          "guide_docs/language_specific/python_style_guide.json",
-          "guide_docs/language_specific/fastapi_development_guide.json",
-          "guide_docs/domain_specific/database_management_guide.json",
-          "guide_docs/domain_specific/shell_style_guide.json"
-        ],
-        "target_sections": [
-          "mandatory_python_patterns",
-          "python_quality_checklist",
-          "python_pattern_examples"
-        ],
-        "integration_method": "pattern_extraction",
-        "priority": "critical"
-      },
-      "style_guide_compliance": {
-        "mandatory_patterns": [
-          "module_documentation",
-          "import_organization",
-          "type_hints",
-          "error_handling",
-          "file_operations",
-          "logging_setup",
-          "database_patterns",
-          "fastapi_patterns",
-          "testing_patterns",
-          "security_patterns"
-        ],
-        "validation_required": true,
-        "auto_check": true,
-        "priority": "critical"
-      },
-      "automatic_pattern_sync": {
-        "enabled": true,
-        "sync_frequency": "on_demand",
-        "pattern_categories": [
-          "error_handling",
-          "security_patterns",
-          "performance_patterns",
-          "code_organization",
-          "testing_patterns"
-        ],
-        "exclusion_patterns": [
-          "deprecated_patterns",
-          "experimental_patterns",
-          "context_specific_patterns"
-        ]
-      }
-    },
-    "pattern_extraction": {
-      "extraction_rules": {
-        "python_style_guide": {
-          "critical_patterns": [
-            "module_documentation",
-            "import_organization",
-            "type_hints",
-            "error_handling",
-            "file_operations",
-            "logging_setup",
-            "database_patterns",
-            "fastapi_patterns",
-            "testing_patterns",
-            "security_patterns",
-            "pydantic_v2_migration"
-          ],
-          "extraction_method": "section_content",
-          "validation_required": true,
-          "mandatory_compliance": true
-        },
-        "fastapi_development_guide": {
-          "critical_patterns": [
-            "router_organization",
-            "dependency_injection",
-            "request_response_models",
-            "authentication_authorization"
-          ],
-          "extraction_method": "section_content",
-          "validation_required": true
-        },
-        "database_management_guide": {
-          "critical_patterns": [
-            "sqlalchemy_models",
-            "database_operations",
-            "database_configuration",
-            "migration_patterns"
-          ],
-          "extraction_method": "section_content",
-          "validation_required": true
-        }
-      }
-    },
-    "integration_workflow": {
-      "trigger_conditions": [
-        "guide_update",
-        "new_pattern_detection",
-        "manual_sync_request",
-        "health_check_failure",
-        "style_guide_violation"
-      ],
-      "validation_steps": [
-        "pattern_consistency_check",
-        "cross_reference_validation",
-        "priority_conflict_resolution",
-        "format_compatibility_check",
-        "style_guide_compliance_check"
-      ],
-      "output_formats": [
-        "core_principles_update",
-        "integration_report",
-        "conflict_resolution_log",
-        "style_guide_compliance_report"
-      ]
-    }
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "description": "AI documentation structure and organization",
+    "ai_rules": "ai/ai_rules.json",
+    "search_index": "ai/search_index.json",
+    "guide_docs": "ai/guide_docs/",
+    "project_context": "ai/project_context/",
+    "features": "ai/features/",
+    "outputs": "ai/outputs/"
   },
   "ai_tool_settings": {
     "json_optimization": {
@@ -250,217 +70,71 @@
         "validation_required": true,
         "quality_checklist": true
       }
-    },
-    "context_awareness": {
-      "dependency_mapping": true,
-      "priority_systems": true,
-      "decision_frameworks": true,
-      "error_handling": true,
-      "style_guide_awareness": {
-        "mandatory": true,
-        "auto_reference": true,
-        "violation_detection": true
-      }
-    },
-    "dynamic_integration": {
-      "pattern_inheritance": true,
-      "automatic_sync": true,
-      "conflict_resolution": true,
-      "validation_automation": true,
-      "style_guide_sync": true
-    },
-    "content_exclusions": {
-      "methodology_terms": [
-        "sprint",
-        "sprints",
-        "agile",
-        "scrum",
-        "iteration",
-        "sprint planning",
-        "sprint review",
-        "sprint retrospective"
-      ],
-      "time_based_placeholders": [
-        "week 1",
-        "week 2",
-        "sprint 1",
-        "sprint 2",
-        "iteration 1"
-      ],
-      "rule": "Do not include sprint/agile methodology concepts unless explicitly requested by the user"
-    },
-    "content_guidelines": {
-      "plan_documents": {
-        "focus": "high_level_strategy",
-        "avoid": [
-          "detailed_code_snippets",
-          "implementation_specifics",
-          "step_by_step_instructions",
-          "exact_file_contents"
-        ],
-        "include": [
-          "overall_approach",
-          "key_decisions",
-          "architecture_considerations",
-          "risk_assessment",
-          "success_criteria"
-        ],
-        "rule": "Plans should focus on WHAT and WHY, not HOW. Implementation details belong in separate implementation guides."
-      },
-      "implementation_guides": {
-        "focus": "detailed_implementation",
-        "include": [
-          "step_by_step_instructions",
-          "code_examples",
-          "file_paths",
-          "testing_strategies"
-        ],
-        "rule": "Implementation guides can include detailed code and step-by-step instructions."
-      }
     }
   },
-  "priority_system": {
-    "critical_priority": [
-      "python_style_guide.json",
-      "core_principles.json"
-    ],
-    "high_priority": [
-      "architecture_overview.json",
-      "fastapi_development_guide.json",
-      "database_management_guide.json"
-    ],
-    "medium_priority": [
-      "feature_template.json",
-      "development_workflow.json",
-      "python_testing_style_guide.json"
-    ],
-    "low_priority": [
-      "ai_tool_optimization_guide.json",
-      "shell_style_guide.json"
-    ]
-  },
-  "decision_frameworks": {
-    "architecture_decisions": "core_principles.json",
-    "coding_standards": "python_style_guide.json",
-    "testing_approaches": "python_testing_style_guide.json",
-    "api_design": "fastapi_development_guide.json",
-    "style_guide_compliance": "python_style_guide.json"
-  },
-  "style_guide_compliance": {
-    "mandatory": true,
-    "primary_source": "humans/guides/python_style_guide.md",
-    "ai_reference": "ai/guide_docs/language_specific/python_style_guide.json",
-    "auto_validation": true,
-    "quality_checklist": true,
-    "violation_detection": true,
-    "priority_levels": {
-      "critical": [
-        "module_documentation",
-        "legal_notice",
-        "import_organization",
-        "type_hints",
-        "pydantic_v2_migration"
-      ],
-      "high": [
-        "error_handling",
-        "code_organization",
-        "testing_patterns",
-        "security_patterns"
-      ],
-      "medium": [
-        "performance_patterns",
-        "logging_patterns",
-        "file_operations"
-      ]
-    }
-  },
-  "documentation": {
-    "template_version": "3.1",
-    "format": "json",
-    "ai_metadata_required": true,
-    "cross_references_required": true,
-    "validation_rules_required": true,
-    "structured_content": true,
-    "dynamic_integration_enabled": true,
-    "style_guide_compliance_required": true
-  },
-  "patterns": {
-    "error_handling": "consistent across all guides",
-    "code_organization": "modular and maintainable",
-    "testing": "comprehensive coverage",
-    "documentation": "JSON-optimized for AI consumption",
-    "dynamic_integration": "automatic pattern synchronization",
-    "style_guide_compliance": "mandatory and automatic"
-  },
-  "templates": {
-    "feature_documentation": "feature_template.json",
-    "code_review": "code_review_patterns.json",
-    "ai_metadata": "standardized JSON format across all documents",
-    "dynamic_integration": "pattern_inheritance_template.json",
-    "style_guide_compliance": "mandatory validation template"
-  },
-  "scripts": {
-    "health_check": {
-      "purpose": "validate documentation quality and completeness",
-      "output": "outputs/health_check/healthcheck-result.json",
-      "style_guide_check": true
-    },
-    "update_documentation": {
-      "purpose": "maintain consistency and update metadata",
-      "output": "outputs/updates/update-results.md",
-      "style_guide_sync": true
-    },
-    "test_paths": {
-      "purpose": "verify system structure and path resolution",
-      "output": "outputs/test_results/path-test-results.md"
-    },
-    "convert_to_json": {
-      "purpose": "convert markdown documentation to JSON format for AI consumption",
-      "output": "outputs/conversion_report.json"
-    },
-    "dynamic_integration": {
-      "purpose": "automatically sync patterns from source guides to core principles",
-      "output": "outputs/dynamic_integration/integration-report.json",
-      "triggers": [
-        "guide_update",
-        "manual_request",
-        "health_check_failure",
-        "style_guide_violation"
-      ],
-      "style_guide_compliance": true
-    }
-  },
-  "conversion": {
-    "source_format": "markdown",
-    "target_format": "json",
-    "optimization": "ai_tool_consumption",
-    "preserve_original": true,
-    "structured_output": true,
-    "style_guide_compliance": true
-  },
-  "debugging_enforcement": {
+  "dynamic_integration": {
     "enabled": true,
-    "mandatory": true,
-    "script_path": "scripts/enforce_debug_workflow.py",
-    "acknowledgment_script": "scripts/acknowledge_reports.py",
-    "timeout_minutes": 5,
-    "description": "Enforces mandatory debugging workflow by blocking debugging without report acknowledgment",
-    "workflow": [
-      "Check for existing reports in ai/outputs/",
-      "Block debugging if reports exist without acknowledgment",
-      "Require explicit acknowledgment via acknowledge_reports.py",
-      "Allow debugging only after proper acknowledgment"
-    ]
-  },
-  "cursor_integration": {
-    "rules_file": ".cursorrules",
-    "workspace_config": ".cursor/workspace.json",
-    "vscode_settings": ".vscode/settings.json",
-    "enforcement": {
-      "debugging_workflow": "mandatory",
-      "style_guides": "mandatory",
-      "documentation": "mandatory"
+    "style_guide_integration": {
+      "mandatory": true,
+      "source_guide": "humans/guides/python_style_guide.md",
+      "ai_guide": "ai/guide_docs/language_specific/python_style_guide.json",
+      "auto_sync": true,
+      "validation_required": true
     },
-    "description": "Cursor-specific configuration for enforcing project rules and workflows"
+    "integration_rules": {
+      "core_principles_inheritance": {
+        "source_guides": [
+          "guide_docs/language_specific/python_style_guide.json",
+          "guide_docs/domain_specific/database_management_guide.json",
+          "guide_docs/domain_specific/shell_style_guide.json"
+        ],
+        "target_sections": [
+          "mandatory_python_patterns",
+          "python_quality_checklist",
+          "python_pattern_examples"
+        ],
+        "integration_method": "pattern_extraction",
+        "priority": "critical"
+      }
+    },
+    "pattern_extraction": {
+      "extraction_rules": {
+        "python_style_guide": {
+          "critical_patterns": [
+            "module_documentation",
+            "import_organization",
+            "type_hints",
+            "error_handling",
+            "file_operations",
+            "logging_setup",
+            "database_patterns",
+            "fastapi_patterns",
+            "testing_patterns",
+            "security_patterns",
+            "pydantic_v2_migration"
+          ],
+          "extraction_method": "section_content",
+          "validation_required": true,
+          "mandatory_compliance": true
+        },
+        "database_management_guide": {
+          "critical_patterns": [
+            "sqlalchemy_models",
+            "database_operations",
+            "database_configuration",
+            "migration_patterns"
+          ],
+          "extraction_method": "section_content",
+          "validation_required": true
+        }
+      }
+    }
+  },
+  "maintenance_notes": {
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "description": "This file has been minimized to only contain script-required configuration. All other content has been moved to ai/ai_rules.json",
+    "purpose": "Script compatibility and minimal configuration",
+    "validation": "Use scripts/ai_health_check.py for validation"
   }
 }

@@ -1,16 +1,26 @@
 {
-  "metadata": {
-    "title": "Core Development Principles",
-    "description": "Fundamental decision-making frameworks with mandatory style guide compliance",
-    "version": "3.1",
-    "last_updated": "2025-01-27",
-    "source": "guide_docs/core_principles.md",
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "Project architecture, user intent, current codebase state",
+    "validation_required": true,
+    "code_generation": "Supported",
+    "style_guide": "humans/guides/python_style_guide.md",
     "cross_references": [
-      "../project_context/architecture_overview.json",
-      "../project_context/common_patterns.json",
-      "../project_context/development_workflow.json",
-      "language_specific/python_style_guide.json",
-      "language_specific/fastapi_development_guide.json",
+      "ai/ai_rules.json",
+      "ai/guide_docs/feature_template.json",
+      "ai/guide_docs/implementation_guide_template.json"
+    ],
+    "maintenance": "Core principles for AI development assistance"
+  },
+  "metadata": {
+    "title": "Core Principles for AI Development",
+    "description": "Fundamental principles and patterns for AI-assisted development",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "Core development principles and decision frameworks",
+    "cross_references": [
+      "ai/ai_rules.json",
       "humans/guides/python_style_guide.md"
     ]
   },
@@ -19,10 +29,6 @@
       "title": "Core Development Principles",
       "description": "> This guide outlines the fundamental principles that guide all development decisions. Use these principles to ensure consistent, high-quality development practices across the project.",
       "content": "> This guide outlines the fundamental principles that guide all development decisions. Use these principles to ensure consistent, high-quality development practices across the project."
-    },
-    "ai_metadata": {
-      "title": "AI Metadata",
-      "description": "**Template Version:** 2.4\n**AI Processing Level:** High\n**Required Context:** Project architecture, user intent, current codebase state\n**Validation Required:** Yes\n**Code Generation:** Supported\n**Style Guide Compliance:** MANDATORY\n\n**Dependencies:**\n- `../project_context/architecture_overview.json` - System architecture\n- `../project_context/common_patterns.json` - Project patterns\n- `../project_context/development_workflow.json` - Development process\n- `language_specific/python_style_guide.json` - Python implementation patterns\n- `language_specific/fastapi_development_guide.json` - API development patterns\n- `humans/guides/python_style_guide.md` - Primary style guide reference\n\n**Validation Rules:**\n- All decision frameworks must be consistently applied\n- Context awareness must be maintained throughout interactions\n- Error handling must follow established project patterns\n- Code quality principles must align with project standards\n- Communication patterns must be constructive and educational\n- Python style guide patterns must be STRICTLY followed\n- Style guide compliance is MANDATORY for all code generation\n- Legal notices must be included in all Python modules\n- Import organization must follow established patterns\n- Type hints must be used for all functions"
     },
     "overview": {
       "title": "Overview",
