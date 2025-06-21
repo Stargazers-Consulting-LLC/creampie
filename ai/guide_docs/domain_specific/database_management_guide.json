@@ -195,6 +195,78 @@
         "connection_string": "postgresql://user:pass@host:port/db?sslmode=require"
       }
     },
+    "data_retention_and_deletion": {
+      "title": "Data Retention and Deletion Policies",
+      "description": "Critical policies for data retention, compliance, and legal requirements",
+      "core_principle": "Data should NEVER be actually deleted by user requests. Only flag as disabled/deleted for compliance and recovery purposes.",
+      "retention_rules": [
+        "NEVER use DELETE operations for user-requested data removal",
+        "Always implement soft deletion using status flags (is_deleted, is_active, deleted_at)",
+        "Maintain data for legal compliance, account recovery, and subpoena requirements",
+        "Use status-based filtering in all queries to exclude 'deleted' records",
+        "Implement audit trails for all data modifications",
+        "Consider data retention periods based on business requirements and regulations",
+        "Document data retention policies and legal requirements"
+      ],
+      "soft_deletion_patterns": {
+        "basic_soft_delete": "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE id = ?",
+        "status_based_soft_delete": "UPDATE users SET status = 'deleted', deleted_at = NOW() WHERE id = ?",
+        "query_filtering": "SELECT * FROM users WHERE is_deleted = false AND status != 'deleted'",
+        "sqlalchemy_filter": "session.query(User).filter(User.is_deleted == False).all()"
+      },
+      "schema_requirements": {
+        "required_columns": [
+          "is_deleted BOOLEAN NOT NULL DEFAULT false",
+          "deleted_at TIMESTAMPTZ",
+          "status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'deleted', 'banned'))"
+        ],
+        "index_requirements": [
+          "CREATE INDEX idx_users_is_deleted ON users(is_deleted)",
+          "CREATE INDEX idx_users_status ON users(status)",
+          "CREATE INDEX idx_users_deleted_at ON users(deleted_at)"
+        ]
+      },
+      "compliance_considerations": {
+        "legal_requirements": [
+          "Account recovery requests",
+          "Subpoena compliance",
+          "Regulatory audits",
+          "Data breach investigations",
+          "Financial record keeping"
+        ],
+        "retention_periods": {
+          "user_accounts": "7 years minimum",
+          "financial_transactions": "7 years minimum",
+          "audit_logs": "10 years minimum",
+          "legal_documents": "Permanent retention"
+        }
+      },
+      "implementation_guidelines": {
+        "model_patterns": {
+          "base_model_with_soft_delete": "class SoftDeleteMixin:\n    is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)\n    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)\n    \n    def soft_delete(self):\n        self.is_deleted = True\n        self.deleted_at = datetime.utcnow()",
+          "status_based_model": "class StatusMixin:\n    status: Mapped[str] = mapped_column(String, nullable=False, default='active')\n    \n    def mark_deleted(self):\n        self.status = 'deleted'"
+        },
+        "query_patterns": {
+          "exclude_deleted": "session.query(User).filter(User.is_deleted == False)",
+          "include_deleted": "session.query(User).filter(User.is_deleted == True)",
+          "status_filter": "session.query(User).filter(User.status.in_(['active', 'inactive']))"
+        },
+        "api_patterns": {
+          "delete_endpoint": "Instead of DELETE /users/{id}, use PATCH /users/{id} with {'status': 'deleted'}",
+          "list_endpoint": "Always filter out deleted records in list operations",
+          "admin_endpoint": "Provide admin-only endpoints to view deleted records"
+        }
+      },
+      "audit_trail_requirements": {
+        "tracking_fields": [
+          "created_at TIMESTAMPTZ NOT NULL DEFAULT now()",
+          "updated_at TIMESTAMPTZ NOT NULL DEFAULT now()",
+          "created_by UUID REFERENCES users(id)",
+          "updated_by UUID REFERENCES users(id)"
+        ],
+        "audit_table_pattern": "CREATE TABLE audit_logs (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    table_name TEXT NOT NULL,\n    record_id UUID NOT NULL,\n    action TEXT NOT NULL,\n    old_values JSONB,\n    new_values JSONB,\n    changed_by UUID REFERENCES users(id),\n    changed_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);"
+      }
+    },
     "backup_and_recovery": {
       "title": "Backup and Recovery",
       "description": "Guidelines for database backup and disaster recovery",

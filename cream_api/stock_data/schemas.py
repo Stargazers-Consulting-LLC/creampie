@@ -1,5 +1,13 @@
 """Pydantic schemas for stock tracking requests.
 
+This module provides Pydantic models for validating stock tracking request data,
+including input validation, response models, and admin listing schemas.
+
+References:
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [Python Type Hints](https://docs.python.org/3/library/typing.html)
+
 ### Legal
 SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
 

@@ -37,7 +37,7 @@ class TrackedStock(ModelBase):
     symbol: Mapped[str] = mapped_column(String, nullable=False, index=True)
     last_pull_date: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=lambda: datetime.now(UTC))
     last_pull_status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
-    error_message: Mapped[str] = mapped_column(String, nullable=True)
+    error_message: Mapped[str | None] = mapped_column(String, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     __table_args__ = (UniqueConstraint("symbol", name="uix_symbol"),)

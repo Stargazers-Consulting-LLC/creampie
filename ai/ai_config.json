@@ -20,6 +20,44 @@
       "scripts/dynamic_integration.py"
     ]
   },
+  "ai_workflow_preferences": {
+    "mandatory_output_checks": {
+      "enabled": true,
+      "priority": "critical",
+      "check_before_commands": true,
+      "output_folders": [
+        "ai/outputs/test_results",
+        "ai/outputs/lint_results",
+        "ai/outputs/health_check",
+        "ai/outputs/migration_results",
+        "ai/outputs/dynamic_integration",
+        "ai/outputs/database_operations"
+      ],
+      "file_patterns": [
+        "*.json",
+        "*.txt",
+        "*.md"
+      ],
+      "behavior": {
+        "always_check_first": true,
+        "skip_command_if_results_exist": false,
+        "reference_existing_results": true,
+        "update_results_after_commands": true
+      }
+    },
+    "command_execution": {
+      "pre_execution_checks": [
+        "check_ai_outputs_for_existing_results",
+        "validate_command_necessity",
+        "reference_previous_outputs"
+      ],
+      "post_execution_actions": [
+        "save_results_to_ai_outputs",
+        "update_metadata",
+        "cross_reference_with_existing"
+      ]
+    }
+  },
   "documentation_structure": {
     "format": "json",
     "optimization": "ai_tool_consumption",

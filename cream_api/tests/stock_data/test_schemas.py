@@ -1,5 +1,13 @@
 """Tests for stock data schemas.
 
+This module provides comprehensive test coverage for the stock data schemas,
+including validation rules, edge cases, and integration scenarios.
+
+References:
+    - [Pytest Documentation](https://docs.pytest.org/)
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+    - [Python Testing](https://docs.python.org/3/library/unittest.html)
+
 ### Legal
 SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
 

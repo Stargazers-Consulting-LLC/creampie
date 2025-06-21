@@ -979,6 +979,13 @@ async def get_stock_by_symbol(symbol: str, db: AsyncSession) -> StockData:
 # BAD: f"SELECT * FROM stocks WHERE symbol = '{symbol}'"
 ```
 
+### Data Retention Policy
+
+- **Never actually delete data by user request** - use soft deletion with status flags for compliance and recovery purposes
+- Implement soft deletion using `is_deleted` or `status` fields instead of DELETE operations
+- Always filter out deleted records in user-facing queries
+- Maintain data for legal compliance (account recovery, subpoenas, regulatory audits)
+
 ## Performance Considerations
 
 ### Database Optimization

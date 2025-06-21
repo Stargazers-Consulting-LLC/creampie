@@ -80,6 +80,7 @@
 - Restrict network access to the database (firewall, VPC, etc.).
 - Regularly audit user privileges and revoke unused accounts.
 - Use row-level security (RLS) if needed for multi-tenant data.
+- **Never actually delete data by user request** - use soft deletion with status flags for compliance and recovery purposes.
 
 ## Backup and Recovery
 - Schedule regular automated backups (e.g., `pg_dump`, managed service snapshots).

@@ -9,7 +9,10 @@ alwaysApply: true
 # - Development guides and patterns
 # - Technical summaries and decisions
 # - domain_specific and language-specific guidelines
-ai/
+ai\guide_docs
+ai\outputs
+ai\search_index.json
+ai\ai_config.json
 
 # Include key project configuration files
 pyproject.toml
@@ -27,6 +30,3 @@ scripts/
 dev.md
 FEATURE_TEMPLATE.md
 cream.md
-
-# Include AI-generated outputs and reports
-ai/outputs/

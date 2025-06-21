@@ -15,6 +15,13 @@ FastAPI Engineer
 ## Description
 Add new API endpoints for requesting stock tracking and managing tracked stocks.
 
+
+## Before Resuming Work:
+- [ ] Are there unused imports?
+- [ ] Are the legal notices correct?
+- [ ] Can we move anything into a module level constants file?
+- [ ] Are there constants in the tests that should be moved?
+
 ## Acceptance Criteria
 - [x] Add `POST /stock-data/track` endpoint for requesting stock tracking
 - [ ] Add `GET /stock-data/tracked` endpoint for listing tracked stocks (admin)

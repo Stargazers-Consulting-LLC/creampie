@@ -343,6 +343,65 @@
       "sql_injection_prevention": {
         "good": "async def get_stock_by_symbol(symbol: str, db: AsyncSession) -> StockData:\n    \"\"\"Get stock by symbol using safe ORM query.\"\"\"\n    stmt = select(StockData).where(StockData.symbol == symbol)\n    result = await db.execute(stmt)\n    return result.scalar_one_or_none()",
         "avoid": "# BAD: f\"SELECT * FROM stocks WHERE symbol = '{symbol}'\""
+      },
+      "data_retention_and_deletion": {
+        "title": "Data Retention and Deletion Policies",
+        "description": "Critical policies for data retention, compliance, and legal requirements",
+        "core_principle": "Data should NEVER be actually deleted by user requests. Only flag as disabled/deleted for compliance and recovery purposes.",
+        "retention_rules": [
+          "NEVER use DELETE operations for user-requested data removal",
+          "Always implement soft deletion using status flags (is_deleted, is_active, deleted_at)",
+          "Maintain data for legal compliance, account recovery, and subpoena requirements",
+          "Use status-based filtering in all queries to exclude 'deleted' records",
+          "Implement audit trails for all data modifications",
+          "Consider data retention periods based on business requirements and regulations",
+          "Document data retention policies and legal requirements"
+        ],
+        "soft_deletion_patterns": {
+          "sqlalchemy_model": "class SoftDeleteMixin:\n    \"\"\"Mixin for soft deletion functionality.\"\"\"\n    is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)\n    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)\n    \n    def soft_delete(self) -> None:\n        \"\"\"Mark record as deleted without removing from database.\"\"\"\n        self.is_deleted = True\n        self.deleted_at = datetime.utcnow()",
+          "status_based_model": "class StatusMixin:\n    \"\"\"Mixin for status-based soft deletion.\"\"\"\n    status: Mapped[str] = mapped_column(String, nullable=False, default='active')\n    \n    def mark_deleted(self) -> None:\n        \"\"\"Mark record as deleted using status field.\"\"\"\n        self.status = 'deleted'",
+          "query_filtering": "async def get_active_users(db: AsyncSession) -> list[User]:\n    \"\"\"Get only active (non-deleted) users.\"\"\"\n    stmt = select(User).where(User.is_deleted == False)\n    result = await db.execute(stmt)\n    return result.scalars().all()",
+          "api_endpoint": "@router.patch(\"/{user_id}/delete\")\nasync def soft_delete_user(\n    user_id: UUID,\n    db: Annotated[AsyncSession, Depends(get_async_db)]\n) -> dict:\n    \"\"\"Soft delete a user (mark as deleted, don't remove from database).\"\"\"\n    user = await get_user_by_id(user_id, db)\n    if not user:\n        raise HTTPException(status_code=404, detail=\"User not found\")\n    \n    user.soft_delete()\n    await db.commit()\n    \n    return {\"message\": \"User marked as deleted\"}"
+        },
+        "compliance_considerations": {
+          "legal_requirements": [
+            "Account recovery requests",
+            "Subpoena compliance",
+            "Regulatory audits",
+            "Data breach investigations",
+            "Financial record keeping"
+          ],
+          "retention_periods": {
+            "user_accounts": "7 years minimum",
+            "financial_transactions": "7 years minimum",
+            "audit_logs": "10 years minimum",
+            "legal_documents": "Permanent retention"
+          }
+        },
+        "audit_trail_implementation": {
+          "model_pattern": "class AuditMixin:\n    \"\"\"Mixin for audit trail functionality.\"\"\"\n    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)\n    updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)\n    created_by: Mapped[Optional[UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=True)\n    updated_by: Mapped[Optional[UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=True)",
+          "audit_table": "class AuditLog(ModelBase):\n    \"\"\"Audit log for tracking all data modifications.\"\"\"\n    __tablename__ = 'audit_logs'\n    \n    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)\n    table_name: Mapped[str] = mapped_column(String, nullable=False)\n    record_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), nullable=False)\n    action: Mapped[str] = mapped_column(String, nullable=False)  # CREATE, UPDATE, DELETE\n    old_values: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)\n    new_values: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)\n    changed_by: Mapped[Optional[UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=True)\n    changed_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)"
+        },
+        "implementation_guidelines": {
+          "model_requirements": [
+            "Include SoftDeleteMixin or StatusMixin in all user-facing models",
+            "Add AuditMixin for tracking creation and modification",
+            "Implement proper indexes for soft deletion fields",
+            "Use database constraints to enforce status values"
+          ],
+          "api_requirements": [
+            "Use PATCH endpoints instead of DELETE for soft deletion",
+            "Always filter out deleted records in list operations",
+            "Provide admin-only endpoints to view deleted records",
+            "Include audit trail information in responses when appropriate"
+          ],
+          "query_requirements": [
+            "Always include soft deletion filters in user-facing queries",
+            "Use database views or functions for complex filtering",
+            "Implement proper indexing for soft deletion performance",
+            "Consider query optimization for large datasets with soft deletion"
+          ]
+        }
       }
     },
     "performance_considerations": {
