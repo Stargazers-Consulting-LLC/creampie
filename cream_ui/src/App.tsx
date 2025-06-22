@@ -10,7 +10,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
 import { LoginPage } from './pages/auth/LoginPage';
-import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 
 // Component imports
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -29,7 +28,6 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/auth/login" element={<LoginPage />} />
-          <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
 
           {/* Protected routes */}
           <Route

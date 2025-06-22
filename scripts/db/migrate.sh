@@ -6,7 +6,7 @@ set -e
 # Source common functions
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-source "$PROJECT_ROOT/scripts/common.sh"
+source "$PROJECT_ROOT/common.sh"
 
 # Get the project root and API directory
 API_DIR="$PROJECT_ROOT/cream_api"

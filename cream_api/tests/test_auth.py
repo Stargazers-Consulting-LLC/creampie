@@ -29,7 +29,7 @@ def test_signup_success(client: TestClient, test_db: Session, test_settings: Set
     assert user.email == "test@example.com"
     assert user.first_name == "Test"
     assert user.last_name == "User"
-    assert not user.is_verified
+    assert user.is_verified
     assert user.is_active
 
 
@@ -95,3 +95,28 @@ def test_login_invalid_credentials(client: TestClient, test_settings: Settings) 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
     assert response.json() == {"detail": "Incorrect email or password"}
     assert response.headers.get("www-authenticate") == "Bearer"
+
+
+def test_login_immediately_after_signup(client: TestClient, test_db: Session, test_settings: Settings) -> None:
+    """Test that users can login immediately after signup without email verification."""
+    # Signup a new user
+    signup_response = client.post(
+        "/auth/signup",
+        json={
+            "email": "newuser@example.com",
+            "password": "testpassword123",
+            "first_name": "New",
+            "last_name": "User",
+        },
+    )
+    assert signup_response.status_code == status.HTTP_201_CREATED
+
+    # Login immediately without email verification
+    login_response = client.post(
+        "/auth/login",
+        data={"username": "newuser@example.com", "password": "testpassword123"},
+    )
+    assert login_response.status_code == status.HTTP_200_OK
+    data = login_response.json()
+    assert "access_token" in data
+    assert data["token_type"] == "bearer"

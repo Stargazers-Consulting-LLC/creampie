@@ -111,7 +111,7 @@ async def get_current_user_async(
 # Route handlers
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
 def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> dict:
-    """Creates new user account with manual verification requirement."""
+    """Creates new user account with automatic verification."""
     # Check if user already exists
     if db.query(AppUser).filter(AppUser.email == user_data.email).first():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
@@ -123,7 +123,7 @@ def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> di
         password=hashed_password,
         first_name=user_data.first_name,
         last_name=user_data.last_name,
-        is_verified=False,
+        is_verified=True,  # Users are automatically verified
         is_active=True,
     )
 
@@ -148,11 +148,6 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not user.is_verified:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Please verify your email before logging in",
-        )
-
+    # Email verification is disabled - users can login immediately after signup
     access_token = create_access_token(data={"sub": user.email})
     return Token(access_token=access_token, token_type="bearer")

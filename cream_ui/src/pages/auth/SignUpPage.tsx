@@ -54,9 +54,12 @@ export function SignUpPage() {
         throw new Error(error.message || 'Signup failed');
       }
 
-      // Show success message and redirect to verification page
-      navigate('/auth/verify-email', {
-        state: { email: formData.email },
+      // Show success message and redirect to login page
+      navigate('/auth/login', {
+        state: {
+          message: 'Account created successfully! Please sign in with your credentials.',
+          email: formData.email,
+        },
       });
     } catch (error) {
       if (error instanceof z.ZodError) {

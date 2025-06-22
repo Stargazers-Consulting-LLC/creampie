@@ -1,0 +1,20 @@
+/**
+ * Vitest configuration for frontend testing.
+ *
+ * Configures the testing environment with TypeScript support and DOM simulation.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
+ */
+
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test-setup.ts'],
+  },
+});
