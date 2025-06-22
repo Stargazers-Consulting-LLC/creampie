@@ -23,6 +23,8 @@
 12. [Performance Considerations](#performance-considerations)
 13. [File Operations](#file-operations)
 14. [File Naming Conventions](#file-naming-conventions)
+15. [Team Collaboration](#team-collaboration)
+16. [Debugging and Troubleshooting](#debugging-and-troubleshooting)
 
 ## Code Style and Formatting
 
@@ -302,7 +304,7 @@ class UserResponse(BaseModel):
     ```
 
 - **Comments** (`# ...`):
-  - Used within code to clarify **WHY** something is implemented a certain way, especially if it’s not obvious.
+  - Used within code to clarify **WHY** something is implemented a certain way, especially if it's not obvious.
   - Should only explain rationale, intent, or non-obvious decisions.
   - Example:
     ```python
@@ -1363,3 +1365,119 @@ async def get_stock_data(
 ```
 
 This style guide provides a comprehensive foundation for writing reliable, maintainable Python code. Follow these patterns consistently to ensure your code is robust, secure, and easy to maintain.
+
+## Team Collaboration
+
+### Document Decisions and Rationale
+
+**Problem**: Team members don't understand why certain decisions were made.
+
+**Solution**: Document important decisions:
+- **Why** certain patterns were chosen
+- **What** alternatives were considered
+- **How** decisions impact future development
+- **When** decisions should be revisited
+
+**Key Insight**: Good documentation helps team members make consistent decisions.
+
+### Review Code for Patterns, Not Just Bugs
+
+**Problem**: Code reviews focus only on finding bugs, not improving patterns.
+
+**Solution**: Review for patterns and consistency:
+- **Consistency** - Does this follow established patterns?
+- **Maintainability** - Is this code easy to understand and modify?
+- **Testability** - Is this code easy to test?
+- **Performance** - Are there obvious performance issues?
+
+**Key Insight**: Code reviews should improve code quality, not just find bugs.
+
+### Share Knowledge Proactively
+
+**Problem**: Team members learn the same lessons independently.
+
+**Solution**: Share knowledge systematically:
+- **Document lessons learned** in guides like this one
+- **Share debugging strategies** with the team
+- **Create reusable patterns** for common problems
+- **Review and update** documentation regularly
+
+**Key Insight**: Shared knowledge improves team efficiency and code quality.
+
+## Debugging and Troubleshooting
+
+### Check Existing Reports First
+
+**Problem**: Jumping straight into debugging without checking existing error reports wastes time.
+
+**Solution**: Always check existing reports first:
+1. **ALWAYS** check `ai/outputs/lint_results/` for existing tool reports
+2. **ALWAYS** check `ai/outputs/test_results/` for existing test failure reports
+3. **ALWAYS** check `ai/outputs/` for any other relevant reports
+4. **ALWAYS** read the actual error messages from these reports
+5. **ONLY THEN** begin debugging based on concrete error information
+
+**Key Insight**: Don't assume you need to run tools when error reports already exist.
+
+### Take a Step Back Before Making Changes
+
+**Problem**: Making rapid changes without understanding the root cause leads to breaking more functionality.
+
+**Solution**: Pause and analyze before making changes:
+1. Understand what the code is actually doing
+2. Identify the root cause of the issue
+3. Consider the impact of changes on other parts of the system
+4. Make targeted, minimal changes
+5. Verify the fix doesn't break other functionality
+
+**Key Insight**: Slow down to speed up - understanding the problem saves time in the long run.
+
+### Use Systematic Debugging Approach
+
+**Problem**: Random debugging attempts are inefficient and frustrating.
+
+**Solution**: Use a systematic approach:
+1. **Reproduce the issue** - Run the failing code to see the exact error
+2. **Understand the context** - What is the code trying to do?
+3. **Identify the root cause** - Why is the code failing?
+4. **Make minimal changes** - Fix only what's broken
+5. **Verify the fix** - Ensure the fix works and doesn't break other functionality
+
+**Key Insight**: Systematic debugging is faster than trial and error.
+
+### Don't Ignore Test Failures
+
+**Problem**: Assuming tests pass just because a script executes leads to false confidence.
+
+**Solution**: Always verify test results:
+- **NEVER** assume tests pass just because a script executes
+- **ALWAYS** check test result files for actual outcomes
+- **ALWAYS** read test failure messages and error details
+- **ALWAYS** verify test outcomes through actual result files
+
+**Key Insight**: Test results are the source of truth, not assumptions.
+
+### Keep It Simple
+
+**Problem**: Over-engineering solutions makes code hard to debug and maintain.
+
+**Solution**: Prefer simple solutions:
+- Use built-in language features when possible
+- Avoid complex abstractions unless necessary
+- Keep functions small and focused
+- Use clear, descriptive names
+- Document non-obvious logic
+
+**Key Insight**: Simple solutions are easier to debug and maintain.
+
+### Work With Frameworks, Not Against Them
+
+**Problem**: Trying to override framework behavior causes conflicts and bugs.
+
+**Solution**: Work with the framework, not against it:
+- Use framework features as intended
+- Don't override framework behavior unless absolutely necessary
+- Leverage framework best practices
+- Follow framework conventions
+
+**Key Insight**: Frameworks are designed to solve common problems - use them as intended.

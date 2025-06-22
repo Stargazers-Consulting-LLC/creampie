@@ -12,8 +12,9 @@
 7. [Test Data Management](#test-data-management)
 8. [Performance Testing](#performance-testing)
 9. [Coverage and Quality Metrics](#coverage-and-quality-metrics)
-10. [Best Practices and Anti-patterns](#best-practices-and-anti-patterns)
-11. [Example Patterns](#example-patterns)
+10. [Debugging Strategies](#debugging-strategies)
+11. [Best Practices and Anti-patterns](#best-practices-and-anti-patterns)
+12. [Example Patterns](#example-patterns)
 
 ---
 
@@ -339,6 +340,152 @@ python_classes = Test*
 python_functions = test_*
 ```
 
+## Debugging Strategies
+
+### Check Existing Reports First
+
+**Problem**: Jumping straight into debugging without checking existing error reports wastes time.
+
+**Solution**: Always check existing reports first:
+1. **ALWAYS** check `ai/outputs/lint_results/` for existing tool reports
+2. **ALWAYS** check `ai/outputs/test_results/` for existing test failure reports
+3. **ALWAYS** check `ai/outputs/` for any other relevant reports
+4. **ALWAYS** read the actual error messages from these reports
+5. **ONLY THEN** begin debugging based on concrete error information
+
+**Key Insight**: Don't assume you need to run tools when error reports already exist.
+
+### Take a Step Back Before Making Changes
+
+**Problem**: Making rapid changes without understanding the root cause leads to breaking more tests.
+
+**Solution**: Pause and analyze before making changes:
+1. Understand what the test is actually testing
+2. Identify the root cause of the failure
+3. Consider the impact of changes on other tests
+4. Make targeted, minimal changes
+5. Verify the fix doesn't break other functionality
+
+**Key Insight**: Slow down to speed up - understanding the problem saves time in the long run.
+
+### Use Systematic Debugging Approach
+
+**Problem**: Random debugging attempts are inefficient and frustrating.
+
+**Solution**: Use a systematic approach:
+1. **Reproduce the issue** - Run the failing test to see the exact error
+2. **Understand the context** - What is the test trying to verify?
+3. **Identify the root cause** - Why is the test failing?
+4. **Make minimal changes** - Fix only what's broken
+5. **Verify the fix** - Ensure the fix works and doesn't break other tests
+
+**Key Insight**: Systematic debugging is faster than trial and error.
+
+### Don't Ignore Test Failures
+
+**Problem**: Assuming tests pass just because a script executes leads to false confidence.
+
+**Solution**: Always verify test results:
+- **NEVER** assume tests pass just because a script executes
+- **ALWAYS** check test result files for actual outcomes
+- **ALWAYS** read test failure messages and error details
+- **ALWAYS** verify test outcomes through actual result files
+
+**Key Insight**: Test results are the source of truth, not assumptions.
+
+### Test User Behavior, Not Implementation
+
+**Problem**: Tests focused on implementation details rather than user behavior are brittle and hard to maintain.
+
+**Solution**: Write tests that simulate real user interactions:
+```python
+# ✅ Good: Test user behavior
+async def test_user_can_request_stock_tracking(self, client, test_db):
+    """Test that users can successfully request stock tracking."""
+    # Arrange
+    user_data = {"symbol": "AAPL"}
+
+    # Act
+    response = await client.post("/stock-data/track", json=user_data)
+
+    # Assert
+    assert response.status_code == 200
+    result = response.json()
+    assert result["symbol"] == "AAPL"
+    assert result["status"] == "tracking"
+
+# ❌ Bad: Test implementation details
+def test_calls_validation_function(self):
+    """Test that validation function is called."""
+    with patch('app.services.validate_symbol') as mock_validate:
+        # ... testing internal validation calls
+        mock_validate.assert_called_once()
+```
+
+### Mock at the Right Level
+
+**Problem**: Over-mocking makes tests brittle and hard to debug.
+
+**Solution**: Mock at the API boundary, not internal functions:
+```python
+# ✅ Good: Mock external API calls
+@patch("app.services.stock_data.ExternalAPIClient")
+def test_fetch_stock_data_success(self, mock_api_client):
+    """Test successful stock data fetching."""
+    # Mock external dependency
+    mock_client = MagicMock()
+    mock_api_client.return_value = mock_client
+    mock_client.get_stock_data.return_value = {"symbol": "AAPL", "price": 150.0}
+
+    # Test the service
+    service = StockDataService()
+    result = service.fetch_stock_data("AAPL")
+
+    assert result["symbol"] == "AAPL"
+
+# ❌ Bad: Mock internal validation
+@patch("app.services.validate_symbol")
+def test_validation_is_called(self, mock_validate):
+    """Test that internal validation is called."""
+    # Don't mock internal logic
+    mock_validate.return_value = True
+    # ... testing internal calls
+```
+
+### Test Error States Comprehensively
+
+**Problem**: Only testing happy paths leaves error scenarios untested.
+
+**Solution**: Test all error scenarios:
+```python
+async def test_stock_tracking_invalid_symbol(self, client, test_db):
+    """Test handling of invalid stock symbols."""
+    # Arrange
+    invalid_data = {"symbol": "INVALID"}
+
+    # Act
+    response = await client.post("/stock-data/track", json=invalid_data)
+
+    # Assert
+    assert response.status_code == 400
+    result = response.json()
+    assert "invalid symbol" in result["detail"].lower()
+
+async def test_stock_tracking_api_error(self, client, test_db):
+    """Test handling of API errors."""
+    # Arrange
+    with patch("app.services.ExternalAPIClient") as mock_api:
+        mock_api.return_value.get_data.side_effect = APIError("Service unavailable")
+
+        # Act
+        response = await client.post("/stock-data/track", json={"symbol": "AAPL"})
+
+        # Assert
+        assert response.status_code == 500
+        result = response.json()
+        assert "error" in result["detail"].lower()
+```
+
 ## Best Practices and Anti-patterns
 
 ### Best Practices
@@ -348,6 +495,9 @@ python_functions = test_*
 - Use appropriate assertions and error messages.
 - Keep tests fast and reliable.
 - Use test doubles (mocks, stubs) appropriately.
+- Test user behavior, not implementation details.
+- Mock external dependencies, not internal logic.
+- Test error states and edge cases comprehensively.
 
 ### Anti-patterns to Avoid
 - Testing implementation details instead of behavior.
@@ -356,6 +506,9 @@ python_functions = test_*
 - Testing multiple behaviors in a single test.
 - Ignoring test failures or flaky tests.
 - Writing tests that are hard to understand.
+- Over-mocking internal logic.
+- Only testing happy paths.
+- Assuming tests pass without checking results.
 
 ## Example Patterns
 

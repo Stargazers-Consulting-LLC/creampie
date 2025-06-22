@@ -9,11 +9,13 @@
 4. [Component Patterns](#component-patterns)
 5. [Styling](#styling)
 6. [State Management](#state-management)
-7. [Testing](#testing)
-8. [Performance](#performance)
-9. [Accessibility](#accessibility)
-10. [Code Review Checklist](#code-review-checklist)
-11. [Example Patterns](#example-patterns)
+7. [Form Validation Patterns](#form-validation-patterns)
+8. [UX Design Principles](#ux-design-principles)
+9. [Testing](#testing)
+10. [Performance](#performance)
+11. [Accessibility](#accessibility)
+12. [Code Review Checklist](#code-review-checklist)
+13. [Example Patterns](#example-patterns)
 
 ---
 
@@ -109,6 +111,136 @@ export const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false
 - Keep state as close to where it is used as possible.
 - Avoid prop drilling by using context or hooks.
 
+## Form Validation Patterns
+
+### Choose Validation Mode Based on UX Goals
+
+**Problem**: Using `mode: 'onChange'` for form validation shows errors immediately as users type, creating a poor user experience where users are "yelled at" while still typing valid data.
+
+**Solution**: Use `mode: 'onBlur'` for better UX:
+- ✅ No errors while typing
+- ✅ Errors show when user leaves field with invalid data
+- ✅ Errors show when user tries to submit with invalid data
+- ✅ Empty field only shows error when user attempts to submit
+
+```typescript
+const form = useForm<FormData>({
+  resolver: zodResolver(schema),
+  mode: 'onBlur', // Better UX than 'onChange'
+  defaultValues: { symbol: '' }
+});
+```
+
+### Avoid Over-Validation During Input
+
+**Problem**: Using `shouldValidate: true` in `setValue` calls causes validation to trigger on every keystroke, interfering with the form's validation mode.
+
+**Solution**: Let React Hook Form handle validation timing:
+```typescript
+// ✅ Good: Let form handle validation timing
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value.toUpperCase();
+  form.setValue('symbol', value); // No shouldValidate parameter
+
+  // Clear API error messages when user starts typing
+  if (errorMessage) {
+    setErrorMessage(null);
+  }
+};
+```
+
+### Keep Validation Schemas Simple
+
+**Problem**: Complex validation schemas with multiple `refine` methods are hard to debug and maintain.
+
+**Solution**: Use simple, sequential validation rules:
+```typescript
+// ✅ Good: Simple, clear validation order
+const schema = z.object({
+  symbol: z
+    .string()
+    .min(1, 'Stock symbol is required')
+    .min(2, 'Stock symbol must be at least 2 characters')
+    .max(10, 'Stock symbol must be 10 characters or less')
+    .regex(/^[A-Za-z][A-Za-z0-9]*$/, 'Stock symbol must be 2-10 characters, start with a letter')
+    .transform((value) => value.trim().toUpperCase())
+});
+```
+
+### Separate Concerns Clearly
+
+**Problem**: Mixing validation logic, API calls, and UI state makes code hard to test and maintain.
+
+**Solution**: Separate concerns:
+```typescript
+// ✅ Good: Clear separation of concerns
+const form = useForm<FormData>({
+  resolver: zodResolver(schema), // Validation
+  mode: 'onBlur',
+  defaultValues: { symbol: '' }
+});
+
+const [errorMessage, setErrorMessage] = useState<string | null>(null); // API errors
+const [isSubmitting, setIsSubmitting] = useState(false); // UI state
+
+const onSubmit = async (data: FormData) => {
+  setIsSubmitting(true);
+  setErrorMessage(null);
+
+  try {
+    await trackStock(data.symbol);
+    // Handle success
+  } catch (error) {
+    setErrorMessage(getErrorMessage(error));
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+```
+
+## UX Design Principles
+
+### Don't Interrupt User Flow
+
+**Problem**: Immediate validation errors interrupt users while they're still typing valid data.
+
+**Solution**: Design validation to support user flow:
+- **Don't show errors while typing** - Let users complete their input
+- **Show errors on blur** - When user leaves field with invalid data
+- **Show errors on submit** - When user attempts to submit invalid data
+- **Clear errors when user starts fixing** - Provide immediate positive feedback
+
+### Make Submit Button Always Clickable
+
+**Problem**: Disabling submit button when form is invalid prevents users from triggering validation.
+
+**Solution**: Keep submit button enabled and let validation handle errors:
+```typescript
+// ✅ Good: Button always clickable
+<Button type="submit" disabled={isSubmitting} className="w-full">
+  Request Tracking
+</Button>
+
+// ❌ Bad: Button disabled prevents validation
+<Button
+  type="submit"
+  disabled={!form.formState.isValid || isSubmitting}
+  className="w-full"
+>
+  Request Tracking
+</Button>
+```
+
+### Provide Clear Feedback
+
+**Problem**: Users don't know what's happening during form submission.
+
+**Solution**: Provide comprehensive feedback:
+- **Loading states** - Show when form is submitting
+- **Success messages** - Confirm when action completes
+- **Error messages** - Explain what went wrong and how to fix it
+- **Progress indicators** - Show multi-step processes
+
 ## Testing
 - Use [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for all component and hook tests.
 - Co-locate tests with the components they test.
@@ -150,6 +282,9 @@ test("calls onClick when clicked", () => {
 - [ ] TypeScript types are used for all props and state
 - [ ] Components are pure and side-effect free
 - [ ] State is managed appropriately (local, context, or global)
+- [ ] Form validation follows UX best practices
+- [ ] Submit buttons are always clickable (except during submission)
+- [ ] Loading and error states are properly handled
 - [ ] Styles are co-located and follow project conventions
 - [ ] Tests are present and cover key behaviors
 - [ ] Accessibility best practices are followed
@@ -193,6 +328,74 @@ export function Alert({ message }: { message: string }) {
     <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4">
       {message}
     </div>
+  );
+}
+```
+
+### Form Component with Proper Validation
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+  symbol: z
+    .string()
+    .min(1, 'Stock symbol is required')
+    .min(2, 'Stock symbol must be at least 2 characters')
+    .regex(/^[A-Za-z][A-Za-z0-9]*$/, 'Stock symbol must be 2-10 characters, start with a letter')
+    .transform((value) => value.trim().toUpperCase())
+});
+
+type FormData = z.infer<typeof schema>;
+
+export function StockRequestForm() {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    mode: 'onBlur', // Better UX
+    defaultValues: { symbol: '' }
+  });
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      await trackStock(data.symbol);
+      // Handle success
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <input
+        {...form.register('symbol')}
+        placeholder="Enter stock symbol"
+        className="w-full p-2 border rounded"
+      />
+      {form.formState.errors.symbol && (
+        <p className="text-red-500 text-sm">
+          {form.formState.errors.symbol.message}
+        </p>
+      )}
+      {errorMessage && (
+        <p className="text-red-500 text-sm">{errorMessage}</p>
+      )}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full p-2 bg-blue-600 text-white rounded disabled:opacity-50"
+      >
+        {isSubmitting ? 'Submitting...' : 'Request Tracking'}
+      </button>
+    </form>
   );
 }
 ```

@@ -87,3 +87,5 @@ ai/outputs/
 # Logs
 cream_api/logs/
 cream_api/stock_data/files/
+
+cream_ui/coverage/
