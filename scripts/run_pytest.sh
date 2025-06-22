@@ -352,7 +352,7 @@ if poetry run coverage run -m pytest "${PYTEST_ARGS[@]}" 2>&1 | tee "$TEMP_OUTPU
     print_success "Coverage report generated: $COVERAGE_OUTPUT_FILE"
 
     # Capture test output for AI report - write to separate file to avoid escaping issues
-    TEST_OUTPUT_FILE="$AI_OUTPUT_DIR/test_output.txt"
+    TEST_OUTPUT_FILE="$AI_OUTPUT_DIR/pytest_output.txt"
     cat "$TEMP_OUTPUT_FILE" > "$TEST_OUTPUT_FILE"
     ADDITIONAL_CONTENT="  \"test_details\": {\n    \"test_path\": \"${TEST_PATH:-"All tests"}\",\n    \"test_function\": \"${TEST_FUNCTION:-"All functions"}\",\n    \"marker\": \"${MARKER:-"None"}\",\n    \"verbose\": \"$VERBOSE\",\n    \"watch_mode\": \"$WATCH_MODE\"\n  },\n  \"test_output_file\": \"$(basename "$TEST_OUTPUT_FILE")\",\n  \"coverage_report_file\": \"$(basename "$COVERAGE_OUTPUT_FILE")\","
 
@@ -369,7 +369,7 @@ else
     print_error "Pytest failed after ${duration}s"
 
     # Capture test output for AI report - write to separate file to avoid escaping issues
-    TEST_OUTPUT_FILE="$AI_OUTPUT_DIR/test_output.txt"
+    TEST_OUTPUT_FILE="$AI_OUTPUT_DIR/pytest_output.txt"
     cat "$TEMP_OUTPUT_FILE" > "$TEST_OUTPUT_FILE"
     ADDITIONAL_CONTENT="  \"test_details\": {\n    \"test_path\": \"${TEST_PATH:-"All tests"}\",\n    \"test_function\": \"${TEST_FUNCTION:-"All functions"}\",\n    \"marker\": \"${MARKER:-"None"}\",\n    \"verbose\": \"$VERBOSE\",\n    \"watch_mode\": \"$WATCH_MODE\"\n  },\n  \"test_output_file\": \"$(basename "$TEST_OUTPUT_FILE")\","
 
