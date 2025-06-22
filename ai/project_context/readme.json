@@ -1,0 +1,133 @@
+{
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "Project context and architecture documentation",
+    "validation_required": true,
+    "code_generation": "Not applicable",
+    "cross_references": [
+      "ai/readme.json",
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "Project context documentation overview"
+  },
+  "metadata": {
+    "title": "Project Context Documentation Overview",
+    "description": "Project-specific architecture, patterns, and development context",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "Project context documentation system overview",
+    "cross_references": [
+      "ai/readme.json",
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ]
+  },
+  "sections": {
+    "overview": {
+      "title": "Project Context Documentation System",
+      "description": "Project-specific architecture, patterns, and development context",
+      "content": "This directory contains project-specific documentation that provides context about the system architecture, common patterns, and development workflow. These documents help maintain consistency and provide guidance specific to this project's implementation."
+    },
+    "architecture_documentation": {
+      "title": "System Architecture",
+      "description": "High-level system architecture and component relationships",
+      "files": {
+        "architecture_overview.json": {
+          "purpose": "System architecture and component relationships",
+          "usage": "Reference for understanding system structure and design decisions",
+          "key_topics": [
+            "System component overview",
+            "Data flow and relationships",
+            "Technology stack decisions",
+            "Integration patterns",
+            "Scalability considerations"
+          ],
+          "target_audience": [
+            "New developers joining the project",
+            "Architecture review processes",
+            "System design decisions"
+          ]
+        }
+      }
+    },
+    "development_patterns": {
+      "title": "Common Implementation Patterns",
+      "description": "Project-specific patterns and implementation approaches",
+      "files": {
+        "common_patterns.json": {
+          "purpose": "Project-specific implementation patterns",
+          "usage": "Reference for consistent implementation approaches across the project",
+          "key_topics": [
+            "API endpoint patterns",
+            "Database interaction patterns",
+            "Error handling approaches",
+            "Authentication and authorization patterns",
+            "Frontend component patterns",
+            "Testing patterns"
+          ],
+          "benefits": [
+            "Consistent code structure",
+            "Reduced development time",
+            "Improved maintainability",
+            "Better code reviews"
+          ]
+        }
+      }
+    },
+    "workflow_documentation": {
+      "title": "Development Workflow",
+      "description": "Git workflow, CI/CD, and deployment procedures",
+      "files": {
+        "development_workflow.json": {
+          "purpose": "Git workflow, CI/CD, and deployment procedures",
+          "usage": "Guidelines for development processes and deployment",
+          "key_topics": [
+            "Git branching strategy",
+            "Commit message conventions",
+            "Code review processes",
+            "CI/CD pipeline configuration",
+            "Deployment procedures",
+            "Environment management"
+          ],
+          "processes": [
+            "Feature development workflow",
+            "Bug fix workflow",
+            "Release process",
+            "Hotfix procedures"
+          ]
+        }
+      }
+    }
+  },
+  "implementation_guidelines": {
+    "when_to_reference": {
+      "new_feature_development": "Check architecture_overview.json for system design",
+      "implementation_decisions": "Reference common_patterns.json for consistent approaches",
+      "deployment_planning": "Use development_workflow.json for process guidance",
+      "code_reviews": "Verify adherence to common_patterns.json"
+    },
+    "maintenance": {
+      "updating_architecture": "Update architecture_overview.json when system structure changes",
+      "pattern_evolution": "Update common_patterns.json when new patterns emerge",
+      "workflow_changes": "Update development_workflow.json when processes change",
+      "cross_references": "Maintain cross-references between context documents"
+    }
+  },
+  "integration_with_guides": {
+    "relationship": "Project context documents complement guide_docs by providing project-specific context",
+    "usage_patterns": {
+      "architecture_decisions": "Use architecture_overview.json + guide_docs/core_principles.json",
+      "implementation": "Use common_patterns.json + appropriate language-specific guides",
+      "testing": "Use development_workflow.json + guide_docs/python_testing_style_guide.json",
+      "deployment": "Use development_workflow.json + guide_docs/domain_specific guides"
+    }
+  },
+  "navigation": {
+    "new_developers": "Start with architecture_overview.json for system understanding",
+    "feature_development": "Reference common_patterns.json for implementation guidance",
+    "deployment": "Use development_workflow.json for process guidance",
+    "architecture_reviews": "Check architecture_overview.json for design decisions"
+  }
+}

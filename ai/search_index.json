@@ -25,7 +25,11 @@
   "quick_navigation": {
     "primary_reference": "ai/ai_rules.json",
     "configuration": "ai/ai_config.json",
-    "overview": "ai/readme.json"
+    "overview": "ai/readme.json",
+    "guide_docs": "ai/guide_docs/readme.json",
+    "project_context": "ai/project_context/readme.json",
+    "features": "ai/features/readme.json",
+    "outputs": "ai/outputs/readme.json"
   },
   "development_areas": {
     "backend_development": {
@@ -129,17 +133,17 @@
     "beginner": {
       "title": "Beginner",
       "description": "Getting started, basic patterns, and simple examples",
-      "content": "- **Main hub**: `ai/readme.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Feature template**: `ai/guide_docs/feature_template.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`"
+      "content": "- **Main hub**: `ai/readme.json`\n- **Guide overview**: `ai/guide_docs/readme.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Feature template**: `ai/guide_docs/feature_template.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`"
     },
     "intermediate": {
       "title": "Intermediate",
       "description": "Advanced patterns, architecture decisions, and optimization",
-      "content": "- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`"
+      "content": "- **Context overview**: `ai/project_context/readme.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Testing guide**: `ai/guide_docs/language_specific/python_testing_style_guide.json`"
     },
     "advanced": {
       "title": "Advanced",
       "description": "System architecture, complex patterns, and scalability",
-      "content": "- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Development workflow**: `ai/project_context/development_workflow.json`"
+      "content": "- **Features overview**: `ai/features/readme.json`\n- **Architecture**: `ai/project_context/architecture_overview.json`\n- **Common patterns**: `ai/project_context/common_patterns.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`\n- **Development workflow**: `ai/project_context/development_workflow.json`"
     }
   },
   "project_phases": {
@@ -160,10 +164,15 @@
     }
   },
   "active_features": {
+    "overview": {
+      "title": "Features Overview",
+      "description": "Complete feature documentation and tracking",
+      "content": "- **Features overview**: `ai/features/readme.json`"
+    },
     "current_plans": {
       "title": "Current Plans",
       "description": "Active implementation plans and ongoing work",
-      "content": "- **Stock Tracking**: `ai/features/plans/[IN-PROGRESS]-Stock Tracking Request Plan.json`\n- **JWT Authentication**: `ai/features/plans/JWT-001-implement-jwt-authentication.json`"
+      "content": "- **Stock Tracking**: `ai/features/in_progress/stock_tracking_request_plan.json`\n- **JWT Authentication**: `ai/features/todo/implement_jwt_authentication.json`"
     },
     "completed_features": {
       "title": "Completed Features",
@@ -175,12 +184,17 @@
     "health_check": {
       "title": "Health Check",
       "description": "Documentation validation and quality assurance",
-      "content": "- **Health check script**: `scripts/ai_health_check.py`\n- **Outputs**: `ai/outputs/health_check/`"
+      "content": "- **Health check script**: `scripts/ai_health_check.py`\n- **Outputs**: `ai/outputs/health_check/`\n- **Outputs overview**: `ai/outputs/readme.json`"
     },
     "ai_optimization": {
       "title": "AI Optimization",
       "description": "AI tool optimization and consumption patterns",
       "content": "- **AI optimization guide**: `ai/guide_docs/ai_tool_optimization_guide.json`\n- **Core principles**: `ai/guide_docs/core_principles.json`"
+    },
+    "outputs_management": {
+      "title": "Outputs Management",
+      "description": "AI tool outputs and debugging resources",
+      "content": "- **Outputs overview**: `ai/outputs/readme.json`\n- **Debugging workflow**: Check outputs before debugging\n- **Test results**: `ai/outputs/test_results/`\n- **Lint results**: `ai/outputs/lint_results/`"
     },
     "helper_scripts": {
       "ai_report_helper": {

@@ -1,0 +1,187 @@
+{
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "Guide documentation structure and navigation",
+    "validation_required": true,
+    "code_generation": "Not applicable",
+    "cross_references": [
+      "ai/readme.json",
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "Guide documentation overview"
+  },
+  "metadata": {
+    "title": "Guide Documentation Overview",
+    "description": "Overview of reusable patterns, standards, and best practices",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "Guide documentation system overview",
+    "cross_references": [
+      "ai/readme.json",
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ]
+  },
+  "sections": {
+    "overview": {
+      "title": "Guide Documentation System",
+      "description": "Reusable patterns, standards, and best practices for development",
+      "content": "This directory contains reusable patterns, standards, and best practices that guide development across the project. These guides provide consistent approaches to common development tasks and ensure code quality and maintainability."
+    },
+    "core_guides": {
+      "title": "Core Principles and Patterns",
+      "description": "Fundamental decision-making frameworks and architectural principles",
+      "guides": {
+        "core_principles.json": {
+          "purpose": "Decision-making frameworks and architectural principles",
+          "usage": "Reference for architectural decisions and design patterns",
+          "key_topics": [
+            "Architectural decision-making frameworks",
+            "Design pattern selection criteria",
+            "Code organization principles",
+            "Performance optimization guidelines"
+          ]
+        },
+        "code_review_patterns.json": {
+          "purpose": "How to structure suggestions and handle conflicts",
+          "usage": "Guidelines for effective code reviews and feedback",
+          "key_topics": [
+            "Code review best practices",
+            "Feedback structure and delivery",
+            "Conflict resolution strategies",
+            "Quality assurance processes"
+          ]
+        },
+        "ai_tool_optimization_guide.json": {
+          "purpose": "Patterns for optimizing AI tool consumption",
+          "usage": "Guidelines for effective AI-assisted development",
+          "key_topics": [
+            "AI tool usage patterns",
+            "Prompt engineering strategies",
+            "Context management techniques",
+            "Efficiency optimization"
+          ]
+        }
+      }
+    },
+    "language_specific_guides": {
+      "title": "Language-Specific Standards",
+      "description": "Coding standards and patterns for specific programming languages",
+      "guides": {
+        "python_style_guide.json": {
+          "purpose": "Python coding standards and patterns",
+          "usage": "Reference for Python development and code organization",
+          "key_topics": [
+            "Code style and formatting",
+            "Import organization",
+            "Type hints and documentation",
+            "Error handling patterns"
+          ]
+        },
+        "react_style_guide.json": {
+          "purpose": "React/TypeScript development standards",
+          "usage": "Guidelines for frontend component development",
+          "key_topics": [
+            "Component structure and organization",
+            "TypeScript best practices",
+            "State management patterns",
+            "Styling and UI patterns"
+          ]
+        },
+        "python_testing_style_guide.json": {
+          "purpose": "Testing strategies and patterns",
+          "usage": "Comprehensive testing approach for Python code",
+          "key_topics": [
+            "Test organization and structure",
+            "Mocking and fixture patterns",
+            "Integration testing strategies",
+            "Test data management"
+          ]
+        }
+      }
+    },
+    "domain_specific_guides": {
+      "title": "Domain-Specific Patterns",
+      "description": "Specialized patterns for specific technical domains",
+      "guides": {
+        "database_management_guide.json": {
+          "purpose": "Database patterns and migration strategies",
+          "usage": "Guidelines for database design and management",
+          "key_topics": [
+            "Database design patterns",
+            "Migration strategies",
+            "Query optimization",
+            "Data integrity patterns"
+          ]
+        },
+        "shell_style_guide.json": {
+          "purpose": "Bash scripting and automation patterns",
+          "usage": "Standards for shell script development",
+          "key_topics": [
+            "Script organization and structure",
+            "Error handling in scripts",
+            "Portability considerations",
+            "Security best practices"
+          ]
+        }
+      }
+    },
+    "templates": {
+      "title": "Development Templates",
+      "description": "Standardized templates for consistent development",
+      "templates": {
+        "feature_template.json": {
+          "purpose": "Standardized feature development template",
+          "usage": "Template for documenting new features",
+          "key_sections": [
+            "Feature overview and requirements",
+            "Implementation plan",
+            "Testing strategy",
+            "Documentation requirements"
+          ]
+        },
+        "implementation_guide_template.json": {
+          "purpose": "Template for implementation guides",
+          "usage": "Standardized format for implementation documentation",
+          "key_sections": [
+            "Implementation overview",
+            "Step-by-step instructions",
+            "Code examples",
+            "Troubleshooting guide"
+          ]
+        },
+        "pattern_inheritance_template.json": {
+          "purpose": "Template for pattern inheritance documentation",
+          "usage": "Documenting how patterns extend or inherit from others",
+          "key_sections": [
+            "Base pattern description",
+            "Inheritance relationship",
+            "Customizations and extensions",
+            "Usage examples"
+          ]
+        }
+      }
+    }
+  },
+  "implementation_guidelines": {
+    "when_to_use": {
+      "new_feature_development": "Start with feature_template.json for planning",
+      "language_specific_development": "Reference appropriate language-specific guide",
+      "architectural_decisions": "Check core_principles.json for guidance",
+      "testing_implementation": "Use python_testing_style_guide.json for test strategies"
+    },
+    "maintenance": {
+      "updating_guides": "Update guides when patterns evolve or new best practices emerge",
+      "cross_references": "Maintain cross-references between related guides",
+      "validation": "Use ai_health_check.py to validate guide completeness and accuracy"
+    }
+  },
+  "navigation": {
+    "quick_start": "Start with core_principles.json for architectural guidance",
+    "development_workflow": "Use language-specific guides for coding standards",
+    "testing": "Reference python_testing_style_guide.json for test strategies",
+    "templates": "Use feature_template.json for new feature documentation"
+  }
+}

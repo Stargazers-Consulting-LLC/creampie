@@ -376,14 +376,6 @@ class AIDocumentationHealthCheck:
         outputs_dir = os.path.join(self.ai_folder, "outputs", "health_check")
         os.makedirs(outputs_dir, exist_ok=True)
 
-        # Generate report
-        report = self._generate_report()
-
-        # Save text report
-        report_file = os.path.join(outputs_dir, "healthcheck-result.md")
-        with open(report_file, "w", encoding="utf-8") as f:
-            f.write(report)
-
         # Save JSON report
         json_report = self._generate_json_report()
         json_file = os.path.join(outputs_dir, "healthcheck-result.json")
@@ -391,50 +383,7 @@ class AIDocumentationHealthCheck:
             json.dump(json_report, f, indent=2)
 
         if self.verbose:
-            print(f"\n📄 Health check results saved to: {report_file}")
             print(f"📄 JSON results saved to: {json_file}")
-
-    def _generate_report(self) -> str:
-        """Generate the health check report.
-
-        Returns:
-            The formatted report string.
-        """
-        report = f"""# AI Documentation Health Check Report
-
-**Date:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-**AI Folder:** {self.ai_folder}
-
-## Summary
-
-- ✅ **Successful checks:** {self.success_count}
-- ❌ **Issues found:** {len(self.issues)}
-- ⚠️ **Warnings:** {len(self.warnings)}
-
-"""
-
-        if self.issues:
-            report += "\n## ❌ Issues\n\n"
-            for issue in self.issues:
-                report += f"- {issue}\n"
-
-        if self.warnings:
-            report += "\n## ⚠️ Warnings\n\n"
-            for warning in self.warnings:
-                report += f"- {warning}\n"
-
-        if not self.issues and not self.warnings:
-            report += (
-                "\n## 🎉 All checks passed!\n\n"
-                "AI documentation is properly structured and optimized for tool consumption."
-            )
-        else:
-            report += (
-                "\n## 🔧 Recommendations\n\n"
-                "Please address the issues and warnings above to ensure optimal AI tool performance."
-            )
-
-        return report
 
     def _generate_json_report(self) -> dict[str, Any]:
         """Generate the JSON health check report.

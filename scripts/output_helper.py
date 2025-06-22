@@ -37,7 +37,7 @@ class ResultsDict(TypedDict):
     warnings: list[str]
 
 
-class AIOutputHelper:
+class OutputHelper:
     """Helper class for generating proper JSON output for AI tooling.
 
     This class provides standardized methods for creating AI-friendly JSON output
@@ -216,7 +216,7 @@ class AIOutputHelper:
 def example_usage() -> None:
     """Example of how to use the JSON output helper."""
     # Create helper instance
-    helper = AIOutputHelper("example_script", "example_category")
+    helper = OutputHelper("example_script", "example_category")
 
     # Add some example data
     helper.add_result("processed_files", 5)

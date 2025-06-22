@@ -1,0 +1,181 @@
+{
+  "ai_metadata": {
+    "template_version": "4.0",
+    "ai_processing_level": "High",
+    "required_context": "Feature implementation documentation structure",
+    "validation_required": true,
+    "code_generation": "Not applicable",
+    "cross_references": [
+      "ai/readme.json",
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ],
+    "maintenance": "Feature documentation overview"
+  },
+  "metadata": {
+    "title": "Feature Documentation Overview",
+    "description": "Feature implementation plans and completed module documentation",
+    "version": "4.0",
+    "last_updated": "2025-06-21",
+    "purpose": "Feature documentation system overview",
+    "cross_references": [
+      "ai/readme.json",
+      "ai/ai_rules.json",
+      "ai/search_index.json"
+    ]
+  },
+  "sections": {
+    "overview": {
+      "title": "Feature Documentation System",
+      "description": "Feature implementation plans and completed module documentation",
+      "content": "This directory contains documentation for feature implementation plans and completed modules. It provides a structured approach to tracking feature development from planning through completion, ensuring comprehensive documentation of all system features."
+    },
+    "directory_structure": {
+      "title": "Directory Organization",
+      "description": "How features are organized by development status",
+      "structure": {
+        "plans": {
+          "purpose": "Active implementation plans for new features",
+          "content": "Detailed plans for features currently being developed",
+          "file_naming": "[STATUS]-Feature-Name-Plan.json",
+          "status_indicators": [
+            "[IN-PROGRESS] - Feature actively being developed",
+            "[PLANNED] - Feature planned but not yet started",
+            "[BLOCKED] - Feature blocked by dependencies or issues"
+          ]
+        },
+        "in_progress": {
+          "purpose": "Features currently under active development",
+          "content": "Detailed implementation status and progress tracking",
+          "file_naming": "feature_name_implementation_status.json",
+          "tracking_elements": [
+            "Implementation progress",
+            "Current blockers",
+            "Next steps",
+            "Resource requirements"
+          ]
+        },
+        "complete": {
+          "purpose": "Documentation of completed features",
+          "content": "Comprehensive documentation of finished features",
+          "file_naming": "[COMPLETED]-Feature-Name-Summary.json",
+          "documentation_elements": [
+            "Feature overview and requirements",
+            "Implementation details",
+            "Testing results",
+            "Deployment information",
+            "Lessons learned"
+          ]
+        },
+        "summaries": {
+          "purpose": "Summarized documentation of completed modules",
+          "content": "High-level summaries of completed features for quick reference",
+          "file_naming": "[COMPLETED]-Feature-Name-Summary.json",
+          "summary_elements": [
+            "Feature purpose and scope",
+            "Key implementation details",
+            "Integration points",
+            "Usage examples"
+          ]
+        },
+        "todo": {
+          "purpose": "Backlog of planned features",
+          "content": "Features planned for future development",
+          "file_naming": "feature-name-requirements.json",
+          "planning_elements": [
+            "Feature requirements",
+            "Priority level",
+            "Estimated effort",
+            "Dependencies"
+          ]
+        }
+      }
+    },
+    "current_features": {
+      "title": "Current Feature Status",
+      "description": "Overview of features in different development stages",
+      "features": {
+        "stock_tracking": {
+          "status": "In Progress",
+          "location": "in_progress/stock_tracking_request_plan.json",
+          "description": "Stock tracking request functionality for users",
+          "components": [
+            "Backend API endpoints",
+            "Frontend request form",
+            "Database models",
+            "Integration with stock data processing"
+          ]
+        },
+        "jwt_authentication": {
+          "status": "Planned",
+          "location": "todo/implement-jwt-authentication.json",
+          "description": "JWT-based authentication system",
+          "components": [
+            "JWT token generation and validation",
+            "User session management",
+            "Protected route implementation",
+            "Token refresh mechanism"
+          ]
+        }
+      }
+    },
+    "completed_features": {
+      "title": "Completed Features",
+      "description": "Features that have been successfully implemented",
+      "features": {
+        "stock_data_processing_pipeline": {
+          "status": "Completed",
+          "location": "complete/stock_data_processing_pipeline_summary.json",
+          "description": "Comprehensive stock data processing and storage system",
+          "components": [
+            "Data retrieval from external APIs",
+            "Data parsing and validation",
+            "Database storage and management",
+            "Error handling and retry mechanisms"
+          ],
+          "documentation": "summaries/[COMPLETED]-stock_data_processing_pipeline_summary.json"
+        }
+      }
+    }
+  },
+  "implementation_guidelines": {
+    "feature_planning": {
+      "template": "Use guide_docs/feature_template.json for new feature planning",
+      "requirements": [
+        "Clear feature description and scope",
+        "Technical requirements and constraints",
+        "Implementation timeline",
+        "Testing strategy",
+        "Documentation requirements"
+      ]
+    },
+    "development_tracking": {
+      "progress_updates": "Update in_progress files with current status",
+      "blocker_management": "Document blockers and resolution strategies",
+      "milestone_tracking": "Track key milestones and deliverables"
+    },
+    "completion_documentation": {
+      "summary_creation": "Create comprehensive summary in complete/ directory",
+      "lessons_learned": "Document implementation challenges and solutions",
+      "integration_notes": "Document how the feature integrates with existing systems"
+    }
+  },
+  "integration_with_guides": {
+    "planning": "Use guide_docs/feature_template.json for feature planning",
+    "implementation": "Reference guide_docs/language_specific guides for coding standards",
+    "testing": "Use guide_docs/python_testing_style_guide.json for test strategies",
+    "architecture": "Check project_context/architecture_overview.json for system design"
+  },
+  "maintenance": {
+    "regular_updates": "Update feature status regularly during development",
+    "completion_migration": "Move completed features to complete/ and summaries/ directories",
+    "cross_references": "Maintain cross-references between feature docs and implementation",
+    "validation": "Use ai_health_check.py to validate feature documentation completeness"
+  },
+  "navigation": {
+    "new_features": "Start with guide_docs/feature_template.json for planning",
+    "active_development": "Check in_progress/ for current development status",
+    "completed_features": "Reference complete/ and summaries/ for finished features",
+    "backlog": "Check todo/ for planned features"
+  }
+}
