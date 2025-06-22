@@ -1,3 +1,11 @@
+/**
+ * Sign up page component.
+ * Handles user registration with email, password, and name fields.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
+ */
+
 import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

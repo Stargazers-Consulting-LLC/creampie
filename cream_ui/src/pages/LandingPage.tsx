@@ -1,8 +1,11 @@
 /**
  * Landing page component that showcases the main features and value proposition.
  * Implements a responsive design with hero section, features grid, and disclaimer.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
  */
-// @ts-expect-error - React is needed for JSX
+
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 

@@ -69,6 +69,35 @@ cream_ui/
 - Use [custom hooks](https://react.dev/reference/react/hooks#using-the-state-hook) to encapsulate reusable logic.
 - Destructure props at the top of the component.
 - Use default values for optional props.
+
+### React Import Pattern
+
+**Problem**: ESLint flags `import * as React from 'react';` as unused even though it's required for JSX compilation.
+
+**Solution**: Use the preferred import pattern based on your needs:
+
+```tsx
+// ✅ Preferred - Explicit namespace import (use when you need React for JSX)
+import * as React from 'react';
+
+// ✅ Also acceptable - Specific imports (use when you only need certain hooks)
+import { useState, useEffect } from 'react';
+
+// ❌ Less preferred - Default import (can be confusing)
+import React from 'react';
+```
+
+**When to use each pattern:**
+- **`import * as React from 'react';`** - Use in components that render JSX (most components)
+- **`import { useState, useEffect } from 'react';`** - Use in hooks or utilities that only need specific React exports
+- **`import React from 'react';`** - Avoid this pattern for consistency
+
+**Why this pattern?**
+- JSX requires React to be in scope (even if not explicitly used)
+- ESLint may flag it as unused import
+- The namespace import is more explicit and consistent
+- This pattern is consistent across the codebase
+
 - Example:
 
 ```tsx
@@ -288,6 +317,7 @@ test("calls onClick when clicked", () => {
 - [ ] Styles are co-located and follow project conventions
 - [ ] Tests are present and cover key behaviors
 - [ ] Accessibility best practices are followed
+- [ ] React import pattern is followed (with ESLint comment when needed)
 - [ ] No unused code, variables, or imports
 - [ ] No direct DOM manipulation (use refs or effects if needed)
 - [ ] No hardcoded values (use constants or config)
@@ -297,7 +327,8 @@ test("calls onClick when clicked", () => {
 
 ### Simple Function Component
 ```tsx
-import React from "react";
+// @ts-expect-error - React is needed for JSX
+import * as React from 'react';
 
 type GreetingProps = { name: string };
 
@@ -308,7 +339,7 @@ export function Greeting({ name }: GreetingProps) {
 
 ### Custom Hook
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -323,6 +354,9 @@ export function useWindowWidth() {
 
 ### Component with Tailwind CSS
 ```tsx
+// @ts-expect-error - React is needed for JSX
+import * as React from 'react';
+
 export function Alert({ message }: { message: string }) {
   return (
     <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4">
@@ -334,6 +368,9 @@ export function Alert({ message }: { message: string }) {
 
 ### Form Component with Proper Validation
 ```tsx
+// @ts-expect-error - React is needed for JSX
+import * as React from 'react';
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

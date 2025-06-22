@@ -1,3 +1,13 @@
+/**
+ * Protected Route Component
+ *
+ * Route protection component that ensures users are authenticated before
+ * accessing protected routes. Redirects to login if not authenticated.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
+ */
+
 import * as React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 

@@ -1,8 +1,11 @@
 /**
  * Main navigation component using shadcn/ui navigation menu.
  * Provides responsive navigation with dropdown menus and mobile support.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
  */
-// @ts-expect-error - React is needed for JSX
+
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {

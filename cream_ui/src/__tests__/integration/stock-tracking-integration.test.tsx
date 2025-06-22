@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import React from 'react';
+import * as React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';

@@ -2,7 +2,7 @@
   "metadata": {
     "title": "React Style Guide",
     "description": "Best practices and standards for writing React code in the CreamPie project.",
-    "version": "4.0",
+    "version": "4.1",
     "last_updated": "2025-01-27",
     "source": "humans/guides/react_style_guide.md",
     "cross_references": [
@@ -58,6 +58,23 @@
         "Destructure props at the top of the component.",
         "Use default values for optional props."
       ],
+      "react_import_pattern": {
+        "title": "React Import Pattern",
+        "problem": "ESLint flags import * as React from 'react'; as unused even though it's required for JSX compilation.",
+        "solution": "Use the preferred import pattern based on your needs.",
+        "preferred_pattern": "import * as React from 'react';",
+        "acceptable_patterns": [
+          "import * as React from 'react'; - Use in components that render JSX (most components)",
+          "import { useState, useEffect } from 'react'; - Use in hooks or utilities that only need specific React exports"
+        ],
+        "avoid_pattern": "import React from 'react'; - Avoid this pattern for consistency",
+        "explanation": [
+          "JSX requires React to be in scope (even if not explicitly used)",
+          "ESLint may flag it as unused import",
+          "The namespace import is more explicit and consistent",
+          "This pattern is consistent across the codebase"
+        ]
+      },
       "example": {
         "Button": "export const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false }) => ( <button onClick={onClick} disabled={disabled}>{label}</button> );"
       }
@@ -130,9 +147,13 @@
         "TypeScript types are used for all props and state",
         "Components are pure and side-effect free",
         "State is managed appropriately (local, context, or global)",
+        "Form validation follows UX best practices",
+        "Submit buttons are always clickable (except during submission)",
+        "Loading and error states are properly handled",
         "Styles are co-located and follow project conventions",
         "Tests are present and cover key behaviors",
         "Accessibility best practices are followed",
+        "React import pattern is followed (with ESLint comment when needed)",
         "No unused code, variables, or imports",
         "No direct DOM manipulation (use refs or effects if needed)",
         "No hardcoded values (use constants or config)",
@@ -141,9 +162,9 @@
     },
     "example_patterns": {
       "title": "Example Patterns",
-      "simple_function_component": "export function Greeting({ name }: { name: string }) { return <h1>Hello, {name}!</h1>; }",
-      "custom_hook": "export function useWindowWidth() { const [width, setWidth] = useState(window.innerWidth); useEffect(() => { const handleResize = () => setWidth(window.innerWidth); window.addEventListener('resize', handleResize); return () => window.removeEventListener('resize', handleResize); }, []); return width; }",
-      "tailwind_component": "export function Alert({ message }: { message: string }) { return (<div className=\"bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4\">{message}</div>); }"
+      "simple_function_component": "// @ts-expect-error - React is needed for JSX\nimport * as React from 'react';\n\nexport function Greeting({ name }: { name: string }) {\n  return <h1>Hello, {name}!</h1>;\n}",
+      "custom_hook": "import { useState, useEffect } from 'react';\n\nexport function useWindowWidth() {\n  const [width, setWidth] = useState(window.innerWidth);\n  useEffect(() => {\n    const handleResize = () => setWidth(window.innerWidth);\n    window.addEventListener('resize', handleResize);\n    return () => window.removeEventListener('resize', handleResize);\n  }, []);\n  return width;\n}",
+      "tailwind_component": "// @ts-expect-error - React is needed for JSX\nimport * as React from 'react';\n\nexport function Alert({ message }: { message: string }) {\n  return (\n    <div className=\"bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4\">\n      {message}\n    </div>\n  );\n}"
     }
   }
 }

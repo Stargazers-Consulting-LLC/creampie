@@ -1,3 +1,11 @@
+/**
+ * Login page component.
+ * Handles user authentication with email and password.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
+ */
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';

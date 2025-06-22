@@ -32,12 +32,9 @@ const stockRequestSchema = z.object({
   symbol: z
     .string()
     .min(1, 'Stock symbol is required')
-    .refine((value) => value.length >= 2, 'Stock symbol must be at least 2 characters')
-    .refine((value) => value.length <= 10, 'Stock symbol must be 10 characters or less')
-    .refine(
-      (value) => /^[A-Za-z][A-Za-z0-9]*$/.test(value),
-      'Stock symbol must be 2-10 characters, start with a letter'
-    )
+    .min(2, 'Stock symbol must be at least 2 characters')
+    .max(10, 'Stock symbol must be 10 characters or less')
+    .regex(/^[A-Za-z][A-Za-z0-9]*$/, 'Stock symbol must be 2-10 characters, start with a letter')
     .transform((value) => value.trim().toUpperCase()),
 });
 

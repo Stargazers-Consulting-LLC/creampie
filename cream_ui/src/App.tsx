@@ -1,6 +1,9 @@
 /**
  * Main application component that handles routing and layout.
  * Provides the base structure for the application including navigation and route protection.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
  */
 // @ts-expect-error - React is needed for JSX
 import * as React from 'react';
@@ -21,7 +24,7 @@ import { Navigation } from './components/Navigation';
 // Styles
 import './App.css';
 
-function App() {
+export function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">

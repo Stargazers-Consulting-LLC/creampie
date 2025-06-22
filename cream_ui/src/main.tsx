@@ -1,4 +1,11 @@
-// @ts-expect-error - React is needed for JSX
+/**
+ * Main entry point for the React application.
+ * Renders the App component in strict mode for better development experience.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
+ */
+
 import * as React from 'react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

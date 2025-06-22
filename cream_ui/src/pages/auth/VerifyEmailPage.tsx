@@ -1,4 +1,11 @@
-// @ts-expect-error - React is needed for JSX
+/**
+ * Email verification page component.
+ * Handles email verification flow and provides resend functionality.
+ *
+ * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+ * SPDX-License-Identifier: MIT
+ */
+
 import * as React from 'react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
