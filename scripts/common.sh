@@ -43,9 +43,31 @@ get_script_dir() {
     cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd
 }
 
-# Get the project root directory
+# Get the project root directory by finding key project files
+# This is more robust than assuming directory structure
 get_project_root() {
-    dirname "$(get_script_dir)"
+    local current_dir="$(pwd)"
+    local script_dir="$(get_script_dir)"
+
+    # Start from the script directory and walk up until we find project root
+    local search_dir="$script_dir"
+
+    while [[ "$search_dir" != "/" ]]; do
+        # Check for key project files
+        if [[ -f "$search_dir/pyproject.toml" ]] || \
+           [[ -f "$search_dir/alembic.ini" ]] || \
+           [[ -f "$search_dir/package.json" ]] || \
+           [[ -d "$search_dir/cream_api" && -d "$search_dir/cream_ui" ]]; then
+            echo "$search_dir"
+            return 0
+        fi
+
+        # Move up one directory
+        search_dir="$(dirname "$search_dir")"
+    done
+
+    # Fallback to the old method if no project root found
+    echo "$(dirname "$(get_script_dir)")"
 }
 
 # Function to confirm an action

@@ -13,8 +13,8 @@
 
 # Source common functions
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-source "$PROJECT_ROOT/scripts/common.sh"
+source "$(dirname "$SCRIPT_DIR")/common.sh"
+PROJECT_ROOT="$(get_project_root)"
 
 # Get project root directory
 AI_OUTPUT_DIR="$PROJECT_ROOT/ai/outputs/database_operations"

@@ -11,9 +11,9 @@
   "file_info": {
     "file_path": "outputs/outputs/migration-results.json",
     "original_format": "json",
-    "generated_at": "2025-06-20T17:56:59-07:00",
-    "file_size": 1496,
-    "line_count": 51
+    "generated_at": "2025-06-21T20:54:15-07:00",
+    "file_size": 1611,
+    "line_count": 55
   },
   "content": {
     "sections": [
@@ -26,18 +26,22 @@
       {
         "level": 2,
         "title": "Execution Summary",
-        "content": "**Status**: success\n**Duration**: 0s\n**Timestamp**: 2025-06-20T17:56:59-07:00\n**Report Type**: migration",
+        "content": "**Status**: success\n**Duration**: 5s\n**Timestamp**: 2025-06-21T20:54:15-07:00\n**Report Type**: migration",
         "subsections": []
       }
     ],
     "code_blocks": [],
     "links": [],
-    "raw_content": "Migration execution completed with status: success. Duration: 0s."
+    "raw_content": "Migration execution completed with status: success. Duration: 5s."
   },
   "cross_references": [],
   "migration_details": {
-    "migration_created": "yes",
+    "validation_status": "success",
+    "migration_created": "no",
     "migration_status": "success",
+    "dry_run": "false",
+    "force_mode": "false",
+    "duration_seconds": "5",
     "target_directory": "cream_api/",
     "configuration": "alembic.ini"
   },
@@ -45,7 +49,7 @@
   "validation_rules": [],
   "optimization": {
     "version": "1.0",
-    "generated_at": "2025-06-20T17:56:59-07:00",
+    "generated_at": "2025-06-21T20:54:15-07:00",
     "improvements": []
   }
 }
