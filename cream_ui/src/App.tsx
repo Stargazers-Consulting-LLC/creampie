@@ -10,9 +10,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
 import { LoginPage } from './pages/auth/LoginPage';
+import { StockRequestPage } from './pages/StockRequestPage';
+import { TrackedStocksPage } from './pages/admin/TrackedStocksPage';
 
 // Component imports
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AdminRoute } from './components/auth/AdminRoute';
 import { Navigation } from './components/Navigation';
 
 // Styles
@@ -36,6 +39,26 @@ function App() {
               <ProtectedRoute>
                 <div>Dashboard (Coming Soon)</div>
               </ProtectedRoute>
+            }
+          />
+
+          {/* Stock Tracking Routes */}
+          <Route
+            path="/stock-request"
+            element={
+              <ProtectedRoute>
+                <StockRequestPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin Routes */}
+          <Route
+            path="/admin/tracked-stocks"
+            element={
+              <AdminRoute>
+                <TrackedStocksPage />
+              </AdminRoute>
             }
           />
         </Routes>

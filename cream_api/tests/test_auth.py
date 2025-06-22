@@ -4,6 +4,7 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from cream_api.common.constants import AUTH_LOGIN_PATH, AUTH_SIGNUP_PATH
 from cream_api.settings import Settings
 from cream_api.users.models.app_user import AppUser
 from cream_api.users.routes.auth import get_password_hash
@@ -12,7 +13,7 @@ from cream_api.users.routes.auth import get_password_hash
 def test_signup_success(client: TestClient, test_db: Session, test_settings: Settings) -> None:
     """Test successful user signup."""
     response = client.post(
-        "/auth/signup",
+        AUTH_SIGNUP_PATH,
         json={
             "email": "test@example.com",
             "password": "testpassword123",
@@ -21,7 +22,9 @@ def test_signup_success(client: TestClient, test_db: Session, test_settings: Set
         },
     )
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.json() == {"message": "User created successfully."}
+    data = response.json()
+    assert "access_token" in data
+    assert data["token_type"] == "bearer"
 
     # Verify user was created in database
     user = test_db.query(AppUser).filter(AppUser.email == "test@example.com").first()
@@ -49,7 +52,7 @@ def test_signup_duplicate_email(client: TestClient, test_db: Session, test_setti
 
     # Try to signup with same email
     response = client.post(
-        "/auth/signup",
+        AUTH_SIGNUP_PATH,
         json={
             "email": "test@example.com",
             "password": "testpassword123",
@@ -77,7 +80,7 @@ def test_login_success(client: TestClient, test_db: Session, test_settings: Sett
 
     # Login
     response = client.post(
-        "/auth/login",
+        AUTH_LOGIN_PATH,
         data={"username": "test@example.com", "password": "testpassword123"},
     )
     assert response.status_code == status.HTTP_200_OK
@@ -89,7 +92,7 @@ def test_login_success(client: TestClient, test_db: Session, test_settings: Sett
 def test_login_invalid_credentials(client: TestClient, test_settings: Settings) -> None:
     """Test login with invalid credentials."""
     response = client.post(
-        "/auth/login",
+        AUTH_LOGIN_PATH,
         data={"username": "test@example.com", "password": "wrongpassword"},
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -101,7 +104,7 @@ def test_login_immediately_after_signup(client: TestClient, test_db: Session, te
     """Test that users can login immediately after signup without email verification."""
     # Signup a new user
     signup_response = client.post(
-        "/auth/signup",
+        AUTH_SIGNUP_PATH,
         json={
             "email": "newuser@example.com",
             "password": "testpassword123",
@@ -113,7 +116,7 @@ def test_login_immediately_after_signup(client: TestClient, test_db: Session, te
 
     # Login immediately without email verification
     login_response = client.post(
-        "/auth/login",
+        AUTH_LOGIN_PATH,
         data={"username": "newuser@example.com", "password": "testpassword123"},
     )
     assert login_response.status_code == status.HTTP_200_OK

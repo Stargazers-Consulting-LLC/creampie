@@ -13,11 +13,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
+from cream_api.common.constants import AUTH_PREFIX
 from cream_api.db import get_async_db, get_db
 from cream_api.users.models.app_user import AppUser
 
 # Router configuration
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix=AUTH_PREFIX, tags=["auth"])
 
 # Security configuration
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")

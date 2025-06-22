@@ -14,6 +14,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from cream_api.background_tasks import start_background_tasks
+from cream_api.common.constants import API_PREFIX
 from cream_api.settings import configure_logging, get_app_settings
 from cream_api.stock_data.api import router as stock_data_router
 from cream_api.stock_data.config import get_stock_data_config
@@ -86,8 +87,8 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(auth_router, prefix="/api")
-app.include_router(stock_data_router, prefix="/api")
+app.include_router(auth_router, prefix=API_PREFIX)
+app.include_router(stock_data_router, prefix=API_PREFIX)
 
 
 @app.get("/")

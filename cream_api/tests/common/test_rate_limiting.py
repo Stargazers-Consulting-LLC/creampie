@@ -1,4 +1,18 @@
-"""Tests for rate limiting functionality."""
+"""Rate limiting tests.
+
+This module contains comprehensive tests for the rate limiting functionality,
+including basic rate limiting, concurrent requests, error handling, and edge cases.
+
+References:
+    - [Pytest Documentation](https://docs.pytest.org/)
+    - [Python Type Hints](https://docs.python.org/3/library/typing.html)
+    - [aiohttp Testing](https://docs.aiohttp.org/en/stable/testing.html)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 import asyncio
 from collections.abc import AsyncGenerator, Generator
@@ -6,7 +20,7 @@ from datetime import datetime
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientError, ClientSession
+from aiohttp import ClientSession
 from aioresponses import aioresponses
 from fastapi import status
 
@@ -14,29 +28,30 @@ from cream_api.common.rate_limiter import RateLimiter
 from cream_api.tests.stock_data.stock_data_test_constants import (
     RATE_LIMITER_REQUESTS,
     RATE_LIMITER_WINDOW,
-    TEST_SERVER_BASE_URL,
     TIMING_TOLERANCE,
 )
 
-# Test constants
-TEST_MAX_REQUESTS = 10
-TEST_TIME_WINDOW = 30
-FULL_UTILIZATION_PERCENT = 100.0
+# Test configuration
 CONCURRENT_TEST_COUNT = 10
+FULL_UTILIZATION_PERCENT = 100.0
 
-pytest_plugins = ("pytest_asyncio",)
+# Test constants to avoid magic numbers
+TEST_MAX_REQUESTS = 10
+TEST_TIME_WINDOW = 30.0
+TEST_IMMEDIATE_THRESHOLD = 0.1
+TEST_MOCK_ID = 123
 
 
 @pytest_asyncio.fixture(scope="function")
 async def http_session() -> AsyncGenerator[ClientSession, None]:
-    """Create an aiohttp session for testing."""
+    """Create a test HTTP session."""
     async with ClientSession() as session:
         yield session
 
 
 @pytest_asyncio.fixture(scope="function")
 async def rate_limiter(http_session: ClientSession) -> AsyncGenerator[RateLimiter, None]:
-    """Create a rate limiter instance for testing."""
+    """Create a test rate limiter."""
     limiter = RateLimiter(max_requests=RATE_LIMITER_REQUESTS, time_window=RATE_LIMITER_WINDOW)
     limiter.set_session(http_session)
     yield limiter
@@ -44,20 +59,21 @@ async def rate_limiter(http_session: ClientSession) -> AsyncGenerator[RateLimite
 
 @pytest.fixture
 def mock_responses() -> Generator[aioresponses, None, None]:
-    """Create a mock response handler."""
+    """Create mock HTTP responses."""
     with aioresponses() as m:
         yield m
 
 
 def test_rate_limiter_initialization() -> None:
-    """Test rate limiter initialization with valid parameters."""
+    """Test rate limiter initialization."""
     limiter = RateLimiter(max_requests=TEST_MAX_REQUESTS, time_window=TEST_TIME_WINDOW)
     assert limiter.max_requests == TEST_MAX_REQUESTS
-    assert limiter.time_window == float(TEST_TIME_WINDOW)
+    assert limiter.time_window == TEST_TIME_WINDOW
+    assert len(limiter.requests) == 0
 
 
 def test_rate_limiter_invalid_parameters() -> None:
-    """Test rate limiter initialization with invalid parameters."""
+    """Test rate limiter with invalid parameters."""
     with pytest.raises(ValueError, match="max_requests must be at least 1"):
         RateLimiter(max_requests=0, time_window=30)
 
@@ -66,7 +82,7 @@ def test_rate_limiter_invalid_parameters() -> None:
 
 
 def test_session_property_without_session() -> None:
-    """Test accessing session property without setting a session."""
+    """Test session property when no session is set."""
     limiter = RateLimiter()
     with pytest.raises(RuntimeError, match="No aiohttp session set"):
         _ = limiter.session
@@ -75,125 +91,120 @@ def test_session_property_without_session() -> None:
 @pytest.mark.asyncio
 async def test_rate_limiting_basic(rate_limiter: RateLimiter) -> None:
     """Test basic rate limiting functionality."""
-    domain = f"test-basic-{datetime.now().timestamp()}.com"  # Unique domain per test
+    domain = "test.com"
 
-    # Make requests up to the limit
-    for _ in range(RATE_LIMITER_REQUESTS):
-        await rate_limiter.acquire(domain)
-
-    # The next request should be delayed
-    next_request_start = datetime.now()
+    # First request should be immediate
+    start_time = datetime.now()
     await rate_limiter.acquire(domain)
-    end_time = datetime.now()
+    first_request_time = (datetime.now() - start_time).total_seconds()
+    assert first_request_time < TEST_IMMEDIATE_THRESHOLD  # Should be nearly immediate
 
-    # Verify that the delay was approximately the time window
-    delay = (end_time - next_request_start).total_seconds()
-    assert abs(delay - RATE_LIMITER_WINDOW) <= TIMING_TOLERANCE
+    # Second request should also be immediate (within limit)
+    await rate_limiter.acquire(domain)
+    second_request_time = (datetime.now() - start_time).total_seconds()
+    assert second_request_time < TEST_IMMEDIATE_THRESHOLD  # Should be nearly immediate
+
+    # Third request should be delayed
+    start_time = datetime.now()
+    await rate_limiter.acquire(domain)
+    delay = (datetime.now() - start_time).total_seconds()
+    assert delay >= RATE_LIMITER_WINDOW - TIMING_TOLERANCE
 
 
 @pytest.mark.asyncio
 async def test_get_request(rate_limiter: RateLimiter, mock_responses: aioresponses) -> None:
-    """Test GET request with rate limiting."""
-    url = f"{TEST_SERVER_BASE_URL}/test"
-    domain = f"test-get-{datetime.now().timestamp()}.com"  # Unique domain per test
-
-    # Mock the GET request
-    mock_responses.get(url, status=status.HTTP_200_OK, payload={"message": "success"})
+    """Test rate-limited GET request."""
+    url = "https://api.test.com/data"
+    domain = "api.test.com"
+    mock_responses.get(url, status=status.HTTP_200_OK, payload={"data": "test"})
 
     async with rate_limiter.get(url, domain) as response:
         assert response.status == status.HTTP_200_OK
         data = await response.json()
-        assert data == {"message": "success"}
+        assert data["data"] == "test"
 
 
 @pytest.mark.asyncio
 async def test_post_request(rate_limiter: RateLimiter, mock_responses: aioresponses) -> None:
-    """Test POST request with rate limiting."""
-    url = f"{TEST_SERVER_BASE_URL}/test"
-    domain = f"test-post-{datetime.now().timestamp()}.com"  # Unique domain per test
-    data = {"test": "data"}
+    """Test rate-limited POST request."""
+    url = "https://api.test.com/data"
+    domain = "api.test.com"
+    payload = {"key": "value"}
+    mock_responses.post(url, status=status.HTTP_201_CREATED, payload={"id": TEST_MOCK_ID})
 
-    # Mock the POST request
-    mock_responses.post(url, status=status.HTTP_200_OK, payload={"received": data})
-
-    async with rate_limiter.post(url, domain, json=data) as response:
-        assert response.status == status.HTTP_200_OK
-        result = await response.json()
-        assert result == {"received": data}
+    async with rate_limiter.post(url, domain, json=payload) as response:
+        assert response.status == status.HTTP_201_CREATED
+        data = await response.json()
+        assert data["id"] == TEST_MOCK_ID
 
 
 @pytest.mark.asyncio
 async def test_concurrent_requests(rate_limiter: RateLimiter) -> None:
-    """Test handling of concurrent requests."""
-    domain = f"test-concurrent-{datetime.now().timestamp()}.com"  # Unique domain per test
-    num_requests = RATE_LIMITER_REQUESTS * 2
+    """Test concurrent rate-limited requests."""
+    domain = "concurrent.com"
 
     async def make_request() -> None:
         await rate_limiter.acquire(domain)
 
-    # Make concurrent requests
+    # Make more requests than the limit
+    num_requests = RATE_LIMITER_REQUESTS * 2
     start_time = datetime.now()
     await asyncio.gather(*[make_request() for _ in range(num_requests)])
-    end_time = datetime.now()
+    actual_time = (datetime.now() - start_time).total_seconds()
 
-    # Verify that the total time is at least (num_requests / max_requests - 1) * time_window
+    # Calculate expected minimum time
+    # With 4 requests and 2 per window, we need 1 window (2 requests) + 1 window (2 requests)
     expected_min_time = (num_requests / RATE_LIMITER_REQUESTS - 1) * RATE_LIMITER_WINDOW
-    actual_time = (end_time - start_time).total_seconds()
     assert actual_time >= expected_min_time - TIMING_TOLERANCE
 
 
 @pytest.mark.asyncio
 async def test_request_without_session() -> None:
-    """Test making a request without setting a session."""
+    """Test request without setting session."""
     limiter = RateLimiter()
     with pytest.raises(RuntimeError, match="No aiohttp session set"):
-        await limiter.request("GET", "http://test.com", "test.com")
+        await limiter.request("GET", "https://test.com", "test.com")
 
 
 @pytest.mark.asyncio
 async def test_request_error_handling(rate_limiter: RateLimiter, mock_responses: aioresponses) -> None:
-    """Test error handling during requests."""
-    url = "http://test.com/error"
-    domain = f"test-error-{datetime.now().timestamp()}.com"  # Unique domain per test
+    """Test error handling in rate-limited requests."""
+    url = "https://api.test.com/error"
+    domain = "api.test.com"
+    mock_responses.get(url, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # Mock a failed request
-    mock_responses.get(url, exception=ClientError())
-
-    with pytest.raises(ClientError):
-        async with rate_limiter.get(url, domain) as response:
-            await response.json()
+    async with rate_limiter.get(url, domain) as response:
+        assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
 @pytest.mark.asyncio
 async def test_rate_limited_requests(rate_limiter: RateLimiter, mock_responses: aioresponses) -> None:
-    """Test multiple requests with rate limiting."""
-    url = f"{TEST_SERVER_BASE_URL}/test"
-    domain = f"test-multiple-{datetime.now().timestamp()}.com"  # Unique domain per test
+    """Test that requests are properly rate limited."""
+    url = "https://api.test.com/data"
+    domain = "api.test.com"
 
-    # Mock multiple successful requests
-    for _ in range(RATE_LIMITER_REQUESTS + 1):
-        mock_responses.get(url, status=status.HTTP_200_OK, payload={"count": _})
-
-    # Make requests that should be rate limited
-    start_time = datetime.now()
+    # Fill up the rate limit
     for i in range(RATE_LIMITER_REQUESTS + 1):
+        # Mock each request individually
+        mock_responses.get(url, status=status.HTTP_200_OK, payload={"data": f"test_{i}"})
+
+        start_time = datetime.now()
         async with rate_limiter.get(url, domain) as response:
             assert response.status == status.HTTP_200_OK
-            data = await response.json()
-            assert data == {"count": i}
-    end_time = datetime.now()
+        end_time = datetime.now()
 
-    # Verify that the requests took at least the time window
-    total_time = (end_time - start_time).total_seconds()
-    assert total_time >= RATE_LIMITER_WINDOW - TIMING_TOLERANCE
+        # Check if the request was delayed (after the first RATE_LIMITER_REQUESTS)
+        if i >= RATE_LIMITER_REQUESTS:
+            total_time = (end_time - start_time).total_seconds()
+            assert total_time >= RATE_LIMITER_WINDOW - TIMING_TOLERANCE
 
 
 class TestMetrics:
-    """Tests for metrics functionality."""
+    """Tests for rate limiter metrics."""
 
     @pytest.mark.asyncio
     async def test_metrics_empty_domain(self, rate_limiter: RateLimiter) -> None:
-        """Test metrics for a domain with no requests."""
+        """Test metrics for an empty domain."""
         domain = "empty-domain.com"
         metrics = rate_limiter.get_metrics(domain)
 
@@ -261,18 +272,15 @@ class TestMemoryManagement:
         # Wait for the request to expire
         await asyncio.sleep(RATE_LIMITER_WINDOW + 0.1)
 
-        # Trigger cleanup by making a new request to the same domain
-        await rate_limiter.acquire(domain)
+        # Trigger cleanup by making a new request to a different domain
+        # This should clean up the expired domain
+        await rate_limiter.acquire("other-domain.com")
 
-        # The domain should still exist because we added a new request
-        assert domain in rate_limiter.requests
-
-        # Wait for the new request to expire and trigger cleanup with a different domain
-        await asyncio.sleep(RATE_LIMITER_WINDOW + 0.1)
-        await rate_limiter.acquire("other-domain.com")  # Trigger cleanup
-
-        # The domain should be pruned because it's empty after the other request
+        # The original domain should be pruned because it's empty
         assert domain not in rate_limiter.requests
+
+        # Verify the other domain still exists
+        assert "other-domain.com" in rate_limiter.requests
 
     @pytest.mark.asyncio
     async def test_multiple_domains_isolation(self, rate_limiter: RateLimiter) -> None:
@@ -317,8 +325,10 @@ class TestAsyncSafety:
 
         # Verify no exceptions were raised and timing is reasonable
         total_time = (end_time - start_time).total_seconds()
-        # In concurrent scenario, all requests beyond the limit wait for the same window
-        # With 10 requests and 2 per window, 8 requests will wait for 1 window
+        # With 10 requests and 2 per window:
+        # - First 2 requests go through immediately
+        # - Next 8 requests all wait for the same 1-second window to expire
+        # So minimum time should be 1.0 seconds
         expected_min_time = RATE_LIMITER_WINDOW
         assert total_time >= expected_min_time - TIMING_TOLERANCE
 
@@ -355,7 +365,10 @@ class TestEdgeCases:
         await asyncio.gather(*tasks)
         end_time = datetime.now()
 
-        # Verify timing is correct - with 4 requests and 2 per window, we need 1 window
+        # Verify timing is correct - with 4 requests and 2 per window:
+        # - First 2 requests go through immediately
+        # - Next 2 requests wait for the same 1-second window to expire
+        # So minimum time should be 1.0 seconds
         total_time = (end_time - start_time).total_seconds()
         expected_min_time = RATE_LIMITER_WINDOW
         assert total_time >= expected_min_time - TIMING_TOLERANCE

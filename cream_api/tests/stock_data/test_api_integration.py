@@ -21,8 +21,11 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from cream_api.common.constants import STOCK_TRACK_PATH, STOCK_TRACKED_PATH
 from cream_api.main import app
-from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL
+from cream_api.users.models.app_user import AppUser
+
+from .stock_data_test_constants import DEFAULT_TEST_SYMBOL
 
 client = TestClient(app)
 
@@ -48,7 +51,7 @@ class TestStockTrackingAPI:
         request_data = {"symbol": DEFAULT_TEST_SYMBOL}
 
         # Act
-        response = client.post("/stock-data/track", json=request_data)
+        response = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -73,7 +76,7 @@ class TestStockTrackingAPI:
         request_data = {"symbol": "1INVALID"}
 
         # Act
-        response = client.post("/stock-data/track", json=request_data)
+        response = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Assert - Pydantic validation returns 422 for invalid format
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -96,7 +99,7 @@ class TestStockTrackingAPI:
         request_data = {"symbol": ""}
 
         # Act
-        response = client.post("/stock-data/track", json=request_data)
+        response = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Assert - Pydantic validation returns 422 for empty string
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -119,10 +122,10 @@ class TestStockTrackingAPI:
         request_data = {"symbol": DEFAULT_TEST_SYMBOL}
 
         # Act - First request
-        response1 = client.post("/stock-data/track", json=request_data)
+        response1 = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Act - Second request
-        response2 = client.post("/stock-data/track", json=request_data)
+        response2 = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Assert
         assert response1.status_code == status.HTTP_200_OK
@@ -148,7 +151,7 @@ class TestAdminEndpoints:
             async_test_db: Async database session for testing
         """
         # Act
-        response = client.get("/stock-data/track")
+        response = client.get("/api/stock-data/track")
 
         # Assert
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -173,7 +176,7 @@ class TestAdminEndpoints:
         headers = {"Authorization": "Bearer dummy_token"}
 
         # Act
-        response = client.get("/stock-data/track", headers=headers)
+        response = client.get("/api/stock-data/track", headers=headers)
 
         # Assert
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
@@ -193,7 +196,7 @@ class TestAdminEndpoints:
             async_test_db: Async database session for testing
         """
         # Act
-        response = client.delete(f"/stock-data/tracked/{DEFAULT_TEST_SYMBOL}")
+        response = client.delete(f"/api/stock-data/tracked/{DEFAULT_TEST_SYMBOL}")
 
         # Assert
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -208,40 +211,55 @@ class TestAdminEndpoints:
 
         This test verifies that:
         1. The admin delete endpoint validates authentication tokens
-        2. Returns 401 or 403 when token is invalid
+        2. Returns 401 Unauthorized when token is invalid
         3. Proper error handling for authentication failures
 
         Args:
             async_test_db: Async database session for testing
         """
-        # Arrange
-        headers = {"Authorization": "Bearer dummy_token"}
+        # Arrange - Use a token that doesn't exist in the database
+        headers = {"Authorization": "Bearer invalid_token"}
 
         # Act
-        response = client.delete(f"/stock-data/tracked/{DEFAULT_TEST_SYMBOL}", headers=headers)
+        response = client.delete(f"/api/stock-data/tracked/{DEFAULT_TEST_SYMBOL}", headers=headers)
 
-        # Assert
-        assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
+        # Assert - Invalid token should return 401 Unauthorized
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        data = response.json()
+        assert "detail" in data
+        assert "Could not validate credentials" in data["detail"]
 
     @pytest.mark.asyncio
     async def test_delete_tracked_stock_with_invalid_symbol_format_returns_unauthorized(
         self, async_test_db: AsyncSession
     ) -> None:
-        """Test DELETE /tracked/{symbol} with invalid symbol format returns unauthorized.
+        """Test that delete tracked stock endpoint validates symbol format.
 
         This test verifies that:
-        1. Authentication is checked before symbol validation
-        2. Returns 401 or 403 for auth failure before symbol validation
-        3. Proper error handling sequence
+        1. The endpoint validates symbol format
+        2. Invalid symbols are rejected
+        3. The response indicates the issue
 
         Args:
             async_test_db: Async database session for testing
         """
-        # Arrange
+        # Arrange - Create a test user and get auth token
+        test_user = AppUser(
+            email="test@example.com",
+            password="hashed_password",
+            first_name="Test",
+            last_name="User",
+            is_verified=True,
+            is_active=True,
+            password_reset_token="dummy_token",  # Match the token expected by auth system
+        )
+        async_test_db.add(test_user)
+        await async_test_db.commit()
+
         headers = {"Authorization": "Bearer dummy_token"}
 
         # Act
-        response = client.delete("/stock-data/tracked/INVALID", headers=headers)
+        response = client.delete(f"{STOCK_TRACKED_PATH}/INVALID", headers=headers)
 
         # Assert
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
@@ -266,7 +284,7 @@ class TestAPIResponseFormat:
         request_data = {"symbol": "TSLA"}
 
         # Act
-        response = client.post("/stock-data/track", json=request_data)
+        response = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
@@ -303,7 +321,7 @@ class TestAPIResponseFormat:
         request_data = {"symbol": "1INVALID"}
 
         # Act
-        response = client.post("/stock-data/track", json=request_data)
+        response = client.post(STOCK_TRACK_PATH, json=request_data)
 
         # Assert - Pydantic validation returns 422 for invalid format
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -332,7 +350,7 @@ class TestAPIEndpointAvailability:
         routes = [route.path for route in app.routes if hasattr(route, "path")]
 
         # Act & Assert
-        assert "/stock-data/track" in routes
+        assert "/api/stock-data/track" in routes
 
         # Check for DELETE endpoint pattern
         delete_endpoints = [route for route in routes if "tracked" in route]
@@ -358,13 +376,132 @@ class TestAPIEndpointAvailability:
 
         # Check that our endpoints are documented
         paths = data.get("paths", {})
-        assert "/stock-data/track" in paths
+        assert "/api/stock-data/track" in paths
 
         # Check that both GET and POST methods are documented
-        track_endpoint = paths["/stock-data/track"]
+        track_endpoint = paths["/api/stock-data/track"]
         assert "post" in track_endpoint
         assert "get" in track_endpoint
 
         # Check that DELETE endpoint is documented
         delete_endpoints = [path for path in paths.keys() if "tracked" in path]
         assert len(delete_endpoints) > 0
+
+    @pytest.mark.asyncio
+    async def test_list_tracked_stocks_with_auth_returns_forbidden(self, async_test_db: AsyncSession) -> None:
+        """Test that list tracked stocks endpoint returns forbidden for non-admin users.
+
+        This test verifies that:
+        1. The endpoint accepts valid authentication tokens
+        2. Returns 403 Forbidden for users without admin privileges
+        3. The endpoint properly validates authorization
+
+        Args:
+            async_test_db: Async database session for testing
+        """
+        # Arrange - Create a test user and get auth token
+        test_user = AppUser(
+            email="test@example.com",
+            password="hashed_password",
+            first_name="Test",
+            last_name="User",
+            is_verified=True,
+            is_active=True,
+            password_reset_token="dummy_token",  # Match the token expected by auth system
+        )
+        async_test_db.add(test_user)
+        await async_test_db.commit()
+
+        headers = {"Authorization": "Bearer dummy_token"}
+
+        # Act
+        response = client.get(STOCK_TRACK_PATH, headers=headers)
+
+        # Assert - Valid token but no admin role should return 403 Forbidden
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        data = response.json()
+        assert "detail" in data
+        assert "Admin access required" in data["detail"]
+
+    @pytest.mark.asyncio
+    async def test_delete_tracked_stock_without_auth_returns_unauthorized(self, async_test_db: AsyncSession) -> None:
+        """Test that delete tracked stock endpoint requires authentication.
+
+        This test verifies that:
+        1. The endpoint rejects unauthenticated users
+        2. The response indicates authentication is required
+        3. The endpoint is properly protected
+
+        Args:
+            async_test_db: Async database session for testing
+        """
+        # Act
+        response = client.delete(f"{STOCK_TRACKED_PATH}/{DEFAULT_TEST_SYMBOL}")
+
+        # Assert
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        data = response.json()
+        assert "detail" in data
+        assert "Not authenticated" in data["detail"]
+
+    @pytest.mark.asyncio
+    async def test_delete_tracked_stock_with_auth_returns_forbidden(self, async_test_db: AsyncSession) -> None:
+        """Test that delete tracked stock endpoint returns forbidden for non-admin users.
+
+        This test verifies that:
+        1. The endpoint accepts valid authentication tokens
+        2. Returns 403 Forbidden for users without admin privileges
+        3. The endpoint properly validates authorization
+
+        Args:
+            async_test_db: Async database session for testing
+        """
+        # Arrange - Create a test user and get auth token
+        test_user = AppUser(
+            email="test@example.com",
+            password="hashed_password",
+            first_name="Test",
+            last_name="User",
+            is_verified=True,
+            is_active=True,
+            password_reset_token="dummy_token",  # Match the token expected by auth system
+        )
+        async_test_db.add(test_user)
+        await async_test_db.commit()
+
+        headers = {"Authorization": "Bearer dummy_token"}
+
+        # Act
+        response = client.delete(f"{STOCK_TRACKED_PATH}/{DEFAULT_TEST_SYMBOL}", headers=headers)
+
+        # Assert - Valid token but no admin role should return 403 Forbidden
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        data = response.json()
+        assert "detail" in data
+        assert "Admin access required" in data["detail"]
+
+    @pytest.mark.asyncio
+    async def test_list_tracked_stocks_with_invalid_token_returns_unauthorized(
+        self, async_test_db: AsyncSession
+    ) -> None:
+        """Test GET /track with invalid token returns unauthorized error.
+
+        This test verifies that:
+        1. The admin endpoint validates authentication tokens
+        2. Returns 401 Unauthorized when token is invalid
+        3. Proper error handling for authentication failures
+
+        Args:
+            async_test_db: Async database session for testing
+        """
+        # Arrange - Use a token that doesn't exist in the database
+        headers = {"Authorization": "Bearer invalid_token"}
+
+        # Act
+        response = client.get("/api/stock-data/track", headers=headers)
+
+        # Assert - Invalid token should return 401 Unauthorized
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        data = response.json()
+        assert "detail" in data
+        assert "Could not validate credentials" in data["detail"]

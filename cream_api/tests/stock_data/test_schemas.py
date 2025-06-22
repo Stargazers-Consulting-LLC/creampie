@@ -58,15 +58,11 @@ class TestStockRequestCreate:
         request = StockRequestCreate(**data)
         assert request.symbol == "AA"
 
-    def test_symbol_whitespace_rejected(self) -> None:
-        """Test that symbols with whitespace are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            StockRequestCreate(symbol="  AAPL  ")
-
-        error = exc_info.value
-        assert len(error.errors()) == 1
-        assert error.errors()[0]["type"] == "value_error"
-        assert "whitespace" in str(error.errors()[0]["msg"])
+    def test_symbol_whitespace_trimmed(self) -> None:
+        """Test that symbols with whitespace are trimmed."""
+        data = {"symbol": "  AAPL  "}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AAPL"
 
     def test_symbol_mixed_case_converted(self) -> None:
         """Test that mixed case symbols are converted to uppercase."""
@@ -133,9 +129,11 @@ class TestStockRequestCreate:
     @pytest.mark.parametrize(
         "invalid_symbol",
         [
-            "AAPL ",  # Contains space
-            "AAPL\n",  # Contains newline
-            "AAPL\t",  # Contains tab
+            "AAPL!",  # Contains special character
+            "AAPL-",  # Contains hyphen
+            "AAPL_",  # Contains underscore
+            "1AAPL",  # Starts with digit
+            "AAPL1!",  # Contains special character
         ],
     )
     def test_invalid_symbols_rejected_custom_validation(self, invalid_symbol: str) -> None:
@@ -211,50 +209,35 @@ class TestStockRequestCreate:
         assert len(error.errors()) == 1
         assert "must start with a letter" in str(error.errors()[0]["msg"])
 
-    def test_symbol_with_leading_whitespace_rejected(self) -> None:
-        """Test that symbols with leading whitespace are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            StockRequestCreate(symbol=" AAPL")
+    def test_symbol_with_leading_whitespace_trimmed(self) -> None:
+        """Test that symbols with leading whitespace are trimmed."""
+        data = {"symbol": " AAPL"}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AAPL"
 
-        error = exc_info.value
-        assert len(error.errors()) == 1
-        assert "whitespace" in str(error.errors()[0]["msg"])
+    def test_symbol_with_trailing_whitespace_trimmed(self) -> None:
+        """Test that symbols with trailing whitespace are trimmed."""
+        data = {"symbol": "AAPL "}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AAPL"
 
-    def test_symbol_with_trailing_whitespace_rejected(self) -> None:
-        """Test that symbols with trailing whitespace are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            StockRequestCreate(symbol="AAPL ")
+    def test_symbol_with_newline_trimmed(self) -> None:
+        """Test that symbols with newline characters are trimmed."""
+        data = {"symbol": "AAPL\n"}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AAPL"
 
-        error = exc_info.value
-        assert len(error.errors()) == 1
-        assert "whitespace" in str(error.errors()[0]["msg"])
+    def test_symbol_with_tab_trimmed(self) -> None:
+        """Test that symbols with tab characters are trimmed."""
+        data = {"symbol": "AAPL\t"}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AAPL"
 
-    def test_symbol_with_newline_rejected(self) -> None:
-        """Test that symbols with newline characters are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            StockRequestCreate(symbol="AAPL\n")
-
-        error = exc_info.value
-        assert len(error.errors()) == 1
-        assert "whitespace" in str(error.errors()[0]["msg"])
-
-    def test_symbol_with_tab_rejected(self) -> None:
-        """Test that symbols with tab characters are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            StockRequestCreate(symbol="AAPL\t")
-
-        error = exc_info.value
-        assert len(error.errors()) == 1
-        assert "whitespace" in str(error.errors()[0]["msg"])
-
-    def test_symbol_with_multiple_whitespace_characters_rejected(self) -> None:
-        """Test that symbols with multiple whitespace characters are rejected."""
-        with pytest.raises(ValidationError) as exc_info:
-            StockRequestCreate(symbol="AAPL \n\t")
-
-        error = exc_info.value
-        assert len(error.errors()) == 1
-        assert "whitespace" in str(error.errors()[0]["msg"])
+    def test_symbol_with_multiple_whitespace_characters_trimmed(self) -> None:
+        """Test that symbols with multiple whitespace characters are trimmed."""
+        data = {"symbol": "AAPL \n\t"}
+        request = StockRequestCreate(**data)
+        assert request.symbol == "AAPL"
 
 
 class TestStockRequestResponse:

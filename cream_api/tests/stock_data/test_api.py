@@ -32,7 +32,7 @@ def app(async_test_db: AsyncSession) -> FastAPI:
     Following the style guide's test application setup pattern, this fixture:
     1. Creates a new FastAPI application
     2. Overrides the database dependency with the test database
-    3. Includes the router under test
+    3. Includes the router under test with proper API prefix
 
     Args:
         async_test_db: Async database session for testing
@@ -53,7 +53,12 @@ def app(async_test_db: AsyncSession) -> FastAPI:
 
     app.dependency_overrides[get_async_db] = override_get_async_db
     app.dependency_overrides[get_current_user_async] = override_get_current_user_async
-    app.include_router(router)
+
+    # Include the router with the API prefix to match the main app configuration
+    from cream_api.common.constants import API_PREFIX
+
+    app.include_router(router, prefix=API_PREFIX)
+
     return app
 
 
@@ -85,7 +90,7 @@ async def test_track_stock_new(async_test_db: AsyncSession, async_client: TestCl
         async_client: Test client for making requests
     """
     # Make the request
-    response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
+    response = async_client.post("/api/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
     # Verify response
     assert response.status_code == status.HTTP_200_OK
@@ -126,7 +131,7 @@ async def test_track_stock_existing(async_test_db: AsyncSession, async_client: T
     await async_test_db.commit()
 
     # Make the request
-    response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
+    response = async_client.post("/api/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
     # Verify response
     assert response.status_code == status.HTTP_200_OK
@@ -157,7 +162,7 @@ async def test_track_stock_invalid_symbol(async_test_db: AsyncSession, async_cli
         async_client: Test client for making requests
     """
     # Make the request with an invalid symbol
-    response = async_client.post("/stock-data/track", json={"symbol": ""})
+    response = async_client.post("/api/stock-data/track", json={"symbol": ""})
 
     # Verify response
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -184,7 +189,7 @@ async def test_track_stock_database_error(async_test_db: AsyncSession, async_cli
 
     with patch.object(async_test_db, "commit", side_effect=mock_commit):
         # Make the request
-        response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
+        response = async_client.post("/api/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
         # Verify response
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -211,7 +216,7 @@ async def test_track_stock_background_task_error(async_test_db: AsyncSession, as
         async_client: Test client for making requests
     """
 
-    response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
+    response = async_client.post("/api/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
     # Verify response
     assert response.status_code == status.HTTP_200_OK  # Task errors shouldn't affect the response
@@ -235,7 +240,7 @@ async def test_list_tracked_stocks_admin_required(async_test_db: AsyncSession, a
         async_client: Test client for making requests
     """
     # Make the request
-    response = async_client.get("/stock-data/track")
+    response = async_client.get("/api/stock-data/track")
 
     # Verify response
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -258,7 +263,7 @@ async def test_deactivate_tracking_admin_required(async_test_db: AsyncSession, a
         async_client: Test client for making requests
     """
     # Make the request
-    response = async_client.delete(f"/stock-data/tracked/{DEFAULT_TEST_SYMBOL}")
+    response = async_client.delete(f"/api/stock-data/tracked/{DEFAULT_TEST_SYMBOL}")
 
     # Verify response
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -287,7 +292,7 @@ async def test_track_stock_invalid_symbol_error_handling(async_test_db: AsyncSes
         mock_service.side_effect = InvalidStockSymbolError("INVALID", "Symbol must start with a letter")
 
         # Make the request
-        response = async_client.post("/stock-data/track", json={"symbol": "INVALID"})
+        response = async_client.post("/api/stock-data/track", json={"symbol": "INVALID"})
 
         # Verify response
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -316,7 +321,7 @@ async def test_track_stock_stock_data_error_handling(async_test_db: AsyncSession
         mock_service.side_effect = StockDataError("Failed to process stock tracking request")
 
         # Make the request
-        response = async_client.post("/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
+        response = async_client.post("/api/stock-data/track", json={"symbol": DEFAULT_TEST_SYMBOL})
 
         # Verify response
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR

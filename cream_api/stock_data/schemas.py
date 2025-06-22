@@ -41,11 +41,12 @@ class StockRequestCreate(BaseModel):
     @classmethod
     def validate_symbol_format(cls, v: str) -> str:
         """Validate stock symbol format."""
-        # Check for whitespace/newlines first
-        if any(c.isspace() for c in v):
-            raise ValueError("Stock symbol cannot contain whitespace, newlines, or tabs")
+        # User-friendly normalization: trim whitespace and convert to uppercase
+        symbol = v.strip().upper()
 
-        symbol = v.upper()
+        # Check for remaining whitespace/newlines (shouldn't happen after strip, but safety check)
+        if any(c in string.whitespace for c in symbol):
+            raise ValueError("Stock symbol cannot contain whitespace, newlines, or tabs")
 
         if not (1 < len(symbol) <= MAX_STOCK_SYMBOL_LENGTH):
             raise ValueError("Stock symbol must be 2-10 characters long")

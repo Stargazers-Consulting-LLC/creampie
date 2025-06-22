@@ -14,6 +14,11 @@ from cream_api.db import ModelBase, get_async_db, get_db
 from cream_api.main import app
 from cream_api.settings import Settings
 
+# Import models so they're registered with SQLAlchemy
+from cream_api.stock_data.models import StockData, TrackedStock  # noqa: F401
+from cream_api.users.models.app_user import AppUser  # noqa: F401
+from cream_api.users.models.app_user_session import AppUserSession  # noqa: F401
+
 
 @pytest.fixture
 def test_settings() -> Settings:

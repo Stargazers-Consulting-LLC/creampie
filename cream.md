@@ -2,9 +2,11 @@
 
 Cash Rules Everything Around Me Project: Investing in Everyone
 
-CREAMPIE is a radical experiment in vibes. A truly open source platform for financial planning.
+CREAMPIE is a radical experiment in development, AI tooling and personal finance. A truly open source platform for financial planning.
 
 Most Americans can't cover an emergency expense and that's bullshit.
+
+It's also a crass joke, because i thought it was funny at the time.
 
 ## Truly Open
 

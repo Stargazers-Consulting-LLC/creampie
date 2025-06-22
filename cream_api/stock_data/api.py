@@ -107,6 +107,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from cream_api.common.constants import STOCK_DATA_PREFIX
 from cream_api.common.exceptions import StockNotFoundError
 from cream_api.db import get_async_db
 from cream_api.stock_data.schemas import StockRequestCreate
@@ -120,7 +121,7 @@ from cream_api.users.routes.auth import get_current_user_async
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/stock-data", tags=["stock-data"])
+router = APIRouter(prefix=STOCK_DATA_PREFIX, tags=["stock-data"])
 
 
 # Response models for API documentation
