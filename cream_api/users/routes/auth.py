@@ -1,6 +1,7 @@
 """Authentication routes for user management."""
 
 import hashlib
+import logging
 import secrets
 from datetime import datetime
 from typing import Annotated
@@ -20,6 +21,9 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 # Security configuration
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+
+# Logging configuration
+logger = logging.getLogger(__name__)
 
 
 # Pydantic models for request/response validation
@@ -109,11 +113,15 @@ async def get_current_user_async(
 
 
 # Route handlers
-@router.post("/signup", status_code=status.HTTP_201_CREATED)
-def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> dict:
-    """Creates new user account with automatic verification."""
+@router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=Token)
+def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> Token:
+    """Creates new user account with automatic verification and login."""
+    logger.info(f"Signup request received for email: {user_data.email}")
+    logger.info(f"Request data: {user_data}")
+
     # Check if user already exists
     if db.query(AppUser).filter(AppUser.email == user_data.email).first():
+        logger.warning(f"Signup failed - email already registered: {user_data.email}")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
     # Create new user
@@ -131,7 +139,11 @@ def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> di
     db.commit()
     db.refresh(db_user)
 
-    return {"message": "User created successfully."}
+    # Create access token for automatic login
+    access_token = create_access_token(data={"sub": user_data.email})
+
+    logger.info(f"User created successfully and logged in: {user_data.email}")
+    return Token(access_token=access_token, token_type="bearer")
 
 
 @router.post("/login", response_model=Token)

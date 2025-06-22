@@ -40,28 +40,60 @@ export function SignUpPage() {
       // Validate form data
       signUpSchema.parse(formData);
 
+      console.log('Making signup request to:', '/api/auth/signup');
+      console.log('Request data:', formData);
+
+      // Transform form data to match backend API expectations
+      const apiData = {
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+      };
+
+      console.log('API request data:', apiData);
+
       // TODO: Implement API call
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(apiData),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        const error = await response.json();
+        const errorText = await response.text();
+        console.log('Error response text:', errorText);
+
+        let error;
+        try {
+          error = JSON.parse(errorText);
+        } catch {
+          error = { message: errorText || 'Signup failed' };
+        }
+
         throw new Error(error.message || 'Signup failed');
       }
 
-      // Show success message and redirect to login page
-      navigate('/auth/login', {
+      const responseData = await response.json();
+      console.log('Success response:', responseData);
+
+      // Store the token for automatic login
+      localStorage.setItem('token', responseData.access_token);
+
+      // Redirect to dashboard since user is now logged in
+      navigate('/dashboard', {
         state: {
-          message: 'Account created successfully! Please sign in with your credentials.',
-          email: formData.email,
+          message: 'Account created successfully! Welcome to CreamPie.',
         },
       });
     } catch (error) {
+      console.error('Signup error:', error);
+
       if (error instanceof z.ZodError) {
         const fieldErrors: Partial<SignUpFormData> = {};
         error.errors.forEach((err) => {
@@ -73,7 +105,7 @@ export function SignUpPage() {
       } else {
         setErrors({ email: (error as Error).message });
       }
-    } finally {
+
       setIsSubmitting(false);
     }
   };

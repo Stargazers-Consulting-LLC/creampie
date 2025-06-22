@@ -7,10 +7,10 @@ for proper startup and shutdown handling.
 
 import logging
 import os
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from cream_api.background_tasks import start_background_tasks
@@ -63,6 +63,20 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 app = FastAPI(title="Cream API", lifespan=lifespan)
 
+
+# Add request logging middleware
+@app.middleware("http")
+async def log_requests(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
+    """Log all incoming requests for debugging."""
+    logger.info(f"Incoming request: {request.method} {request.url}")
+    logger.info(f"Request headers: {dict(request.headers)}")
+
+    response = await call_next(request)
+
+    logger.info(f"Response status: {response.status_code}")
+    return response
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Vite default port
@@ -72,8 +86,8 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(auth_router)
-app.include_router(stock_data_router)
+app.include_router(auth_router, prefix="/api")
+app.include_router(stock_data_router, prefix="/api")
 
 
 @app.get("/")

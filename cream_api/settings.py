@@ -7,6 +7,10 @@ import sys
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Get the directory where this settings file is located
+SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_FILE_PATH = os.path.join(SETTINGS_DIR, ".env")
+
 
 class Settings(BaseSettings):
     """Configuration for database and frontend integration."""
@@ -38,7 +42,7 @@ class Settings(BaseSettings):
             return "sqlite+aiosqlite:///:memory:"
         return f"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}"
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=ENV_FILE_PATH)
 
 
 app_settings = Settings()
