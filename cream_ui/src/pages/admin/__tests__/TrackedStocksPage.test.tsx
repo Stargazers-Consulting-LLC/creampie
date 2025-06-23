@@ -1,8 +1,8 @@
 /**
- * TrackedStocksPage Component Tests
+ * Tracked Stocks Page Component Tests
  *
- * Comprehensive unit tests for the TrackedStocksPage component covering
- * data loading, display, error handling, and admin actions.
+ * Comprehensive test suite for the TrackedStocksPage component, covering
+ * data loading, error handling, and user interactions.
  *
  * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
  * SPDX-License-Identifier: MIT
@@ -163,9 +163,6 @@ describe('TrackedStocksPage', () => {
     });
 
     // Mock the API to return a promise that doesn't resolve immediately
-    const mockGetTrackedStocks = stockTrackingApi.getTrackedStocks as jest.MockedFunction<
-      typeof stockTrackingApi.getTrackedStocks
-    >;
     mockGetTrackedStocks.mockImplementationOnce(() => new Promise(() => {}));
 
     // Click refresh button
@@ -352,10 +349,6 @@ describe('TrackedStocksPage', () => {
     });
 
     // Mock the API to return a promise that doesn't resolve immediately
-    const mockDeactivateStockTracking =
-      stockTrackingApi.deactivateStockTracking as jest.MockedFunction<
-        typeof stockTrackingApi.deactivateStockTracking
-      >;
     mockDeactivateStockTracking.mockImplementationOnce(() => new Promise(() => {}));
 
     // Click the first deactivate button (AAPL)

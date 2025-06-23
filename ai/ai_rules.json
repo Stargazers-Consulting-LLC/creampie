@@ -105,6 +105,18 @@
     }
   },
   "mandatory_workflows": {
+    "critical_workflow_triggers": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "AUTOMATIC TRIGGER: When user mentions any error, issue, or problem, MUST check ai/outputs/ first",
+      "keywords": [
+        "lint", "eslint", "test", "error", "failure", "warning", "build", "fail", "broken", "issue", "problem", "doesn't work", "not working"
+      ],
+      "mandatory_response": "I MUST check ai/outputs/ first before any other action",
+      "blocking": true,
+      "priority": "highest",
+      "enforcement": "AUTOMATIC - No exceptions, no questions, no alternatives"
+    },
     "outputs_check_rule": {
       "enabled": true,
       "mandatory": true,

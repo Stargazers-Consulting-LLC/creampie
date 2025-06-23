@@ -1,15 +1,14 @@
 /**
- * StockRequestForm Component Tests
+ * Stock Request Form Component Tests
  *
- * Comprehensive unit tests for the StockRequestForm component covering
- * form validation, user interactions, API integration, and error handling.
+ * Comprehensive test suite for the StockRequestForm component, covering
+ * form validation, submission, error handling, and user interactions.
  *
  * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
  * SPDX-License-Identifier: MIT
  */
 
 import * as React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StockRequestForm } from '../StockRequestForm';
@@ -104,7 +103,11 @@ describe('StockRequestForm', () => {
   it('submits form with valid data', async () => {
     const user = userEvent.setup();
     const onSuccess = vi.fn();
-    mockTrackStock.mockResolvedValue({ message: 'Stock tracking requested successfully' });
+    mockTrackStock.mockResolvedValue({
+      status: 'tracking',
+      message: 'Stock tracking requested successfully',
+      symbol: 'AAPL',
+    });
 
     render(<StockRequestForm onSuccess={onSuccess} />);
 
@@ -182,7 +185,11 @@ describe('StockRequestForm', () => {
   it('calls onSuccess callback when successful', async () => {
     const user = userEvent.setup();
     const onSuccess = vi.fn();
-    mockTrackStock.mockResolvedValue({ message: 'Success' });
+    mockTrackStock.mockResolvedValue({
+      status: 'tracking',
+      message: 'Success',
+      symbol: 'AAPL',
+    });
 
     render(<StockRequestForm onSuccess={onSuccess} />);
 
@@ -217,7 +224,11 @@ describe('StockRequestForm', () => {
 
   it('clears form after successful submission', async () => {
     const user = userEvent.setup();
-    mockTrackStock.mockResolvedValue({ message: 'Success' });
+    mockTrackStock.mockResolvedValue({
+      status: 'tracking',
+      message: 'Success',
+      symbol: 'AAPL',
+    });
 
     render(<StockRequestForm />);
 

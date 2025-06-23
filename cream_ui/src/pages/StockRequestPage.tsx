@@ -1,8 +1,8 @@
 /**
- * Stock Request Page
+ * Stock Request Page Component
  *
- * Page component for requesting stock tracking. Provides a clean interface
- * for users to submit stock tracking requests with proper layout and navigation.
+ * A page that allows users to request stock tracking with a form interface.
+ * Provides a clean, user-friendly interface for submitting stock tracking requests.
  *
  * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
  * SPDX-License-Identifier: MIT

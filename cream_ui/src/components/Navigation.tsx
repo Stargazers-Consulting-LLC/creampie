@@ -1,6 +1,8 @@
 /**
- * Main navigation component using shadcn/ui navigation menu.
- * Provides responsive navigation with dropdown menus and mobile support.
+ * Navigation Component
+ *
+ * Main navigation component for the application. Provides navigation links
+ * and user authentication status display.
  *
  * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
  * SPDX-License-Identifier: MIT

@@ -107,7 +107,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cream_api.common.constants import STOCK_DATA_PREFIX
 from cream_api.common.exceptions import StockNotFoundError
 from cream_api.db import get_async_db
 from cream_api.stock_data.schemas import StockRequestCreate
@@ -121,7 +120,7 @@ from cream_api.users.routes.auth import get_current_user_async
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix=STOCK_DATA_PREFIX, tags=["stock-data"])
+router = APIRouter(tags=["stock-data"])
 
 
 class StockTrackingResponse(BaseModel):
@@ -159,7 +158,7 @@ class StockDeactivationResponse(BaseModel):
 
 
 @router.post(
-    "/track",
+    "/stock-data/track",
     response_model=StockTrackingResponse,
     status_code=status.HTTP_200_OK,
     summary="Start tracking a stock symbol",
@@ -203,7 +202,7 @@ async def track_stock(
 
 
 @router.get(
-    "/track",
+    "/stock-data/track",
     response_model=TrackedStocksResponse,
     status_code=status.HTTP_200_OK,
     summary="List all tracked stocks (admin only)",
@@ -244,7 +243,7 @@ async def list_tracked_stocks(
 
 
 @router.delete(
-    "/tracked/{symbol}",
+    "/stock-data/tracked/{symbol}",
     response_model=StockDeactivationResponse,
     status_code=status.HTTP_200_OK,
     summary="Deactivate stock tracking (admin only)",

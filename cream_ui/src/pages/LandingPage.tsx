@@ -1,6 +1,8 @@
 /**
- * Landing page component that showcases the main features and value proposition.
- * Implements a responsive design with hero section, features grid, and disclaimer.
+ * Landing Page Component
+ *
+ * The main landing page for the application, providing an overview
+ * and navigation to key features.
  *
  * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
  * SPDX-License-Identifier: MIT

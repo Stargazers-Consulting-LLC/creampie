@@ -1,6 +1,8 @@
 /**
- * Email verification page component.
- * Handles email verification flow and provides resend functionality.
+ * Verify Email Page Component
+ *
+ * A page that handles email verification for user accounts.
+ * Provides feedback to users about their email verification status.
  *
  * SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
  * SPDX-License-Identifier: MIT
