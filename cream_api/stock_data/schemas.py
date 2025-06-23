@@ -1,7 +1,10 @@
 """Pydantic schemas for stock tracking requests.
 
-This module provides Pydantic models for validating stock tracking request data,
-including input validation, response models, and admin listing schemas.
+This module provides comprehensive Pydantic models for validating stock tracking
+request data, including input validation, response models, and admin listing schemas.
+It handles stock symbol validation, status tracking, and data transformation for
+the stock tracking system. The schemas ensure data integrity and provide clear
+error messages for validation failures.
 
 References:
     - [Pydantic Documentation](https://docs.pydantic.dev/)
@@ -18,7 +21,7 @@ import string
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from cream_api.stock_data.constants import MAX_STOCK_SYMBOL_LENGTH
 
@@ -37,16 +40,30 @@ class StockRequestCreate(BaseModel):
 
     symbol: str = Field(..., min_length=1, max_length=MAX_STOCK_SYMBOL_LENGTH, description="Stock symbol to track")
 
+    @model_validator(mode="before")
+    @classmethod
+    def trim_whitespace(cls, values: dict) -> dict:
+        """Trim whitespace from symbol before field validation."""
+        if isinstance(values, dict) and "symbol" in values:
+            values["symbol"] = values["symbol"].strip()
+        return values
+
     @field_validator("symbol")
     @classmethod
     def validate_symbol_format(cls, v: str) -> str:
-        """Validate stock symbol format."""
-        # User-friendly normalization: trim whitespace and convert to uppercase
-        symbol = v.strip().upper()
+        """Validate stock symbol format.
 
-        # Check for remaining whitespace/newlines (shouldn't happen after strip, but safety check)
-        if any(c in string.whitespace for c in symbol):
-            raise ValueError("Stock symbol cannot contain whitespace, newlines, or tabs")
+        Args:
+            v: The stock symbol string to validate (already trimmed)
+
+        Returns:
+            str: The normalized and validated stock symbol (uppercase)
+
+        Raises:
+            ValueError: If the symbol format is invalid with a descriptive message
+        """
+        # Convert to uppercase
+        symbol = v.upper().strip()
 
         if not (1 < len(symbol) <= MAX_STOCK_SYMBOL_LENGTH):
             raise ValueError("Stock symbol must be 2-10 characters long")
@@ -55,6 +72,7 @@ class StockRequestCreate(BaseModel):
         if not all(c in valid_chars for c in symbol):
             raise ValueError("Stock symbol must contain only uppercase letters (A-Z) and digits (0-9)")
 
+        # Check that symbol starts with a letter
         if symbol[0] not in string.ascii_uppercase:
             raise ValueError("Stock symbol must start with a letter (A-Z)")
 

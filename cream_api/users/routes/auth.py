@@ -1,4 +1,19 @@
-"""Authentication routes for user management."""
+"""Authentication routes for user management.
+
+This module provides comprehensive authentication endpoints for user registration,
+login, and session management. It includes password hashing, JWT token handling,
+and user validation with proper security measures.
+
+References:
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 import hashlib
 import logging
@@ -29,7 +44,14 @@ logger = logging.getLogger(__name__)
 
 # Pydantic models for request/response validation
 class UserCreate(BaseModel):
-    """User registration data model."""
+    """User registration data model.
+
+    Attributes:
+        email: User's email address for account creation
+        password: Plain text password (will be hashed)
+        first_name: User's first name
+        last_name: User's last name
+    """
 
     email: EmailStr
     password: str
@@ -38,20 +60,34 @@ class UserCreate(BaseModel):
 
 
 class Token(BaseModel):
-    """JWT token response."""
+    """JWT token response model.
+
+    Attributes:
+        access_token: JWT access token for authentication
+        token_type: Type of token (typically "bearer")
+    """
 
     access_token: str
     token_type: str
 
 
 class TokenData(BaseModel):
-    """Session token payload model."""
+    """Session token payload model.
+
+    Attributes:
+        email: User email from token payload
+    """
 
     email: str | None = None
 
 
 class TokenPayload(BaseModel):
-    """JWT token payload."""
+    """JWT token payload model.
+
+    Attributes:
+        sub: Subject identifier (typically user ID or email)
+        exp: Token expiration timestamp
+    """
 
     sub: str
     exp: datetime
@@ -59,21 +95,46 @@ class TokenPayload(BaseModel):
 
 # Helper functions
 def get_password_hash(password: str) -> str:
-    """Using SHA-256 with salt for secure password storage."""
+    """Generate secure password hash using SHA-256 with salt.
+
+    Args:
+        password: Plain text password to hash
+
+    Returns:
+        str: Salted hash in format "salt$hash"
+    """
     salt = secrets.token_hex(16)
     hash_obj = hashlib.sha256((password + salt).encode())
     return f"{salt}${hash_obj.hexdigest()}"
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Validates password against stored hash using the same salt."""
+    """Validate password against stored hash using the same salt.
+
+    Args:
+        plain_password: Plain text password to verify
+        hashed_password: Stored hash in format "salt$hash"
+
+    Returns:
+        bool: True if password matches, False otherwise
+    """
     salt, stored_hash = hashed_password.split("$")
     hash_obj = hashlib.sha256((plain_password + salt).encode())
     return hash_obj.hexdigest() == stored_hash
 
 
 def create_access_token(data: dict) -> str:
-    """Create JWT access token."""
+    """Create JWT access token.
+
+    Args:
+        data: Token payload data
+
+    Returns:
+        str: JWT access token
+
+    Note:
+        TODO: Implement proper JWT token creation with expiration and signing
+    """
     # TODO: Implement proper JWT token creation with expiration and signing
     return "dummy_token"
 
@@ -81,7 +142,18 @@ def create_access_token(data: dict) -> str:
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)], db: Annotated[Session, Depends(get_db)]
 ) -> AppUser:
-    """Validates session token and returns associated user."""
+    """Validate session token and return associated user.
+
+    Args:
+        token: JWT token from request
+        db: Database session
+
+    Returns:
+        AppUser: Authenticated user instance
+
+    Raises:
+        HTTPException: If token is invalid or user not found
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -97,7 +169,18 @@ async def get_current_user(
 async def get_current_user_async(
     token: Annotated[str, Depends(oauth2_scheme)], db: Annotated[AsyncSession, Depends(get_async_db)]
 ) -> AppUser:
-    """Validates session token and returns associated user (async version)."""
+    """Validate session token and return associated user (async version).
+
+    Args:
+        token: JWT token from request
+        db: Async database session
+
+    Returns:
+        AppUser: Authenticated user instance
+
+    Raises:
+        HTTPException: If token is invalid or user not found
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -116,7 +199,18 @@ async def get_current_user_async(
 # Route handlers
 @router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=Token)
 def signup(user_data: UserCreate, db: Annotated[Session, Depends(get_db)]) -> Token:
-    """Creates new user account with automatic verification and login."""
+    """Create new user account with automatic verification and login.
+
+    Args:
+        user_data: User registration data
+        db: Database session
+
+    Returns:
+        Token: JWT token for immediate authentication
+
+    Raises:
+        HTTPException: If email is already registered
+    """
     logger.info(f"Signup request received for email: {user_data.email}")
     logger.info(f"Request data: {user_data}")
 
@@ -152,7 +246,18 @@ def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Annotated[Session, Depends(get_db)],
 ) -> Token:
-    """Authenticate user and return JWT token."""
+    """Authenticate user and return JWT token.
+
+    Args:
+        form_data: OAuth2 password form data
+        db: Database session
+
+    Returns:
+        Token: JWT token for authentication
+
+    Raises:
+        HTTPException: If credentials are invalid
+    """
     user = db.query(AppUser).filter(AppUser.email == form_data.username).first()
     if not user or not verify_password(form_data.password, user.password):
         raise HTTPException(

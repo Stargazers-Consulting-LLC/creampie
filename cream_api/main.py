@@ -2,7 +2,16 @@
 
 This module sets up the FastAPI application with all necessary middleware,
 routers, and event handlers. It also configures the application's lifespan
-for proper startup and shutdown handling.
+for proper startup and shutdown handling with background task management.
+
+References:
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
 """
 
 import logging
@@ -68,7 +77,18 @@ app = FastAPI(title="Cream API", lifespan=lifespan)
 # Add request logging middleware
 @app.middleware("http")
 async def log_requests(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
-    """Log all incoming requests for debugging."""
+    """Log all incoming requests for debugging.
+
+    This middleware logs detailed information about all incoming HTTP requests
+    including method, URL, headers, and response status for debugging purposes.
+
+    Args:
+        request: The incoming HTTP request
+        call_next: Function to call the next middleware/route handler
+
+    Returns:
+        Response: The HTTP response from the application
+    """
     logger.info(f"Incoming request: {request.method} {request.url}")
     logger.info(f"Request headers: {dict(request.headers)}")
 
@@ -93,7 +113,11 @@ app.include_router(stock_data_router, prefix=API_PREFIX)
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    """Health check endpoint to verify API is running."""
+    """Health check endpoint to verify API is running.
+
+    Returns:
+        dict[str, str]: Simple health check response
+    """
     return {"app": "root"}
 
 

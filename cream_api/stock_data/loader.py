@@ -1,4 +1,19 @@
-"""Stock data loading functionality."""
+"""Stock data loading functionality.
+
+This module provides data loading, validation, transformation, and database storage
+capabilities for stock data operations. It handles bulk data processing with
+PostgreSQL-specific optimizations for performance and data integrity.
+
+References:
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+    - [Pandas Documentation](https://pandas.pydata.org/docs/)
+    - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 import logging
 from itertools import batched
@@ -16,18 +31,26 @@ logger: logging.Logger = get_logger_for(__name__)
 
 
 class StockDataLoader:
-    """Loader for stock data operations including validation, transformation, and database storage."""
+    """Loader for stock data operations including validation, transformation, and database storage.
+
+    This class provides comprehensive data processing capabilities for stock data,
+    including validation of data structure, transformation of raw data into database
+    models, and efficient bulk storage operations with PostgreSQL-specific optimizations.
+
+    The loader supports batch processing to handle large datasets efficiently and
+    includes robust error handling and logging for production use.
+    """
 
     def __init__(
         self,
         session: AsyncSession,
         config: StockDataConfig | None = None,
-    ):
+    ) -> None:
         """Initialize the loader with a database session.
 
         Args:
             session: AsyncSession for database operations
-            config: StockDataConfig instance (defaults to default config)
+            config: Configuration instance (defaults to default config)
         """
         self.session = session
         self.config = config or get_stock_data_config()
@@ -39,7 +62,7 @@ class StockDataLoader:
             data: Stock data to validate
 
         Raises:
-            ValueError: If data is invalid
+            ValueError: If data structure is invalid or missing required fields
         """
         if not isinstance(data, dict):
             raise ValueError("Data must be a dictionary")
@@ -62,10 +85,14 @@ class StockDataLoader:
         """Transform raw data into StockData objects.
 
         Args:
-            data: Raw stock data
+            data: Raw stock data dictionary
 
         Returns:
-            List of StockData objects
+            List of validated StockData objects
+
+        Raises:
+            ValueError: If data validation fails
+            Exception: If data transformation fails
         """
         try:
             logger.debug("Starting transform_data")
@@ -114,8 +141,8 @@ class StockDataLoader:
         and date already exists, it will be updated with the new values.
 
         Args:
+            symbol: Stock symbol for the data
             stock_data_list: List of StockData objects to store
-            symbol: Stock symbol
 
         Raises:
             psycopg.errors.InsufficientPrivilege: If database user lacks sequence permissions
@@ -190,8 +217,11 @@ class StockDataLoader:
         """Process and store stock data.
 
         Args:
-            data: Raw stock data
-            symbol: Stock symbol
+            symbol: Stock symbol for the data
+            data: Raw stock data dictionary
+
+        Raises:
+            Exception: If any step in the processing pipeline fails
         """
         try:
             logger.debug(f"Starting process_data for {symbol}")

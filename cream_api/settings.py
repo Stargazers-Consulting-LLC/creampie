@@ -1,4 +1,18 @@
-"""Application settings configuration."""
+"""Application settings configuration.
+
+This module provides comprehensive application configuration management including
+database settings, logging configuration, and environment variable handling.
+It uses Pydantic Settings for type-safe configuration with environment file support.
+
+References:
+    - [Pydantic Settings Documentation](https://docs.pydantic.dev/latest/concepts/pydantic_settings/)
+    - [Python Logging Documentation](https://docs.python.org/3/library/logging.html)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 import logging
 import logging.handlers
@@ -13,7 +27,27 @@ ENV_FILE_PATH = os.path.join(SETTINGS_DIR, ".env")
 
 
 class Settings(BaseSettings):
-    """Configuration for database and frontend integration."""
+    """Configuration for database and frontend integration.
+
+    This class manages all application configuration settings including database
+    connection parameters, frontend integration settings, background task configuration,
+    and comprehensive logging setup with file rotation support.
+
+    Attributes:
+        db_user: Database username for application connections
+        db_host: Database host address
+        db_name: Database name
+        db_password: Database password for application user
+        db_admin_user: Database admin username for administrative operations
+        db_admin_password: Database admin password
+        frontend_url: Frontend application URL for CORS configuration
+        enable_background_tasks: Whether to enable background task processing
+        log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        log_file: Path to log file (None for console-only logging)
+        debug_mode: Whether application is running in debug mode
+        log_max_size_mb: Maximum log file size in megabytes before rotation
+        log_backup_count: Number of backup log files to keep
+    """
 
     # Database configuration
     db_user: str = "creamapp"
@@ -37,7 +71,15 @@ class Settings(BaseSettings):
     log_backup_count: int = 5
 
     def get_connection_string(self) -> str:
-        """Get database connection string."""
+        """Get database connection string.
+
+        Returns a database connection string based on configuration settings.
+        Falls back to SQLite in-memory database if no database configuration
+        is provided.
+
+        Returns:
+            str: Database connection string for SQLAlchemy
+        """
         if not self.db_host or not self.db_name:
             return "sqlite+aiosqlite:///:memory:"
         return f"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}"
@@ -49,12 +91,20 @@ app_settings = Settings()
 
 
 def get_app_settings() -> Settings:
-    """Get application configuration settings."""
+    """Get application configuration settings.
+
+    Returns:
+        Settings: Application configuration instance
+    """
     return app_settings
 
 
 def configure_logging(settings: Settings | None = None) -> None:
     """Configure application-wide logging settings.
+
+    This function sets up comprehensive logging configuration including console
+    and file handlers with rotation support. It configures different log formats
+    for debug and production modes.
 
     Args:
         settings: Settings instance to use for configuration (defaults to app_settings)

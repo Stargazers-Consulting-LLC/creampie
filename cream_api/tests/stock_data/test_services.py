@@ -1,4 +1,22 @@
-"""Unit tests for stock data business logic services."""
+"""Tests for stock data services.
+
+This module contains comprehensive unit tests for the stock data services module,
+including request processing, database operations, and error handling. It tests
+all service functions with various scenarios including success cases, error
+conditions, and edge cases.
+
+The tests cover symbol validation, database interactions, error handling,
+and business logic to ensure robust service functionality.
+
+References:
+    - [SQLAlchemy Testing](https://docs.sqlalchemy.org/en/20/orm/session_transaction.html#joining-a-session-into-an-external-transaction-such-as-for-test-suites)
+    - [Pytest Async](https://pytest-asyncio.readthedocs.io/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 from datetime import UTC, datetime
 from unittest.mock import AsyncMock
@@ -23,9 +41,9 @@ from cream_api.stock_data.services import (
 )
 from cream_api.tests.stock_data.stock_data_test_constants import DEFAULT_TEST_SYMBOL, TEST_STOCK_SYMBOLS
 
-# Test constants
-EXPECTED_THREE_STOCKS = 3
-EXPECTED_TWO_ACTIVE_STOCKS = 2
+# Test constants for magic numbers
+EXPECTED_TOTAL_STOCKS = 3
+EXPECTED_ACTIVE_STOCKS = 2
 
 
 class DummyResultNone:
@@ -43,7 +61,11 @@ class TestProcessStockRequest:
 
     @pytest.mark.asyncio
     async def test_process_stock_request_new_symbol_success(self, async_test_db: AsyncSession) -> None:
-        """Test successful processing of a new stock symbol."""
+        """Test that process_stock_request successfully creates tracking for new symbols.
+
+        Verifies that when a new stock symbol is requested, the function creates
+        a new tracking entry with proper default values and saves it to the database.
+        """
         result = await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", async_test_db)
         stmt = select(TrackedStock).where(TrackedStock.symbol == DEFAULT_TEST_SYMBOL)
         db_result = await async_test_db.execute(stmt)
@@ -57,8 +79,12 @@ class TestProcessStockRequest:
 
     @pytest.mark.asyncio
     async def test_process_stock_request_existing_active_symbol(self, async_test_db: AsyncSession) -> None:
-        """Test processing when symbol is already actively tracked."""
-        # Arrange
+        """Test that process_stock_request returns existing tracking for active symbols.
+
+        Verifies that when requesting tracking for a symbol that is already
+        actively tracked, the function returns the existing tracking without
+        modifying its state.
+        """
         existing_stock = TrackedStock(
             symbol=DEFAULT_TEST_SYMBOL,
             last_pull_date=datetime.now(UTC),
@@ -68,23 +94,23 @@ class TestProcessStockRequest:
         async_test_db.add(existing_stock)
         await async_test_db.commit()
 
-        # Act
         result = await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", async_test_db)
 
-        # Assert
         assert result.symbol == DEFAULT_TEST_SYMBOL
         assert result.is_active is True
-        assert result.last_pull_status == PullStatus.SUCCESS  # Should remain unchanged
+        assert result.last_pull_status == PullStatus.SUCCESS
         assert result.id == existing_stock.id
 
     @pytest.mark.asyncio
     async def test_process_stock_request_disabled_symbol_remains_disabled(self, async_test_db: AsyncSession) -> None:
-        """Test that disabled stock symbols remain disabled."""
-        # Use a different symbol for this test
+        """Test that process_stock_request preserves disabled state for inactive symbols.
+
+        Verifies that when requesting tracking for a symbol that is currently
+        disabled, the function returns the existing tracking without reactivating it.
+        """
         test_symbol = "TSLA"
         assert test_symbol in TEST_STOCK_SYMBOLS
 
-        # Arrange
         disabled_stock = TrackedStock(
             symbol=test_symbol,
             last_pull_date=datetime.now(UTC),
@@ -95,91 +121,113 @@ class TestProcessStockRequest:
         async_test_db.add(disabled_stock)
         await async_test_db.commit()
 
-        # Act
         result = await process_stock_request(test_symbol, "user123", async_test_db)
 
-        # Assert
         assert result.symbol == test_symbol
-        assert result.is_active is False  # Should remain disabled
-        assert result.last_pull_status == PullStatus.FAILED  # Should remain unchanged
-        assert result.error_message == "Previous error"  # Should remain unchanged
+        assert result.is_active is False
+        assert result.last_pull_status == PullStatus.FAILED
+        assert result.error_message == "Previous error"
         assert result.id == disabled_stock.id
 
     @pytest.mark.asyncio
     async def test_process_stock_request_empty_symbol(self, async_test_db: AsyncSession) -> None:
-        """Test processing with empty symbol raises error."""
-        # Act & Assert
+        """Test that process_stock_request rejects empty symbols with appropriate error.
+
+        Verifies that the function raises InvalidStockSymbolError when provided
+        with an empty string symbol.
+        """
         with pytest.raises(InvalidStockSymbolError, match="Symbol cannot be empty"):
             await process_stock_request("", "user123", async_test_db)
 
     @pytest.mark.asyncio
     async def test_process_stock_request_whitespace_symbol(self, async_test_db: AsyncSession) -> None:
-        """Test processing with whitespace-only symbol raises error."""
-        # Act & Assert
+        """Test that process_stock_request rejects whitespace-only symbols.
+
+        Verifies that the function raises InvalidStockSymbolError when provided
+        with a symbol containing only whitespace characters.
+        """
         with pytest.raises(InvalidStockSymbolError, match="Symbol cannot be empty"):
             await process_stock_request("   ", "user123", async_test_db)
 
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_too_long(self, async_test_db: AsyncSession) -> None:
-        """Test processing with symbol longer than 10 characters raises error."""
-        # Act & Assert
+        """Test that process_stock_request rejects symbols exceeding maximum length.
+
+        Verifies that the function raises InvalidStockSymbolError when provided
+        with a symbol longer than the maximum allowed length.
+        """
         with pytest.raises(InvalidStockSymbolError, match="Symbol must be 10 characters or less"):
             await process_stock_request("VERYLONGSYMBOL", "user123", async_test_db)
 
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_starts_with_number(self, async_test_db: AsyncSession) -> None:
-        """Test processing with symbol starting with number raises error."""
-        # Act & Assert
+        """Test that process_stock_request rejects symbols starting with numbers.
+
+        Verifies that the function raises InvalidStockSymbolError when provided
+        with a symbol that starts with a numeric digit.
+        """
         with pytest.raises(InvalidStockSymbolError, match="Symbol must start with a letter"):
             await process_stock_request("1AAPL", "user123", async_test_db)
 
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_contains_invalid_chars(self, async_test_db: AsyncSession) -> None:
-        """Test processing with symbol containing invalid characters raises error."""
-        # Act & Assert
+        """Test that process_stock_request rejects symbols with invalid characters.
+
+        Verifies that the function raises InvalidStockSymbolError when provided
+        with a symbol containing special characters or non-alphanumeric content.
+        """
         with pytest.raises(InvalidStockSymbolError, match="Symbol must contain only letters and numbers"):
             await process_stock_request("AAPL!", "user123", async_test_db)
 
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_normalized_to_uppercase(self, async_test_db: AsyncSession) -> None:
-        """Test that symbol is normalized to uppercase."""
+        """Test that process_stock_request normalizes symbols to uppercase.
+
+        Verifies that the function converts lowercase symbols to uppercase
+        format during processing.
+        """
         lowercase_symbol = DEFAULT_TEST_SYMBOL.lower()
 
-        # Act
         result = await process_stock_request(lowercase_symbol, "user123", async_test_db)
 
-        # Assert
         assert result.symbol == DEFAULT_TEST_SYMBOL
 
     @pytest.mark.asyncio
     async def test_process_stock_request_symbol_trimmed(self, async_test_db: AsyncSession) -> None:
-        """Test that symbol is trimmed of whitespace."""
+        """Test that process_stock_request trims whitespace from symbols.
+
+        Verifies that the function removes leading and trailing whitespace
+        from input symbols during processing.
+        """
         padded_symbol = f"  {DEFAULT_TEST_SYMBOL}  "
 
-        # Act
         result = await process_stock_request(padded_symbol, "user123", async_test_db)
 
-        # Assert
         assert result.symbol == DEFAULT_TEST_SYMBOL
 
     @pytest.mark.asyncio
     async def test_process_stock_request_database_error_handling(self, async_test_db: AsyncSession) -> None:
-        """Test handling of database errors during stock request processing."""
-        # Arrange - Mock the database session to raise an error
+        """Test that process_stock_request handles database errors gracefully.
+
+        Verifies that the function properly handles SQLAlchemy errors during
+        database operations and performs rollback when needed.
+        """
         mock_db = AsyncMock(spec=AsyncSession)
         mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
         mock_db.rollback = AsyncMock()
 
-        # Act & Assert
         with pytest.raises(StockDataError, match="Failed to process stock tracking request"):
             await process_stock_request(DEFAULT_TEST_SYMBOL, "user123", mock_db)
 
-        # Verify rollback was called
         mock_db.rollback.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_process_stock_request_commit_error_handling(self, async_test_db: AsyncSession) -> None:
-        """Test handling of commit errors during stock request processing."""
+        """Test that process_stock_request handles commit errors gracefully.
+
+        Verifies that the function properly handles commit failures and
+        performs rollback when database commits fail.
+        """
         mock_db = AsyncMock(spec=AsyncSession)
         mock_db.execute.return_value = DummyResultNone()
         mock_db.commit.side_effect = SQLAlchemyError("Commit failed")
@@ -196,46 +244,47 @@ class TestGetTrackedStocks:
 
     @pytest.mark.asyncio
     async def test_get_tracked_stocks_empty_list(self, async_test_db: AsyncSession) -> None:
-        """Test getting tracked stocks when none exist."""
-        # Act
-        result = await get_tracked_stocks(async_test_db)
+        """Test that get_tracked_stocks returns empty list when no stocks are tracked.
 
-        # Assert
+        Verifies that the function returns an empty list when there are no
+        tracked stocks in the database.
+        """
+        result = await get_tracked_stocks(async_test_db)
         assert result == []
 
     @pytest.mark.asyncio
     async def test_get_tracked_stocks_with_stocks(self, async_test_db: AsyncSession) -> None:
-        """Test getting tracked stocks when multiple exist."""
-        # Use specific symbols from constants
-        symbols = ["AAPL", "TSLA", "MSFT"]
+        """Test that get_tracked_stocks returns all tracked stocks.
 
-        # Arrange
+        Verifies that the function returns all tracked stocks including both
+        active and inactive entries, ordered by symbol.
+        """
         stocks = [
-            TrackedStock(symbol=symbols[0], is_active=True),
-            TrackedStock(symbol=symbols[1], is_active=False),
-            TrackedStock(symbol=symbols[2], is_active=True),
+            TrackedStock(symbol="AAPL", is_active=True),
+            TrackedStock(symbol="TSLA", is_active=False),
+            TrackedStock(symbol="GOOGL", is_active=True),
         ]
         for stock in stocks:
             async_test_db.add(stock)
         await async_test_db.commit()
 
-        # Act
         result = await get_tracked_stocks(async_test_db)
 
-        # Assert
-        assert len(result) == EXPECTED_THREE_STOCKS
-        result_symbols = [stock.symbol for stock in result]
-        expected_symbols = sorted(symbols)  # Should be ordered by symbol
-        assert result_symbols == expected_symbols
+        assert len(result) == EXPECTED_TOTAL_STOCKS
+        assert result[0].symbol == "AAPL"
+        assert result[1].symbol == "GOOGL"
+        assert result[2].symbol == "TSLA"
 
     @pytest.mark.asyncio
     async def test_get_tracked_stocks_database_error_handling(self, async_test_db: AsyncSession) -> None:
-        """Test handling of database errors when retrieving tracked stocks."""
-        # Arrange - Mock the database session to raise an error
-        mock_db = AsyncMock(spec=AsyncSession)
-        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+        """Test that get_tracked_stocks handles database errors gracefully.
 
-        # Act & Assert
+        Verifies that the function properly handles SQLAlchemy errors during
+        database queries and raises appropriate exceptions.
+        """
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.side_effect = SQLAlchemyError("Database query failed")
+
         with pytest.raises(StockDataError, match="Failed to retrieve tracked stocks"):
             await get_tracked_stocks(mock_db)
 
@@ -245,20 +294,22 @@ class TestDeactivateStockTracking:
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_success(self, async_test_db: AsyncSession) -> None:
-        """Test successful deactivation of stock tracking."""
-        # Arrange
+        """Test that deactivate_stock_tracking successfully deactivates active stocks.
+
+        Verifies that the function properly deactivates an active stock tracking
+        entry and updates its status to disabled.
+        """
         active_stock = TrackedStock(
             symbol=DEFAULT_TEST_SYMBOL,
-            is_active=True,
+            last_pull_date=datetime.now(UTC),
             last_pull_status=PullStatus.SUCCESS,
+            is_active=True,
         )
         async_test_db.add(active_stock)
         await async_test_db.commit()
 
-        # Act
         result = await deactivate_stock_tracking(DEFAULT_TEST_SYMBOL, async_test_db)
 
-        # Assert
         assert result.symbol == DEFAULT_TEST_SYMBOL
         assert result.is_active is False
         assert result.last_pull_status == PullStatus.DISABLED
@@ -266,79 +317,93 @@ class TestDeactivateStockTracking:
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_already_deactivated(self, async_test_db: AsyncSession) -> None:
-        """Test deactivating an already deactivated stock."""
-        # Use a different symbol for this test
-        test_symbol = "TSLA"
-        assert test_symbol in TEST_STOCK_SYMBOLS
+        """Test that deactivate_stock_tracking handles already deactivated stocks.
 
-        # Arrange
+        Verifies that the function returns the existing tracking without
+        modification when attempting to deactivate an already inactive stock.
+        """
         inactive_stock = TrackedStock(
-            symbol=test_symbol,
-            is_active=False,
+            symbol=DEFAULT_TEST_SYMBOL,
+            last_pull_date=datetime.now(UTC),
             last_pull_status=PullStatus.DISABLED,
+            is_active=False,
             error_message="Already deactivated",
         )
         async_test_db.add(inactive_stock)
         await async_test_db.commit()
 
-        # Act
-        result = await deactivate_stock_tracking(test_symbol, async_test_db)
+        result = await deactivate_stock_tracking(DEFAULT_TEST_SYMBOL, async_test_db)
 
-        # Assert
-        assert result.symbol == test_symbol
-        assert result.is_active is False  # Should remain deactivated
-        assert result.last_pull_status == PullStatus.DISABLED  # Should remain unchanged
-        assert result.error_message == "Already deactivated"  # Should remain unchanged
+        assert result.symbol == DEFAULT_TEST_SYMBOL
+        assert result.is_active is False
+        assert result.last_pull_status == PullStatus.DISABLED
+        assert result.error_message == "Already deactivated"
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_stock_not_found(self, async_test_db: AsyncSession) -> None:
-        """Test deactivating non-existent stock raises error."""
-        # Act & Assert
-        with pytest.raises(StockNotFoundError, match="Stock UNKNOWN is not being tracked"):
-            await deactivate_stock_tracking("UNKNOWN", async_test_db)
+        """Test that deactivate_stock_tracking raises error for untracked stocks.
+
+        Verifies that the function raises StockNotFoundError when attempting
+        to deactivate tracking for a symbol that is not being tracked.
+        """
+        with pytest.raises(StockNotFoundError, match="Stock TSLA is not being tracked"):
+            await deactivate_stock_tracking("TSLA", async_test_db)
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_empty_symbol(self, async_test_db: AsyncSession) -> None:
-        """Test deactivating with empty symbol raises error."""
-        # Act & Assert
+        """Test that deactivate_stock_tracking rejects empty symbols.
+
+        Verifies that the function raises InvalidStockSymbolError when provided
+        with an empty string symbol.
+        """
         with pytest.raises(InvalidStockSymbolError, match="Symbol cannot be empty"):
             await deactivate_stock_tracking("", async_test_db)
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_symbol_normalized(self, async_test_db: AsyncSession) -> None:
-        """Test that symbol is normalized during deactivation."""
-        lowercase_symbol = DEFAULT_TEST_SYMBOL.lower()
+        """Test that deactivate_stock_tracking normalizes symbol format.
 
-        # Arrange
-        active_stock = TrackedStock(symbol=DEFAULT_TEST_SYMBOL, is_active=True)
+        Verifies that the function properly normalizes symbols by trimming
+        whitespace and converting to uppercase before processing.
+        """
+        active_stock = TrackedStock(
+            symbol=DEFAULT_TEST_SYMBOL,
+            last_pull_date=datetime.now(UTC),
+            last_pull_status=PullStatus.SUCCESS,
+            is_active=True,
+        )
         async_test_db.add(active_stock)
         await async_test_db.commit()
 
-        # Act
-        result = await deactivate_stock_tracking(lowercase_symbol, async_test_db)
+        padded_lowercase_symbol = f"  {DEFAULT_TEST_SYMBOL.lower()}  "
+        result = await deactivate_stock_tracking(padded_lowercase_symbol, async_test_db)
 
-        # Assert
-        assert result.symbol == DEFAULT_TEST_SYMBOL  # Should be normalized to uppercase
+        assert result.symbol == DEFAULT_TEST_SYMBOL
         assert result.is_active is False
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_database_error_handling(self, async_test_db: AsyncSession) -> None:
-        """Test handling of database errors during deactivation."""
-        # Arrange - Mock the database session to raise an error
+        """Test that deactivate_stock_tracking handles database errors gracefully.
+
+        Verifies that the function properly handles SQLAlchemy errors during
+        database operations and performs rollback when needed.
+        """
         mock_db = AsyncMock(spec=AsyncSession)
-        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+        mock_db.execute.side_effect = SQLAlchemyError("Database query failed")
         mock_db.rollback = AsyncMock()
 
-        # Act & Assert
         with pytest.raises(StockDataError, match="Failed to deactivate stock tracking"):
             await deactivate_stock_tracking(DEFAULT_TEST_SYMBOL, mock_db)
 
-        # Verify rollback was called
         mock_db.rollback.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_deactivate_stock_tracking_commit_error_handling(self, async_test_db: AsyncSession) -> None:
-        """Test handling of commit errors during deactivation."""
+        """Test that deactivate_stock_tracking handles commit errors gracefully.
+
+        Verifies that the function properly handles commit failures and
+        performs rollback when database commits fail.
+        """
         mock_db = AsyncMock(spec=AsyncSession)
         mock_db.execute.return_value = DummyResultStock()
         mock_db.commit.side_effect = SQLAlchemyError("Commit failed")
@@ -355,42 +420,46 @@ class TestGetActiveTrackedStocks:
 
     @pytest.mark.asyncio
     async def test_get_active_tracked_stocks_empty_list(self, async_test_db: AsyncSession) -> None:
-        """Test getting active tracked stocks when none exist."""
-        # Act
-        result = await get_active_tracked_stocks(async_test_db)
+        """Test that get_active_tracked_stocks returns empty list when no active stocks exist.
 
-        # Assert
+        Verifies that the function returns an empty list when there are no
+        actively tracked stocks in the database.
+        """
+        result = await get_active_tracked_stocks(async_test_db)
         assert result == []
 
     @pytest.mark.asyncio
     async def test_get_active_tracked_stocks_only_active(self, async_test_db: AsyncSession) -> None:
-        """Test getting only active tracked stocks."""
-        # Arrange
+        """Test that get_active_tracked_stocks returns only active stocks.
+
+        Verifies that the function filters and returns only stocks that are
+        currently active, excluding inactive or disabled stocks.
+        """
         stocks = [
             TrackedStock(symbol="AAPL", is_active=True),
             TrackedStock(symbol="TSLA", is_active=False),
-            TrackedStock(symbol="MSFT", is_active=True),
-            TrackedStock(symbol="GOOGL", is_active=False),
+            TrackedStock(symbol="GOOGL", is_active=True),
         ]
         for stock in stocks:
             async_test_db.add(stock)
         await async_test_db.commit()
 
-        # Act
         result = await get_active_tracked_stocks(async_test_db)
 
-        # Assert
-        assert len(result) == EXPECTED_TWO_ACTIVE_STOCKS
-        symbols = [stock.symbol for stock in result]
-        assert symbols == ["AAPL", "MSFT"]  # Should be ordered by symbol
+        assert len(result) == EXPECTED_ACTIVE_STOCKS
+        assert all(stock.is_active for stock in result)
+        assert result[0].symbol == "AAPL"
+        assert result[1].symbol == "GOOGL"
 
     @pytest.mark.asyncio
     async def test_get_active_tracked_stocks_database_error_handling(self, async_test_db: AsyncSession) -> None:
-        """Test handling of database errors when retrieving active tracked stocks."""
-        # Arrange - Mock the database session to raise an error
-        mock_db = AsyncMock(spec=AsyncSession)
-        mock_db.execute.side_effect = SQLAlchemyError("Database connection failed")
+        """Test that get_active_tracked_stocks handles database errors gracefully.
 
-        # Act & Assert
+        Verifies that the function properly handles SQLAlchemy errors during
+        database queries and raises appropriate exceptions.
+        """
+        mock_db = AsyncMock(spec=AsyncSession)
+        mock_db.execute.side_effect = SQLAlchemyError("Database query failed")
+
         with pytest.raises(StockDataError, match="Failed to retrieve active tracked stocks"):
             await get_active_tracked_stocks(mock_db)

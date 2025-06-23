@@ -1,4 +1,18 @@
-"""Session model definition."""
+"""Session model definition.
+
+This module defines the AppUserSession model for managing user authentication sessions,
+including session tracking, security features, and device information. It provides
+comprehensive session management capabilities with automatic expiration and activity tracking.
+
+References:
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+    - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -15,7 +29,27 @@ if TYPE_CHECKING:
 
 
 class AppUserSession(ModelBase):
-    """Session model representing user sessions."""
+    """Session model representing user authentication sessions.
+
+    This model provides comprehensive session management capabilities including
+    session tracking, security features, device information, and automatic
+    expiration handling. It supports session revocation and activity monitoring.
+
+    Attributes:
+        id: Unique session identifier
+        user_id: Foreign key reference to the associated user
+        created_at: Timestamp when the session was created
+        expires_at: Timestamp when the session expires
+        last_activity: Timestamp of the last activity on this session
+        ip_address: IP address from which the session was created
+        user_agent: User agent string from the session creation
+        device_id: Optional device identifier for multi-device tracking
+        is_valid: Whether the session is currently valid
+        revoked_at: Timestamp when the session was revoked (if applicable)
+        platform: Platform information (e.g., mobile, desktop)
+        browser: Browser information for the session
+        user: Relationship to the associated AppUser
+    """
 
     __tablename__ = "sessions"
 

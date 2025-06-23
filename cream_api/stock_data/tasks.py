@@ -1,4 +1,19 @@
-"""Background tasks for stock data operations."""
+"""Background tasks for stock data operations.
+
+This module provides comprehensive background task management for stock data operations,
+including periodic data retrieval, file processing, and deadletter retry mechanisms.
+It handles asynchronous task scheduling with robust error handling and logging.
+
+References:
+    - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+    - [asyncio Documentation](https://docs.python.org/3/library/asyncio.html)
+    - [psycopg Documentation](https://www.psycopg.org/docs/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 import asyncio
 import logging
@@ -19,6 +34,7 @@ from cream_api.stock_data.retriever import StockDataRetriever
 
 logger = logging.getLogger(__name__)
 
+# Task scheduling intervals
 RETRIEVAL_INTERVAL_SECONDS = 5 * 60
 PROCESSING_INTERVAL_SECONDS = 10 * 60
 DEADLETTER_RETRY_INTERVAL_SECONDS = 24 * 60 * 60
@@ -32,13 +48,25 @@ async def retrieve_historical_data_task(symbol: str, end_date: str | None = None
     Args:
         symbol: Stock symbol to retrieve data for
         end_date: Optional end date in YYYY-MM-DD format
+
+    Raises:
+        Exception: If data retrieval fails
     """
     retriever = StockDataRetriever(config=config)
     await retriever.get_historical_data(symbol=symbol, end_date=end_date)
 
 
 async def process_raw_files_task() -> None:
-    """Process raw HTML files and load data into database."""
+    """Process raw HTML files and load data into database.
+
+    This task processes all raw HTML files in the configured directory,
+    parses them for stock data, and loads the results into the database.
+    It includes comprehensive error handling for database permission issues.
+
+    Raises:
+        psycopg.errors.InsufficientPrivilege: If database user lacks required permissions
+        Exception: If file processing fails for other reasons
+    """
     if not os.path.exists(config.raw_responses_dir):
         logger.info("Raw responses directory does not exist, skipping file processing")
         return
@@ -66,7 +94,14 @@ async def process_raw_files_task() -> None:
 
 
 async def retry_deadletter_files_task() -> None:
-    """Move all files from the deadletter directory back to the raw directory every 24 hours."""
+    """Move all files from the deadletter directory back to the raw directory every 24 hours.
+
+    This task runs continuously and attempts to retry processing of files that
+    previously failed. It moves files from the deadletter directory back to the
+    raw directory for reprocessing, with safeguards against overwriting existing files.
+
+    The task includes comprehensive error handling and logging for file operations.
+    """
     while True:
         logger.info("retry_deadletter_files_task() heartbeat.")
         try:
@@ -103,6 +138,9 @@ async def update_all_tracked_stocks(db: AsyncSession) -> None:
 
     Args:
         db: Database session for tracking stock updates
+
+    Raises:
+        Exception: If database operations fail
     """
     try:
         stmt = select(TrackedStock).where(TrackedStock.is_active)
@@ -129,7 +167,12 @@ async def update_all_tracked_stocks(db: AsyncSession) -> None:
 
 
 async def run_periodic_updates() -> None:
-    """Run periodic updates of tracked stocks."""
+    """Run periodic updates of tracked stocks.
+
+    This task runs continuously and updates all active tracked stocks with
+    the latest historical data. It includes comprehensive error handling
+    and automatic retry mechanisms for failed operations.
+    """
     while True:
         logger.info("run_periodic_updates() heartbeat.")
         try:
@@ -153,7 +196,12 @@ async def run_periodic_updates() -> None:
 
 
 async def run_periodic_file_processing() -> None:
-    """Run periodic processing of raw HTML files every 10 minutes."""
+    """Run periodic processing of raw HTML files every 10 minutes.
+
+    This task runs continuously and processes raw HTML files in the configured
+    directory. It includes comprehensive error handling for both application
+    logic failures and general processing errors.
+    """
     while True:
         logger.info("run_periodic_file_processing() heartbeat.")
         try:

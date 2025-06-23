@@ -105,24 +105,28 @@
     }
   },
   "mandatory_workflows": {
-    "debugging_workflow": {
+    "outputs_check_rule": {
       "enabled": true,
       "mandatory": true,
-      "description": "Before ANY debugging attempt, you MUST check existing reports",
+      "description": "CRITICAL BLOCKING REQUIREMENT: You MUST check ai/outputs/ for existing reports BEFORE any other work",
+      "rule": "This is a BLOCKING requirement - no debugging, analysis, or tool execution can proceed until this check is completed.",
       "steps": [
-        "ALWAYS check ai/outputs/lint_results/ for tool reports",
-        "ALWAYS check ai/outputs/test_results/ for test failure reports",
-        "ALWAYS check ai/outputs/ for other relevant reports",
-        "ALWAYS read actual error messages from these reports",
+        "MUST check ai/outputs/lint_results/ for existing tool reports",
+        "MUST check ai/outputs/test_results/ for existing test failure reports",
+        "MUST check ai/outputs/ for any other relevant reports",
+        "MUST read actual error messages from these reports",
         "ONLY THEN begin debugging based on concrete error information"
       ],
       "forbidden": [
-        "Starting debugging without checking ai/outputs/ first",
+        "Starting any debugging without checking ai/outputs/ first",
         "Asking to run tools when error reports already exist",
         "Making assumptions about error causes",
-        "Guessing at missing imports or constants"
+        "Guessing at missing imports or constants",
+        "Proceeding with any analysis without checking existing reports"
       ],
-      "enforcement": "MANDATORY and non-negotiable. Violating leads to wasted time and incorrect fixes."
+      "enforcement": "CRITICAL BLOCKING - This rule is MANDATORY and non-negotiable. No other work can proceed until this check is completed.",
+      "priority": "highest",
+      "blocking": true
     },
     "test_assumption_rule": {
       "enabled": true,

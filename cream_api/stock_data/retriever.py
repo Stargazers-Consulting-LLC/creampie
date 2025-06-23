@@ -1,4 +1,19 @@
-"""Stock data retrieval functionality for Yahoo Finance."""
+"""Stock data retrieval functionality for Yahoo Finance.
+
+This module provides comprehensive stock data retrieval capabilities from Yahoo Finance,
+including HTTP request handling, retry logic, and file storage operations. It handles
+asynchronous web scraping with robust error handling and rate limiting support.
+
+References:
+    - [aiohttp Documentation](https://docs.aiohttp.org/)
+    - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+    - [Yahoo Finance](https://finance.yahoo.com/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 import asyncio
 import logging
@@ -18,7 +33,15 @@ MAX_HEADER_SIZE = 2**32
 
 
 class StockDataRetriever:
-    """Retriever for historical stock data from Yahoo Finance."""
+    """Retriever for historical stock data from Yahoo Finance.
+
+    This class provides comprehensive stock data retrieval capabilities from Yahoo Finance,
+    including HTTP request handling, retry logic, rate limiting support, and file storage.
+    It handles asynchronous web scraping with robust error handling for production use.
+
+    The retriever supports configurable timeouts, retry attempts, and user agent customization
+    to ensure reliable data retrieval while respecting rate limits and handling network errors.
+    """
 
     def __init__(self, config: StockDataConfig | None = None) -> None:
         """Initialize the retriever with required headers.
@@ -46,7 +69,7 @@ class StockDataRetriever:
             html_content: Raw HTML content to save
 
         Raises:
-            OSError: If the file cannot be written
+            OSError: If the file cannot be written to the configured directory
         """
         date = datetime.now().strftime("%Y-%m-%d")
         filename = f"{symbol}_{date}.html"
@@ -71,7 +94,7 @@ class StockDataRetriever:
             Response text if successful, None if retry needed
 
         Raises:
-            StockRetrievalError: If the request fails after all retries
+            StockRetrievalError: If the request fails after all retries or symbol not found
         """
         if response.status == status.HTTP_200_OK:
             logger.debug("Received successful response (status 200)")
@@ -158,7 +181,7 @@ class StockDataRetriever:
         Raises:
             StockRetrievalError: If the request fails after all retries
             ValueError: If the date format is invalid
-            OSError: If the HTML content cannot be saved
+            OSError: If the HTML content cannot be saved to the configured directory
         """
         if end_date is None:
             end_date = datetime.now().strftime("%Y-%m-%d")

@@ -2,6 +2,8 @@
 
 This module contains test-specific constants used across stock data tests,
 including test directories, sample data, and other test configuration.
+It provides centralized constants for stock symbols, price data, test paths,
+and validation values to ensure consistency across all stock data tests.
 
 References:
     - [Pytest Documentation](https://docs.pytest.org/)

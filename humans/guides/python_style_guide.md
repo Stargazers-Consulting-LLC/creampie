@@ -178,7 +178,6 @@ def example_function() -> None:
 3. **Local application imports**
 
 ```python
-# Standard library imports
 import logging
 import os
 from collections.abc import AsyncGenerator
@@ -186,13 +185,11 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Annotated
 
-# Third-party imports
 from fastapi import FastAPI, APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Local imports
 from cream_api.db import get_async_db
 from cream_api.settings import get_app_settings
 from cream_api.stock_data.models import TrackedStock
@@ -205,6 +202,7 @@ from cream_api.stock_data.models import TrackedStock
 - **Remove unused imports** to keep code clean
 - **Use specific imports** rather than wildcard imports
 - **Use `from` imports** for commonly used items
+- **Do not add comments** to delimit import groups - the blank lines provide sufficient visual separation
 
 ```python
 # Good
@@ -214,6 +212,12 @@ from sqlalchemy import select
 # Avoid
 from fastapi import *
 from sqlalchemy import *
+
+# Avoid unnecessary import grouping comments
+# # Standard library imports
+# import logging
+# # Third-party imports
+# from fastapi import APIRouter
 ```
 
 ## Type Hints
@@ -315,6 +319,42 @@ class UserResponse(BaseModel):
 **Rule of thumb:**
 - Use docstrings for documentation and explanation of WHAT the code does.
 - Use comments only for explaining WHY the code is written a certain way.
+
+**Avoid useless comments:**
+- Comments that just repeat what the code obviously shows
+- Comments that label variables, functions, or classes without adding context
+- Comments that state the obvious
+
+```python
+# ❌ Avoid - Useless comments that just label what's obvious
+# Test constants
+EXPECTED_STOCK_COUNT = 2
+
+# Database connection
+db = get_database()
+
+# Function to calculate total
+def calculate_total(items):
+    pass
+
+# ✅ Good - Comments that explain WHY or non-obvious decisions
+# Use a set for O(1) lookups (performance critical)
+seen_ids = set()
+
+# Skip validation for admin users to avoid circular dependency
+if user.is_admin:
+    return True
+
+# Retry up to 3 times with exponential backoff
+for attempt in range(3):
+    try:
+        result = api_call()
+        break
+    except TimeoutError:
+        if attempt == 2:  # Last attempt
+            raise
+        time.sleep(2 ** attempt)  # Exponential backoff
+```
 
 ### Module Docstrings
 

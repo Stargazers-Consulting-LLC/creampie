@@ -1,4 +1,19 @@
-"""Stock data parser for extracting information from HTML content."""
+"""Stock data parser for extracting information from HTML content.
+
+This module provides comprehensive HTML parsing capabilities for stock data extraction,
+including table parsing, data validation, and cleaning operations. It handles
+BeautifulSoup-based HTML processing with robust error handling and data quality checks.
+
+References:
+    - [BeautifulSoup Documentation](https://www.crummy.com/software/BeautifulSoup/)
+    - [Pandas Documentation](https://pandas.pydata.org/docs/)
+    - [Pydantic Documentation](https://docs.pydantic.dev/)
+
+### Legal
+SPDX-FileCopyright © Robert Ferguson <rmferguson@pm.me>
+
+SPDX-License-Identifier: [MIT](https://spdx.org/licenses/MIT.html)
+"""
 
 from typing import Any
 
@@ -47,7 +62,15 @@ NUMERIC_TOLERANCE = 1e-10
 
 
 class StockDataParser:
-    """Parser for extracting stock data from HTML content."""
+    """Parser for extracting stock data from HTML content.
+
+    This class provides comprehensive HTML parsing capabilities for stock data extraction,
+    including table identification, data extraction, validation, and cleaning operations.
+    It handles various HTML formats and includes robust error handling for production use.
+
+    The parser supports dividend and stock split detection, data quality validation,
+    and automatic data cleaning to ensure high-quality output for downstream processing.
+    """
 
     # Selectors for the historical prices table
     HISTORICAL_PRICES_CSS_SELECTOR = ".table"
@@ -63,14 +86,13 @@ class StockDataParser:
         self._column_mapping: dict[str, str] = COLUMN_MAPPING
 
     def parse_html(self, html_content: str) -> dict[str, list[dict[str, Any]]]:
-        """
-        Parse HTML content and extract stock data.
+        """Parse HTML content and extract stock data.
 
         Args:
             html_content: Raw HTML string to parse
 
         Returns:
-            Dictionary containing parsed stock data
+            Dictionary containing parsed stock data with 'prices' key
 
         Raises:
             StockRetrievalError: If HTML content is invalid or missing required data
@@ -90,13 +112,13 @@ class StockDataParser:
         """Parse stock data from an HTML file.
 
         Args:
-            file_path: Path to the HTML file.
+            file_path: Path to the HTML file
 
         Returns:
-            Dictionary containing the parsed data.
+            Dictionary containing the parsed data with 'prices' key
 
         Raises:
-            StockRetrievalError: If the file cannot be read or parsed.
+            StockRetrievalError: If the file cannot be read or parsed
         """
         try:
             with open(file_path, encoding="utf-8") as f:
@@ -108,14 +130,13 @@ class StockDataParser:
             raise StockRetrievalError(f"Failed to read HTML file: {e!s}") from e
 
     def process_data(self, data: dict[str, list[dict[str, Any]]]) -> pd.DataFrame:
-        """
-        Process raw data into a DataFrame.
+        """Process raw data into a DataFrame.
 
         Args:
-            data: Dictionary containing raw stock data
+            data: Dictionary containing raw stock data with 'prices' key
 
         Returns:
-            DataFrame with processed stock data
+            DataFrame with processed and validated stock data
 
         Raises:
             StockRetrievalError: If data processing fails
@@ -129,8 +150,7 @@ class StockDataParser:
             raise StockRetrievalError(f"Failed to process data: {e!s}") from e
 
     def _find_data_table(self, soup: BeautifulSoup) -> Any | None:
-        """
-        Find the main data table in the HTML.
+        """Find the main data table in the HTML.
 
         Args:
             soup: BeautifulSoup object of parsed HTML
@@ -142,14 +162,13 @@ class StockDataParser:
         return table
 
     def _extract_table_data(self, table: Any) -> list[dict[str, Any]]:
-        """
-        Extract data from the table.
+        """Extract data from the table.
 
         Args:
             table: BeautifulSoup table object
 
         Returns:
-            List of dictionaries containing row data
+            List of dictionaries containing row data, sorted by date descending
 
         Raises:
             StockRetrievalError: If table structure is invalid
@@ -192,7 +211,7 @@ class StockDataParser:
             headers: List of raw header names
 
         Returns:
-            List of cleaned header names
+            List of cleaned header names with special cases handled
         """
         cleaned_headers = []
         for header_text in headers:
@@ -215,6 +234,9 @@ class StockDataParser:
 
         Returns:
             List of filtered row data dictionaries
+
+        Raises:
+            StockRetrievalError: If table body is missing
         """
         tbody = table.find("tbody")
         if not tbody:
@@ -237,6 +259,9 @@ class StockDataParser:
 
         Returns:
             Dictionary containing row data
+
+        Raises:
+            StockRetrievalError: If unknown header is encountered
         """
         row_data = {}
         for td, header in zip(tr.find_all("td"), cleaned_headers, strict=False):
@@ -297,7 +322,7 @@ class StockDataParser:
             row_data: Dictionary containing row data
 
         Returns:
-            True if volume is valid, False otherwise
+            True if volume is valid (positive number), False otherwise
         """
         try:
             volume_str = row_data["volume"].replace(",", "")
@@ -307,8 +332,7 @@ class StockDataParser:
             return False
 
     def _validate_headers(self, headers: list[str]) -> bool:
-        """
-        Validate table headers against required columns.
+        """Validate table headers against required columns.
 
         Args:
             headers: List of header strings
@@ -329,14 +353,13 @@ class StockDataParser:
         return len(headers) == REQUIRED_COLUMNS_COUNT and mapped_headers == required_columns
 
     def _clean_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Clean and normalize the data.
+        """Clean and normalize the data.
 
         Args:
             df: DataFrame to clean
 
         Returns:
-            Cleaned DataFrame
+            Cleaned DataFrame with normalized data types and missing values handled
 
         Raises:
             StockRetrievalError: If data cleaning fails
@@ -365,8 +388,7 @@ class StockDataParser:
             raise StockRetrievalError(f"Failed to clean data: {e!s}") from e
 
     def _validate_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Validate the processed data.
+        """Validate the processed data for logical consistency.
 
         Args:
             df: DataFrame to validate
@@ -375,7 +397,7 @@ class StockDataParser:
             Validated DataFrame
 
         Raises:
-            StockRetrievalError: If data validation fails
+            StockRetrievalError: If data validation fails (invalid price relationships)
         """
         invalid_rows = df[
             (df["high"] < df["low"] - NUMERIC_TOLERANCE)

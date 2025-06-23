@@ -124,7 +124,6 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix=STOCK_DATA_PREFIX, tags=["stock-data"])
 
 
-# Response models for API documentation
 class StockTrackingResponse(BaseModel):
     """Response model for stock tracking operations."""
 
@@ -185,7 +184,6 @@ async def track_stock(
         HTTPException: If there's an error starting tracking
     """
     try:
-        # Use the business logic service to process the request
         await process_stock_request(request.symbol, "system", db)
 
         return {
